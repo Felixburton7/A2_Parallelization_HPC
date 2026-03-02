@@ -1,0 +1,19 @@
+# Generated data
+out/
+
+# AI context workspace
+ai/
+
+# Build artifacts
+*.o
+md_solver
+test_runner
+
+# Submission tarball
+*.tar.gz
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
