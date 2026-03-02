@@ -22,6 +22,7 @@
 #include <cstdio>
 #include <fstream>
 #include <functional>
+#include <iomanip>
 #include <string>
 #include <vector>
 
@@ -167,6 +168,7 @@ int main(int argc, char* argv[]) {
         std::string fname = "out/" + params.mode + "_" + params.integrator + ".csv";
         outFile.open(fname);
         if (outFile.is_open()) {
+            outFile << std::setprecision(15);
             if (isHO) {
                 // HO: output position, velocity, energy for phase-space & convergence plots
                 outFile << "step,time,x,v,E_kin,E_pot,E_total\n";
