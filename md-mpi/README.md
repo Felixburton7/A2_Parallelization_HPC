@@ -39,6 +39,9 @@ mpirun -np 1 ./md_solver --mode lj --integrator euler --N 864 --steps 100
 
 # With equilibration rescale at step 10
 mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 100 --rescale-step 10
+
+# Supplementary g(r) (extended run, ~450 frames for smooth Rahman comparison)
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 5000 --gr --gr-discard 500 --gr-interval 10
 ```
 
 ### Scaling (Results 3)

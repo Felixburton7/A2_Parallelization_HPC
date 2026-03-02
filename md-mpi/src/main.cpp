@@ -37,12 +37,24 @@
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
 
-    // ── Parse parameters ──
-    md::Params params = md::Params::parse(argc, argv);
+    // ── Parse parameters (never calls std::exit — returns status) ──
+    md::Params params;
+    md::ParseStatus status = md::Params::parse(argc, argv, params);
+
+    if (status != md::ParseStatus::Ok) {
+        int rank;
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        if (rank == 0) {
+            md::Params::printUsage(argv[0]);
+        }
+        MPI_Finalize();
+        return (status == md::ParseStatus::Help) ? 0 : 1;
+    }
 
     // ── Initialise MPI context and particle decomposition ──
     md::MPIContext ctx;
     ctx.init(params.N);
+    ctx.timingMode = params.timing;
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
@@ -61,6 +73,7 @@ int main(int argc, char* argv[]) {
     // ── Generate initial conditions on rank 0, broadcast to all ──
     std::vector<double> posAll(3 * N, 0.0);
     std::vector<double> velAll(3 * N, 0.0);
+    int fccError = 0;  // broadcast from root to all ranks (LJ only)
 
     if (ctx.isRoot()) {
         if (isHO) {
@@ -75,9 +88,30 @@ int main(int argc, char* argv[]) {
                 velAll[3 * i + 2] = 0.0;
             }
         } else {
-            // LJ: FCC lattice with perturbation + Box-Muller velocities
-            posAll = md::buildFCCLattice(N, L, params.seed);
-            velAll = md::generateVelocities(N, params.T_init, md::constants::mass, params.seed);
+            // Validate FCC particle count: N must equal 4*k^3
+            int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
+            if (4 * k * k * k != N) {
+                std::fprintf(stderr,
+                             "ERROR: N = %d is not a valid FCC particle count "
+                             "(need N = 4*k^3, nearest k = %d gives N = %d)\n",
+                             N, k, 4 * k * k * k);
+                fccError = 1;
+            } else {
+                // LJ: FCC lattice with perturbation + Box-Muller velocities
+                // Single RNG stream for both (no seed+offset code smell)
+                std::mt19937_64 gen(params.seed);
+                posAll = md::buildFCCLattice(N, L, gen);
+                velAll = md::generateVelocities(N, params.T_init, md::constants::mass, gen);
+            }
+        }
+    }
+
+    // All ranks check FCC validation result (LJ only)
+    if (!isHO) {
+        MPI_Bcast(&fccError, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        if (fccError) {
+            MPI_Finalize();
+            return 1;
         }
     }
 
@@ -195,10 +229,23 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            // ── Optional velocity rescale at user-specified step ──
+            // ── Velocity rescaling (single-step or continuous thermostat) ──
             // NOTE: totalKE is only valid on rank 0 (from MPI_Reduce), so we
             // compute lambda on root and broadcast it to ensure ALL ranks rescale.
+            bool doRescale = false;
+
+            // Single-step rescale (legacy --rescale-step flag)
             if (step == params.rescale_step && !isHO) {
+                doRescale = true;
+            }
+
+            // Continuous thermostat during equilibration
+            if (params.rescale_freq > 0 && step <= params.rescale_end && !isHO &&
+                step % params.rescale_freq == 0) {
+                doRescale = true;
+            }
+
+            if (doRescale) {
                 double lambda = 1.0;
                 if (ctx.isRoot()) {
                     double tMeasured = md::computeTemperature(totalKE, N);
@@ -244,8 +291,21 @@ int main(int argc, char* argv[]) {
     double maxTime = 0.0;
     MPI_Reduce(&elapsed, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
+    // Communication time breakdown (timing mode only)
+    double maxCommTime = 0.0;
+    if (params.timing) {
+        MPI_Reduce(&ctx.commTime, &maxCommTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    }
+
     if (ctx.isRoot()) {
         std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, ctx.size);
+        if (params.timing) {
+            double computeTime = maxTime - maxCommTime;
+            std::printf("  Comm time: %.6f s (%.1f%%)\n", maxCommTime,
+                        100.0 * maxCommTime / maxTime);
+            std::printf("  Compute time: %.6f s (%.1f%%)\n", computeTime,
+                        100.0 * computeTime / maxTime);
+        }
     }
 
     // ── Write g(r) to file (LJ only) ──

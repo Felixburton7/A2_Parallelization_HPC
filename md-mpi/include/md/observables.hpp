@@ -11,7 +11,6 @@
 #define MD_OBSERVABLES_HPP
 
 #include <cmath>
-#include <cstdio>
 #include <vector>
 
 #include "md/constants.hpp"
@@ -55,37 +54,9 @@ inline double computeTemperature(double eKinTotal, int N) {
     return (2.0 * eKinTotal) / (nDof * constants::kB);
 }
 
-/**
- * @brief Rescale velocities to match a target temperature.
- *
- * Computes lambda = sqrt(T_target / T_measured) and scales all velocity
- * components by this factor. Records the scaling factor to stdout for
- * traceability.
- *
- * @param sys        System state (velocities modified in-place)
- * @param mass       Particle mass [kg]
- * @param tTarget    Target temperature [K]
- * @param eKinTotal  Total kinetic energy (from MPI_Reduce) [J]
- * @param N          Total number of particles
- * @param step       Current timestep (for logging)
- * @param rank       MPI rank (only rank 0 logs)
- */
-inline void rescaleVelocities(System& sys, double /*mass*/, double tTarget, double eKinTotal, int N,
-                              int step, int rank) {
-    double tMeasured = computeTemperature(eKinTotal, N);
-    if (tMeasured < 1e-30)
-        return;  // avoid division by zero
-    double lambda = std::sqrt(tTarget / tMeasured);
-
-    for (int i = 0; i < 3 * sys.localN; ++i) {
-        sys.vel[i] *= lambda;
-    }
-
-    if (rank == 0) {
-        std::printf("Rescale at step %d: lambda = %.15e, T_before = %.6f K, T_after = %.6f K\n",
-                    step, lambda, tMeasured, tTarget);
-    }
-}
+// NOTE: Velocity rescaling is performed directly in main.cpp using
+// computeTemperature() + MPI_Bcast(lambda) for MPI-correct thermostatting.
+// No standalone rescaleVelocities() helper — avoids duplication.
 
 /**
  * @brief Accumulate pair distances into a g(r) histogram.
@@ -143,8 +114,10 @@ inline void accumulateGR(const std::vector<double>& posGlobal, int N, double L, 
 /**
  * @brief Normalise the accumulated g(r) histogram.
  *
- * Uses the unordered-pair formula:
- *   g(r) = (1 / (rho * N)) * n(r, r+dr) / (4 * pi * r^2 * dr * nFrames)
+ * Since we count unordered pairs (i < j), each pair appears exactly once.
+ * The standard formula uses ordered pairs (factor of N*(N-1) total), so we
+ * multiply by 2 to compensate:
+ *   g(r) = 2 * count / (rho * N * 4*pi*r^2 * dr * nFrames)
  *
  * @param histogram  Accumulated histogram (modified in-place to g(r))
  * @param dr         Bin width
@@ -161,9 +134,9 @@ inline void normaliseGR(std::vector<double>& histogram, double dr, int N, double
         double rMid = rLow + 0.5 * dr;
         double shellVol = 4.0 * constants::pi * rMid * rMid * dr;
 
-        // Normalise: (1 / (rho * N)) * count / (shellVol * nFrames)
+        // Factor of 2: unordered pairs → ordered pairs
         if (shellVol > 0.0 && nFrames > 0) {
-            histogram[bin] /= (rho * N * shellVol * nFrames);
+            histogram[bin] *= 2.0 / (rho * N * shellVol * nFrames);
         }
     }
 }

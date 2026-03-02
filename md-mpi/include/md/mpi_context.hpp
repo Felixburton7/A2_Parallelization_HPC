@@ -33,6 +33,9 @@ class MPIContext {
     std::vector<int> displs;        ///< Displacement in doubles for each rank (3 * offset[r])
     std::vector<double> posGlobal;  ///< Permanent global position buffer (size 3*N)
 
+    double commTime = 0.0;    ///< Accumulated MPI_Allgatherv wall time [s] (timing mode only)
+    bool timingMode = false;  ///< When true, measure communication time
+
     /**
      * @brief Initialise MPI context with particle decomposition.
      *
@@ -75,11 +78,21 @@ class MPIContext {
      * the complete global position array (3*N doubles). This is the ONLY
      * collective communication in the time-stepping loop for LJ mode.
      *
+     * When timingMode is true, the wall time spent in MPI_Allgatherv is
+     * accumulated in commTime for compute-vs-communication analysis.
+     *
      * @param posLocal Local position array (3*localN doubles, interleaved)
      */
     void allgatherPositions(const std::vector<double>& posLocal) {
-        MPI_Allgatherv(posLocal.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(), recvcounts.data(),
-                       displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+        if (timingMode) {
+            double t0 = MPI_Wtime();
+            MPI_Allgatherv(posLocal.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(),
+                           recvcounts.data(), displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+            commTime += (MPI_Wtime() - t0);
+        } else {
+            MPI_Allgatherv(posLocal.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(),
+                           recvcounts.data(), displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+        }
     }
 
     /**

@@ -4,15 +4,14 @@
  *
  * All random number generation uses std::mt19937_64 with a fixed seed,
  * executed ONLY on rank 0 for bitwise reproducibility across all MPI
- * configurations. Does NOT use rand() or std::rand().
+ * configurations. Both functions accept a reference to a shared generator
+ * to draw from a single, statistically sound random stream.
  */
 
 #ifndef MD_RNG_HPP
 #define MD_RNG_HPP
 
 #include <cmath>
-#include <cstdio>
-#include <cstdlib>
 #include <random>
 #include <vector>
 
@@ -29,23 +28,14 @@ namespace md {
  * A small random zero-mean perturbation (~0.01*sigma per coordinate) is
  * applied to break exact symmetry and prevent force singularities.
  *
- * @param N     Total number of particles (must be 4*k^3 for integer k)
+ * @param N     Total number of particles (must be 4*k^3, validated by caller)
  * @param L     Box side length [m]
- * @param seed  RNG seed for perturbation
+ * @param gen   Reference to shared RNG (caller owns lifetime)
  * @return      Flat interleaved position array of size 3*N
  */
-inline std::vector<double> buildFCCLattice(int N, double L, int seed) {
-    // Determine k such that N = 4*k^3
+inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
+    // Determine k such that N = 4*k^3 (validated by caller)
     int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
-
-    // Validate: N must equal 4*k^3 for a valid FCC lattice
-    if (4 * k * k * k != N) {
-        std::fprintf(stderr,
-                     "ERROR: N = %d is not a valid FCC particle count (need N = 4*k^3, "
-                     "nearest k = %d gives N = %d)\n",
-                     N, k, 4 * k * k * k);
-        std::exit(1);
-    }
 
     std::vector<double> positions(3 * N);
 
@@ -57,7 +47,6 @@ inline std::vector<double> buildFCCLattice(int N, double L, int seed) {
 
     // Perturbation magnitude (zero-mean uniform distribution)
     double pertMag = 0.01 * constants::sigma;
-    std::mt19937_64 gen(seed);
     std::uniform_real_distribution<double> pertDist(-pertMag, pertMag);
 
     int idx = 0;
@@ -91,16 +80,14 @@ inline std::vector<double> buildFCCLattice(int N, double L, int seed) {
  * @param N      Total number of particles
  * @param T      Target temperature [K]
  * @param mass   Particle mass [kg]
- * @param seed   RNG seed
+ * @param gen    Reference to shared RNG (same stream as lattice perturbation)
  * @return       Flat interleaved velocity array of size 3*N
  */
-inline std::vector<double> generateVelocities(int N, double T, double mass, int seed) {
+inline std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
     std::vector<double> vel(3 * N);
 
     double sigmaV = std::sqrt(constants::kB * T / mass);
 
-    // Use a separate seed stream for velocities (offset from lattice seed)
-    std::mt19937_64 gen(seed + 1000);
     std::uniform_real_distribution<double> uDist(0.0, 1.0);
 
     int totalComponents = 3 * N;

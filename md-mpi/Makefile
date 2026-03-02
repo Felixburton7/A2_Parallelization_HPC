@@ -9,7 +9,7 @@
 # ──────────────────────────────────────────────────────────────────
 
 CXX       = mpicxx
-CXXFLAGS  = -std=c++17 -O3 -march=native -Wall -Wextra -pedantic
+CXXFLAGS  = -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic
 INCLUDES  = -Iinclude
 
 # Source files
