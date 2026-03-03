@@ -143,6 +143,9 @@ def plot_equilibrated_comparison():
     ax1.set_xlabel('Step')
     ax1.set_ylabel(r'$(E_{total} - E_0) / |E_0|$')
     ax1.set_title('Energy Deviation: Full Trajectories')
+    ax1.axvline(x=100, color='gray', linestyle=':', linewidth=1.5, alpha=0.7)
+    ax1.text(102, ax1.get_ylim()[1] * 0.5, 'NVE starts', rotation=90,
+             fontsize=9, color='gray', va='center')
     ax1.legend(fontsize=9)
     ax1.grid(True, alpha=0.3)
 
@@ -198,7 +201,7 @@ def plot_rdf():
     ax.axhline(y=1.0, color='k', linestyle='--', alpha=0.3, label='g(r) = 1')
     ax.set_xlabel(r'$r / \sigma$', fontsize=14)
     ax.set_ylabel(r'$g(r)$', fontsize=14)
-    ax.set_title('Radial Distribution Function (Liquid Argon, T=94.4 K)')
+    ax.set_title(r'Radial Distribution Function (Liquid Argon, $T_{\mathrm{init}}$ = 94.4 K)')
     ax.set_xlim(0, 5)
     ax.legend()
     ax.grid(True, alpha=0.3)

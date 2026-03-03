@@ -78,7 +78,7 @@ fi
 # ── 3. g(r) Production Run ──
 echo ""
 echo "=== g(r) PRODUCTION RUN ==="
-mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 5000 \
+mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 25500 \
     --rescale-freq 10 --rescale-end 500 --gr --gr-discard 500 --gr-interval 10 2>/dev/null
 if [ -s "$OUTDIR/gr.csv" ]; then
     echo "  g(r) done: $(wc -l < "$OUTDIR/gr.csv") lines ✅"

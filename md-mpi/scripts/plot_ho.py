@@ -215,6 +215,28 @@ def plot_energy_conservation():
     ax.legend(fontsize=10)
     ax.grid(True, alpha=0.3)
 
+    # Add zoomed inset to show VV vs RK4 near zero
+    from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+    axins = inset_axes(ax, width="40%", height="30%", loc="lower right", borderpad=2)
+    
+    for integ in INTEGRATORS:
+        if integ == "euler": continue # Skip Euler for inset
+        fpath = f"{HO_DIR}/{integ}_dt{TRAJ_DT}.csv"
+        if not os.path.exists(fpath): continue
+        data = load_csv(fpath)
+        t = data['time']
+        E = data['E_total']
+        E0 = E[0]
+        rel_dev = (E - E0) / abs(E0) if abs(E0) > 1e-30 else E - E0
+        axins.plot(t, rel_dev, color=INTEGRATOR_COLORS[integ], linewidth=1.5)
+    
+    axins.set_title('Zoom: VV vs RK4', fontsize=9)
+    axins.grid(True, alpha=0.3)
+    axins.tick_params(axis='both', which='major', labelsize=8)
+    
+    # Optional: adjust y-limits of inset manually if needed
+    # (Leaving it auto-scaled, which usually captures the O(1e-4) VV vs O(1e-15) RK4 nicely.)
+
     plt.tight_layout()
     plt.savefig(f"{PLOT_DIR}/ho_energy.png", dpi=150, bbox_inches='tight')
     plt.close()
