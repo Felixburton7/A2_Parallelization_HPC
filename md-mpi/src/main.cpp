@@ -290,21 +290,34 @@ int main(int argc, char* argv[]) {
     // ── Timing completion ──
     double tEnd = MPI_Wtime();
     double elapsed = tEnd - tStart;
-    double maxTime = 0.0;
-    MPI_Reduce(&elapsed, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-    // Communication time breakdown (timing mode only)
-    double maxCommTime = 0.0;
+    // Find the slowest rank using MPI_MAXLOC — ensures wall and comm come
+    // from the SAME rank, guaranteeing comm <= wall. Allreduce so all ranks
+    // know slowestRank (needed for the subsequent MPI_Bcast).
+    struct {
+        double val;
+        int rank;
+    } localData{elapsed, ctx.rank}, globalData{0.0, 0};
+    MPI_Allreduce(&localData, &globalData, 1, MPI_DOUBLE_INT, MPI_MAXLOC, MPI_COMM_WORLD);
+
+    double maxTime = globalData.val;
+    int slowestRank = globalData.rank;
+
+    // Get comm time from the slowest rank (not the max comm across all ranks)
+    double reportedCommTime = 0.0;
     if (params.timing) {
-        MPI_Reduce(&ctx.commTime, &maxCommTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        if (ctx.rank == slowestRank) {
+            reportedCommTime = ctx.commTime;
+        }
+        MPI_Bcast(&reportedCommTime, 1, MPI_DOUBLE, slowestRank, MPI_COMM_WORLD);
     }
 
     if (ctx.isRoot()) {
         std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, ctx.size);
         if (params.timing) {
-            double computeTime = maxTime - maxCommTime;
-            std::printf("  Comm time: %.6f s (%.1f%%)\n", maxCommTime,
-                        100.0 * maxCommTime / maxTime);
+            double computeTime = maxTime - reportedCommTime;
+            std::printf("  Comm time: %.6f s (%.1f%%)\n", reportedCommTime,
+                        100.0 * reportedCommTime / maxTime);
             std::printf("  Compute time: %.6f s (%.1f%%)\n", computeTime,
                         100.0 * computeTime / maxTime);
         }

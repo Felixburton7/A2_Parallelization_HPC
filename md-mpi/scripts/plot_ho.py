@@ -3,17 +3,14 @@
 plot_ho.py — Generate Harmonic Oscillator verification plots (Results 1).
 
 Produces:
-  1. Position vs time for all three integrators (with exact solution overlay)
-  2. Velocity vs time
-  3. Phase-space (v vs x) diagrams
-  4. Log-log convergence: |x_num(T) - x_exact(T)| vs dt with fitted slopes
+  1. Position & velocity vs time for all three integrators (with exact overlay)
+  2. Phase-space (v vs x) diagrams
+  3. Log-log convergence: |x_num(T) - x_exact(T)| vs dt with fitted slopes
+  4. Energy conservation comparison
 
 Usage:
-  python3 scripts/plot_ho.py           # just plot from existing data
+  python3 scripts/plot_ho.py           # plot from existing data in out/ho/
   python3 scripts/plot_ho.py --run     # run simulations first, then plot
-
-Prerequisites:
-  HO CSV files in out/ directory with columns: step,time,x,v,E_kin,E_pot,E_total
 """
 
 import os
@@ -24,90 +21,66 @@ import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 # ── Configuration ──
-INTEGRATORS = ["euler", "rk4", "verlet"]
-INTEGRATOR_LABELS = {"euler": "Euler (AMM Eqn 4.27)", "rk4": "RK4", "verlet": "Velocity-Verlet"}
+INTEGRATORS = ["euler", "verlet", "rk4"]
+INTEGRATOR_LABELS = {"euler": "Euler (AMM 4.27)", "rk4": "RK4", "verlet": "Velocity-Verlet"}
 INTEGRATOR_COLORS = {"euler": "#e74c3c", "rk4": "#3498db", "verlet": "#2ecc71"}
 INTEGRATOR_ORDERS = {"euler": 1, "rk4": 4, "verlet": 2}
 
-DT_VALUES = [0.1, 0.05, 0.02, 0.01, 0.005, 0.002, 0.001]
+DT_VALUES = [1.0, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005]
+DT_STEPS = {1.0: 10, 0.5: 20, 0.1: 100, 0.05: 200, 0.01: 1000,
+            0.005: 2000, 0.001: 10000, 0.0005: 20000}
 OMEGA = 1.0
-T_FINAL = 10.0  # final time for convergence test
-N_PARTICLES = 1
-
-# Initial conditions: x(0) = 1.0, v(0) = 0.0
-X0 = 1.0
-V0 = 0.0
+T_FINAL = 10.0
+TRAJ_DT = 0.01  # dt used for trajectory/phase-space plots
 
 OUT_DIR = "out"
+HO_DIR = "out/ho"
 PLOT_DIR = "out/plots"
 
 
-def exact_solution(t, omega=OMEGA, x0=X0, v0=V0):
-    """Exact HO solution: x(t) = x0*cos(wt) + (v0/w)*sin(wt)."""
-    x = x0 * np.cos(omega * t) + (v0 / omega) * np.sin(omega * t)
-    v = -x0 * omega * np.sin(omega * t) + v0 * np.cos(omega * t)
+def exact_solution(t, omega=OMEGA):
+    """Exact HO solution: x(t) = cos(wt), v(t) = -w*sin(wt)."""
+    x = np.cos(omega * t)
+    v = -omega * np.sin(omega * t)
     return x, v
 
 
 def run_ho_simulations():
     """Run HO simulations for all integrators and dt values."""
-    os.makedirs(OUT_DIR, exist_ok=True)
-
+    os.makedirs(HO_DIR, exist_ok=True)
     for integ in INTEGRATORS:
-        # Single run with moderate dt for trajectory plots
-        dt_traj = 0.01
-        steps_traj = int(T_FINAL / dt_traj)
-        cmd = [
-            "mpirun", "-np", "1", "./md_solver",
-            "--mode", "ho", "--integrator", integ,
-            "--dt", str(dt_traj), "--steps", str(steps_traj),
-            "--N", str(N_PARTICLES), "--omega", str(OMEGA)
-        ]
-        print(f"Running: {' '.join(cmd)}")
-        subprocess.run(cmd, check=True)
-
-        # Rename output for trajectory
-        src = f"{OUT_DIR}/ho_{integ}.csv"
-        dst = f"{OUT_DIR}/ho_{integ}_traj.csv"
-        if os.path.exists(src):
-            os.rename(src, dst)
-
-        # Convergence sweep
         for dt in DT_VALUES:
-            steps = int(T_FINAL / dt)
+            steps = DT_STEPS[dt]
             cmd = [
                 "mpirun", "-np", "1", "./md_solver",
                 "--mode", "ho", "--integrator", integ,
-                "--dt", str(dt), "--steps", str(steps),
-                "--N", str(N_PARTICLES), "--omega", str(OMEGA)
+                "--dt", str(dt), "--steps", str(steps), "--N", "1"
             ]
-            print(f"Running: {' '.join(cmd)}")
-            subprocess.run(cmd, check=True)
-
-            # Rename with dt label
+            print(f"Running: {integ} dt={dt} steps={steps}")
+            subprocess.run(cmd, check=True, capture_output=True)
             src = f"{OUT_DIR}/ho_{integ}.csv"
-            dst = f"{OUT_DIR}/ho_{integ}_dt{dt}.csv"
+            dst = f"{HO_DIR}/{integ}_dt{dt}.csv"
             if os.path.exists(src):
                 os.rename(src, dst)
+    print("All HO simulations complete.")
 
 
 def load_csv(filepath):
-    """Load CSV file with headers."""
+    """Load CSV with headers."""
     return np.genfromtxt(filepath, delimiter=',', names=True)
 
 
 def plot_trajectories():
-    """Plot x(t), v(t), phase space for all integrators."""
+    """Plot x(t), v(t), phase space for all integrators at dt=0.01."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
-    # Exact solution
     t_exact = np.linspace(0, T_FINAL, 1000)
     x_exact, v_exact = exact_solution(t_exact)
 
     for integ in INTEGRATORS:
-        fpath = f"{OUT_DIR}/ho_{integ}_traj.csv"
+        fpath = f"{HO_DIR}/{integ}_dt{TRAJ_DT}.csv"
         if not os.path.exists(fpath):
             print(f"Warning: {fpath} not found, skipping {integ}")
             continue
@@ -120,13 +93,8 @@ def plot_trajectories():
         color = INTEGRATOR_COLORS[integ]
         label = INTEGRATOR_LABELS[integ]
 
-        # Position vs time
         axes[0].plot(t, x, color=color, label=label, linewidth=1.5, alpha=0.8)
-
-        # Velocity vs time
         axes[1].plot(t, v, color=color, label=label, linewidth=1.5, alpha=0.8)
-
-        # Phase space: v vs x
         axes[2].plot(x, v, color=color, label=label, linewidth=1.2, alpha=0.8)
 
     # Exact overlays
@@ -144,8 +112,8 @@ def plot_trajectories():
     axes[1].legend(fontsize=9)
     axes[1].grid(True, alpha=0.3)
 
-    x_ex_phase, v_ex_phase = exact_solution(np.linspace(0, 2*np.pi/OMEGA, 500))
-    axes[2].plot(x_ex_phase, v_ex_phase, 'k--', linewidth=1, alpha=0.5, label='Exact')
+    x_ep, v_ep = exact_solution(np.linspace(0, 2 * np.pi / OMEGA, 500))
+    axes[2].plot(x_ep, v_ep, 'k--', linewidth=1, alpha=0.5, label='Exact')
     axes[2].set_xlabel('Position x')
     axes[2].set_ylabel('Velocity v')
     axes[2].set_title('Phase Space (v vs x)')
@@ -154,18 +122,17 @@ def plot_trajectories():
     axes[2].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_trajectories.png", dpi=150)
+    plt.savefig(f"{PLOT_DIR}/ho_trajectories.png", dpi=150, bbox_inches='tight')
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_trajectories.png")
 
 
 def plot_convergence():
-    """Plot log-log convergence: |x_num(T) - x_exact(T)| vs dt with fitted slopes."""
+    """Log-log convergence plot with fitted slopes."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     fig, ax = plt.subplots(figsize=(8, 6))
 
-    # Exact position at T_FINAL
     x_ex_final, _ = exact_solution(T_FINAL)
 
     for integ in INTEGRATORS:
@@ -173,17 +140,15 @@ def plot_convergence():
         dts = []
 
         for dt in DT_VALUES:
-            fpath = f"{OUT_DIR}/ho_{integ}_dt{dt}.csv"
+            fpath = f"{HO_DIR}/{integ}_dt{dt}.csv"
             if not os.path.exists(fpath):
                 continue
 
             data = load_csv(fpath)
-
-            # Position error: |x_num(T) - x_exact(T)| (charter §A3)
             x_num_final = data['x'][-1]
             err = abs(x_num_final - x_ex_final)
 
-            if err > 0:
+            if err > 1e-16:  # skip if at machine epsilon
                 errors.append(err)
                 dts.append(dt)
 
@@ -194,21 +159,20 @@ def plot_convergence():
         dts = np.array(dts)
         errors = np.array(errors)
 
-        # Linear regression on log-log data
         log_dt = np.log10(dts)
         log_err = np.log10(errors)
         slope, intercept, r_value, _, _ = linregress(log_dt, log_err)
 
         color = INTEGRATOR_COLORS[integ]
         expected = INTEGRATOR_ORDERS[integ]
-        label = f"{INTEGRATOR_LABELS[integ]} (fitted p={slope:.2f}, expected {expected})"
+        label = f"{INTEGRATOR_LABELS[integ]} (slope={slope:.2f}, expected {expected})"
 
         ax.loglog(dts, errors, 'o-', color=color, label=label,
                   linewidth=2, markersize=6)
 
         # Reference slope line
         dt_ref = np.array([min(dts), max(dts)])
-        err_ref = errors[0] * (dt_ref / dts[0])**expected
+        err_ref = errors[0] * (dt_ref / dts[0]) ** expected
         ax.loglog(dt_ref, err_ref, '--', color=color, alpha=0.4, linewidth=1)
 
     ax.set_xlabel(r'$\Delta t$', fontsize=14)
@@ -218,19 +182,19 @@ def plot_convergence():
     ax.grid(True, which='both', alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_convergence.png", dpi=150)
+    plt.savefig(f"{PLOT_DIR}/ho_convergence.png", dpi=150, bbox_inches='tight')
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_convergence.png")
 
 
 def plot_energy_conservation():
-    """Plot energy conservation comparison for all integrators."""
+    """Energy conservation comparison for all integrators."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     fig, ax = plt.subplots(figsize=(8, 5))
 
     for integ in INTEGRATORS:
-        fpath = f"{OUT_DIR}/ho_{integ}_traj.csv"
+        fpath = f"{HO_DIR}/{integ}_dt{TRAJ_DT}.csv"
         if not os.path.exists(fpath):
             continue
 
@@ -247,12 +211,12 @@ def plot_energy_conservation():
 
     ax.set_xlabel('Time')
     ax.set_ylabel(r'$(E - E_0) / |E_0|$')
-    ax.set_title('HO Energy Conservation')
+    ax.set_title('HO Energy Conservation (dt=0.01)')
     ax.legend(fontsize=10)
     ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_energy.png", dpi=150)
+    plt.savefig(f"{PLOT_DIR}/ho_energy.png", dpi=150, bbox_inches='tight')
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_energy.png")
 
