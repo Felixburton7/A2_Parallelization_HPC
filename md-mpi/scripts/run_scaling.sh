@@ -20,7 +20,7 @@ SOLVER="./md_solver"
 OUTDIR="out"
 STEPS=100
 INTEGRATOR="verlet"
-REPS=5
+REPS=10
 
 mkdir -p "$OUTDIR"
 
