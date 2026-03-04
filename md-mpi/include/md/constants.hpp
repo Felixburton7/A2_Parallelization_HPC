@@ -2,9 +2,7 @@
  * @file constants.hpp
  * @brief Physical constants for Molecular Dynamics simulation.
  *
- * All constants are defined as constexpr values in SI units unless
- * otherwise noted. No magic numbers should appear anywhere else in
- * the codebase — reference this header instead.
+ * Physical constants and derived LJ parameters (SI units).
  */
 
 #ifndef MD_CONSTANTS_HPP
@@ -34,9 +32,6 @@ constexpr double rcut_sigma = 2.25;
 /// Interaction cutoff [m]
 constexpr double rcut = rcut_sigma * sigma;
 
-/// Pi
-constexpr double pi = 3.14159265358979323846;
-
 // ── Derived quantities for optimised LJ kernel ──
 
 /// sigma^2
@@ -57,6 +52,20 @@ constexpr double four_eps = 4.0 * epsilon;
 /// 24 * epsilon (force prefactor)
 constexpr double twentyfour_eps = 24.0 * epsilon;
 
+// ── Magic numbers extracted from codebase ──
+
+/// Fraction of sigma for random initial position perturbation
+constexpr double fccPerturbation = 0.01;
+
+/// g(r) histogram bin width in units of sigma
+constexpr double grBinWidthSigma = 0.02;
+
+/// Box size for HO mode (non-periodic; effectively unused but kept finite as a safety guard)
+constexpr double L_ho_dummy = 1.0e10;
+
+/// Lower bound numerical guard for temperature rescaling
+constexpr double rescaleGuard = 1e-30;
+
 // ── Rahman (1964) reference state point ──
 
 /// Number of particles in Rahman's simulation
@@ -70,18 +79,6 @@ constexpr double L_sigma_rahman = 10.229;
 
 /// Box side length for N=864 [m]
 constexpr double L_rahman = L_sigma_rahman * sigma;
-
-/// Initial temperature [K]
-constexpr double T_init = 94.4;
-
-/// Timestep [s]
-constexpr double dt_rahman = 1.0e-14;
-
-/// Total simulation time [s]
-constexpr double T_sim = 1.0e-12;
-
-/// Number of timesteps (T_sim / dt)
-constexpr int steps_rahman = 100;
 
 }  // namespace constants
 }  // namespace md

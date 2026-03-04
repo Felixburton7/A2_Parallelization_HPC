@@ -29,13 +29,7 @@ namespace md {
  * @param mass  Particle mass [kg]
  * @return      Local kinetic energy [J]
  */
-inline double computeLocalKineticEnergy(const System& sys, double mass) {
-    double eKin = 0.0;
-    for (int i = 0; i < 3 * sys.localN; ++i) {
-        eKin += sys.vel[i] * sys.vel[i];
-    }
-    return 0.5 * mass * eKin;
-}
+double computeLocalKineticEnergy(const System& sys, double mass);
 
 /**
  * @brief Compute temperature from total kinetic energy.
@@ -49,10 +43,7 @@ inline double computeLocalKineticEnergy(const System& sys, double mass) {
  * @param N         Total number of particles
  * @return          Instantaneous temperature [K]
  */
-inline double computeTemperature(double eKinTotal, int N) {
-    int nDof = 3 * (N - 1);  // degrees of freedom after CoM removal
-    return (2.0 * eKinTotal) / (nDof * constants::kB);
-}
+double computeTemperature(double eKinTotal, int N);
 
 // NOTE: Velocity rescaling is performed directly in main.cpp using
 // computeTemperature() + MPI_Bcast(lambda) for MPI-correct thermostatting.
@@ -75,41 +66,8 @@ inline double computeTemperature(double eKinTotal, int N) {
  * @param rMax       Maximum distance to bin
  * @param histogram  Output histogram (must be pre-sized)
  */
-inline void accumulateGR(const std::vector<double>& posGlobal, int N, double L, int offset,
-                         int localN, double dr, double rMax, std::vector<double>& histogram) {
-    double halfL = 0.5 * L;
-    int nBins = static_cast<int>(histogram.size());
-
-    for (int i = offset; i < offset + localN; ++i) {
-        for (int j = i + 1; j < N; ++j) {
-            double dx = posGlobal[3 * i + 0] - posGlobal[3 * j + 0];
-            double dy = posGlobal[3 * i + 1] - posGlobal[3 * j + 1];
-            double dz = posGlobal[3 * i + 2] - posGlobal[3 * j + 2];
-
-            // Minimum image convention (branch-predictor friendly)
-            if (dx > halfL)
-                dx -= L;
-            else if (dx < -halfL)
-                dx += L;
-            if (dy > halfL)
-                dy -= L;
-            else if (dy < -halfL)
-                dy += L;
-            if (dz > halfL)
-                dz -= L;
-            else if (dz < -halfL)
-                dz += L;
-
-            double r = std::sqrt(dx * dx + dy * dy + dz * dz);
-            if (r < rMax) {
-                int bin = static_cast<int>(r / dr);
-                if (bin < nBins) {
-                    histogram[bin] += 1.0;
-                }
-            }
-        }
-    }
-}
+void accumulateGR(const std::vector<double>& posGlobal, int N, double L, int offset, int localN,
+                  double dr, double rMax, std::vector<double>& histogram);
 
 /**
  * @brief Normalise the accumulated g(r) histogram.
@@ -125,21 +83,7 @@ inline void accumulateGR(const std::vector<double>& posGlobal, int N, double L, 
  * @param L          Box side length
  * @param nFrames    Number of frames accumulated
  */
-inline void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int nFrames) {
-    double V = L * L * L;
-    double rho = N / V;
-
-    for (int bin = 0; bin < static_cast<int>(histogram.size()); ++bin) {
-        double rLow = bin * dr;
-        double rMid = rLow + 0.5 * dr;
-        double shellVol = 4.0 * constants::pi * rMid * rMid * dr;
-
-        // Factor of 2: unordered pairs → ordered pairs
-        if (shellVol > 0.0 && nFrames > 0) {
-            histogram[bin] *= 2.0 / (rho * N * shellVol * nFrames);
-        }
-    }
-}
+void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int nFrames);
 
 }  // namespace md
 

@@ -20,13 +20,13 @@ SOLVER="./md_solver"
 OUTDIR="out"
 STEPS=100
 INTEGRATOR="verlet"
-REPS=10
+REPS=20
 
 mkdir -p "$OUTDIR"
 
 # Helper: given parallel arrays of wall and comm times, pick the
 # median by wall time and return the paired (wall, comm).
-# Usage: pick_median_pair "w1 w2 w3 w4 w5" "c1 c2 c3 c4 c5"
+# Usage: pick_median_pair "w1 ... wn" "c1 ... cn"
 # Prints: wall_median comm_from_same_rep
 pick_median_pair() {
     local walls=($1)
@@ -61,10 +61,11 @@ for P in 1 2 4 8 16 24 32; do
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N_STRONG" --steps "$STEPS" --timing 2>&1)
 
-        WALL=$(echo "$OUTPUT" | grep "Wall time" | awk '{print $3}')
-        COMM=$(echo "$OUTPUT" | grep "Comm time" | awk '{print $3}')
+        WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
+        COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
         # P=1 has no comm line
         if [ -z "$COMM" ]; then COMM="0.000000"; fi
+        COMM=$(awk -v w="$WALL" -v c="$COMM" 'BEGIN{if (c > w) print w; else print c}')
 
         WALLS="$WALLS $WALL"
         COMMS="$COMMS $COMM"
@@ -90,11 +91,12 @@ for N in 108 256 500 864 1372 2048; do
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun --oversubscribe -np "$P_SIZE" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
-            --N "$N" --steps "$STEPS" --timing 2>&1)
+            --N "$N" --steps 500 --timing 2>&1)
 
-        WALL=$(echo "$OUTPUT" | grep "Wall time" | awk '{print $3}')
-        COMM=$(echo "$OUTPUT" | grep "Comm time" | awk '{print $3}')
+        WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
+        COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
         if [ -z "$COMM" ]; then COMM="0.000000"; fi
+        COMM=$(awk -v w="$WALL" -v c="$COMM" 'BEGIN{if (c > w) print w; else print c}')
 
         WALLS="$WALLS $WALL"
         COMMS="$COMMS $COMM"

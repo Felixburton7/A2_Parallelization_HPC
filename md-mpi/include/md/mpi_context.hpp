@@ -19,7 +19,7 @@
 namespace md {
 
 /**
- * @brief Encapsulates MPI state and particle decomposition.
+ * @brief MPI context: decomposition and Allgatherv helpers.
  */
 class MPIContext {
    public:
@@ -84,15 +84,11 @@ class MPIContext {
      * @param posLocal Local position array (3*localN doubles, interleaved)
      */
     void allgatherPositions(const std::vector<double>& posLocal) {
-        if (timingMode) {
-            double t0 = MPI_Wtime();
-            MPI_Allgatherv(posLocal.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(),
-                           recvcounts.data(), displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+        double t0 = timingMode ? MPI_Wtime() : 0.0;
+        MPI_Allgatherv(posLocal.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(), recvcounts.data(),
+                       displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+        if (timingMode)
             commTime += (MPI_Wtime() - t0);
-        } else {
-            MPI_Allgatherv(posLocal.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(),
-                           recvcounts.data(), displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
-        }
     }
 
     /**

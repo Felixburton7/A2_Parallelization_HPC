@@ -20,9 +20,11 @@
 
 #include <cmath>
 #include <cstdio>
+#include <ctime>
 #include <fstream>
 #include <functional>
 #include <iomanip>
+#include <random>
 #include <string>
 #include <vector>
 
@@ -43,11 +45,6 @@ int main(int argc, char* argv[]) {
     md::ParseStatus status = md::Params::parse(argc, argv, params);
 
     if (status != md::ParseStatus::Ok) {
-        int rank;
-        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        if (rank == 0) {
-            md::Params::printUsage(argv[0]);
-        }
         MPI_Finalize();
         return (status == md::ParseStatus::Help) ? 0 : 1;
     }
@@ -59,13 +56,15 @@ int main(int argc, char* argv[]) {
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
+    const int productionStart = (!isHO && params.rescaleStep >= 0) ? params.rescaleStep : 0;
+    const int grStart = productionStart + params.grDiscard;
 
     // ── Compute box side length ──
     // For LJ: scale from Rahman's L=10.229*sigma for N=864 to maintain constant density
     // For HO: L is irrelevant (non-interacting), set to a large value
     double L;
     if (isHO) {
-        L = 1.0e10;  // effectively unbounded for HO
+        L = md::constants::L_ho_dummy;  // effectively unused for HO
     } else {
         L = md::constants::L_sigma_rahman * md::constants::sigma *
             std::cbrt(static_cast<double>(N) / md::constants::N_rahman);
@@ -78,6 +77,12 @@ int main(int argc, char* argv[]) {
 
     if (ctx.isRoot()) {
         if (isHO) {
+            if (params.N != 1) {
+                std::fprintf(
+                    stderr,
+                    "WARNING: HO validation expects N=1. Continuing with N>1 treats particles as "
+                    "independent copies.\n");
+            }
             // HO: single particle (or N independent particles) with simple IC
             // x(0) = 1.0, v(0) = 0.0 for each particle (each dimension)
             for (int i = 0; i < N; ++i) {
@@ -99,10 +104,27 @@ int main(int argc, char* argv[]) {
                 fccError = 1;
             } else {
                 // LJ: FCC lattice with perturbation + Box-Muller velocities
-                // Single RNG stream for both (no seed+offset code smell)
+                // Single RNG stream for both
                 std::mt19937_64 gen(params.seed);
                 posAll = md::buildFCCLattice(N, L, gen);
                 velAll = md::generateVelocities(N, params.T_init, md::constants::mass, gen);
+
+                double sumV2 = 0.0;
+                for (int i = 0; i < 3 * N; ++i) {
+                    sumV2 += velAll[i] * velAll[i];
+                }
+                double eKin0 = 0.5 * md::constants::mass * sumV2;
+                double tMeasured0 = md::computeTemperature(eKin0, N);
+
+                std::printf("=== Initial Conditions (Rank 0) ===\n");
+                std::printf("Seed used for RNG: %d\n", params.seed);
+                std::printf("FCC lattice generated\n");
+                std::printf("Perturbation amplitude: %.6e m (%.4f sigma)\n",
+                            md::constants::fccPerturbation * md::constants::sigma,
+                            md::constants::fccPerturbation);
+                std::printf("Box-Muller velocities applied\n");
+                std::printf("Initial measured Temperature: %.6f K\n", tMeasured0);
+                std::printf("===================================\n");
             }
         }
     }
@@ -143,32 +165,59 @@ int main(int argc, char* argv[]) {
     }
 
     // ── Build force function (binds potential-specific parameters) ──
-    md::ForceFunc forceFunc;
-    if (isHO) {
-        double omega = params.omega;
-        double mass = md::constants::mass;
-        forceFunc = [omega, mass](md::System& s, const std::vector<double>& pg, double& pe) {
-            md::computeHOForces(s, pg, pe, omega, mass);
-        };
-    } else {
-        double mass = md::constants::mass;
-        forceFunc = [mass](md::System& s, const std::vector<double>& pg, double& pe) {
-            md::computeLJForces(s, pg, pe, mass);
-        };
-    }
+    double omega = params.omega;
+    double mass = md::constants::mass;
+
+    auto evalHO = [omega, mass](md::System& s, const std::vector<double>& pg, double& pe) {
+        md::computeHOForces(s, pg, pe, omega, mass);
+    };
+    auto evalLJ = [mass](md::System& s, const std::vector<double>& pg, double& pe) {
+        md::computeLJForces(s, pg, pe, mass);
+    };
+
+    enum class IntegratorType { Euler, RK4, Verlet };
+    IntegratorType intType = IntegratorType::Verlet;
+    if (params.integrator == "euler")
+        intType = IntegratorType::Euler;
+    else if (params.integrator == "rk4")
+        intType = IntegratorType::RK4;
 
     // ── Initial force evaluation ──
     double localPE = 0.0;
-    forceFunc(sys, ctx.posGlobal, localPE);
+    if (isHO) {
+        evalHO(sys, ctx.posGlobal, localPE);
+    } else {
+        evalLJ(sys, ctx.posGlobal, localPE);
+    }
 
     // ── Create output directory and open file (rank 0 only) ──
     std::ofstream outFile;
     if (params.output && ctx.isRoot()) {
-        mkdir("out", 0755);  // create if not exists, ignore error if exists
-        std::string fname = "out/" + params.mode + "_" + params.integrator + ".csv";
+        std::string fname;
+        if (!params.outdir.empty()) {
+            fname = params.outdir + "/" + params.mode + "_" + params.integrator + ".csv";
+        } else {
+            mkdir("out", 0755);
+            fname = "out/" + params.mode + "_" + params.integrator + ".csv";
+        }
         outFile.open(fname);
         if (outFile.is_open()) {
             outFile << std::setprecision(15);
+            std::time_t t = std::time(nullptr);
+            char tstr[100];
+            std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
+            outFile << "# mode: " << params.mode << ", integrator: " << params.integrator
+                    << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
+                    << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
+                    << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
+                    << ", rescale_step: " << params.rescaleStep
+                    << ", production_start: " << productionStart
+                    << ", gr_discard: " << params.grDiscard
+                    << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart;
+            if (!isHO) {
+                outFile << ", lattice: FCC, velocities: Box-Muller";
+            }
+            outFile << ", timestamp: " << tstr << "\n";
             if (isHO) {
                 // HO: output position, velocity, energy for phase-space & convergence plots
                 outFile << "step,time,x,v,E_kin,E_pot,E_total\n";
@@ -179,7 +228,7 @@ int main(int argc, char* argv[]) {
     }
 
     // ── Print simulation info (rank 0) ──
-    if (ctx.isRoot()) {
+    if (ctx.isRoot() && !params.timing) {
         std::printf("=== MD Solver ===\n");
         std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
         std::printf("N = %d | P = %d | steps = %d | dt = %.3e\n", N, ctx.size, params.steps,
@@ -192,9 +241,10 @@ int main(int argc, char* argv[]) {
     }
 
     // ── g(r) histogram setup (LJ only) ──
-    const double grDr = 0.02 * md::constants::sigma;  // bin width = 0.02*sigma
-    const double grRMax = 0.5 * L;                    // bin range = [0, L/2]
-    const int grNBins = static_cast<int>(grRMax / grDr);
+    // Keep HO mode at zero-sized buffers to avoid meaningless allocations.
+    const double grDr = md::constants::grBinWidthSigma * md::constants::sigma;  // bin width
+    const double grRMax = isHO ? 0.0 : 0.5 * L;                                  // [0, L/2] for LJ
+    const int grNBins = isHO ? 0 : static_cast<int>(grRMax / grDr);
     std::vector<double> grHistLocal(grNBins, 0.0);
     int grFrames = 0;
 
@@ -231,33 +281,20 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            // ── Velocity rescaling (single-step or continuous thermostat) ──
-            // NOTE: totalKE is only valid on rank 0 (from MPI_Reduce), so we
-            // compute lambda on root and broadcast it to ensure ALL ranks rescale.
-            bool doRescale = false;
-
-            // Single-step rescale (legacy --rescale-step flag)
-            if (step == params.rescale_step && !isHO) {
-                doRescale = true;
-            }
-
-            // Continuous thermostat during equilibration
-            if (params.rescale_freq > 0 && step <= params.rescale_end && !isHO &&
-                step % params.rescale_freq == 0) {
-                doRescale = true;
-            }
-
-            if (doRescale) {
+            // ── Single-step Velocity Rescaling ──
+            if (step == params.rescaleStep && !isHO) {
                 double lambda = 1.0;
                 if (ctx.isRoot()) {
                     double tMeasured = md::computeTemperature(totalKE, N);
-                    if (tMeasured > 1e-30) {
+                    if (tMeasured > md::constants::rescaleGuard) {
                         lambda = std::sqrt(params.T_init / tMeasured);
                     }
-                    std::printf(
-                        "Rescale at step %d: lambda = %.15e, T_before = %.6f K, T_after = %.6f "
-                        "K\n",
-                        step, lambda, tMeasured, params.T_init);
+                    if (!params.timing) {
+                        std::printf(
+                            "Rescale at step %d: lambda = %.15e, T_before = %.6f K, T_after = %.6f "
+                            "K\n",
+                            step, lambda, tMeasured, params.T_init);
+                    }
                 }
                 MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
                 for (int i = 0; i < 3 * sys.localN; ++i) {
@@ -266,9 +303,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // ── Accumulate g(r) histogram (LJ only, after equilibration) ──
-        if (params.gr && !isHO && step >= params.gr_discard &&
-            (step - params.gr_discard) % params.gr_interval == 0) {
+        // ── Accumulate g(r) histogram (LJ only, production window) ──
+        if (params.gr && !isHO && step >= grStart && ((step - grStart) % params.grInterval == 0)) {
             md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
                              grHistLocal);
             ++grFrames;
@@ -278,12 +314,23 @@ int main(int argc, char* argv[]) {
         if (step == params.steps)
             break;
 
-        if (params.integrator == "euler") {
-            md::stepEuler(sys, ctx, params.dt, forceFunc, localPE, isHO);
-        } else if (params.integrator == "rk4") {
-            md::stepRK4(sys, ctx, params.dt, forceFunc, localPE, isHO);
-        } else {  // "verlet" (default)
-            md::stepVelocityVerlet(sys, ctx, params.dt, forceFunc, localPE, isHO);
+        // 6-way dispatch: necessary to avoid std::function virtual dispatch overhead in the hot
+        // loop
+        if (intType == IntegratorType::Euler) {
+            if (isHO)
+                md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        } else if (intType == IntegratorType::RK4) {
+            if (isHO)
+                md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        } else {  // Verlet (default)
+            if (isHO)
+                md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
         }
     }
 
@@ -334,15 +381,31 @@ int main(int argc, char* argv[]) {
             // Normalise: g(r) = (1 / (rho * N)) * count / (4*pi*r^2 * dr * nFrames)
             md::normaliseGR(grHistGlobal, grDr, N, L, grFrames);
 
-            std::ofstream grFile("out/gr.csv");
+            std::string grFname = params.outdir.empty() ? "out/gr.csv" : params.outdir + "/gr.csv";
+            std::ofstream grFile(grFname);
             if (grFile.is_open()) {
+                std::time_t t = std::time(nullptr);
+                char tstr[100];
+                std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
+                grFile << "# mode: " << params.mode << ", integrator: " << params.integrator
+                       << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
+                       << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
+                       << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
+                       << ", rescale_step: " << params.rescaleStep
+                       << ", production_start: " << productionStart
+                       << ", gr_discard: " << params.grDiscard
+                       << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart
+                       << ", lattice: FCC, velocities: Box-Muller, timestamp: " << tstr << "\n";
                 grFile << "r_sigma,gr\n";
                 for (int b = 0; b < grNBins; ++b) {
                     double rMid = (b + 0.5) * grDr;
                     grFile << (rMid / md::constants::sigma) << "," << grHistGlobal[b] << "\n";
                 }
                 grFile.close();
-                std::printf("g(r) written to out/gr.csv (%d bins, %d frames)\n", grNBins, grFrames);
+                if (!params.timing) {
+                    std::printf("g(r) written to %s (%d bins, %d frames)\n", grFname.c_str(),
+                                grNBins, grFrames);
+                }
             }
         }
     }

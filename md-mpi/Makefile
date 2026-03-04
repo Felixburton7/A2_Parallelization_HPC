@@ -13,26 +13,24 @@ CXXFLAGS  = -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic
 INCLUDES  = -Iinclude
 
 # Source files
-SRC_MAIN      = src/main.cpp
-SRC_EULER     = src/integrators/euler.cpp
-SRC_RK4       = src/integrators/rk4.cpp
-SRC_VERLET    = src/integrators/velocity_verlet.cpp
-SRC_HARMONIC  = src/potentials/harmonic.cpp
-SRC_LJ        = src/potentials/lennard_jones.cpp
+SRC_MAIN        = src/main.cpp
+SRC_HARMONIC    = src/potentials/harmonic.cpp
+SRC_LJ          = src/potentials/lennard_jones.cpp
+SRC_OBSERVABLES = src/observables.cpp
 
-SRCS = $(SRC_MAIN) $(SRC_EULER) $(SRC_RK4) $(SRC_VERLET) $(SRC_HARMONIC) $(SRC_LJ)
+SRCS = $(SRC_MAIN) $(SRC_HARMONIC) $(SRC_LJ) $(SRC_OBSERVABLES)
 OBJS = $(SRCS:.cpp=.o)
 
 # Test files
 TEST_SRCS = tests/test_runner.cpp tests/test_mic.cpp tests/test_force.cpp
 TEST_OBJS = $(TEST_SRCS:.cpp=.o)
 # Tests also need the LJ potential (for test_force.cpp)
-TEST_DEPS = src/potentials/lennard_jones.o src/potentials/harmonic.o
+TEST_DEPS = src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o
 
 TARGET    = md_solver
 TEST_BIN  = test_runner
 
-TARBALL   = candidate_BCN_wa2.tar.gz
+TARBALL   = candidate_fb638_wa2.tar.gz
 
 # ──────────────────────────────────────────────────────────────────
 # Default target

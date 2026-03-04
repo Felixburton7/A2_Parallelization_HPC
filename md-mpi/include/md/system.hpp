@@ -58,8 +58,9 @@ struct System {
      * the subsequent MPI_Allgatherv / force evaluation.
      */
     void wrapPositions() {
+        double invL = 1.0 / L;
         for (int i = 0; i < 3 * localN; ++i) {
-            pos[i] -= L * std::floor(pos[i] / L);
+            pos[i] -= L * std::floor(pos[i] * invL);
         }
     }
 };

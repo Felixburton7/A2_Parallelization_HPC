@@ -1,11 +1,11 @@
 /**
  * @file potentials.hpp
- * @brief Harmonic Oscillator and Lennard-Jones force/energy kernels.
+ * @brief Harmonic Oscillator and Lennard-Jones acceleration/energy kernels.
  *
  * Both potentials implement a common interface:
  *   computeForces(system, posGlobal, localPE)
  *
- * The HO potential computes F = -omega^2 * x purely locally, ignoring
+ * The HO potential computes a = -omega^2 * x purely locally, ignoring
  * the global position data. The LJ potential uses the global positions
  * from MPI_Allgatherv with minimum image convention and hard cutoff.
  */
@@ -20,16 +20,19 @@
 namespace md {
 
 /**
- * @brief Compute harmonic oscillator forces for local particles.
+ * @brief Compute harmonic oscillator accelerations for local particles.
  *
- * F_i = -omega^2 * x_i  (independent, non-interacting particles)
+ * a_i = -omega^2 * x_i  (independent, non-interacting particles)
+ * V_i = 0.5 * m * omega^2 * x_i^2
  *
  * This kernel operates purely on local data and does NOT require any
  * global position information. The MPI_Allgatherv call should be
  * bypassed entirely in HO mode to eliminate unnecessary O(N)
  * communication overhead.
  *
- * @param[in,out] sys       System state (forces written to sys.acc)
+ * Validation runs should use N=1. The code supports N independent copies.
+ *
+ * @param[in,out] sys       System state (accelerations written to sys.acc)
  * @param[in]     posGlobal Ignored for HO (may be empty)
  * @param[out]    localPE   Local potential energy contribution
  * @param[in]     omega     Angular frequency
@@ -42,7 +45,7 @@ void computeHOForces(System& sys, const std::vector<double>& posGlobal, double& 
  * @brief Compute Lennard-Jones forces for local particles against all particles.
  *
  * Uses the optimised kernel with shared intermediates (no pow, no sqrt).
- * Applies branch-predictor-friendly minimum image convention and hard
+ * Applies minimum image convention and hard
  * cutoff at rcut. Accumulates potential energy unconditionally for all
  * j != i; the local sum is multiplied by 0.5 AFTER the loop to correct
  * for double-counting.

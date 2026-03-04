@@ -33,7 +33,7 @@ namespace md {
  * @param gen   Reference to shared RNG (caller owns lifetime)
  * @return      Flat interleaved position array of size 3*N
  */
-inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
+std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
     // Determine k such that N = 4*k^3 (validated by caller)
     int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
 
@@ -46,7 +46,7 @@ inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen
     const double basis[4][3] = {{0.0, 0.0, 0.0}, {0.5, 0.5, 0.0}, {0.5, 0.0, 0.5}, {0.0, 0.5, 0.5}};
 
     // Perturbation magnitude (zero-mean uniform distribution)
-    double pertMag = 0.01 * constants::sigma;
+    double pertMag = constants::fccPerturbation * constants::sigma;
     std::uniform_real_distribution<double> pertDist(-pertMag, pertMag);
 
     int idx = 0;
@@ -67,15 +67,7 @@ inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen
 }
 
 /**
- * @brief Generate Maxwell-Boltzmann velocities using Box-Muller transform.
- *
- * Generates 3N velocity components from a Gaussian distribution with
- * standard deviation sigma_v = sqrt(k_B * T / m). Uses pairs of uniform
- * deviates to produce pairs of normal deviates via the Box-Muller method.
- *
- * After generation:
- *   1. Centre-of-mass drift is removed (subtract mean velocity)
- *   2. Velocities are rescaled to exactly match the target temperature
+ * @brief Maxwell-Boltzmann velocities via Box-Muller. Removes CoM drift, rescales to target T.
  *
  * @param N      Total number of particles
  * @param T      Target temperature [K]
@@ -83,7 +75,7 @@ inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen
  * @param gen    Reference to shared RNG (same stream as lattice perturbation)
  * @return       Flat interleaved velocity array of size 3*N
  */
-inline std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
+std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
     std::vector<double> vel(3 * N);
 
     double sigmaV = std::sqrt(constants::kB * T / mass);
@@ -102,8 +94,8 @@ inline std::vector<double> generateVelocities(int N, double T, double mass, std:
         u2 = uDist(gen);
 
         double mag = sigmaV * std::sqrt(-2.0 * std::log(u1));
-        double z1 = mag * std::cos(2.0 * constants::pi * u2);
-        double z2 = mag * std::sin(2.0 * constants::pi * u2);
+        double z1 = mag * std::cos(2.0 * M_PI * u2);
+        double z2 = mag * std::sin(2.0 * M_PI * u2);
 
         vel[i] = z1;
         if (i + 1 < totalComponents) {
@@ -111,7 +103,7 @@ inline std::vector<double> generateVelocities(int N, double T, double mass, std:
         }
     }
 
-    // Remove centre-of-mass drift
+    // Remove centre-of-mass drift to ensure zero total momentum.
     double vxMean = 0.0, vyMean = 0.0, vzMean = 0.0;
     for (int i = 0; i < N; ++i) {
         vxMean += vel[3 * i + 0];
@@ -128,17 +120,12 @@ inline std::vector<double> generateVelocities(int N, double T, double mass, std:
         vel[3 * i + 2] -= vzMean;
     }
 
-    // Rescale to exact target temperature: lambda = sqrt(T_target / T_measured)
-    // T_measured = (2 / (N_dof * kB)) * E_kin, where N_dof = 3*(N-1)
-    double eKin = 0.0;
+    double sumSq = 0.0;
     for (int i = 0; i < 3 * N; ++i) {
-        eKin += vel[i] * vel[i];
+        sumSq += vel[i] * vel[i];
     }
-    eKin *= 0.5 * mass;
-
-    int nDof = 3 * (N - 1);  // degrees of freedom after CoM removal
-    double tMeasured = (2.0 * eKin) / (nDof * constants::kB);
-    double lambda = std::sqrt(T / tMeasured);
+    double tActual = (mass / (3.0 * (N - 1) * constants::kB)) * sumSq;
+    double lambda = std::sqrt(T / tActual);
 
     for (int i = 0; i < 3 * N; ++i) {
         vel[i] *= lambda;

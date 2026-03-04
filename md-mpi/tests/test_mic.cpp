@@ -13,20 +13,7 @@
 #include <cstdlib>
 
 #include "md/constants.hpp"
-
-namespace {
-
-/// Apply the branch-predictor-friendly MIC to a single displacement component
-inline double applyMIC(double dx, double L) {
-    double halfL = 0.5 * L;
-    if (dx > halfL)
-        dx -= L;
-    else if (dx < -halfL)
-        dx += L;
-    return dx;
-}
-
-}  // namespace
+#include "md/mic.hpp"
 
 int testMIC() {
     int failures = 0;
@@ -36,7 +23,7 @@ int testMIC() {
     // Test 1: displacement within [-L/2, L/2) should be unchanged
     {
         double dx = 3.0;
-        double result = applyMIC(dx, L);
+        double result = md::applyMIC(dx, L);
         if (std::abs(result - 3.0) > tol) {
             std::printf("FAIL: MIC unchanged test: got %e, expected 3.0\n", result);
             ++failures;
@@ -46,7 +33,7 @@ int testMIC() {
     // Test 2: displacement > L/2 should wrap by -L
     {
         double dx = 7.0;  // > 5.0 = L/2
-        double result = applyMIC(dx, L);
+        double result = md::applyMIC(dx, L);
         if (std::abs(result - (-3.0)) > tol) {
             std::printf("FAIL: MIC positive wrap: got %e, expected -3.0\n", result);
             ++failures;
@@ -56,7 +43,7 @@ int testMIC() {
     // Test 3: displacement < -L/2 should wrap by +L
     {
         double dx = -6.0;  // < -5.0
-        double result = applyMIC(dx, L);
+        double result = md::applyMIC(dx, L);
         if (std::abs(result - 4.0) > tol) {
             std::printf("FAIL: MIC negative wrap: got %e, expected 4.0\n", result);
             ++failures;
@@ -65,21 +52,20 @@ int testMIC() {
 
     // Test 4: displacement at exactly L/2 boundary
     {
-        double dx = 5.0;  // == L/2 (should remain, since condition is strict >)
-        double result = applyMIC(dx, L);
-        // dx == halfL is not > halfL, so it stays as-is
-        if (std::abs(result - 5.0) > tol) {
-            std::printf("FAIL: MIC boundary L/2: got %e, expected 5.0\n", result);
+        double dx = 5.0;  // == L/2 (std::round(0.5) is 1.0, wraps to -5.0)
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result - (-5.0)) > tol) {
+            std::printf("FAIL: MIC boundary L/2: got %e, expected -5.0\n", result);
             ++failures;
         }
     }
 
     // Test 5: displacement at exactly -L/2 boundary
     {
-        double dx = -5.0;  // == -L/2 (should remain)
-        double result = applyMIC(dx, L);
-        if (std::abs(result - (-5.0)) > tol) {
-            std::printf("FAIL: MIC boundary -L/2: got %e, expected -5.0\n", result);
+        double dx = -5.0;  // == -L/2 (std::round(-0.5) is -1.0, wraps to 5.0)
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result - 5.0) > tol) {
+            std::printf("FAIL: MIC boundary -L/2: got %e, expected 5.0\n", result);
             ++failures;
         }
     }
@@ -87,7 +73,7 @@ int testMIC() {
     // Test 6: zero displacement
     {
         double dx = 0.0;
-        double result = applyMIC(dx, L);
+        double result = md::applyMIC(dx, L);
         if (std::abs(result) > tol) {
             std::printf("FAIL: MIC zero: got %e, expected 0.0\n", result);
             ++failures;
@@ -110,9 +96,9 @@ int testMIC() {
     // Test 8: 3D MIC with all components wrapping
     {
         double dx = 8.0, dy = -7.0, dz = 0.5;
-        dx = applyMIC(dx, L);
-        dy = applyMIC(dy, L);
-        dz = applyMIC(dz, L);
+        dx = md::applyMIC(dx, L);
+        dy = md::applyMIC(dy, L);
+        dz = md::applyMIC(dz, L);
 
         if (std::abs(dx - (-2.0)) > tol || std::abs(dy - 3.0) > tol || std::abs(dz - 0.5) > tol) {
             std::printf("FAIL: 3D MIC: got (%e, %e, %e), expected (-2, 3, 0.5)\n", dx, dy, dz);

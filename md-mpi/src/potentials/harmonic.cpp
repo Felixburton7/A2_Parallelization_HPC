@@ -1,12 +1,14 @@
 /**
  * @file harmonic.cpp
- * @brief Harmonic Oscillator force/energy kernel.
+ * @brief Harmonic Oscillator acceleration/energy kernel.
  *
- * F_i = -omega^2 * x_i  (each component independently)
- * V_i = 0.5 * omega^2 * x_i^2
+ * sys.acc stores acceleration (not force).
+ * a_i = -omega^2 * x_i  (each component independently)
+ * V_i = 0.5 * m * omega^2 * x_i^2
  *
  * This is a non-interacting potential: particles do not see each other.
  * The MPI_Allgatherv collective is bypassed entirely in HO mode.
+ * Validation runs should use N=1. Code supports N independent copies.
  */
 
 #include "md/potentials.hpp"

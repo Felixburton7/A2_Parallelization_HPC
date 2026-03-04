@@ -18,11 +18,10 @@ import sys
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import linregress
 
 # ── Configuration ──
 INTEGRATORS = ["euler", "verlet", "rk4"]
-INTEGRATOR_LABELS = {"euler": "Euler (AMM 4.27)", "rk4": "RK4", "verlet": "Velocity-Verlet"}
+INTEGRATOR_LABELS = {"euler": "Forward Euler", "rk4": "RK4", "verlet": "Velocity-Verlet"}
 INTEGRATOR_COLORS = {"euler": "#e74c3c", "rk4": "#3498db", "verlet": "#2ecc71"}
 INTEGRATOR_ORDERS = {"euler": 1, "rk4": 4, "verlet": 2}
 
@@ -65,9 +64,23 @@ def run_ho_simulations():
     print("All HO simulations complete.")
 
 
+import json
+import csv
+
+def load_manifest():
+    with open("out/manifest.json", "r") as f:
+        return json.load(f)
+
 def load_csv(filepath):
-    """Load CSV with headers."""
-    return np.genfromtxt(filepath, delimiter=',', names=True)
+    """Load CSV with headers, skipping comment lines."""
+    def filter_comments(f):
+        for line in f:
+            if line.strip() and not line.startswith('#'):
+                yield line
+    with open(filepath, 'r') as f:
+        # np.genfromtxt has trouble with Python generators, so read to list
+        lines = list(filter_comments(f))
+    return np.genfromtxt(lines, delimiter=',', names=True)
 
 
 def plot_trajectories():
@@ -79,8 +92,11 @@ def plot_trajectories():
     t_exact = np.linspace(0, T_FINAL, 1000)
     x_exact, v_exact = exact_solution(t_exact)
 
+    manifest = load_manifest()
+    
     for integ in INTEGRATORS:
-        fpath = f"{HO_DIR}/{integ}_dt{TRAJ_DT}.csv"
+        dt_key = str(TRAJ_DT).replace('.', '_')
+        fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
         if not os.path.exists(fpath):
             print(f"Warning: {fpath} not found, skipping {integ}")
             continue
@@ -103,14 +119,14 @@ def plot_trajectories():
     axes[0].set_ylabel('Position x')
     axes[0].set_title('Position vs Time')
     axes[0].legend(fontsize=9)
-    axes[0].grid(True, alpha=0.3)
+    axes[0].grid(True)
 
     axes[1].plot(t_exact, v_exact, 'k--', linewidth=1, alpha=0.5, label='Exact')
     axes[1].set_xlabel('Time')
     axes[1].set_ylabel('Velocity v')
     axes[1].set_title('Velocity vs Time')
     axes[1].legend(fontsize=9)
-    axes[1].grid(True, alpha=0.3)
+    axes[1].grid(True)
 
     x_ep, v_ep = exact_solution(np.linspace(0, 2 * np.pi / OMEGA, 500))
     axes[2].plot(x_ep, v_ep, 'k--', linewidth=1, alpha=0.5, label='Exact')
@@ -119,10 +135,10 @@ def plot_trajectories():
     axes[2].set_title('Phase Space (v vs x)')
     axes[2].legend(fontsize=9)
     axes[2].set_aspect('equal')
-    axes[2].grid(True, alpha=0.3)
+    axes[2].grid(True)
 
     plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_trajectories.png", dpi=150, bbox_inches='tight')
+    plt.savefig(f"{PLOT_DIR}/ho_trajectories.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_trajectories.png")
 
@@ -135,12 +151,18 @@ def plot_convergence():
 
     x_ex_final, _ = exact_solution(T_FINAL)
 
+    manifest = load_manifest()
+
     for integ in INTEGRATORS:
         errors = []
         dts = []
 
         for dt in DT_VALUES:
-            fpath = f"{HO_DIR}/{integ}_dt{dt}.csv"
+            dt_key = str(dt).replace('.', '_')
+            try:
+                fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
+            except Exception:
+                fpath = ""
             if not os.path.exists(fpath):
                 continue
 
@@ -161,7 +183,7 @@ def plot_convergence():
 
         log_dt = np.log10(dts)
         log_err = np.log10(errors)
-        slope, intercept, r_value, _, _ = linregress(log_dt, log_err)
+        slope, intercept = np.polyfit(log_dt, log_err, 1)
 
         color = INTEGRATOR_COLORS[integ]
         expected = INTEGRATOR_ORDERS[integ]
@@ -175,14 +197,14 @@ def plot_convergence():
         err_ref = errors[0] * (dt_ref / dts[0]) ** expected
         ax.loglog(dt_ref, err_ref, '--', color=color, alpha=0.4, linewidth=1)
 
-    ax.set_xlabel(r'$\Delta t$', fontsize=14)
-    ax.set_ylabel(r'$|x_{num}(T) - x_{exact}(T)|$', fontsize=14)
-    ax.set_title('Convergence: Position Error vs Timestep', fontsize=14)
+    ax.set_xlabel(r'$\Delta t$')
+    ax.set_ylabel(r'$|x_{num}(T) - x_{exact}(T)|$')
+    ax.set_title('Convergence: Position Error vs Timestep')
     ax.legend(fontsize=10)
-    ax.grid(True, which='both', alpha=0.3)
+    ax.grid(True, which='both')
 
     plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_convergence.png", dpi=150, bbox_inches='tight')
+    plt.savefig(f"{PLOT_DIR}/ho_convergence.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_convergence.png")
 
@@ -193,8 +215,11 @@ def plot_energy_conservation():
 
     fig, ax = plt.subplots(figsize=(8, 5))
 
+    manifest = load_manifest()
+    
     for integ in INTEGRATORS:
-        fpath = f"{HO_DIR}/{integ}_dt{TRAJ_DT}.csv"
+        dt_key = str(TRAJ_DT).replace('.', '_')
+        fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
         if not os.path.exists(fpath):
             continue
 
@@ -213,7 +238,7 @@ def plot_energy_conservation():
     ax.set_ylabel(r'$(E - E_0) / |E_0|$')
     ax.set_title('HO Energy Conservation (dt=0.01)')
     ax.legend(fontsize=10)
-    ax.grid(True, alpha=0.3)
+    ax.grid(True)
 
     # Add zoomed inset to show VV vs RK4 near zero
     from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -221,7 +246,8 @@ def plot_energy_conservation():
     
     for integ in INTEGRATORS:
         if integ == "euler": continue # Skip Euler for inset
-        fpath = f"{HO_DIR}/{integ}_dt{TRAJ_DT}.csv"
+        dt_key = str(TRAJ_DT).replace('.', '_')
+        fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
         if not os.path.exists(fpath): continue
         data = load_csv(fpath)
         t = data['time']
@@ -230,15 +256,15 @@ def plot_energy_conservation():
         rel_dev = (E - E0) / abs(E0) if abs(E0) > 1e-30 else E - E0
         axins.plot(t, rel_dev, color=INTEGRATOR_COLORS[integ], linewidth=1.5)
     
-    axins.set_title('Zoom: VV vs RK4', fontsize=9)
-    axins.grid(True, alpha=0.3)
+    axins.set_title('Zoom: VV vs RK4')
+    axins.grid(True)
     axins.tick_params(axis='both', which='major', labelsize=8)
     
     # Optional: adjust y-limits of inset manually if needed
     # (Leaving it auto-scaled, which usually captures the O(1e-4) VV vs O(1e-15) RK4 nicely.)
 
     plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_energy.png", dpi=150, bbox_inches='tight')
+    plt.savefig(f"{PLOT_DIR}/ho_energy.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_energy.png")
 
