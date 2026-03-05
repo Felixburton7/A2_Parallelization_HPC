@@ -1,5 +1,5 @@
 # MD Solver Production Data Bundle
-Generated: Wed Mar  4 14:44:12 GMT 2026
+Generated: Thu Mar  5 10:58:33 GMT 2026
 
 This file contains the raw CSV outputs from the production runs.
 Long trajectory files are truncated to the first 10 and last 5 lines.
@@ -8,38 +8,38 @@ Long trajectory files are truncated to the first 10 and last 5 lines.
 ```json
 {
   "ho_convergence": {
-    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260304_130453/ho_euler.csv",
-    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260304_130453/ho_euler.csv",
-    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260304_130453/ho_euler.csv",
-    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260304_130453/ho_euler.csv",
-    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260304_130453/ho_euler.csv",
-    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260304_130453/ho_euler.csv",
-    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260304_130453/ho_euler.csv",
-    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260304_130453/ho_euler.csv",
-    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260304_130453/ho_verlet.csv",
-    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260304_130453/ho_verlet.csv",
-    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260304_130453/ho_verlet.csv",
-    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260304_130453/ho_verlet.csv",
-    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260304_130453/ho_verlet.csv",
-    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260304_130453/ho_verlet.csv",
-    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260304_130453/ho_verlet.csv",
-    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260304_130453/ho_verlet.csv",
-    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260304_130453/ho_rk4.csv",
-    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260304_130453/ho_rk4.csv",
-    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260304_130453/ho_rk4.csv",
-    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260304_130453/ho_rk4.csv",
-    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260304_130453/ho_rk4.csv",
-    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260304_130453/ho_rk4.csv",
-    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260304_130453/ho_rk4.csv",
-    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260304_130453/ho_rk4.csv"
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260304_170025/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260304_170025/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260304_170025/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260304_170025/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260304_170025/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260304_170025/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260304_170025/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260304_170025/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260304_170025/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260304_170025/ho_rk4.csv"
   },
   "lj_production": {
-    "verlet_100": "out/runs/lj_N864_P4_verlet_100_20260304_130453/lj_verlet.csv",
-    "euler_100": "out/runs/lj_N864_P4_euler_100_20260304_130453/lj_euler.csv",
-    "verlet_200_equilibrated": "out/runs/lj_N864_P4_verlet_200_eq_20260304_130453/lj_verlet.csv"
+    "verlet_100": "out/runs/lj_N864_P4_verlet_100_20260304_170025/lj_verlet.csv",
+    "euler_100": "out/runs/lj_N864_P4_euler_100_20260304_170025/lj_euler.csv",
+    "verlet_200_equilibrated": "out/runs/lj_N864_P4_verlet_200_eq_20260304_170025/lj_verlet.csv"
   },
-  "lj_gr": "out/runs/lj_N864_P4_gr_20260304_130453/gr.csv",
-  "lj_gr_energy": "out/runs/lj_N864_P4_gr_20260304_130453/lj_verlet.csv",
+  "lj_gr": "out/runs/lj_N864_P4_gr_20260304_170025/gr.csv",
+  "lj_gr_energy": "out/runs/lj_N864_P4_gr_20260304_170025/lj_verlet.csv",
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
@@ -50,29 +50,29 @@ Long trajectory files are truncated to the first 10 and last 5 lines.
 ## Strong Scaling (N=2048, P=1..32)
 ```csv
 P,N,wall_s,comm_s
-1,2048,10.236426,0.000324
-2,2048,5.184793,0.033121
-4,2048,2.859599,0.217342
-8,2048,1.805305,0.059257
-16,2048,0.959927,0.061286
-24,2048,0.863703,0.184215
-32,2048,0.750760,0.023791
+1,2048,11.368837,0.000334
+2,2048,5.711975,0.009069
+4,2048,3.298142,0.442105
+8,2048,1.967324,0.008102
+16,2048,1.046600,0.037558
+24,2048,0.960694,0.068600
+32,2048,0.777739,0.023672
 ```
 
 ## Size Scaling (P=16, N=108..2048)
 ```csv
 P,N,wall_s,comm_s
-16,108,0.020475,0.006588
-16,256,0.071991,0.009601
-16,500,0.217122,0.055213
-16,864,0.501506,0.042546
-16,1372,1.120809,0.028711
-16,2048,2.296580,0.113504
+16,108,0.021791,0.008301
+16,256,0.077733,0.011611
+16,500,0.229446,0.050040
+16,864,0.540230,0.061907
+16,1372,1.237975,0.079826
+16,2048,2.510348,0.090846
 ```
 
 ## Radial Distribution Function g(r) (Latest)
 ```csv
-# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 25500, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, timestamp: 2026-03-04T13:06:51Z
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 25500, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, rescale_step: 10, production_start: 10, gr_discard: 490, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:02:32Z
 r_sigma,gr
 0.01,0
 0.03,0
@@ -333,7 +333,7 @@ r_sigma,gr
 
 ## LJ Velocity-Verlet NVE (N=864, 100 steps) (Truncated)
 ```csv
-# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 100, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, timestamp: 2026-03-04T13:05:09Z
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 100, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, rescale_step: 10, production_start: 10, gr_discard: 500, gr_interval: 10, gr_start: 510, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:00:42Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,1.687164123192e-18,-9.03403363081345e-18,-7.34686950762145e-18,94.3999999999998
 1,1e-14,1.68565150990768e-18,-9.03252377656108e-18,-7.3468722666534e-18,94.3153664471185
@@ -353,7 +353,7 @@ step,time,E_kin,E_pot,E_total,temperature
 
 ## LJ Euler NVE (N=864, 100 steps) (Truncated)
 ```csv
-# mode: lj, integrator: euler, N: 864, P: 4, dt: 1e-14, steps: 100, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, timestamp: 2026-03-04T13:05:10Z
+# mode: lj, integrator: euler, N: 864, P: 4, dt: 1e-14, steps: 100, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, rescale_step: 10, production_start: 10, gr_discard: 500, gr_interval: 10, gr_start: 510, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:00:43Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,1.687164123192e-18,-9.03403363081345e-18,-7.34686950762145e-18,94.3999999999998
 1,1e-14,1.68718160414212e-18,-9.03252062314843e-18,-7.34533901900631e-18,94.4009780919763
@@ -400,9 +400,9 @@ verlet,0.5,-0.7760410416372,0.610655617217049,3.26205118552794e-26
 verlet,1.0,-0.5,0.75,2.717985765625e-26
 ```
 
-## LJ Equilibrated Run (lj_N864_P4_gr_20260304_130453) (Truncated)
+## LJ Equilibrated Run (lj_N864_P4_gr_20260304_170025) (Truncated)
 ```csv
-# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 25500, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, timestamp: 2026-03-04T13:05:13Z
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 25500, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, rescale_step: 10, production_start: 10, gr_discard: 490, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:00:45Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,1.687164123192e-18,-9.03403363081345e-18,-7.34686950762145e-18,94.3999999999998
 1,1e-14,1.68565150990768e-18,-9.03252377656108e-18,-7.3468722666534e-18,94.3153664471185
@@ -422,25 +422,25 @@ step,time,E_kin,E_pot,E_total,temperature
 
 ## MPI Consistency P=1 (N=108, 5 steps)
 ```csv
-# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 5, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, timestamp: 2026-03-04T13:13:43Z
+# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 5, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T10:58:32Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,2.09184891288e-19,-1.12926090964738e-18,-9.2007601835938e-19,94.4
+0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
 1,1e-14,2.08952940324273e-19,-1.12903036097961e-18,-9.20077420655337e-19,94.2953262310627
-2,2e-14,2.08327769566247e-19,-1.12840771146898e-18,-9.20079941902734e-19,94.0132020336875
-3,3e-14,2.07279814481113e-19,-1.12736342912362e-18,-9.20083614642507e-19,93.5402856608675
+2,2e-14,2.08327769566247e-19,-1.12840771146898e-18,-9.20079941902733e-19,94.0132020336875
+3,3e-14,2.07279814481113e-19,-1.12736342912362e-18,-9.20083614642506e-19,93.5402856608675
 4,4e-14,2.05766417434535e-19,-1.12585487169448e-18,-9.20088454259947e-19,92.8573267706855
-5,5e-14,2.03732045550683e-19,-1.12382647756108e-18,-9.20094432010392e-19,91.9392647411899
+5,5e-14,2.03732045550683e-19,-1.12382647756107e-18,-9.20094432010392e-19,91.9392647411899
 ```
 
 ## MPI Consistency P=2 (N=108, 5 steps)
 ```csv
-# mode: lj, integrator: verlet, N: 108, P: 2, dt: 1e-14, steps: 5, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, timestamp: 2026-03-04T13:13:44Z
+# mode: lj, integrator: verlet, N: 108, P: 2, dt: 1e-14, steps: 5, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T10:58:32Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
 1,1e-14,2.08952940324273e-19,-1.12903036097961e-18,-9.20077420655337e-19,94.2953262310627
-2,2e-14,2.08327769566247e-19,-1.12840771146898e-18,-9.20079941902734e-19,94.0132020336875
-3,3e-14,2.07279814481113e-19,-1.12736342912362e-18,-9.20083614642507e-19,93.5402856608675
+2,2e-14,2.08327769566247e-19,-1.12840771146898e-18,-9.20079941902733e-19,94.0132020336875
+3,3e-14,2.07279814481113e-19,-1.12736342912362e-18,-9.20083614642506e-19,93.5402856608675
 4,4e-14,2.05766417434535e-19,-1.12585487169448e-18,-9.20088454259947e-19,92.8573267706854
-5,5e-14,2.03732045550683e-19,-1.12382647756108e-18,-9.20094432010393e-19,91.9392647411899
+5,5e-14,2.03732045550683e-19,-1.12382647756107e-18,-9.20094432010392e-19,91.9392647411899
 ```
 

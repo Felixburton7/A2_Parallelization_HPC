@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-04T14:17:09Z |
-| Git commit | a5d11719079a76f5dabe4c6d25113aba068fcec5 |
+| Timestamp (UTC) | 2026-03-05T10:58:26Z |
+| Git commit | 1857c0029624f889f69c0088375e504883a4eac3 |
 | Hostname | MacBook-Pro-434.local |
 | uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -46,6 +46,7 @@
 ./README.md
 ./scripts/append_manifest.py
 ./scripts/check_tolerance.py
+./scripts/make_results.sh
 ./scripts/plot_ho.py
 ./scripts/plot_lj.py
 ./scripts/plot_scaling.py
@@ -64,93 +65,95 @@
 
 ### out/plots/
 ```
-total 1064
-drwxr-xr-x@ 10 felix  staff     320 Mar  4 14:17 .
-drwxr-xr-x   6 felix  staff     192 Mar  4 14:17 ..
--rw-r--r--@  1 felix  staff   71663 Mar  4 14:17 ho_convergence.png
--rw-r--r--@  1 felix  staff   44775 Mar  4 14:17 ho_energy.png
--rw-r--r--@  1 felix  staff  112160 Mar  4 14:17 ho_trajectories.png
--rw-r--r--   1 felix  staff   98238 Mar  4 14:17 lj_energy.png
--rw-r--r--   1 felix  staff   65154 Mar  4 14:17 lj_equilibrated_comparison.png
--rw-r--r--   1 felix  staff   30632 Mar  4 14:17 lj_rdf.png
--rw-r--r--   1 felix  staff   42276 Mar  4 14:17 lj_temperature.png
--rw-r--r--   1 felix  staff   65764 Mar  4 14:17 scaling_strong.png
+total 1360
+drwx------  11 felix  staff     352 Mar  4 17:17 .
+drwx------  17 felix  staff     544 Mar  4 17:17 ..
+-rw-------   1 felix  staff   77228 Mar  4 17:17 ho_convergence.png
+-rw-------   1 felix  staff   48921 Mar  4 17:17 ho_energy.png
+-rw-------   1 felix  staff  118022 Mar  4 17:17 ho_trajectories.png
+-rw-------   1 felix  staff  109938 Mar  4 17:17 lj_energy.png
+-rw-------   1 felix  staff   72465 Mar  4 17:17 lj_equilibrated_comparison.png
+-rw-------   1 felix  staff   37509 Mar  4 17:17 lj_rdf.png
+-rw-------   1 felix  staff   50699 Mar  4 17:17 lj_temperature.png
+-rw-------   1 felix  staff   88489 Mar  4 17:17 scaling_size.png
+-rw-------   1 felix  staff   78766 Mar  4 17:17 scaling_strong.png
 ```
 
 ### out/manifest.json
 ```json
 {
   "ho_convergence": {
-    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260304_141600/ho_euler.csv",
-    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260304_141600/ho_euler.csv",
-    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260304_141600/ho_euler.csv",
-    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260304_141600/ho_euler.csv",
-    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260304_141600/ho_euler.csv",
-    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260304_141600/ho_euler.csv",
-    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260304_141600/ho_euler.csv",
-    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260304_141600/ho_euler.csv",
-    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260304_141600/ho_verlet.csv",
-    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260304_141600/ho_verlet.csv",
-    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260304_141600/ho_verlet.csv",
-    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260304_141600/ho_verlet.csv",
-    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260304_141600/ho_verlet.csv",
-    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260304_141600/ho_verlet.csv",
-    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260304_141600/ho_verlet.csv",
-    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260304_141600/ho_verlet.csv",
-    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260304_141600/ho_rk4.csv",
-    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260304_141600/ho_rk4.csv",
-    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260304_141600/ho_rk4.csv",
-    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260304_141600/ho_rk4.csv",
-    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260304_141600/ho_rk4.csv",
-    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260304_141600/ho_rk4.csv",
-    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260304_141600/ho_rk4.csv",
-    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260304_141600/ho_rk4.csv"
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260304_170025/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260304_170025/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260304_170025/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260304_170025/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260304_170025/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260304_170025/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260304_170025/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260304_170025/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260304_170025/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260304_170025/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260304_170025/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260304_170025/ho_rk4.csv"
   },
   "lj_production": {
-    "verlet_100": "out/runs/lj_N864_P4_verlet_100_20260304_141600/lj_verlet.csv",
-    "euler_100": "out/runs/lj_N864_P4_euler_100_20260304_141600/lj_euler.csv",
-    "verlet_200_equilibrated": "out/runs/lj_N864_P4_verlet_200_eq_20260304_141600/lj_verlet.csv"
+    "verlet_100": "out/runs/lj_N864_P4_verlet_100_20260304_170025/lj_verlet.csv",
+    "euler_100": "out/runs/lj_N864_P4_euler_100_20260304_170025/lj_euler.csv",
+    "verlet_200_equilibrated": "out/runs/lj_N864_P4_verlet_200_eq_20260304_170025/lj_verlet.csv"
   },
-  "lj_gr": "out/runs/lj_N864_P4_gr_20260304_141600/gr.csv",
-  "lj_gr_energy": "out/runs/lj_N864_P4_gr_20260304_141600/lj_verlet.csv",
+  "lj_gr": "out/runs/lj_N864_P4_gr_20260304_170025/gr.csv",
+  "lj_gr_energy": "out/runs/lj_N864_P4_gr_20260304_170025/lj_verlet.csv",
   "scaling": {
-    "strong": "out/scaling_strong.csv"
+    "strong": "out/scaling_strong.csv",
+    "size": "out/scaling_size.csv"
   }
 }
 ```
 
 ### out/runs/ directories
 ```
-out/runs/ho_N1_euler_dt0.0005_20260304_141600/
-out/runs/ho_N1_euler_dt0.001_20260304_141600/
-out/runs/ho_N1_euler_dt0.005_20260304_141600/
-out/runs/ho_N1_euler_dt0.01_20260304_141600/
-out/runs/ho_N1_euler_dt0.05_20260304_141600/
-out/runs/ho_N1_euler_dt0.1_20260304_141600/
-out/runs/ho_N1_euler_dt0.5_20260304_141600/
-out/runs/ho_N1_euler_dt1.0_20260304_141600/
-out/runs/ho_N1_rk4_dt0.0005_20260304_141600/
-out/runs/ho_N1_rk4_dt0.001_20260304_141600/
-out/runs/ho_N1_rk4_dt0.005_20260304_141600/
-out/runs/ho_N1_rk4_dt0.01_20260304_141600/
-out/runs/ho_N1_rk4_dt0.05_20260304_141600/
-out/runs/ho_N1_rk4_dt0.1_20260304_141600/
-out/runs/ho_N1_rk4_dt0.5_20260304_141600/
-out/runs/ho_N1_rk4_dt1.0_20260304_141600/
-out/runs/ho_N1_verlet_dt0.0005_20260304_141600/
-out/runs/ho_N1_verlet_dt0.001_20260304_141600/
-out/runs/ho_N1_verlet_dt0.005_20260304_141600/
-out/runs/ho_N1_verlet_dt0.01_20260304_141600/
-out/runs/ho_N1_verlet_dt0.05_20260304_141600/
-out/runs/ho_N1_verlet_dt0.1_20260304_141600/
-out/runs/ho_N1_verlet_dt0.5_20260304_141600/
-out/runs/ho_N1_verlet_dt1.0_20260304_141600/
-out/runs/lj_N108_P1_test_20260304_141600/
-out/runs/lj_N108_P2_test_20260304_141600/
-out/runs/lj_N864_P4_euler_100_20260304_141600/
-out/runs/lj_N864_P4_gr_20260304_141600/
-out/runs/lj_N864_P4_verlet_100_20260304_141600/
-out/runs/lj_N864_P4_verlet_200_eq_20260304_141600/
+out/runs/ho_N1_euler_dt0.0005_20260304_170025/
+out/runs/ho_N1_euler_dt0.001_20260304_170025/
+out/runs/ho_N1_euler_dt0.005_20260304_170025/
+out/runs/ho_N1_euler_dt0.01_20260304_170025/
+out/runs/ho_N1_euler_dt0.05_20260304_170025/
+out/runs/ho_N1_euler_dt0.1_20260304_170025/
+out/runs/ho_N1_euler_dt0.5_20260304_170025/
+out/runs/ho_N1_euler_dt1.0_20260304_170025/
+out/runs/ho_N1_rk4_dt0.0005_20260304_170025/
+out/runs/ho_N1_rk4_dt0.001_20260304_170025/
+out/runs/ho_N1_rk4_dt0.005_20260304_170025/
+out/runs/ho_N1_rk4_dt0.01_20260304_170025/
+out/runs/ho_N1_rk4_dt0.05_20260304_170025/
+out/runs/ho_N1_rk4_dt0.1_20260304_170025/
+out/runs/ho_N1_rk4_dt0.5_20260304_170025/
+out/runs/ho_N1_rk4_dt1.0_20260304_170025/
+out/runs/ho_N1_verlet_dt0.0005_20260304_170025/
+out/runs/ho_N1_verlet_dt0.001_20260304_170025/
+out/runs/ho_N1_verlet_dt0.005_20260304_170025/
+out/runs/ho_N1_verlet_dt0.01_20260304_170025/
+out/runs/ho_N1_verlet_dt0.05_20260304_170025/
+out/runs/ho_N1_verlet_dt0.1_20260304_170025/
+out/runs/ho_N1_verlet_dt0.5_20260304_170025/
+out/runs/ho_N1_verlet_dt1.0_20260304_170025/
+out/runs/lj_N108_P1_test_20260304_170025/
+out/runs/lj_N108_P2_test_20260304_170025/
+out/runs/lj_N864_P4_euler_100_20260304_170025/
+out/runs/lj_N864_P4_gr_20260304_170025/
+out/runs/lj_N864_P4_verlet_100_20260304_170025/
+out/runs/lj_N864_P4_verlet_200_eq_20260304_170025/
 ```
 
 ## 3. Build and Warnings
@@ -215,12 +218,12 @@ Mode: ho | Integrator: verlet
 N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
 L = 1.000000e+10 m (29411764705882353664.0000 sigma)
 ==================
-Wall time: 0.003291 s (max across 1 ranks)
+Wall time: 0.002768 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3 lines):**
 ```
-# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, timestamp: 2026-03-04T14:17:14Z
+# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T10:58:31Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.99995,-0.00999975,3.34504599142826e-30,3.34487873703803e-26,3.34521324163718e-26
@@ -240,12 +243,12 @@ Mode: ho | Integrator: rk4
 N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
 L = 1.000000e+10 m (29411764705882353664.0000 sigma)
 ==================
-Wall time: 0.003906 s (max across 1 ranks)
+Wall time: 0.003167 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, timestamp: 2026-03-04T14:17:15Z
+# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T10:58:31Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.999950000416667,-0.00999983333333333,3.34510174382089e-30,3.34487873982557e-26,3.34521324999995e-26
@@ -265,12 +268,12 @@ Mode: ho | Integrator: euler
 N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
 L = 1.000000e+10 m (29411764705882353664.0000 sigma)
 ==================
-Wall time: 0.003305 s (max across 1 ranks)
+Wall time: 0.002511 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, timestamp: 2026-03-04T14:17:15Z
+# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T10:58:32Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,1,-0.01,3.34521325e-30,3.34521325e-26,3.345547771325e-26
@@ -285,18 +288,25 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
 === MD Solver ===
 Mode: lj | Integrator: verlet
 N = 108 | P = 1 | steps = 10 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.000461 s (max across 1 ranks)
+Wall time: 0.000349 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, timestamp: 2026-03-04T14:17:15Z
+# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T10:58:32Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
 1,1e-14,2.08952940324273e-19,-1.12903036097961e-18,-9.20077420655337e-19,94.2953262310627
@@ -314,18 +324,25 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
 === MD Solver ===
 Mode: lj | Integrator: euler
 N = 108 | P = 1 | steps = 10 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.000468 s (max across 1 ranks)
+Wall time: 0.000391 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, timestamp: 2026-03-04T14:17:15Z
+# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T10:58:32Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
 1,1e-14,2.09144192886232e-19,-1.12902994241994e-18,-9.19885749533712e-19,94.3816338115854
@@ -343,20 +360,34 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
 === MD Solver ===
 Mode: lj | Integrator: verlet
 N = 108 | P = 1 | steps = 5 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.000407 s (max across 1 ranks)
+Wall time: 0.000196 s (max across 1 ranks)
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
 === MD Solver ===
 Mode: lj | Integrator: verlet
 N = 108 | P = 2 | steps = 5 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.004498 s (max across 2 ranks)
+Wall time: 0.005556 s (max across 2 ranks)
 MATCH
 ```
 
@@ -379,7 +410,7 @@ Options:
   --rescale-step <int> Step for single velocity rescale (default: disabled)
   --timing             Enable timing mode (implies --no-output)
   --gr                 Enable g(r) accumulation (LJ only)
-  --gr-discard <int>   Equilibration steps to discard (default: 500)
+  --gr-discard <int>   Steps to discard after production_start before g(r) (default: 500)
   --gr-interval <int>  Sample g(r) every N steps (default: 10)
   --outdir <str>       Output directory for generated CSVs
   --help               Print this message and exit
@@ -706,6 +737,29 @@ constexpr double L_rahman = L_sigma_rahman * sigma;
 #endif  // MD_CONSTANTS_HPP
 ```
 
+### `include/md/mic.hpp` (18 lines)
+
+```cpp
+#ifndef MD_MIC_HPP
+#define MD_MIC_HPP
+
+#include <cmath>
+
+namespace md {
+
+/// Apply minimum image convention to a single displacement component.
+/// Maps dx into [-L/2, +L/2) using the round-based branchless method.
+inline double applyMIC(double dx, double L) {
+    double invL = 1.0 / L;
+    dx -= L * std::round(dx * invL);
+    return dx;
+}
+
+}  // namespace md
+
+#endif
+```
+
 ### `include/md/params.hpp` (182 lines)
 
 ```cpp
@@ -753,7 +807,7 @@ struct Params {
     int rescaleStep = -1;               ///< Step at which to apply optional rescale (-1 = disabled)
     bool timing = false;                ///< Enable wall-clock timing (disables output)
     bool gr = false;                    ///< Enable g(r) accumulation
-    int grDiscard = 500;                ///< Number of equilibration steps to discard before g(r)
+    int grDiscard = 500;                ///< Steps to discard AFTER production_start before g(r)
     int grInterval = 10;                ///< Sample g(r) every N steps after discard
     std::string outdir = "";            ///< Output directory for per-run namespaces
 
@@ -881,7 +935,7 @@ struct Params {
                   << "  --rescale-step <int> Step for single velocity rescale (default: disabled)\n"
                   << "  --timing             Enable timing mode (implies --no-output)\n"
                   << "  --gr                 Enable g(r) accumulation (LJ only)\n"
-                  << "  --gr-discard <int>   Equilibration steps to discard (default: 500)\n"
+                  << "  --gr-discard <int>   Steps to discard after production_start before g(r) (default: 500)\n"
                   << "  --gr-interval <int>  Sample g(r) every N steps (default: 10)\n"
                   << "  --outdir <str>       Output directory for generated CSVs\n"
                   << "  --help               Print this message and exit\n";
@@ -1220,17 +1274,17 @@ std::vector<double> generateVelocities(int N, double T, double mass, std::mt1993
 #endif  // MD_RNG_HPP
 ```
 
-### `include/md/potentials.hpp` (64 lines)
+### `include/md/potentials.hpp` (67 lines)
 
 ```cpp
 /**
  * @file potentials.hpp
- * @brief Harmonic Oscillator and Lennard-Jones force/energy kernels.
+ * @brief Harmonic Oscillator and Lennard-Jones acceleration/energy kernels.
  *
  * Both potentials implement a common interface:
  *   computeForces(system, posGlobal, localPE)
  *
- * The HO potential computes F = -omega^2 * x purely locally, ignoring
+ * The HO potential computes a = -omega^2 * x purely locally, ignoring
  * the global position data. The LJ potential uses the global positions
  * from MPI_Allgatherv with minimum image convention and hard cutoff.
  */
@@ -1245,16 +1299,19 @@ std::vector<double> generateVelocities(int N, double T, double mass, std::mt1993
 namespace md {
 
 /**
- * @brief Compute harmonic oscillator forces for local particles.
+ * @brief Compute harmonic oscillator accelerations for local particles.
  *
- * F_i = -omega^2 * x_i  (independent, non-interacting particles)
+ * a_i = -omega^2 * x_i  (independent, non-interacting particles)
+ * V_i = 0.5 * m * omega^2 * x_i^2
  *
  * This kernel operates purely on local data and does NOT require any
  * global position information. The MPI_Allgatherv call should be
  * bypassed entirely in HO mode to eliminate unnecessary O(N)
  * communication overhead.
  *
- * @param[in,out] sys       System state (forces written to sys.acc)
+ * Validation runs should use N=1. The code supports N independent copies.
+ *
+ * @param[in,out] sys       System state (accelerations written to sys.acc)
  * @param[in]     posGlobal Ignored for HO (may be empty)
  * @param[out]    localPE   Local potential energy contribution
  * @param[in]     omega     Angular frequency
@@ -1504,7 +1561,7 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (385 lines)
+### `src/main.cpp` (420 lines)
 
 ```cpp
 /**
@@ -1565,6 +1622,8 @@ int main(int argc, char* argv[]) {
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
+    const int productionStart = (!isHO && params.rescaleStep >= 0) ? params.rescaleStep : 0;
+    const int grStart = productionStart + params.grDiscard;
 
     // ── Compute box side length ──
     // For LJ: scale from Rahman's L=10.229*sigma for N=864 to maintain constant density
@@ -1584,6 +1643,12 @@ int main(int argc, char* argv[]) {
 
     if (ctx.isRoot()) {
         if (isHO) {
+            if (params.N != 1) {
+                std::fprintf(
+                    stderr,
+                    "WARNING: HO validation expects N=1. Continuing with N>1 treats particles as "
+                    "independent copies.\n");
+            }
             // HO: single particle (or N independent particles) with simple IC
             // x(0) = 1.0, v(0) = 0.0 for each particle (each dimension)
             for (int i = 0; i < N; ++i) {
@@ -1609,6 +1674,23 @@ int main(int argc, char* argv[]) {
                 std::mt19937_64 gen(params.seed);
                 posAll = md::buildFCCLattice(N, L, gen);
                 velAll = md::generateVelocities(N, params.T_init, md::constants::mass, gen);
+
+                double sumV2 = 0.0;
+                for (int i = 0; i < 3 * N; ++i) {
+                    sumV2 += velAll[i] * velAll[i];
+                }
+                double eKin0 = 0.5 * md::constants::mass * sumV2;
+                double tMeasured0 = md::computeTemperature(eKin0, N);
+
+                std::printf("=== Initial Conditions (Rank 0) ===\n");
+                std::printf("Seed used for RNG: %d\n", params.seed);
+                std::printf("FCC lattice generated\n");
+                std::printf("Perturbation amplitude: %.6e m (%.4f sigma)\n",
+                            md::constants::fccPerturbation * md::constants::sigma,
+                            md::constants::fccPerturbation);
+                std::printf("Box-Muller velocities applied\n");
+                std::printf("Initial measured Temperature: %.6f K\n", tMeasured0);
+                std::printf("===================================\n");
             }
         }
     }
@@ -1694,7 +1776,14 @@ int main(int argc, char* argv[]) {
                     << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
                     << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
                     << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                    << ", timestamp: " << tstr << "\n";
+                    << ", rescale_step: " << params.rescaleStep
+                    << ", production_start: " << productionStart
+                    << ", gr_discard: " << params.grDiscard
+                    << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart;
+            if (!isHO) {
+                outFile << ", lattice: FCC, velocities: Box-Muller";
+            }
+            outFile << ", timestamp: " << tstr << "\n";
             if (isHO) {
                 // HO: output position, velocity, energy for phase-space & convergence plots
                 outFile << "step,time,x,v,E_kin,E_pot,E_total\n";
@@ -1780,9 +1869,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // ── Accumulate g(r) histogram (LJ only, after equilibration) ──
-        if (params.gr && !isHO && step >= params.grDiscard &&
-            (step - params.grDiscard) % params.grInterval == 0) {
+        // ── Accumulate g(r) histogram (LJ only, production window) ──
+        if (params.gr && !isHO && step >= grStart && ((step - grStart) % params.grInterval == 0)) {
             md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
                              grHistLocal);
             ++grFrames;
@@ -1869,7 +1957,11 @@ int main(int argc, char* argv[]) {
                        << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
                        << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
                        << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                       << ", timestamp: " << tstr << "\n";
+                       << ", rescale_step: " << params.rescaleStep
+                       << ", production_start: " << productionStart
+                       << ", gr_discard: " << params.grDiscard
+                       << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart
+                       << ", lattice: FCC, velocities: Box-Muller, timestamp: " << tstr << "\n";
                 grFile << "r_sigma,gr\n";
                 for (int b = 0; b < grNBins; ++b) {
                     double rMid = (b + 0.5) * grDr;
@@ -1894,18 +1986,95 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-### `src/potentials/harmonic.cpp` (35 lines)
+### `src/observables.cpp` (70 lines)
+
+```cpp
+#include "md/observables.hpp"
+
+#include <cmath>
+
+#include "md/constants.hpp"
+
+namespace md {
+
+double computeLocalKineticEnergy(const System& sys, double mass) {
+    double eKin = 0.0;
+    for (int i = 0; i < 3 * sys.localN; ++i) {
+        eKin += sys.vel[i] * sys.vel[i];
+    }
+    return 0.5 * mass * eKin;
+}
+
+double computeTemperature(double eKinTotal, int N) {
+    int nDof = 3 * (N - 1);  // degrees of freedom after CoM removal
+    return (2.0 * eKinTotal) / (nDof * constants::kB);
+}
+
+void accumulateGR(const std::vector<double>& posGlobal, int N, double L, int offset, int localN,
+                  double dr, double rMax, std::vector<double>& histogram) {
+    int nBins = static_cast<int>(histogram.size());
+    const double invL = 1.0 / L;  // constant per call
+
+    for (int i = offset; i < offset + localN; ++i) {
+        for (int j = i + 1; j < N; ++j) {
+            double dx = posGlobal[3 * i + 0] - posGlobal[3 * j + 0];
+            double dy = posGlobal[3 * i + 1] - posGlobal[3 * j + 1];
+            double dz = posGlobal[3 * i + 2] - posGlobal[3 * j + 2];
+
+            // Minimum image convention
+            dx -= L * std::round(dx * invL);
+            dy -= L * std::round(dy * invL);
+            dz -= L * std::round(dz * invL);
+
+            double r = std::sqrt(dx * dx + dy * dy + dz * dz);
+            if (r < rMax) {
+                int bin = static_cast<int>(r / dr);
+                if (bin < nBins) {
+                    histogram[bin] += 1.0;
+                }
+            }
+        }
+    }
+}
+
+void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int nFrames) {
+    double V = L * L * L;
+    // Finite-N correction: reference density is (N-1)/V because a particle cannot pair with itself.
+    // This differs from the N/V convention in some textbooks; the report must state this choice
+    // explicitly.
+    double rho = static_cast<double>(N - 1) / V;
+
+    for (int bin = 0; bin < static_cast<int>(histogram.size()); ++bin) {
+        double rLow = bin * dr;
+        double rInner = rLow;
+        double rOuter = rLow + dr;
+        double shellVol =
+            (4.0 / 3.0) * M_PI * (rOuter * rOuter * rOuter - rInner * rInner * rInner);
+
+        // Factor of 2: unordered pairs (i<j) → ordered pair convention
+        if (shellVol > 0.0 && nFrames > 0) {
+            histogram[bin] *= 2.0 / (rho * static_cast<double>(N) * shellVol * nFrames);
+        }
+    }
+}
+
+}  // namespace md
+```
+
+### `src/potentials/harmonic.cpp` (37 lines)
 
 ```cpp
 /**
  * @file harmonic.cpp
- * @brief Harmonic Oscillator force/energy kernel.
+ * @brief Harmonic Oscillator acceleration/energy kernel.
  *
- * F_i = -omega^2 * x_i  (each component independently)
- * V_i = 0.5 * omega^2 * x_i^2
+ * sys.acc stores acceleration (not force).
+ * a_i = -omega^2 * x_i  (each component independently)
+ * V_i = 0.5 * m * omega^2 * x_i^2
  *
  * This is a non-interacting potential: particles do not see each other.
  * The MPI_Allgatherv collective is bypassed entirely in HO mode.
+ * Validation runs should use N=1. Code supports N independent copies.
  */
 
 #include "md/potentials.hpp"
@@ -1934,7 +2103,7 @@ void computeHOForces(System& sys, const std::vector<double>& /*posGlobal*/, doub
 }  // namespace md
 ```
 
-### `src/potentials/lennard_jones.cpp` (100 lines)
+### `src/potentials/lennard_jones.cpp` (104 lines)
 
 ```cpp
 /**
@@ -1944,7 +2113,7 @@ void computeHOForces(System& sys, const std::vector<double>& /*posGlobal*/, doub
  * Implements U(r) = 4*eps*[(sigma/r)^12 - (sigma/r)^6] via
  * invR2 → invR6 → invR12 (no pow, no sqrt in force loop).
  *
- * Hard cutoff at rcut = 2.25*sigma with branchless minimum image convention.
+ * Hard cutoff at rcut = 2.25*sigma with round-based minimum image convention.
  * PE is summed over all j != i (both directions) and multiplied by 0.5
  * after the loop to correct for double-counting.
  */
@@ -1970,6 +2139,7 @@ void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& 
     const double fe = constants::four_eps;
     const double te = constants::twentyfour_eps;
     const double rc2 = constants::rcut2;
+    const double tiny = 1e-30 * constants::sigma2;
     const double invMass = 1.0 / mass;
 
     // Zero local forces and PE
@@ -2003,6 +2173,9 @@ void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& 
             dz = md::applyMIC(dz, L);
 
             double r2 = dx * dx + dy * dy + dz * dz;
+
+            if (r2 < tiny)
+                continue;
 
             if (r2 >= rc2)
                 continue;  // hard cutoff
@@ -2401,14 +2574,32 @@ int testForce() {
 }
 ```
 
-### `scripts/run_all_data.sh` (210 lines)
+### `scripts/make_results.sh` (13 lines)
+
+```sh
+#!/bin/bash
+# Thin compatibility wrapper.
+# Use --generate-data to run production data generation before writing results.
+
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if [ "${1:-}" = "--generate-data" ]; then
+  shift
+  bash scripts/run_all_data.sh "$@"
+fi
+
+bash ai/make_results.sh
+```
+
+### `scripts/run_all_data.sh` (212 lines)
 
 ```sh
 #!/bin/bash
 # ──────────────────────────────────────────────────────────────────
 # run_all_data.sh — Generate ALL production data for the report
 #
-# Designed for shared HPC clusters (cerberus1). Uses median-of-10
+# Designed for shared HPC clusters (cerberus1). Uses median-of-20
 # paired (wall, comm) repetitions for scaling benchmarks to filter contention noise.
 # ──────────────────────────────────────────────────────────────────
 
@@ -2472,6 +2663,7 @@ for INT in euler verlet rk4; do
         STEPS=$(echo $ENTRY | cut -d: -f2)
         RUNDIR="$OUTDIR/runs/ho_N1_${INT}_dt${DT}_${TIMESTAMP}"
         mkdir -p "$RUNDIR"
+        # Exam validation requires HO to run with N=1.
         mpirun -np 1 $SOLVER --mode ho --integrator $INT --N 1 --steps $STEPS --dt $DT --outdir "$RUNDIR" > /dev/null
         DSTFILE="$RUNDIR/ho_${INT}.csv"
         if [ -s "$DSTFILE" ]; then
@@ -2516,9 +2708,10 @@ echo ""
 echo "=== g(r) PRODUCTION RUN ==="
 RUNDIR_GR="$OUTDIR/runs/lj_N864_P4_gr_${TIMESTAMP}"
 mkdir -p "$RUNDIR_GR"
-# Added rescale step to avoid dropping temperature significantly
+# With relative --gr-discard semantics (post-production-start), keep absolute
+# g(r) sampling start at step 500 by setting discard=500-10=490.
 mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 25500 \
-    --rescale-step 10 --gr --gr-discard 500 --gr-interval 10 --outdir "$RUNDIR_GR" > /dev/null
+    --rescale-step 10 --gr --gr-discard 490 --gr-interval 10 --outdir "$RUNDIR_GR" > /dev/null
 if [ -s "$RUNDIR_GR/gr.csv" ]; then
     python3 scripts/append_manifest.py "lj_gr" "$RUNDIR_GR/gr.csv"
     python3 scripts/append_manifest.py "lj_gr_energy" "$RUNDIR_GR/lj_verlet.csv"
@@ -2536,11 +2729,11 @@ if [ "$SKIP_SCALING" = "1" ]; then
   [ -f "$OUTDIR/scaling_size.csv" ]   && python3 scripts/append_manifest.py "scaling.size"   "$OUTDIR/scaling_size.csv"
 else
 echo ""
-echo "=== RESULTS 3: STRONG SCALING (10 reps, N=2048, 200 steps) ==="
+echo "=== RESULTS 3: STRONG SCALING (20 reps, N=2048, 200 steps) ==="
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_strong.csv"
 python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
 
-REPS=10
+REPS=20
 for P in 1 2 4 8 16 24 32; do
     WALLS=""
     COMMS=""
@@ -2561,9 +2754,9 @@ for P in 1 2 4 8 16 24 32; do
     echo "  >> P=$P MEDIAN: wall=$MEDIAN_W comm=$MEDIAN_C"
 done
 
-# ── 5. Size Scaling (median of 10 paired samples) ──
+# ── 5. Size Scaling (median of 20 paired samples) ──
 echo ""
-echo "=== RESULTS 3: SIZE SCALING (10 reps, P=16, 500 steps) ==="
+echo "=== RESULTS 3: SIZE SCALING (20 reps, P=16, 500 steps) ==="
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_size.csv"
 python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
 
@@ -2641,7 +2834,7 @@ SOLVER="./md_solver"
 OUTDIR="out"
 STEPS=100
 INTEGRATOR="verlet"
-REPS=10
+REPS=20
 
 mkdir -p "$OUTDIR"
 
@@ -3133,7 +3326,7 @@ if __name__ == "__main__":
     plot_energy_conservation()
 ```
 
-### `scripts/plot_lj.py` (262 lines)
+### `scripts/plot_lj.py` (347 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -3165,7 +3358,6 @@ EPSILON = KB * EPSILON_OVER_KB
 
 
 import json
-import csv
 
 def load_manifest():
     with open("out/manifest.json", "r") as f:
@@ -3180,6 +3372,41 @@ def load_csv(filepath):
     with open(filepath, 'r') as f:
         lines = list(filter_comments(f))
     return np.genfromtxt(lines, delimiter=',', names=True)
+
+
+def parse_csv_metadata(filepath):
+    """Parse first metadata comment line '# key: value, ...'."""
+    if not os.path.exists(filepath):
+        return {}
+    with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            if not line.startswith("#"):
+                break
+            s = line.lstrip("#").strip()
+            parts = [p.strip() for p in s.split(",")]
+            meta = {}
+            for part in parts:
+                if ":" not in part:
+                    continue
+                k, v = part.split(":", 1)
+                meta[k.strip()] = v.strip()
+            if meta:
+                return meta
+    return {}
+
+
+def parse_int_meta(meta, key, default):
+    if key not in meta:
+        return default
+    try:
+        return int(float(meta[key]))
+    except ValueError:
+        return default
+
+
+def first_prod_index(steps, production_start):
+    idx = np.where(steps >= production_start)[0]
+    return int(idx[0]) if idx.size > 0 else 0
 
 
 def plot_energy_conservation():
@@ -3202,7 +3429,11 @@ def plot_energy_conservation():
             continue
 
         data = load_csv(fpath)
+        meta = parse_csv_metadata(fpath)
+        production_start = parse_int_meta(meta, "production_start", 0)
+
         t = data['time'] * 1e12  # ps
+        steps = data['step'] if 'step' in data.dtype.names else np.arange(len(t))
         ekin = data['E_kin'] / EPSILON
         epot = data['E_pot'] / EPSILON
         etot = data['E_total'] / EPSILON
@@ -3219,12 +3450,13 @@ def plot_energy_conservation():
 
         # Relative deviation
         ax2 = axes[idx, 1]
-        e0 = etot[0]
+        i0 = first_prod_index(steps, production_start)
+        e0 = etot[i0]
         rel_dev = (etot - e0) / abs(e0) if abs(e0) > 1e-30 else etot - e0
         ax2.plot(t, rel_dev, color=color, linewidth=1.5)
         ax2.set_xlabel('Time [ps]')
-        ax2.set_ylabel(r'$(E_{total} - E_0) / |E_0|$')
-        ax2.set_title(f'{label}: Relative Energy Deviation')
+        ax2.set_ylabel(r'$\Delta E / |E_{0,\mathrm{prod}}|$')
+        ax2.set_title(f'{label}: Relative Energy Deviation (E0 at step {production_start})')
         ax2.grid(True)
 
     plt.tight_layout()
@@ -3245,6 +3477,7 @@ def plot_temperature():
     ]
 
     manifest = load_manifest()
+    drew_prod_line = False
 
     for key, label, color in configs:
         fpath = manifest.get("lj_production", {}).get(key, "")
@@ -3252,14 +3485,30 @@ def plot_temperature():
             continue
 
         data = load_csv(fpath)
+        meta = parse_csv_metadata(fpath)
         t = data['time'] * 1e12
         T = data['temperature']
         ax.plot(t, T, label=label, color=color, linewidth=1.5)
 
+        rescale_step = parse_int_meta(meta, "rescale_step", -1)
+        dt = float(meta.get("dt", "nan")) if meta else float("nan")
+        if rescale_step >= 0 and np.isfinite(dt):
+            t_prod_ps = rescale_step * dt * 1e12
+            if not drew_prod_line:
+                ax.axvline(
+                    x=t_prod_ps,
+                    color='gray',
+                    linestyle=':',
+                    linewidth=1.5,
+                    alpha=0.8,
+                    label='production start',
+                )
+                drew_prod_line = True
+
     ax.axhline(y=94.4, color='k', linestyle='--', alpha=0.5, label='T = 94.4 K')
     ax.set_xlabel('Time [ps]')
     ax.set_ylabel('Temperature [K]')
-    ax.set_title('Temperature vs Time (N=864, NVE)')
+    ax.set_title('Temperature vs Time [K] (Time in ps)')
     ax.legend()
     ax.grid(True)
 
@@ -3290,19 +3539,20 @@ def plot_equilibrated_comparison():
             continue
 
         data = load_csv(fpath)
+        meta = parse_csv_metadata(fpath)
+        production_start = parse_int_meta(meta, "production_start", 0)
         step = data['step']
         etot = data['E_total'] / EPSILON
-        e0 = etot[0]
+        i0 = first_prod_index(step, production_start)
+        e0 = etot[i0]
         rel_dev = (etot - e0) / abs(e0)
 
         ax1.plot(step, rel_dev, color=color, label=label, linewidth=1.5, linestyle=ls)
+        ax1.axvline(x=production_start, color=color, linestyle=':', linewidth=1.0, alpha=0.6)
 
     ax1.set_xlabel('Step')
-    ax1.set_ylabel(r'$(E_{total} - E_0) / |E_0|$')
+    ax1.set_ylabel(r'$\Delta E / |E_{0,\mathrm{prod}}|$')
     ax1.set_title('Energy Deviation: Full Trajectories')
-    ax1.axvline(x=100, color='gray', linestyle=':', linewidth=1.5, alpha=0.7)
-    ax1.text(102, ax1.get_ylim()[1] * 0.5, 'NVE starts', rotation=90,
-             color='gray', va='center')
     ax1.legend(fontsize=9)
     ax1.grid(True)
 
@@ -3313,26 +3563,44 @@ def plot_equilibrated_comparison():
 
     if os.path.exists(fpath_raw):
         data = load_csv(fpath_raw)
-        etot = data['E_total'] / EPSILON
-        e0 = etot[0]
-        nve_steps = np.arange(len(etot))
-        ax2.plot(nve_steps, (etot - e0) / abs(e0), color='tab:red', linewidth=1.5,
-                 label=f'Raw NVE (drift={abs(etot[-1]-e0)/abs(e0)*100:.2f}%)')
+        meta = parse_csv_metadata(fpath_raw)
+        production_start = parse_int_meta(meta, "production_start", 0)
+        step = data['step']
+        mask = step >= production_start
+        if np.any(mask):
+            etot = data['E_total'][mask] / EPSILON
+            e0 = etot[0]
+            nve_steps = np.arange(len(etot))
+            drift = abs(etot[-1] - e0) / abs(e0) * 100.0
+            ax2.plot(
+                nve_steps,
+                (etot - e0) / abs(e0),
+                color='tab:red',
+                linewidth=1.5,
+                label=f'Raw NVE (from step {production_start}, drift={drift:.2f}%)',
+            )
 
     if os.path.exists(fpath_eq):
         data = load_csv(fpath_eq)
-        # NVE phase starts after step 100
-        nve_mask = data['step'] > 100
+        meta = parse_csv_metadata(fpath_eq)
+        production_start = parse_int_meta(meta, "production_start", 0)
+        nve_mask = data['step'] >= production_start
         if np.any(nve_mask):
             etot_nve = data['E_total'][nve_mask] / EPSILON
             e0_nve = etot_nve[0]
             nve_steps = np.arange(len(etot_nve))
-            ax2.plot(nve_steps, (etot_nve - e0_nve) / abs(e0_nve), color='tab:green', linewidth=1.5,
-                     label=f'Post-equilibration NVE (drift={abs(etot_nve[-1]-e0_nve)/abs(e0_nve)*100:.2f}%)')
+            drift = abs(etot_nve[-1] - e0_nve) / abs(e0_nve) * 100.0
+            ax2.plot(
+                nve_steps,
+                (etot_nve - e0_nve) / abs(e0_nve),
+                color='tab:green',
+                linewidth=1.5,
+                label=f'Post-equilibration NVE (from step {production_start}, drift={drift:.2f}%)',
+            )
 
-    ax2.set_xlabel('NVE Step')
-    ax2.set_ylabel(r'$(E_{total} - E_0) / |E_0|$')
-    ax2.set_title('NVE Energy Conservation Comparison')
+    ax2.set_xlabel('Production Step Index')
+    ax2.set_ylabel(r'$\Delta E / |E_{0,\mathrm{prod}}|$')
+    ax2.set_title('Production-Window Energy Conservation Comparison')
     ax2.legend(fontsize=9)
     ax2.grid(True)
 
@@ -3353,6 +3621,13 @@ def plot_rdf():
         return
 
     data = load_csv(fpath)
+    meta_gr = parse_csv_metadata(fpath)
+    gr_start = parse_int_meta(
+        meta_gr,
+        "gr_start",
+        parse_int_meta(meta_gr, "production_start", 0) + parse_int_meta(meta_gr, "gr_discard", 0),
+    )
+    gr_interval = parse_int_meta(meta_gr, "gr_interval", 1)
 
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.plot(data['r_sigma'], data['gr'], '-', color='k', linewidth=1.5)
@@ -3364,10 +3639,13 @@ def plot_rdf():
         fpath_energy = manifest.get("lj_gr_energy", "")
         if os.path.exists(fpath_energy):
             energy_data = load_csv(fpath_energy)
-            gr_mask = energy_data['step'] >= 500
+            gr_mask = energy_data['step'] >= gr_start
             if np.any(gr_mask):
                 T_mean = np.mean(energy_data['temperature'][gr_mask])
-                ax.set_title(rf'Radial Distribution Function (Liquid Argon, $\langle T \rangle$ = {T_mean:.0f} K)')
+                ax.set_title(
+                    rf'Radial Distribution Function (Liquid Argon, '
+                    rf'$\langle T \rangle$ = {T_mean:.0f} K, start={gr_start}, every {gr_interval})'
+                )
             else:
                 ax.set_title(r'Radial Distribution Function (Liquid Argon)')
         else:
@@ -3747,19 +4025,19 @@ include/md/mic.hpp                                   18 lines
 include/md/mpi_context.hpp                          103 lines
 include/md/observables.hpp                           90 lines
 include/md/params.hpp                               182 lines
-include/md/potentials.hpp                            64 lines
+include/md/potentials.hpp                            67 lines
 include/md/rng.hpp                                  139 lines
 include/md/system.hpp                                70 lines
-src/main.cpp                                        385 lines
+src/main.cpp                                        420 lines
 src/observables.cpp                                  70 lines
-src/potentials/harmonic.cpp                          35 lines
-src/potentials/lennard_jones.cpp                    100 lines
+src/potentials/harmonic.cpp                          37 lines
+src/potentials/lennard_jones.cpp                    104 lines
 tests/test_force.cpp                                198 lines
 tests/test_mic.cpp                                  116 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    1804
+    1848
 ```
 
 **End of audit.**
