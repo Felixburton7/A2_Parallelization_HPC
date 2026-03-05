@@ -33,29 +33,34 @@ mpirun -np 1 ./md_solver --mode ho --integrator rk4 --dt 0.01 --steps 1000 --N 1
 ### Lennard-Jones Argon (Results 2)
 
 ```bash
-# Primary run: 100 steps, Velocity-Verlet (single rescale at step 10)
+# Primary run: 500-step equilibration (velocity rescaling each step) + 100-step NVE production.
+# Production runs use P=4; see scripts/run_all_data.sh for the P=1 vs P=2 consistency check.
 mkdir -p out
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 100 --rescale-step 10
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 600 --rescale-step 500
 
-# Primary run: 100 steps, Euler (single rescale at step 10)
-mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --steps 100 --rescale-step 10
+# Primary run: 500-step equilibration + 100-step Euler production
+mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --steps 600 --rescale-step 500
 
 # Equilibrated comparison run (rescale at 100, then post-rescale NVE segment)
 mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 200 --rescale-step 100
 
 # Supplementary g(r) (extended run, ~450 frames for smooth Rahman comparison)
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 25500 --rescale-step 10 --gr --gr-discard 500 --gr-interval 10
+# --gr-discard is relative to production_start; with --rescale-step 500, discard=0 starts sampling at step 500.
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 25500 --rescale-step 500 --gr --gr-discard 0 --gr-interval 10
 ```
 
 ### Scaling (Results 3)
 
 ```bash
-# Recommended: use the automation script (median-of-10 paired runs)
+# Recommended: use the automation script (median-of-20 paired runs)
 bash scripts/run_all_data.sh
+
+# On cerberus1, run scaling on an exclusive node:
+srun --exclusive -N 1 --ntasks-per-node=32 bash scripts/run_all_data.sh
 
 # Direct timing examples (single run each):
 mpirun -np 1  ./md_solver --mode lj --integrator verlet --N 2048 --steps 200 --timing
-mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864  --steps 500 --timing
+mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864  --steps 2000 --timing
 ```
 
 ## Generate Plots
@@ -81,7 +86,6 @@ src/           — Source implementations (main.cpp, potentials/lennard_jones.cp
 tests/         — Unit tests (MIC wrapping, LJ force, position wrapping)
 scripts/       — Python plotting scripts and bash automation
 out/           — Generated data (excluded from submission)
-ai/            — AI context workspace (excluded from submission)
 ```
 
 Integrators (Euler, Velocity-Verlet, RK4) are implemented as inline functions in `include/md/integrators.hpp`.

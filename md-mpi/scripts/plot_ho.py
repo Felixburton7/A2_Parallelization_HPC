@@ -18,11 +18,20 @@ import sys
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
+
+from plot_style import (
+    INTEGRATOR_STYLE,
+    apply_major_grid,
+    apply_plot_style,
+    disable_offset_text,
+    save_figure,
+)
 
 # ── Configuration ──
 INTEGRATORS = ["euler", "verlet", "rk4"]
 INTEGRATOR_LABELS = {"euler": "Forward Euler", "rk4": "RK4", "verlet": "Velocity-Verlet"}
-INTEGRATOR_COLORS = {"euler": "#e74c3c", "rk4": "#3498db", "verlet": "#2ecc71"}
+INTEGRATOR_COLORS = {k: INTEGRATOR_STYLE[k]["color"] for k in ["euler", "rk4", "verlet"]}
 INTEGRATOR_ORDERS = {"euler": 1, "rk4": 4, "verlet": 2}
 
 DT_VALUES = [1.0, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005]
@@ -65,10 +74,9 @@ def run_ho_simulations():
 
 
 import json
-import csv
 
 def load_manifest():
-    with open("out/manifest.json", "r") as f:
+    with open("out/manifest.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
 def load_csv(filepath):
@@ -87,7 +95,7 @@ def plot_trajectories():
     """Plot x(t), v(t), phase space for all integrators at dt=0.01."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5), constrained_layout=True)
 
     t_exact = np.linspace(0, T_FINAL, 1000)
     x_exact, v_exact = exact_solution(t_exact)
@@ -106,39 +114,88 @@ def plot_trajectories():
         x = data['x']
         v = data['v']
 
-        color = INTEGRATOR_COLORS[integ]
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
         label = INTEGRATOR_LABELS[integ]
 
-        axes[0].plot(t, x, color=color, label=label, linewidth=1.5, alpha=0.8)
-        axes[1].plot(t, v, color=color, label=label, linewidth=1.5, alpha=0.8)
-        axes[2].plot(x, v, color=color, label=label, linewidth=1.2, alpha=0.8)
+        axes[0].plot(
+            t,
+            x,
+            color=color,
+            linestyle=style["linestyle"],
+            label=label,
+            linewidth=style["linewidth"],
+        )
+        axes[1].plot(
+            t,
+            v,
+            color=color,
+            linestyle=style["linestyle"],
+            label=label,
+            linewidth=style["linewidth"],
+        )
+        axes[2].plot(
+            x,
+            v,
+            color=color,
+            linestyle=style["linestyle"],
+            label=label,
+            linewidth=style["linewidth"],
+        )
 
     # Exact overlays
-    axes[0].plot(t_exact, x_exact, 'k--', linewidth=1, alpha=0.5, label='Exact')
-    axes[0].set_xlabel('Time')
-    axes[0].set_ylabel('Position x')
-    axes[0].set_title('Position vs Time')
-    axes[0].legend(fontsize=9)
-    axes[0].grid(True)
+    exact_style = INTEGRATOR_STYLE["exact"]
+    axes[0].plot(
+        t_exact,
+        x_exact,
+        color=exact_style["color"],
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_style["linewidth"],
+        alpha=0.9,
+        label="Exact",
+    )
+    axes[0].set_xlabel(r'Time $[1/\omega]$')
+    axes[0].set_ylabel('Position x [arb.]')
+    axes[0].set_title('Position vs Time (Reduced Units)')
+    axes[0].legend(loc="upper right")
+    apply_major_grid(axes[0])
+    disable_offset_text(axes[0])
 
-    axes[1].plot(t_exact, v_exact, 'k--', linewidth=1, alpha=0.5, label='Exact')
-    axes[1].set_xlabel('Time')
-    axes[1].set_ylabel('Velocity v')
-    axes[1].set_title('Velocity vs Time')
-    axes[1].legend(fontsize=9)
-    axes[1].grid(True)
+    axes[1].plot(
+        t_exact,
+        v_exact,
+        color=exact_style["color"],
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_style["linewidth"],
+        alpha=0.9,
+        label="Exact",
+    )
+    axes[1].set_xlabel(r'Time $[1/\omega]$')
+    axes[1].set_ylabel('Velocity v [arb.]')
+    axes[1].set_title('Velocity vs Time (Reduced Units)')
+    axes[1].legend(loc="upper right")
+    apply_major_grid(axes[1])
+    disable_offset_text(axes[1])
 
     x_ep, v_ep = exact_solution(np.linspace(0, 2 * np.pi / OMEGA, 500))
-    axes[2].plot(x_ep, v_ep, 'k--', linewidth=1, alpha=0.5, label='Exact')
-    axes[2].set_xlabel('Position x')
-    axes[2].set_ylabel('Velocity v')
-    axes[2].set_title('Phase Space (v vs x)')
-    axes[2].legend(fontsize=9)
-    axes[2].set_aspect('equal')
-    axes[2].grid(True)
+    axes[2].plot(
+        x_ep,
+        v_ep,
+        color=exact_style["color"],
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_style["linewidth"],
+        alpha=0.9,
+        label="Exact",
+    )
+    axes[2].set_xlabel('Position x [arb.]')
+    axes[2].set_ylabel('Velocity v [arb.]')
+    axes[2].set_title('Phase Space (v vs x, Reduced Units)')
+    axes[2].legend(loc="upper right")
+    axes[2].set_aspect("equal", "box")
+    apply_major_grid(axes[2])
+    disable_offset_text(axes[2])
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_trajectories.png")
+    save_figure(fig, f"{PLOT_DIR}/ho_trajectories.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_trajectories.png")
 
@@ -147,7 +204,7 @@ def plot_convergence():
     """Log-log convergence plot with fitted slopes."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
 
     x_ex_final, _ = exact_solution(T_FINAL)
 
@@ -185,26 +242,33 @@ def plot_convergence():
         log_err = np.log10(errors)
         slope, intercept = np.polyfit(log_dt, log_err, 1)
 
-        color = INTEGRATOR_COLORS[integ]
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
         expected = INTEGRATOR_ORDERS[integ]
         label = f"{INTEGRATOR_LABELS[integ]} (slope={slope:.2f}, expected {expected})"
 
-        ax.loglog(dts, errors, 'o-', color=color, label=label,
-                  linewidth=2, markersize=6)
+        ax.loglog(
+            dts,
+            errors,
+            marker="o",
+            linestyle=style["linestyle"],
+            color=color,
+            label=label,
+            linewidth=style["linewidth"],
+        )
 
         # Reference slope line
         dt_ref = np.array([min(dts), max(dts)])
         err_ref = errors[0] * (dt_ref / dts[0]) ** expected
-        ax.loglog(dt_ref, err_ref, '--', color=color, alpha=0.4, linewidth=1)
+        ax.loglog(dt_ref, err_ref, "--", color=color, alpha=0.45, linewidth=1.2)
 
-    ax.set_xlabel(r'$\Delta t$')
+    ax.set_xlabel(r'$\Delta t\ [1/\omega]$')
     ax.set_ylabel(r'$|x_{num}(T) - x_{exact}(T)|$')
-    ax.set_title('Convergence: Position Error vs Timestep')
-    ax.legend(fontsize=10)
-    ax.grid(True, which='both')
+    ax.set_title('Convergence: Position Error vs Timestep (Reduced Units)')
+    ax.legend(loc="best")
+    apply_major_grid(ax)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_convergence.png")
+    save_figure(fig, f"{PLOT_DIR}/ho_convergence.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_convergence.png")
 
@@ -213,7 +277,7 @@ def plot_energy_conservation():
     """Energy conservation comparison for all integrators."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
 
     manifest = load_manifest()
     
@@ -227,18 +291,27 @@ def plot_energy_conservation():
         t = data['time']
         E = data['E_total']
 
-        color = INTEGRATOR_COLORS[integ]
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
         label = INTEGRATOR_LABELS[integ]
 
         E0 = E[0]
         rel_dev = (E - E0) / abs(E0) if abs(E0) > 1e-30 else E - E0
-        ax.plot(t, rel_dev, color=color, label=label, linewidth=1.5)
+        ax.plot(
+            t,
+            rel_dev,
+            color=color,
+            linestyle=style["linestyle"],
+            label=label,
+            linewidth=style["linewidth"],
+        )
 
-    ax.set_xlabel('Time')
+    ax.set_xlabel(r'Time $[1/\omega]$')
     ax.set_ylabel(r'$(E - E_0) / |E_0|$')
-    ax.set_title('HO Energy Conservation (dt=0.01)')
-    ax.legend(fontsize=10)
-    ax.grid(True)
+    ax.set_title('HO Energy Conservation (Reduced Units, dt=0.01)')
+    ax.legend(loc="best")
+    apply_major_grid(ax)
+    disable_offset_text(ax)
 
     # Add zoomed inset to show VV vs RK4 near zero
     from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -254,22 +327,28 @@ def plot_energy_conservation():
         E = data['E_total']
         E0 = E[0]
         rel_dev = (E - E0) / abs(E0) if abs(E0) > 1e-30 else E - E0
-        axins.plot(t, rel_dev, color=INTEGRATOR_COLORS[integ], linewidth=1.5)
+        style = INTEGRATOR_STYLE[integ]
+        axins.plot(
+            t,
+            rel_dev,
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=style["linewidth"],
+        )
     
-    axins.set_title('Zoom: VV vs RK4')
-    axins.grid(True)
-    axins.tick_params(axis='both', which='major', labelsize=8)
-    
-    # Optional: adjust y-limits of inset manually if needed
-    # (Leaving it auto-scaled, which usually captures the O(1e-4) VV vs O(1e-15) RK4 nicely.)
+    axins.set_title("Zoom: VV vs RK4", fontsize=9)
+    axins.tick_params(axis="both", which="major", labelsize=8)
+    axins.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1e}"))
+    apply_major_grid(axins)
+    disable_offset_text(axins)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_energy.png")
+    save_figure(fig, f"{PLOT_DIR}/ho_energy.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/ho_energy.png")
 
 
 if __name__ == "__main__":
+    apply_plot_style()
     if "--run" in sys.argv:
         run_ho_simulations()
 

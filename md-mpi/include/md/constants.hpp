@@ -32,7 +32,7 @@ constexpr double rcut_sigma = 2.25;
 /// Interaction cutoff [m]
 constexpr double rcut = rcut_sigma * sigma;
 
-// ── Derived quantities for optimised LJ kernel ──
+// Derived quantities for optimised LJ kernel
 
 /// sigma^2
 constexpr double sigma2 = sigma * sigma;
@@ -52,7 +52,7 @@ constexpr double four_eps = 4.0 * epsilon;
 /// 24 * epsilon (force prefactor)
 constexpr double twentyfour_eps = 24.0 * epsilon;
 
-// ── Magic numbers extracted from codebase ──
+// Simulation constants
 
 /// Fraction of sigma for random initial position perturbation
 constexpr double fccPerturbation = 0.01;
@@ -66,7 +66,7 @@ constexpr double L_ho_dummy = 1.0e10;
 /// Lower bound numerical guard for temperature rescaling
 constexpr double rescaleGuard = 1e-30;
 
-// ── Rahman (1964) reference state point ──
+// Rahman (1964) reference state point
 
 /// Number of particles in Rahman's simulation
 constexpr int N_rahman = 864;

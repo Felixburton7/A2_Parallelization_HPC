@@ -40,26 +40,44 @@
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
 
-    // ── Parse parameters (never calls std::exit — returns status) ──
+    // Parse parameters
     md::Params params;
-    md::ParseStatus status = md::Params::parse(argc, argv, params);
+    md::Params::parse(argc, argv, params);
 
-    if (status != md::ParseStatus::Ok) {
-        MPI_Finalize();
-        return (status == md::ParseStatus::Help) ? 0 : 1;
-    }
-
-    // ── Initialise MPI context and particle decomposition ──
+    // MPI setup and particle decomposition
     md::MPIContext ctx;
     ctx.init(params.N);
     ctx.timingMode = params.timing;
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
-    const int productionStart = (!isHO && params.rescaleStep >= 0) ? params.rescaleStep : 0;
-    const int grStart = productionStart + params.grDiscard;
+    const int nSteps = params.steps;
+    const int nFrames = nSteps + 1;
+    const int productionStart = (!isHO && params.rescaleStep >= 1) ? (params.rescaleStep + 1) : 0;
+    int grDiscardSteps = params.grDiscardSteps;
+    int grSampleEvery = params.grSampleEvery;
+    if (grDiscardSteps < 0) {
+        if (ctx.isRoot()) {
+            std::fprintf(stderr,
+                         "WARNING: --gr-discard-steps=%d is invalid; using 0 instead.\n",
+                         grDiscardSteps);
+        }
+        grDiscardSteps = 0;
+    }
+    if (grSampleEvery <= 0) {
+        if (ctx.isRoot()) {
+            std::fprintf(stderr,
+                         "WARNING: --gr-sample-every=%d is invalid; using 1 instead.\n",
+                         grSampleEvery);
+        }
+        grSampleEvery = 1;
+    }
+    const int grStart = productionStart + grDiscardSteps;
+    const int maxGRFrames = (!isHO && params.gr && grStart <= nSteps)
+                                ? (1 + (nSteps - grStart) / grSampleEvery)
+                                : 0;
 
-    // ── Compute box side length ──
+    // Box side length (constant density scaling for LJ)
     // For LJ: scale from Rahman's L=10.229*sigma for N=864 to maintain constant density
     // For HO: L is irrelevant (non-interacting), set to a large value
     double L;
@@ -70,7 +88,7 @@ int main(int argc, char* argv[]) {
             std::cbrt(static_cast<double>(N) / md::constants::N_rahman);
     }
 
-    // ── Generate initial conditions on rank 0, broadcast to all ──
+    // Generate initial conditions on rank 0, broadcast to all
     std::vector<double> posAll(3 * N, 0.0);
     std::vector<double> velAll(3 * N, 0.0);
     int fccError = 0;  // broadcast from root to all ranks (LJ only)
@@ -143,7 +161,7 @@ int main(int argc, char* argv[]) {
     MPI_Bcast(posAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(velAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    // ── Initialise local system state ──
+    // Initialise local system state
     md::System sys;
     sys.init(ctx.localN, ctx.offset, N, L);
 
@@ -158,13 +176,13 @@ int main(int argc, char* argv[]) {
     // Copy full positions into global buffer for first force evaluation
     ctx.posGlobal = posAll;
 
-    // ── Wrap positions into [0, L) ──
+    // Wrap positions into [0, L)
     if (!isHO) {
         sys.wrapPositions();
         ctx.allgatherPositions(sys.pos);
     }
 
-    // ── Build force function (binds potential-specific parameters) ──
+    // Build force function
     double omega = params.omega;
     double mass = md::constants::mass;
 
@@ -182,7 +200,7 @@ int main(int argc, char* argv[]) {
     else if (params.integrator == "rk4")
         intType = IntegratorType::RK4;
 
-    // ── Initial force evaluation ──
+    // Initial force evaluation
     double localPE = 0.0;
     if (isHO) {
         evalHO(sys, ctx.posGlobal, localPE);
@@ -190,7 +208,7 @@ int main(int argc, char* argv[]) {
         evalLJ(sys, ctx.posGlobal, localPE);
     }
 
-    // ── Create output directory and open file (rank 0 only) ──
+    // Create output directory and open file on rank 0
     std::ofstream outFile;
     if (params.output && ctx.isRoot()) {
         std::string fname;
@@ -208,12 +226,15 @@ int main(int argc, char* argv[]) {
             std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
             outFile << "# mode: " << params.mode << ", integrator: " << params.integrator
                     << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
-                    << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
+                    << ", steps: " << nSteps << ", n_steps: " << nSteps
+                    << ", n_frames: " << nFrames
+                    << ", step_indexing: 0..steps (includes initial frame)"
+                    << ", seed: " << params.seed << ", L: " << L
                     << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
                     << ", rescale_step: " << params.rescaleStep
                     << ", production_start: " << productionStart
-                    << ", gr_discard: " << params.grDiscard
-                    << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart;
+                    << ", gr_discard_steps: " << grDiscardSteps
+                    << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart;
             if (!isHO) {
                 outFile << ", lattice: FCC, velocities: Box-Muller";
             }
@@ -227,20 +248,47 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // ── Print simulation info (rank 0) ──
+    // Print simulation info on rank 0
     if (ctx.isRoot() && !params.timing) {
         std::printf("=== MD Solver ===\n");
         std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
-        std::printf("N = %d | P = %d | steps = %d | dt = %.3e\n", N, ctx.size, params.steps,
-                    params.dt);
-        std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
+        std::printf(
+            "N = %d | P = %d | timesteps = %d | frames = %d (step 0..%d) | dt = %.3e\n", N,
+            ctx.size, nSteps, nFrames, nSteps, params.dt);
+        std::printf(
+            "Step semantics: --steps is the number of integration updates; output includes the "
+            "initial frame at step 0.\n");
         if (!isHO) {
+            std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
             std::printf("T_init = %.1f K | seed = %d\n", params.T_init, params.seed);
+            std::printf("Total simulated time = %.3e s (= steps * dt)\n", nSteps * params.dt);
+            if (params.gr) {
+                std::printf(
+                    "g(r): production_start=%d (first step after rescaling window), "
+                    "gr_start=%d (= production_start + gr_discard_steps=%d), sample_every=%d\n",
+                    productionStart, grStart, grDiscardSteps, grSampleEvery);
+            }
+        } else {
+            std::printf("HO mode: periodic box size is not used\n");
         }
         std::printf("==================\n");
     }
 
-    // ── g(r) histogram setup (LJ only) ──
+    if (params.gr && !isHO && maxGRFrames <= 0 && ctx.isRoot()) {
+        if (grStart > nSteps) {
+            std::fprintf(stderr,
+                         "WARNING: g(r) requested but gr_start=%d is beyond final step=%d. "
+                         "No RDF frames will be sampled.\n",
+                         grStart, nSteps);
+        } else {
+            std::fprintf(stderr,
+                         "WARNING: g(r) requested but no frames available "
+                         "(steps=%d, production_start=%d, gr_discard_steps=%d).\n",
+                         nSteps, productionStart, grDiscardSteps);
+        }
+    }
+
+    // g(r) histogram setup for LJ mode
     // Keep HO mode at zero-sized buffers to avoid meaningless allocations.
     const double grDr = md::constants::grBinWidthSigma * md::constants::sigma;  // bin width
     const double grRMax = isHO ? 0.0 : 0.5 * L;                                  // [0, L/2] for LJ
@@ -248,13 +296,13 @@ int main(int argc, char* argv[]) {
     std::vector<double> grHistLocal(grNBins, 0.0);
     int grFrames = 0;
 
-    // ── Timing setup ──
+    // Timing setup
     MPI_Barrier(MPI_COMM_WORLD);
     double tStart = MPI_Wtime();
 
-    // ── Time-stepping loop ──
-    for (int step = 0; step <= params.steps; ++step) {
-        // ── Compute observables (skip entirely in timing mode for clean benchmarks) ──
+    // Time-stepping loop
+    for (int step = 0; step <= nSteps; ++step) {
+        // Compute observables (skip in timing mode)
         double totalKE = 0.0, totalPE = 0.0;
         if (!params.timing) {
             double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
@@ -281,8 +329,8 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            // ── Single-step Velocity Rescaling ──
-            if (step == params.rescaleStep && !isHO) {
+            // Velocity rescaling during equilibration window
+            if (step > 0 && step <= params.rescaleStep && !isHO) {
                 double lambda = 1.0;
                 if (ctx.isRoot()) {
                     double tMeasured = md::computeTemperature(totalKE, N);
@@ -303,15 +351,15 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // ── Accumulate g(r) histogram (LJ only, production window) ──
-        if (params.gr && !isHO && step >= grStart && ((step - grStart) % params.grInterval == 0)) {
+        // Accumulate g(r) histogram in the production window
+        if (params.gr && !isHO && step >= grStart && ((step - grStart) % grSampleEvery == 0)) {
             md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
                              grHistLocal);
             ++grFrames;
         }
 
-        // ── Advance one timestep (skip on the last iteration — we only want observables) ──
-        if (step == params.steps)
+        // Advance one timestep; skip update on the last iteration
+        if (step == nSteps)
             break;
 
         // 6-way dispatch: necessary to avoid std::function virtual dispatch overhead in the hot
@@ -334,7 +382,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // ── Timing completion ──
+    // Timing completion
     double tEnd = MPI_Wtime();
     double elapsed = tEnd - tStart;
 
@@ -370,7 +418,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // ── Write g(r) to file (LJ only) ──
+    // Write g(r) to file for LJ mode
     if (params.gr && !isHO && grFrames > 0) {
         // Reduce histogram across all ranks
         std::vector<double> grHistGlobal(grNBins, 0.0);
@@ -389,12 +437,15 @@ int main(int argc, char* argv[]) {
                 std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
                 grFile << "# mode: " << params.mode << ", integrator: " << params.integrator
                        << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
-                       << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
+                       << ", steps: " << nSteps << ", n_steps: " << nSteps
+                       << ", n_frames: " << nFrames
+                       << ", step_indexing: 0..steps (includes initial frame)"
+                       << ", seed: " << params.seed << ", L: " << L
                        << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
                        << ", rescale_step: " << params.rescaleStep
                        << ", production_start: " << productionStart
-                       << ", gr_discard: " << params.grDiscard
-                       << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart
+                       << ", gr_discard_steps: " << grDiscardSteps
+                       << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart
                        << ", lattice: FCC, velocities: Box-Muller, timestamp: " << tstr << "\n";
                 grFile << "r_sigma,gr\n";
                 for (int b = 0; b < grNBins; ++b) {
@@ -408,9 +459,13 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+    } else if (params.gr && !isHO && ctx.isRoot() && !params.timing) {
+        std::fprintf(stderr,
+                     "WARNING: g(r) skipped because no frames were sampled. "
+                     "Adjust --steps, --rescale-step, --gr-discard-steps, or --gr-sample-every.\n");
     }
 
-    // ── Close output file ──
+    // Close output file
     if (outFile.is_open()) {
         outFile.close();
     }

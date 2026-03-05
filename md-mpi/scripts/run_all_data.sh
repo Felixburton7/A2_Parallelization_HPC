@@ -11,6 +11,22 @@ set -euo pipefail
 SOLVER="./md_solver"
 OUTDIR="out"
 SKIP_SCALING=0
+STRONG_STEPS=200
+# Use longer runs for size scaling so fixed overhead is less dominant at small N.
+SIZE_STEPS=2000
+
+LJ_DT="1e-14"
+LJ_BRIEF_STEPS=100
+LJ_BRIEF_RESCALE=20
+LJ_BRIEF_FRAMES=$((LJ_BRIEF_STEPS + 1))
+LJ_EXTENDED_STEPS=600
+LJ_EXTENDED_RESCALE=20
+LJ_EXTENDED_FRAMES=$((LJ_EXTENDED_STEPS + 1))
+LJ_RDF_STEPS=20000
+LJ_RDF_RESCALE=20
+LJ_RDF_FRAMES=$((LJ_RDF_STEPS + 1))
+LJ_GR_DISCARD_STEPS=200
+LJ_GR_SAMPLE_EVERY=5
 for arg in "$@"; do
   [ "$arg" = "--skip-scaling" ] && SKIP_SCALING=1
 done
@@ -56,6 +72,21 @@ else
     echo "  P=1 vs P=2 data: MISMATCH ❌"
 fi
 
+echo ""
+echo "=== RDF PARALLEL CONSISTENCY CHECK ==="
+DGR1="$OUTDIR/runs/lj_gr_N108_P1_test_${TIMESTAMP}"
+DGR2="$OUTDIR/runs/lj_gr_N108_P2_test_${TIMESTAMP}"
+mkdir -p "$DGR1" "$DGR2"
+mpirun -np 1 $SOLVER --mode lj --integrator verlet --N 108 --steps 400 --dt 1e-14 \
+    --rescale-step 20 --gr --gr-discard-steps 20 --gr-sample-every 2 --outdir "$DGR1" > /dev/null
+mpirun -np 2 $SOLVER --mode lj --integrator verlet --N 108 --steps 400 --dt 1e-14 \
+    --rescale-step 20 --gr --gr-discard-steps 20 --gr-sample-every 2 --outdir "$DGR2" > /dev/null
+if python3 scripts/check_gr_tolerance.py "$DGR1/gr.csv" "$DGR2/gr.csv" > /dev/null 2>&1; then
+    echo "  g(r) P=1 vs P=2 data: MATCH ✅"
+else
+    echo "  g(r) P=1 vs P=2 data: MISMATCH ❌"
+fi
+
 # ── 1. Results 1: HO Convergence ──
 echo ""
 echo "=== RESULTS 1: HO CONVERGENCE ==="
@@ -78,46 +109,75 @@ for INT in euler verlet rk4; do
     done
 done
 
-# ── 2. Results 2: LJ Production ──
+# ── 2. Results 2: LJ Brief + Extended ──
 echo ""
-echo "=== RESULTS 2: LJ PRODUCTION ==="
-RUNDIR_V="$OUTDIR/runs/lj_N864_P4_verlet_100_${TIMESTAMP}"
-mkdir -p "$RUNDIR_V"
-echo "  Verlet N=864 100 steps..."
-mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 100 --dt 1e-14 --rescale-step 10 --outdir "$RUNDIR_V" > /dev/null
-if [ -s "$RUNDIR_V/lj_verlet.csv" ]; then
-    python3 scripts/append_manifest.py "lj_production.verlet_100" "$RUNDIR_V/lj_verlet.csv"
-    echo "  -> output saved to manifest ✅"
-fi
+echo "=== RESULTS 2: LJ BRIEF + EXTENDED ==="
+echo "  Convention: --steps = number of integration timesteps (updates)."
+echo "  Output frames include initial frame at step 0, so n_frames = steps + 1."
 
-RUNDIR_E="$OUTDIR/runs/lj_N864_P4_euler_100_${TIMESTAMP}"
-mkdir -p "$RUNDIR_E"
-echo "  Euler N=864 100 steps..."
-mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 --steps 100 --dt 1e-14 --rescale-step 10 --outdir "$RUNDIR_E" > /dev/null
-if [ -s "$RUNDIR_E/lj_euler.csv" ]; then
-    python3 scripts/append_manifest.py "lj_production.euler_100" "$RUNDIR_E/lj_euler.csv"
-    echo "  -> output saved to manifest ✅"
-fi
-
-# ── Equilibrated NVE comparison ──
-RUNDIR_EQ="$OUTDIR/runs/lj_N864_P4_verlet_200_eq_${TIMESTAMP}"
-mkdir -p "$RUNDIR_EQ"
+# Brief run (required by brief): exactly 100 timesteps at dt=1e-14 s.
+RUNDIR_BRIEF_V="$OUTDIR/runs/lj_brief_N864_P4_verlet_steps${LJ_BRIEF_STEPS}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_BRIEF_V"
+echo "  Brief (required) Verlet: timesteps=${LJ_BRIEF_STEPS}, frames=${LJ_BRIEF_FRAMES}, dt=${LJ_DT}, total_time=1e-12 s, rescale_end_step=${LJ_BRIEF_RESCALE}..."
 mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
-    --steps 200 --rescale-step 100 --outdir "$RUNDIR_EQ" > /dev/null
-python3 scripts/append_manifest.py "lj_production.verlet_200_equilibrated" "$RUNDIR_EQ/lj_verlet.csv"
+    --steps $LJ_BRIEF_STEPS --dt $LJ_DT --rescale-step $LJ_BRIEF_RESCALE \
+    --outdir "$RUNDIR_BRIEF_V" > /dev/null
+if [ -s "$RUNDIR_BRIEF_V/lj_verlet.csv" ]; then
+    python3 scripts/append_manifest.py "lj_brief.verlet" "$RUNDIR_BRIEF_V/lj_verlet.csv"
+    echo "  -> brief Verlet output saved to manifest ✅"
+fi
 
-# ── 3. g(r) Production Run ──
+RUNDIR_BRIEF_E="$OUTDIR/runs/lj_brief_N864_P4_euler_steps${LJ_BRIEF_STEPS}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_BRIEF_E"
+echo "  Brief (required) Euler: timesteps=${LJ_BRIEF_STEPS}, frames=${LJ_BRIEF_FRAMES}, dt=${LJ_DT}, total_time=1e-12 s, rescale_end_step=${LJ_BRIEF_RESCALE}..."
+mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 \
+    --steps $LJ_BRIEF_STEPS --dt $LJ_DT --rescale-step $LJ_BRIEF_RESCALE \
+    --outdir "$RUNDIR_BRIEF_E" > /dev/null
+if [ -s "$RUNDIR_BRIEF_E/lj_euler.csv" ]; then
+    python3 scripts/append_manifest.py "lj_brief.euler" "$RUNDIR_BRIEF_E/lj_euler.csv"
+    echo "  -> brief Euler output saved to manifest ✅"
+fi
+
+# Extended run (optional): longer trajectories for diagnostics/statistics.
+RUNDIR_EXT_V="$OUTDIR/runs/lj_extended_N864_P4_verlet_steps${LJ_EXTENDED_STEPS}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_EXT_V"
+echo "  Extended (optional) Verlet: timesteps=${LJ_EXTENDED_STEPS}, frames=${LJ_EXTENDED_FRAMES}, dt=${LJ_DT}, rescale_end_step=${LJ_EXTENDED_RESCALE}..."
+mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
+    --steps $LJ_EXTENDED_STEPS --dt $LJ_DT --rescale-step $LJ_EXTENDED_RESCALE \
+    --outdir "$RUNDIR_EXT_V" > /dev/null
+if [ -s "$RUNDIR_EXT_V/lj_verlet.csv" ]; then
+    python3 scripts/append_manifest.py "lj_extended.verlet_600" "$RUNDIR_EXT_V/lj_verlet.csv"
+    echo "  -> extended Verlet output saved to manifest ✅"
+fi
+
+RUNDIR_EXT_E="$OUTDIR/runs/lj_extended_N864_P4_euler_steps${LJ_EXTENDED_STEPS}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_EXT_E"
+echo "  Extended (optional) Euler: timesteps=${LJ_EXTENDED_STEPS}, frames=${LJ_EXTENDED_FRAMES}, dt=${LJ_DT}, rescale_end_step=${LJ_EXTENDED_RESCALE}..."
+mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 \
+    --steps $LJ_EXTENDED_STEPS --dt $LJ_DT --rescale-step $LJ_EXTENDED_RESCALE \
+    --outdir "$RUNDIR_EXT_E" > /dev/null
+if [ -s "$RUNDIR_EXT_E/lj_euler.csv" ]; then
+    python3 scripts/append_manifest.py "lj_extended.euler_600" "$RUNDIR_EXT_E/lj_euler.csv"
+    echo "  -> extended Euler output saved to manifest ✅"
+fi
+
+# ── 3. g(r) Production Run (extended long) ──
 echo ""
-echo "=== g(r) PRODUCTION RUN ==="
-RUNDIR_GR="$OUTDIR/runs/lj_N864_P4_gr_${TIMESTAMP}"
+echo "=== g(r) PRODUCTION RUN (EXTENDED LONG) ==="
+echo "  RDF long run: timesteps=${LJ_RDF_STEPS}, frames=${LJ_RDF_FRAMES}, rescale_end_step=${LJ_RDF_RESCALE}, discard_steps=${LJ_GR_DISCARD_STEPS}, sample_every=${LJ_GR_SAMPLE_EVERY}"
+RUNDIR_GR="$OUTDIR/runs/lj_rdf_N864_P4_verlet_steps${LJ_RDF_STEPS}_dt1e-14_${TIMESTAMP}"
 mkdir -p "$RUNDIR_GR"
-# With relative --gr-discard semantics (post-production-start), keep absolute
-# g(r) sampling start at step 500 by setting discard=500-10=490.
-mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 25500 \
-    --rescale-step 10 --gr --gr-discard 490 --gr-interval 10 --outdir "$RUNDIR_GR" > /dev/null
+mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
+    --dt $LJ_DT \
+    --steps $LJ_RDF_STEPS \
+    --rescale-step $LJ_RDF_RESCALE \
+    --gr \
+    --gr-discard-steps $LJ_GR_DISCARD_STEPS \
+    --gr-sample-every $LJ_GR_SAMPLE_EVERY \
+    --outdir "$RUNDIR_GR" > /dev/null
 if [ -s "$RUNDIR_GR/gr.csv" ]; then
-    python3 scripts/append_manifest.py "lj_gr" "$RUNDIR_GR/gr.csv"
-    python3 scripts/append_manifest.py "lj_gr_energy" "$RUNDIR_GR/lj_verlet.csv"
+    python3 scripts/append_manifest.py "lj_rdf.verlet_long" "$RUNDIR_GR/gr.csv"
+    python3 scripts/append_manifest.py "lj_rdf.verlet_long_energy" "$RUNDIR_GR/lj_verlet.csv"
     echo "  g(r) done, output saved to manifest ✅"
 else
     echo "  g(r) FAILED ❌"
@@ -132,7 +192,7 @@ if [ "$SKIP_SCALING" = "1" ]; then
   [ -f "$OUTDIR/scaling_size.csv" ]   && python3 scripts/append_manifest.py "scaling.size"   "$OUTDIR/scaling_size.csv"
 else
 echo ""
-echo "=== RESULTS 3: STRONG SCALING (20 reps, N=2048, 200 steps) ==="
+echo "=== RESULTS 3: STRONG SCALING (20 reps, N=2048, ${STRONG_STEPS} steps) ==="
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_strong.csv"
 python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
 
@@ -141,7 +201,7 @@ for P in 1 2 4 8 16 24 32; do
     WALLS=""
     COMMS=""
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun -np $P $SOLVER --mode lj --integrator verlet --N 2048 --steps 200 --timing 2>/dev/null)
+        OUTPUT=$(mpirun -np $P $SOLVER --mode lj --integrator verlet --N 2048 --steps $STRONG_STEPS --timing 2>/dev/null)
         W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
         [ -z "$C" ] && C="0.0"
@@ -159,7 +219,7 @@ done
 
 # ── 5. Size Scaling (median of 20 paired samples) ──
 echo ""
-echo "=== RESULTS 3: SIZE SCALING (20 reps, P=16, 500 steps) ==="
+echo "=== RESULTS 3: SIZE SCALING (20 reps, P=16, ${SIZE_STEPS} steps) ==="
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_size.csv"
 python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
 
@@ -167,7 +227,7 @@ for N in 108 256 500 864 1372 2048; do
     WALLS=""
     COMMS=""
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun -np 16 $SOLVER --mode lj --integrator verlet --N $N --steps 500 --timing 2>/dev/null)
+        OUTPUT=$(mpirun -np 16 $SOLVER --mode lj --integrator verlet --N $N --steps $SIZE_STEPS --timing 2>/dev/null)
         W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
         [ -z "$C" ] && C="0.0"

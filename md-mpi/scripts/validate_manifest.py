@@ -70,11 +70,12 @@ def main():
         for dt in DT_KEYS:
             require_file(manifest, f"ho_convergence.{integ}_dt{dt}", errors)
 
-    require_file(manifest, "lj_production.verlet_100", errors)
-    require_file(manifest, "lj_production.euler_100", errors)
-    require_file(manifest, "lj_production.verlet_200_equilibrated", errors)
-    require_file(manifest, "lj_gr", errors)
-    require_file(manifest, "lj_gr_energy", errors)
+    require_file(manifest, "lj_brief.verlet", errors)
+    require_file(manifest, "lj_brief.euler", errors)
+    require_file(manifest, "lj_extended.verlet_600", errors)
+    require_file(manifest, "lj_extended.euler_600", errors)
+    require_file(manifest, "lj_rdf.verlet_long", errors)
+    require_file(manifest, "lj_rdf.verlet_long_energy", errors)
 
     if not args.skip_scaling:
         require_file(manifest, "scaling.strong", errors)

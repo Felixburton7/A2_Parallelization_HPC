@@ -21,6 +21,17 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 
+from plot_style import (
+    COLOR_EULER,
+    COLOR_REFERENCE,
+    COLOR_RK4,
+    COLOR_VERLET,
+    apply_major_grid,
+    apply_plot_style,
+    disable_offset_text,
+    save_figure,
+)
+
 PLOT_DIR = "out/plots"
 
 
@@ -109,49 +120,58 @@ def plot_strong_scaling():
         P_fit = np.linspace(1, max(P) * 1.1, 100)
         S_fit = amdahl(P_fit, f_fit)
     
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    fig, axes = plt.subplots(1, 3, figsize=(15.5, 4.8), constrained_layout=True)
 
     # --- Panel 1: Speedup ---
     ax1 = axes[0]
-    ax1.plot(P, speedup, 'o-', color='tab:green', linewidth=2, markersize=8, label='Measured')
-    ax1.plot(P, P.astype(float), 'k--', alpha=0.5, linewidth=1.5, label='Ideal (S=P)')
+    ax1.plot(P, speedup, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label="Measured")
+    ax1.plot(P, P.astype(float), "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label="Ideal (S=P)")
     if f_fit is not None:
-        ax1.plot(P_fit, S_fit, '-', color='tab:red', linewidth=1.5,
-                 label=f'Amdahl fit (f={f_fit:.4f})')
-    ax1.set_xlabel('Number of Processes P')
-    ax1.set_ylabel('Speedup S(P)')
-    ax1.set_title('Strong Scaling: Speedup')
-    ax1.legend(fontsize=10)
-    ax1.grid(True)
+        ax1.plot(P_fit, S_fit, "-", color=COLOR_EULER, linewidth=1.6, label=f"Amdahl fit (f={f_fit:.4f})")
+    ax1.set_xlabel("Number of Processes P")
+    ax1.set_ylabel("Speedup S(P)")
+    ax1.set_title("Strong Scaling: Speedup")
+    ax1.legend(loc="best")
+    apply_major_grid(ax1)
+    disable_offset_text(ax1)
 
     # --- Panel 2: Efficiency ---
     ax2 = axes[1]
-    ax2.plot(P, efficiency, 'o-', color='tab:blue', linewidth=2, markersize=8)
-    ax2.axhline(y=1.0, color='k', linestyle='--', alpha=0.5)
-    ax2.set_xlabel('Number of Processes P')
-    ax2.set_ylabel('Efficiency E(P) = S(P)/P')
-    ax2.set_title('Strong Scaling: Efficiency')
+    ax2.plot(P, efficiency, "o-", color=COLOR_RK4, linewidth=2.0, markersize=6, label="Measured efficiency")
+    ax2.axhline(y=1.0, color=COLOR_REFERENCE, linestyle="--", alpha=0.9, linewidth=1.3, label="Ideal (E=1)")
+    ax2.set_xlabel("Number of Processes P")
+    ax2.set_ylabel("Efficiency E(P) = S(P)/P")
+    ax2.set_title("Strong Scaling: Efficiency")
     ax2.set_ylim(0, 1.15)
-    ax2.grid(True)
+    ax2.legend(loc="best")
+    apply_major_grid(ax2)
+    disable_offset_text(ax2)
 
     # --- Panel 3: Stacked bar — Compute vs Communication ---
     ax3 = axes[2]
     x_pos = np.arange(len(P))
     bar_width = 0.6
     compute_display = np.maximum(compute, 0)
-    ax3.bar(x_pos, compute_display, bar_width, label='Compute', color='tab:green', alpha=0.8)
-    ax3.bar(x_pos, comm, bar_width, bottom=compute_display, label='Communication',
-            color='tab:red', alpha=0.8)
+    ax3.bar(x_pos, compute_display, bar_width, label="Compute", color=COLOR_VERLET, alpha=0.85)
+    ax3.bar(
+        x_pos,
+        comm,
+        bar_width,
+        bottom=compute_display,
+        label="Communication",
+        color=COLOR_EULER,
+        alpha=0.85,
+    )
     ax3.set_xticks(x_pos)
     ax3.set_xticklabels([str(p) for p in P])
-    ax3.set_xlabel('Number of Processes P')
-    ax3.set_ylabel('Wall Time [s]')
-    ax3.set_title('Compute vs Communication Time')
-    ax3.legend(fontsize=10)
-    ax3.grid(True, axis='y')
+    ax3.set_xlabel("Number of Processes P")
+    ax3.set_ylabel("Wall Time [s]")
+    ax3.set_title("Compute vs Communication Time")
+    ax3.legend(loc="best")
+    apply_major_grid(ax3, axis="y")
+    disable_offset_text(ax3)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/scaling_strong.png")
+    save_figure(fig, f"{PLOT_DIR}/scaling_strong.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/scaling_strong.png")
 
@@ -186,44 +206,45 @@ def plot_size_scaling():
         log_wall = np.log10(wall[mask])
         slope_wall, intercept_wall = np.polyfit(log_N, log_wall, 1)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.5, 4.8), constrained_layout=True)
 
     wall_label = 'Wall time'
     if slope_wall is not None:
         wall_label += f' (O(N^{slope_wall:.2f}))'
-    ax1.loglog(N, wall, 'o-', color='tab:green', linewidth=2, markersize=8, label=wall_label)
+    ax1.loglog(N, wall, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label=wall_label)
     
     comp_label = 'Compute time'
     if slope_comp is not None:
         comp_label += f' (O(N^{slope_comp:.2f}))'
-    ax1.loglog(N, compute, '^-', color='tab:orange', linewidth=2, markersize=8, label=comp_label)
+    ax1.loglog(N, compute, "^-", color=COLOR_RK4, linewidth=2.0, markersize=6, label=comp_label)
 
-    ax1.loglog(N, comm, 's--', color='tab:red', linewidth=1.5, markersize=6,
-               label='Comm time', alpha=0.7)
+    ax1.loglog(N, comm, "s--", color=COLOR_EULER, linewidth=1.5, markersize=5, label="Comm time", alpha=0.9)
     N_ref = np.array([min(N), max(N)])
     t_ref = wall[-1] * (N_ref / N[-1]) ** 2
-    ax1.loglog(N_ref, t_ref, 'k--', alpha=0.4, linewidth=1.5, label=r'$\sim N^2$ reference')
-    ax1.set_xlabel('Number of Particles N')
-    ax1.set_ylabel('Time [s]')
-    ax1.set_title('Size Scaling (P=16)')
-    ax1.legend(fontsize=10)
-    ax1.grid(True, which='both')
+    ax1.loglog(N_ref, t_ref, "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label=r"$\sim N^2$ reference")
+    ax1.set_xlabel("Number of Particles N")
+    ax1.set_ylabel("Time [s]")
+    ax1.set_title("Size Scaling (P=16)")
+    ax1.legend(loc="best")
+    apply_major_grid(ax1)
 
     comm_frac = comm / wall * 100
-    ax2.plot(N, comm_frac, 'o-', color='tab:red', linewidth=2, markersize=8)
-    ax2.set_xlabel('Number of Particles N')
-    ax2.set_ylabel('Communication Fraction [%]')
-    ax2.set_title('Communication Overhead vs Problem Size')
+    ax2.plot(N, comm_frac, "o-", color=COLOR_EULER, linewidth=2.0, markersize=6)
+    ax2.set_xlabel("Number of Particles N")
+    ax2.set_ylabel("Communication Fraction [%]")
+    ax2.set_title("Communication Overhead vs Problem Size")
     ax2.set_ylim(0, 100)
-    ax2.grid(True)
-    ax2.axhline(y=50, color='k', linestyle='--')
+    apply_major_grid(ax2)
+    ax2.axhline(y=50, color=COLOR_REFERENCE, linestyle="--", linewidth=1.2, label="50% reference")
+    ax2.legend(loc="best")
+    disable_offset_text(ax2)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/scaling_size.png")
+    save_figure(fig, f"{PLOT_DIR}/scaling_size.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/scaling_size.png")
 
 
 if __name__ == "__main__":
+    apply_plot_style()
     plot_strong_scaling()
     plot_size_scaling()

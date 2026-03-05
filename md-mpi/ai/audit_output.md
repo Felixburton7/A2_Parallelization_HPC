@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-05T10:58:26Z |
-| Git commit | 1857c0029624f889f69c0088375e504883a4eac3 |
+| Timestamp (UTC) | 2026-03-05T14:51:33Z |
+| Git commit | 554ada0c01507780c09b7e4339871a2e728931bf |
 | Hostname | MacBook-Pro-434.local |
 | uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -18,20 +18,22 @@
 ```
 ./.clang-format
 ./.gitignore
+./Makefile
+./README.md
 ./ai/analyse_results.py
 ./ai/archive/claude.md
 ./ai/archive/code.md
 ./ai/archive/constraints.md
 ./ai/archive/current_code.md
 ./ai/archive/task_overview.md
-./ai/audit_output.md
 ./ai/audit.sh
+./ai/audit_output.md
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
 ./ai/pack_context.sh
 ./ai/pack_results.sh
-./ai/results_bundle.md
 ./ai/results.md
+./ai/results_bundle.md
 ./include/md/constants.hpp
 ./include/md/integrators.hpp
 ./include/md/mic.hpp
@@ -41,9 +43,7 @@
 ./include/md/potentials.hpp
 ./include/md/rng.hpp
 ./include/md/system.hpp
-./Makefile
 ./md_solver
-./README.md
 ./scripts/append_manifest.py
 ./scripts/check_tolerance.py
 ./scripts/make_results.sh
@@ -65,16 +65,16 @@
 
 ### out/plots/
 ```
-total 1360
+total 1472
 drwx------  11 felix  staff     352 Mar  4 17:17 .
-drwx------  17 felix  staff     544 Mar  4 17:17 ..
--rw-------   1 felix  staff   77228 Mar  4 17:17 ho_convergence.png
--rw-------   1 felix  staff   48921 Mar  4 17:17 ho_energy.png
--rw-------   1 felix  staff  118022 Mar  4 17:17 ho_trajectories.png
--rw-------   1 felix  staff  109938 Mar  4 17:17 lj_energy.png
--rw-------   1 felix  staff   72465 Mar  4 17:17 lj_equilibrated_comparison.png
--rw-------   1 felix  staff   37509 Mar  4 17:17 lj_rdf.png
--rw-------   1 felix  staff   50699 Mar  4 17:17 lj_temperature.png
+drwx------  17 felix  staff     544 Mar  5 12:12 ..
+-rw-------   1 felix  staff   77229 Mar  5 12:15 ho_convergence.png
+-rw-------   1 felix  staff   48922 Mar  5 12:15 ho_energy.png
+-rw-------   1 felix  staff  118023 Mar  5 12:15 ho_trajectories.png
+-rw-------   1 felix  staff  125357 Mar  5 12:16 lj_energy.png
+-rw-------   1 felix  staff  120347 Mar  5 12:16 lj_equilibrated_comparison.png
+-rw-------   1 felix  staff   35327 Mar  5 12:16 lj_rdf.png
+-rw-------   1 felix  staff   45460 Mar  5 12:16 lj_temperature.png
 -rw-------   1 felix  staff   88489 Mar  4 17:17 scaling_size.png
 -rw-------   1 felix  staff   78766 Mar  4 17:17 scaling_strong.png
 ```
@@ -83,38 +83,38 @@ drwx------  17 felix  staff     544 Mar  4 17:17 ..
 ```json
 {
   "ho_convergence": {
-    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260304_170025/ho_euler.csv",
-    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260304_170025/ho_euler.csv",
-    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260304_170025/ho_euler.csv",
-    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260304_170025/ho_euler.csv",
-    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260304_170025/ho_euler.csv",
-    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260304_170025/ho_euler.csv",
-    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260304_170025/ho_euler.csv",
-    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260304_170025/ho_euler.csv",
-    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260304_170025/ho_verlet.csv",
-    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260304_170025/ho_verlet.csv",
-    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260304_170025/ho_verlet.csv",
-    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260304_170025/ho_verlet.csv",
-    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260304_170025/ho_verlet.csv",
-    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260304_170025/ho_verlet.csv",
-    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260304_170025/ho_verlet.csv",
-    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260304_170025/ho_verlet.csv",
-    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260304_170025/ho_rk4.csv",
-    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260304_170025/ho_rk4.csv",
-    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260304_170025/ho_rk4.csv",
-    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260304_170025/ho_rk4.csv",
-    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260304_170025/ho_rk4.csv",
-    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260304_170025/ho_rk4.csv",
-    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260304_170025/ho_rk4.csv",
-    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260304_170025/ho_rk4.csv"
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260305_121121/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260305_121121/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260305_121121/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260305_121121/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260305_121121/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260305_121121/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260305_121121/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260305_121121/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260305_121121/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260305_121121/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260305_121121/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260305_121121/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260305_121121/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260305_121121/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260305_121121/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260305_121121/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260305_121121/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260305_121121/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260305_121121/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260305_121121/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260305_121121/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260305_121121/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260305_121121/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260305_121121/ho_rk4.csv"
   },
   "lj_production": {
-    "verlet_100": "out/runs/lj_N864_P4_verlet_100_20260304_170025/lj_verlet.csv",
-    "euler_100": "out/runs/lj_N864_P4_euler_100_20260304_170025/lj_euler.csv",
-    "verlet_200_equilibrated": "out/runs/lj_N864_P4_verlet_200_eq_20260304_170025/lj_verlet.csv"
+    "verlet_100": "out/runs/lj_N864_P4_verlet_100_20260305_121121/lj_verlet.csv",
+    "euler_100": "out/runs/lj_N864_P4_euler_100_20260305_121121/lj_euler.csv",
+    "verlet_200_equilibrated": "out/runs/lj_N864_P4_verlet_200_eq_20260305_121121/lj_verlet.csv"
   },
-  "lj_gr": "out/runs/lj_N864_P4_gr_20260304_170025/gr.csv",
-  "lj_gr_energy": "out/runs/lj_N864_P4_gr_20260304_170025/lj_verlet.csv",
+  "lj_gr": "out/runs/lj_N864_P4_gr_20260305_121121/gr.csv",
+  "lj_gr_energy": "out/runs/lj_N864_P4_gr_20260305_121121/lj_verlet.csv",
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
@@ -125,42 +125,42 @@ drwx------  17 felix  staff     544 Mar  4 17:17 ..
 ### out/runs/ directories
 ```
 out/runs/ho_N1_euler_dt0.0005_20260304_170025/
+out/runs/ho_N1_euler_dt0.0005_20260305_121121/
 out/runs/ho_N1_euler_dt0.001_20260304_170025/
+out/runs/ho_N1_euler_dt0.001_20260305_121121/
 out/runs/ho_N1_euler_dt0.005_20260304_170025/
+out/runs/ho_N1_euler_dt0.005_20260305_121121/
 out/runs/ho_N1_euler_dt0.01_20260304_170025/
+out/runs/ho_N1_euler_dt0.01_20260305_121121/
 out/runs/ho_N1_euler_dt0.05_20260304_170025/
+out/runs/ho_N1_euler_dt0.05_20260305_121121/
 out/runs/ho_N1_euler_dt0.1_20260304_170025/
+out/runs/ho_N1_euler_dt0.1_20260305_121121/
 out/runs/ho_N1_euler_dt0.5_20260304_170025/
+out/runs/ho_N1_euler_dt0.5_20260305_121121/
 out/runs/ho_N1_euler_dt1.0_20260304_170025/
+out/runs/ho_N1_euler_dt1.0_20260305_121121/
 out/runs/ho_N1_rk4_dt0.0005_20260304_170025/
+out/runs/ho_N1_rk4_dt0.0005_20260305_121121/
 out/runs/ho_N1_rk4_dt0.001_20260304_170025/
+out/runs/ho_N1_rk4_dt0.001_20260305_121121/
 out/runs/ho_N1_rk4_dt0.005_20260304_170025/
+out/runs/ho_N1_rk4_dt0.005_20260305_121121/
 out/runs/ho_N1_rk4_dt0.01_20260304_170025/
+out/runs/ho_N1_rk4_dt0.01_20260305_121121/
 out/runs/ho_N1_rk4_dt0.05_20260304_170025/
+out/runs/ho_N1_rk4_dt0.05_20260305_121121/
 out/runs/ho_N1_rk4_dt0.1_20260304_170025/
+out/runs/ho_N1_rk4_dt0.1_20260305_121121/
 out/runs/ho_N1_rk4_dt0.5_20260304_170025/
-out/runs/ho_N1_rk4_dt1.0_20260304_170025/
-out/runs/ho_N1_verlet_dt0.0005_20260304_170025/
-out/runs/ho_N1_verlet_dt0.001_20260304_170025/
-out/runs/ho_N1_verlet_dt0.005_20260304_170025/
-out/runs/ho_N1_verlet_dt0.01_20260304_170025/
-out/runs/ho_N1_verlet_dt0.05_20260304_170025/
-out/runs/ho_N1_verlet_dt0.1_20260304_170025/
-out/runs/ho_N1_verlet_dt0.5_20260304_170025/
-out/runs/ho_N1_verlet_dt1.0_20260304_170025/
-out/runs/lj_N108_P1_test_20260304_170025/
-out/runs/lj_N108_P2_test_20260304_170025/
-out/runs/lj_N864_P4_euler_100_20260304_170025/
-out/runs/lj_N864_P4_gr_20260304_170025/
-out/runs/lj_N864_P4_verlet_100_20260304_170025/
-out/runs/lj_N864_P4_verlet_200_eq_20260304_170025/
+out/runs/ho_N1_rk4_dt0.5_20260305_121121/
 ```
 
 ## 3. Build and Warnings
 
 ```
 rm -f src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o tests/test_runner.o tests/test_mic.o tests/test_force.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o md_solver test_runner
-rm -f src/integrators/*.o src/potentials/*.o tests/*.o
+rm -f src/potentials/*.o tests/*.o
 
 mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/main.o src/main.cpp
 mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/potentials/harmonic.o src/potentials/harmonic.cpp
@@ -185,7 +185,7 @@ Flags include: `-std=c++17 -O3 -march=native -Wall -Wextra -pedantic`
 Re-building to capture warnings explicitly:
 ```
 rm -f src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o tests/test_runner.o tests/test_mic.o tests/test_force.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o md_solver test_runner
-rm -f src/integrators/*.o src/potentials/*.o tests/*.o
+rm -f src/potentials/*.o tests/*.o
 make: Nothing to be done for `all'.
 ```
 
@@ -216,14 +216,14 @@ ALL TESTS PASSED
 === MD Solver ===
 Mode: ho | Integrator: verlet
 N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
-L = 1.000000e+10 m (29411764705882353664.0000 sigma)
+HO mode: periodic box size is not used
 ==================
-Wall time: 0.002768 s (max across 1 ranks)
+Wall time: 0.002665 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3 lines):**
 ```
-# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T10:58:31Z
+# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T14:51:39Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.99995,-0.00999975,3.34504599142826e-30,3.34487873703803e-26,3.34521324163718e-26
@@ -241,14 +241,14 @@ step,time,x,v,E_kin,E_pot,E_total
 === MD Solver ===
 Mode: ho | Integrator: rk4
 N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
-L = 1.000000e+10 m (29411764705882353664.0000 sigma)
+HO mode: periodic box size is not used
 ==================
-Wall time: 0.003167 s (max across 1 ranks)
+Wall time: 0.003162 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T10:58:31Z
+# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T14:51:39Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.999950000416667,-0.00999983333333333,3.34510174382089e-30,3.34487873982557e-26,3.34521324999995e-26
@@ -266,14 +266,14 @@ step,time,x,v,E_kin,E_pot,E_total
 === MD Solver ===
 Mode: ho | Integrator: euler
 N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
-L = 1.000000e+10 m (29411764705882353664.0000 sigma)
+HO mode: periodic box size is not used
 ==================
-Wall time: 0.002511 s (max across 1 ranks)
+Wall time: 0.002576 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T10:58:32Z
+# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T14:51:39Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,1,-0.01,3.34521325e-30,3.34521325e-26,3.345547771325e-26
@@ -301,12 +301,12 @@ N = 108 | P = 1 | steps = 10 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.000349 s (max across 1 ranks)
+Wall time: 0.000393 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T10:58:32Z
+# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T14:51:39Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
 1,1e-14,2.08952940324273e-19,-1.12903036097961e-18,-9.20077420655337e-19,94.2953262310627
@@ -337,12 +337,12 @@ N = 108 | P = 1 | steps = 10 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.000391 s (max across 1 ranks)
+Wall time: 0.000420 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T10:58:32Z
+# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T14:51:39Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
 1,1e-14,2.09144192886232e-19,-1.12902994241994e-18,-9.19885749533712e-19,94.3816338115854
@@ -373,7 +373,7 @@ N = 108 | P = 1 | steps = 5 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.000196 s (max across 1 ranks)
+Wall time: 0.000202 s (max across 1 ranks)
 === Initial Conditions (Rank 0) ===
 Seed used for RNG: 42
 FCC lattice generated
@@ -387,7 +387,7 @@ N = 108 | P = 2 | steps = 5 | dt = 1.000e-14
 L = 1.738930e-09 m (5.1145 sigma)
 T_init = 94.4 K | seed = 42
 ==================
-Wall time: 0.005556 s (max across 2 ranks)
+Wall time: 0.000227 s (max across 2 ranks)
 MATCH
 ```
 
@@ -395,25 +395,20 @@ MATCH
 
 ### CLI help output
 ```
-Usage: mpirun -np P ./md_solver [options]
-
-Options:
-  --N <int>            Number of particles (default: 864)
-  --steps <int>        Number of timesteps (default: 100)
-  --dt <double>        Timestep (default: 1e-14)
-  --T <double>         Initial temperature [K] (default: 94.4)
-  --omega <double>     HO angular frequency (default: 1.0)
-  --integrator <str>   euler, rk4, verlet (default: verlet)
-  --mode <str>         ho, lj (default: lj)
-  --no-output          Disable CSV output
-  --seed <int>         RNG seed (default: 42)
-  --rescale-step <int> Step for single velocity rescale (default: disabled)
-  --timing             Enable timing mode (implies --no-output)
-  --gr                 Enable g(r) accumulation (LJ only)
-  --gr-discard <int>   Steps to discard after production_start before g(r) (default: 500)
-  --gr-interval <int>  Sample g(r) every N steps (default: 10)
-  --outdir <str>       Output directory for generated CSVs
-  --help               Print this message and exit
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 864 | P = 1 | steps = 100 | dt = 1.000e-14
+L = 3.477860e-09 m (10.2290 sigma)
+T_init = 94.4 K | seed = 42
+==================
+Wall time: 0.135407 s (max across 1 ranks)
 ```
 
 ### Comparison
@@ -494,7 +489,7 @@ $(TEST_BIN): $(TEST_OBJS) $(TEST_DEPS)
 # ──────────────────────────────────────────────────────────────────
 clean:
 	rm -f $(OBJS) $(TEST_OBJS) $(TEST_DEPS) $(TARGET) $(TEST_BIN)
-	rm -f src/integrators/*.o src/potentials/*.o tests/*.o
+	rm -f src/potentials/*.o tests/*.o
 
 # ──────────────────────────────────────────────────────────────────
 # Submission tarball
@@ -517,7 +512,7 @@ out:
 .PHONY: all clean test dist
 ```
 
-### `README.md` (87 lines)
+### `README.md` (91 lines)
 
 ```markdown
 # WA2: MPI Parallelisation of Molecular Dynamics
@@ -555,29 +550,34 @@ mpirun -np 1 ./md_solver --mode ho --integrator rk4 --dt 0.01 --steps 1000 --N 1
 ### Lennard-Jones Argon (Results 2)
 
 ```bash
-# Primary run: 100 steps, Velocity-Verlet (single rescale at step 10)
+# Primary run: 500-step equilibration (velocity rescaling each step) + 100-step NVE production.
+# Production runs use P=4; see scripts/run_all_data.sh for the P=1 vs P=2 consistency check.
 mkdir -p out
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 100 --rescale-step 10
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 600 --rescale-step 500
 
-# Primary run: 100 steps, Euler (single rescale at step 10)
-mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --steps 100 --rescale-step 10
+# Primary run: 500-step equilibration + 100-step Euler production
+mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --steps 600 --rescale-step 500
 
 # Equilibrated comparison run (rescale at 100, then post-rescale NVE segment)
 mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 200 --rescale-step 100
 
 # Supplementary g(r) (extended run, ~450 frames for smooth Rahman comparison)
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 25500 --rescale-step 10 --gr --gr-discard 500 --gr-interval 10
+# --gr-discard is relative to production_start; with --rescale-step 500, discard=0 starts sampling at step 500.
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 25500 --rescale-step 500 --gr --gr-discard 0 --gr-interval 10
 ```
 
 ### Scaling (Results 3)
 
 ```bash
-# Recommended: use the automation script (median-of-10 paired runs)
+# Recommended: use the automation script (median-of-20 paired runs)
 bash scripts/run_all_data.sh
+
+# On cerberus1, run scaling on an exclusive node:
+srun --exclusive -N 1 --ntasks-per-node=32 bash scripts/run_all_data.sh
 
 # Direct timing examples (single run each):
 mpirun -np 1  ./md_solver --mode lj --integrator verlet --N 2048 --steps 200 --timing
-mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864  --steps 500 --timing
+mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864  --steps 2000 --timing
 ```
 
 ## Generate Plots
@@ -603,7 +603,6 @@ src/           — Source implementations (main.cpp, potentials/lennard_jones.cp
 tests/         — Unit tests (MIC wrapping, LJ force, position wrapping)
 scripts/       — Python plotting scripts and bash automation
 out/           — Generated data (excluded from submission)
-ai/            — AI context workspace (excluded from submission)
 ```
 
 Integrators (Euler, Velocity-Verlet, RK4) are implemented as inline functions in `include/md/integrators.hpp`.
@@ -683,7 +682,7 @@ constexpr double rcut_sigma = 2.25;
 /// Interaction cutoff [m]
 constexpr double rcut = rcut_sigma * sigma;
 
-// ── Derived quantities for optimised LJ kernel ──
+// Derived quantities for optimised LJ kernel
 
 /// sigma^2
 constexpr double sigma2 = sigma * sigma;
@@ -703,7 +702,7 @@ constexpr double four_eps = 4.0 * epsilon;
 /// 24 * epsilon (force prefactor)
 constexpr double twentyfour_eps = 24.0 * epsilon;
 
-// ── Magic numbers extracted from codebase ──
+// Simulation constants
 
 /// Fraction of sigma for random initial position perturbation
 constexpr double fccPerturbation = 0.01;
@@ -717,7 +716,7 @@ constexpr double L_ho_dummy = 1.0e10;
 /// Lower bound numerical guard for temperature rescaling
 constexpr double rescaleGuard = 1e-30;
 
-// ── Rahman (1964) reference state point ──
+// Rahman (1964) reference state point
 
 /// Number of particles in Rahman's simulation
 constexpr int N_rahman = 864;
@@ -737,7 +736,7 @@ constexpr double L_rahman = L_sigma_rahman * sigma;
 #endif  // MD_CONSTANTS_HPP
 ```
 
-### `include/md/mic.hpp` (18 lines)
+### `include/md/mic.hpp` (19 lines)
 
 ```cpp
 #ifndef MD_MIC_HPP
@@ -747,8 +746,9 @@ constexpr double L_rahman = L_sigma_rahman * sigma;
 
 namespace md {
 
-/// Apply minimum image convention to a single displacement component.
-/// Maps dx into [-L/2, +L/2) using the round-based branchless method.
+/// Apply the minimum image convention to a single displacement component.
+/// Maps dx into (-L/2, +L/2] using the round-based minimum image convention.
+/// Tie behavior from std::round: +L/2 -> -L/2 and -L/2 -> +L/2.
 inline double applyMIC(double dx, double L) {
     double invL = 1.0 / L;
     dx -= L * std::round(dx * invL);
@@ -760,40 +760,23 @@ inline double applyMIC(double dx, double L) {
 #endif
 ```
 
-### `include/md/params.hpp` (182 lines)
+### `include/md/params.hpp` (72 lines)
 
 ```cpp
 /**
  * @file params.hpp
- * @brief Runtime parameter struct and CLI argument parser.
- *
- * All simulation parameters are configurable via command-line arguments.
- * No recompilation is needed to change N, dt, integrator, etc.
+ * @brief Runtime parameters.
  */
 
 #ifndef MD_PARAMS_HPP
 #define MD_PARAMS_HPP
 
 #include <cstdlib>
-#include <iostream>
 #include <string>
 
 namespace md {
 
-/// Parse result status (avoids std::exit before MPI_Finalize)
-enum class ParseStatus { Ok, Help, Error };
-
-static bool nextVal(int& i, int argc, const char* flag) {
-    if (++i >= argc) {
-        std::cerr << "Missing value for " << flag << "\n";
-        return false;
-    }
-    return true;
-}
-
-/**
- * @brief Simulation parameters, parsed from command-line arguments.
- */
+/// @brief Runtime parameters parsed from command-line arguments.
 struct Params {
     int N = 864;                        ///< Number of particles
     int steps = 100;                    ///< Number of timesteps
@@ -811,134 +794,41 @@ struct Params {
     int grInterval = 10;                ///< Sample g(r) every N steps after discard
     std::string outdir = "";            ///< Output directory for per-run namespaces
 
-    /**
-     * @brief Parse command-line arguments into a Params struct.
-     *
-     * Validates mode ∈ {ho, lj} and integrator ∈ {euler, rk4, verlet}.
-     *
-     * @param argc   Argument count
-     * @param argv   Argument values
-     * @param[out] p Parsed Params struct
-     * @return ParseStatus::Ok on success, Help or Error otherwise
-     */
-    static ParseStatus parse(int argc, char* argv[], Params& p) {
+    static void parse(int argc, char* argv[], Params& p) {
         for (int i = 1; i < argc; ++i) {
             std::string arg = argv[i];
-            if (arg == "--help") {
-                printUsage(argv[0]);
-                return ParseStatus::Help;
-            } else if (arg == "--N") {
-                if (nextVal(i, argc, "--N"))
-                    p.N = std::atoi(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--steps") {
-                if (nextVal(i, argc, "--steps"))
-                    p.steps = std::atoi(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--dt") {
-                if (nextVal(i, argc, "--dt"))
-                    p.dt = std::atof(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--T") {
-                if (nextVal(i, argc, "--T"))
-                    p.T_init = std::atof(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--omega") {
-                if (nextVal(i, argc, "--omega"))
-                    p.omega = std::atof(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--integrator") {
-                if (nextVal(i, argc, "--integrator"))
-                    p.integrator = argv[i];
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--mode") {
-                if (nextVal(i, argc, "--mode"))
-                    p.mode = argv[i];
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--no-output") {
+            if (arg == "--N" && i + 1 < argc)
+                p.N = std::atoi(argv[++i]);
+            else if (arg == "--steps" && i + 1 < argc)
+                p.steps = std::atoi(argv[++i]);
+            else if (arg == "--dt" && i + 1 < argc)
+                p.dt = std::atof(argv[++i]);
+            else if (arg == "--T" && i + 1 < argc)
+                p.T_init = std::atof(argv[++i]);
+            else if (arg == "--omega" && i + 1 < argc)
+                p.omega = std::atof(argv[++i]);
+            else if (arg == "--integrator" && i + 1 < argc)
+                p.integrator = argv[++i];
+            else if (arg == "--mode" && i + 1 < argc)
+                p.mode = argv[++i];
+            else if (arg == "--no-output")
                 p.output = false;
-            } else if (arg == "--seed") {
-                if (nextVal(i, argc, "--seed"))
-                    p.seed = std::atoi(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--outdir") {
-                if (nextVal(i, argc, "--outdir"))
-                    p.outdir = argv[i];
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--rescale-step") {
-                if (nextVal(i, argc, "--rescale-step"))
-                    p.rescaleStep = std::atoi(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--timing") {
+            else if (arg == "--seed" && i + 1 < argc)
+                p.seed = std::atoi(argv[++i]);
+            else if (arg == "--outdir" && i + 1 < argc)
+                p.outdir = argv[++i];
+            else if (arg == "--rescale-step" && i + 1 < argc)
+                p.rescaleStep = std::atoi(argv[++i]);
+            else if (arg == "--timing") {
                 p.timing = true;
                 p.output = false;
-            } else if (arg == "--gr") {
+            } else if (arg == "--gr")
                 p.gr = true;
-            } else if (arg == "--gr-discard") {
-                if (nextVal(i, argc, "--gr-discard"))
-                    p.grDiscard = std::atoi(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else if (arg == "--gr-interval") {
-                if (nextVal(i, argc, "--gr-interval"))
-                    p.grInterval = std::atoi(argv[i]);
-                else
-                    return ParseStatus::Error;
-            } else {
-                std::cerr << "Unknown argument: " << arg << "\n";
-                return ParseStatus::Error;
-            }
+            else if (arg == "--gr-discard" && i + 1 < argc)
+                p.grDiscard = std::atoi(argv[++i]);
+            else if (arg == "--gr-interval" && i + 1 < argc)
+                p.grInterval = std::atoi(argv[++i]);
         }
-
-        // Validate mode
-        if (p.mode != "ho" && p.mode != "lj") {
-            std::cerr << "Invalid --mode '" << p.mode << "' (must be 'ho' or 'lj')\n";
-            return ParseStatus::Error;
-        }
-
-        // Validate integrator
-        if (p.integrator != "euler" && p.integrator != "rk4" && p.integrator != "verlet") {
-            std::cerr << "Invalid --integrator '" << p.integrator
-                      << "' (must be 'euler', 'rk4', or 'verlet')\n";
-            return ParseStatus::Error;
-        }
-
-        return ParseStatus::Ok;
-    }
-
-    /**
-     * @brief Print usage information to stdout.
-     * @param progName Name of the executable.
-     */
-    static void printUsage(const char* progName) {
-        std::cout << "Usage: mpirun -np P " << progName << " [options]\n"
-                  << "\nOptions:\n"
-                  << "  --N <int>            Number of particles (default: 864)\n"
-                  << "  --steps <int>        Number of timesteps (default: 100)\n"
-                  << "  --dt <double>        Timestep (default: 1e-14)\n"
-                  << "  --T <double>         Initial temperature [K] (default: 94.4)\n"
-                  << "  --omega <double>     HO angular frequency (default: 1.0)\n"
-                  << "  --integrator <str>   euler, rk4, verlet (default: verlet)\n"
-                  << "  --mode <str>         ho, lj (default: lj)\n"
-                  << "  --no-output          Disable CSV output\n"
-                  << "  --seed <int>         RNG seed (default: 42)\n"
-                  << "  --rescale-step <int> Step for single velocity rescale (default: disabled)\n"
-                  << "  --timing             Enable timing mode (implies --no-output)\n"
-                  << "  --gr                 Enable g(r) accumulation (LJ only)\n"
-                  << "  --gr-discard <int>   Steps to discard after production_start before g(r) (default: 500)\n"
-                  << "  --gr-interval <int>  Sample g(r) every N steps (default: 10)\n"
-                  << "  --outdir <str>       Output directory for generated CSVs\n"
-                  << "  --help               Print this message and exit\n";
     }
 };
 
@@ -1130,7 +1020,7 @@ struct System {
 #endif  // MD_SYSTEM_HPP
 ```
 
-### `include/md/rng.hpp` (139 lines)
+### `include/md/rng.hpp` (140 lines)
 
 ```cpp
 /**
@@ -1214,6 +1104,7 @@ std::vector<double> generateVelocities(int N, double T, double mass, std::mt1993
     std::vector<double> vel(3 * N);
 
     double sigmaV = std::sqrt(constants::kB * T / mass);
+    constexpr double pi = 3.14159265358979323846;
 
     std::uniform_real_distribution<double> uDist(0.0, 1.0);
 
@@ -1229,8 +1120,8 @@ std::vector<double> generateVelocities(int N, double T, double mass, std::mt1993
         u2 = uDist(gen);
 
         double mag = sigmaV * std::sqrt(-2.0 * std::log(u1));
-        double z1 = mag * std::cos(2.0 * M_PI * u2);
-        double z2 = mag * std::sin(2.0 * M_PI * u2);
+        double z1 = mag * std::cos(2.0 * pi * u2);
+        double z2 = mag * std::sin(2.0 * pi * u2);
 
         vel[i] = z1;
         if (i + 1 < totalComponents) {
@@ -1561,7 +1452,7 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (420 lines)
+### `src/main.cpp` (417 lines)
 
 ```cpp
 /**
@@ -1606,16 +1497,11 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
 
-    // ── Parse parameters (never calls std::exit — returns status) ──
+    // Parse parameters
     md::Params params;
-    md::ParseStatus status = md::Params::parse(argc, argv, params);
+    md::Params::parse(argc, argv, params);
 
-    if (status != md::ParseStatus::Ok) {
-        MPI_Finalize();
-        return (status == md::ParseStatus::Help) ? 0 : 1;
-    }
-
-    // ── Initialise MPI context and particle decomposition ──
+    // MPI setup and particle decomposition
     md::MPIContext ctx;
     ctx.init(params.N);
     ctx.timingMode = params.timing;
@@ -1625,7 +1511,7 @@ int main(int argc, char* argv[]) {
     const int productionStart = (!isHO && params.rescaleStep >= 0) ? params.rescaleStep : 0;
     const int grStart = productionStart + params.grDiscard;
 
-    // ── Compute box side length ──
+    // Box side length (constant density scaling for LJ)
     // For LJ: scale from Rahman's L=10.229*sigma for N=864 to maintain constant density
     // For HO: L is irrelevant (non-interacting), set to a large value
     double L;
@@ -1636,7 +1522,7 @@ int main(int argc, char* argv[]) {
             std::cbrt(static_cast<double>(N) / md::constants::N_rahman);
     }
 
-    // ── Generate initial conditions on rank 0, broadcast to all ──
+    // Generate initial conditions on rank 0, broadcast to all
     std::vector<double> posAll(3 * N, 0.0);
     std::vector<double> velAll(3 * N, 0.0);
     int fccError = 0;  // broadcast from root to all ranks (LJ only)
@@ -1709,7 +1595,7 @@ int main(int argc, char* argv[]) {
     MPI_Bcast(posAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(velAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    // ── Initialise local system state ──
+    // Initialise local system state
     md::System sys;
     sys.init(ctx.localN, ctx.offset, N, L);
 
@@ -1724,13 +1610,13 @@ int main(int argc, char* argv[]) {
     // Copy full positions into global buffer for first force evaluation
     ctx.posGlobal = posAll;
 
-    // ── Wrap positions into [0, L) ──
+    // Wrap positions into [0, L)
     if (!isHO) {
         sys.wrapPositions();
         ctx.allgatherPositions(sys.pos);
     }
 
-    // ── Build force function (binds potential-specific parameters) ──
+    // Build force function
     double omega = params.omega;
     double mass = md::constants::mass;
 
@@ -1748,7 +1634,7 @@ int main(int argc, char* argv[]) {
     else if (params.integrator == "rk4")
         intType = IntegratorType::RK4;
 
-    // ── Initial force evaluation ──
+    // Initial force evaluation
     double localPE = 0.0;
     if (isHO) {
         evalHO(sys, ctx.posGlobal, localPE);
@@ -1756,7 +1642,7 @@ int main(int argc, char* argv[]) {
         evalLJ(sys, ctx.posGlobal, localPE);
     }
 
-    // ── Create output directory and open file (rank 0 only) ──
+    // Create output directory and open file on rank 0
     std::ofstream outFile;
     if (params.output && ctx.isRoot()) {
         std::string fname;
@@ -1793,20 +1679,22 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // ── Print simulation info (rank 0) ──
+    // Print simulation info on rank 0
     if (ctx.isRoot() && !params.timing) {
         std::printf("=== MD Solver ===\n");
         std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
         std::printf("N = %d | P = %d | steps = %d | dt = %.3e\n", N, ctx.size, params.steps,
                     params.dt);
-        std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
         if (!isHO) {
+            std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
             std::printf("T_init = %.1f K | seed = %d\n", params.T_init, params.seed);
+        } else {
+            std::printf("HO mode: periodic box size is not used\n");
         }
         std::printf("==================\n");
     }
 
-    // ── g(r) histogram setup (LJ only) ──
+    // g(r) histogram setup for LJ mode
     // Keep HO mode at zero-sized buffers to avoid meaningless allocations.
     const double grDr = md::constants::grBinWidthSigma * md::constants::sigma;  // bin width
     const double grRMax = isHO ? 0.0 : 0.5 * L;                                  // [0, L/2] for LJ
@@ -1814,13 +1702,13 @@ int main(int argc, char* argv[]) {
     std::vector<double> grHistLocal(grNBins, 0.0);
     int grFrames = 0;
 
-    // ── Timing setup ──
+    // Timing setup
     MPI_Barrier(MPI_COMM_WORLD);
     double tStart = MPI_Wtime();
 
-    // ── Time-stepping loop ──
+    // Time-stepping loop
     for (int step = 0; step <= params.steps; ++step) {
-        // ── Compute observables (skip entirely in timing mode for clean benchmarks) ──
+        // Compute observables (skip in timing mode)
         double totalKE = 0.0, totalPE = 0.0;
         if (!params.timing) {
             double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
@@ -1847,8 +1735,8 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            // ── Single-step Velocity Rescaling ──
-            if (step == params.rescaleStep && !isHO) {
+            // Velocity rescaling during equilibration window
+            if (step > 0 && step <= params.rescaleStep && !isHO) {
                 double lambda = 1.0;
                 if (ctx.isRoot()) {
                     double tMeasured = md::computeTemperature(totalKE, N);
@@ -1869,14 +1757,14 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // ── Accumulate g(r) histogram (LJ only, production window) ──
+        // Accumulate g(r) histogram in the production window
         if (params.gr && !isHO && step >= grStart && ((step - grStart) % params.grInterval == 0)) {
             md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
                              grHistLocal);
             ++grFrames;
         }
 
-        // ── Advance one timestep (skip on the last iteration — we only want observables) ──
+        // Advance one timestep; skip update on the last iteration
         if (step == params.steps)
             break;
 
@@ -1900,7 +1788,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // ── Timing completion ──
+    // Timing completion
     double tEnd = MPI_Wtime();
     double elapsed = tEnd - tStart;
 
@@ -1936,7 +1824,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // ── Write g(r) to file (LJ only) ──
+    // Write g(r) to file for LJ mode
     if (params.gr && !isHO && grFrames > 0) {
         // Reduce histogram across all ranks
         std::vector<double> grHistGlobal(grNBins, 0.0);
@@ -1976,7 +1864,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // ── Close output file ──
+    // Close output file
     if (outFile.is_open()) {
         outFile.close();
     }
@@ -2250,15 +2138,16 @@ int main() {
 }
 ```
 
-### `tests/test_mic.cpp` (116 lines)
+### `tests/test_mic.cpp` (117 lines)
 
 ```cpp
 /**
  * @file test_mic.cpp
  * @brief Unit tests for the Minimum Image Convention.
  *
- * Tests that the branch-predictor-friendly MIC correctly wraps
- * inter-particle displacements to [-L/2, +L/2). Also tests that
+ * Tests that the minimum image convention correctly wraps
+ * inter-particle displacements to (-L/2, +L/2], with tie behavior
+ * from std::round at +/-L/2. Also tests that
  * the geometric safety condition r_c < L/2 holds for the Rahman
  * state point (r_c = 2.25*sigma < L/2 ≈ 5.115*sigma).
  */
@@ -2399,7 +2288,7 @@ int testMIC() {
 int testForce() {
     int failures = 0;
 
-    // ── Test 1: LJ force at potential minimum r = 2^(1/6)*sigma ──
+    // Test 1: LJ force at potential minimum r = 2^(1/6)*sigma
     {
         const double sigma = md::constants::sigma;
         const double rMin = std::pow(2.0, 1.0 / 6.0) * sigma;
@@ -2459,7 +2348,7 @@ int testForce() {
         }
     }
 
-    // ── Test 2: Position wrapping ──
+    // Test 2: Position wrapping
     {
         double L = 10.0;
         md::System sys;
@@ -2504,7 +2393,7 @@ int testForce() {
         }
     }
 
-    // ── Test 3: LJ force sign check ──
+    // Test 3: LJ force sign check
     {
         const double sigma = md::constants::sigma;
         const double mass = md::constants::mass;
@@ -2592,7 +2481,7 @@ fi
 bash ai/make_results.sh
 ```
 
-### `scripts/run_all_data.sh` (212 lines)
+### `scripts/run_all_data.sh` (215 lines)
 
 ```sh
 #!/bin/bash
@@ -2608,6 +2497,9 @@ set -euo pipefail
 SOLVER="./md_solver"
 OUTDIR="out"
 SKIP_SCALING=0
+STRONG_STEPS=200
+# Use longer runs for size scaling so fixed overhead is less dominant at small N.
+SIZE_STEPS=2000
 for arg in "$@"; do
   [ "$arg" = "--skip-scaling" ] && SKIP_SCALING=1
 done
@@ -2680,8 +2572,8 @@ echo ""
 echo "=== RESULTS 2: LJ PRODUCTION ==="
 RUNDIR_V="$OUTDIR/runs/lj_N864_P4_verlet_100_${TIMESTAMP}"
 mkdir -p "$RUNDIR_V"
-echo "  Verlet N=864 100 steps..."
-mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 100 --dt 1e-14 --rescale-step 10 --outdir "$RUNDIR_V" > /dev/null
+echo "  Verlet N=864 (500 equilibration + 100 production steps)..."
+mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 600 --dt 1e-14 --rescale-step 500 --outdir "$RUNDIR_V" > /dev/null
 if [ -s "$RUNDIR_V/lj_verlet.csv" ]; then
     python3 scripts/append_manifest.py "lj_production.verlet_100" "$RUNDIR_V/lj_verlet.csv"
     echo "  -> output saved to manifest ✅"
@@ -2689,8 +2581,8 @@ fi
 
 RUNDIR_E="$OUTDIR/runs/lj_N864_P4_euler_100_${TIMESTAMP}"
 mkdir -p "$RUNDIR_E"
-echo "  Euler N=864 100 steps..."
-mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 --steps 100 --dt 1e-14 --rescale-step 10 --outdir "$RUNDIR_E" > /dev/null
+echo "  Euler N=864 (500 equilibration + 100 production steps)..."
+mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 --steps 600 --dt 1e-14 --rescale-step 500 --outdir "$RUNDIR_E" > /dev/null
 if [ -s "$RUNDIR_E/lj_euler.csv" ]; then
     python3 scripts/append_manifest.py "lj_production.euler_100" "$RUNDIR_E/lj_euler.csv"
     echo "  -> output saved to manifest ✅"
@@ -2708,10 +2600,10 @@ echo ""
 echo "=== g(r) PRODUCTION RUN ==="
 RUNDIR_GR="$OUTDIR/runs/lj_N864_P4_gr_${TIMESTAMP}"
 mkdir -p "$RUNDIR_GR"
-# With relative --gr-discard semantics (post-production-start), keep absolute
-# g(r) sampling start at step 500 by setting discard=500-10=490.
+# With relative --gr-discard semantics (post-production-start), discard=0
+# gives absolute g(r) sampling start at step 500 when --rescale-step=500.
 mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 25500 \
-    --rescale-step 10 --gr --gr-discard 490 --gr-interval 10 --outdir "$RUNDIR_GR" > /dev/null
+    --rescale-step 500 --gr --gr-discard 0 --gr-interval 10 --outdir "$RUNDIR_GR" > /dev/null
 if [ -s "$RUNDIR_GR/gr.csv" ]; then
     python3 scripts/append_manifest.py "lj_gr" "$RUNDIR_GR/gr.csv"
     python3 scripts/append_manifest.py "lj_gr_energy" "$RUNDIR_GR/lj_verlet.csv"
@@ -2729,7 +2621,7 @@ if [ "$SKIP_SCALING" = "1" ]; then
   [ -f "$OUTDIR/scaling_size.csv" ]   && python3 scripts/append_manifest.py "scaling.size"   "$OUTDIR/scaling_size.csv"
 else
 echo ""
-echo "=== RESULTS 3: STRONG SCALING (20 reps, N=2048, 200 steps) ==="
+echo "=== RESULTS 3: STRONG SCALING (20 reps, N=2048, ${STRONG_STEPS} steps) ==="
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_strong.csv"
 python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
 
@@ -2738,7 +2630,7 @@ for P in 1 2 4 8 16 24 32; do
     WALLS=""
     COMMS=""
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun -np $P $SOLVER --mode lj --integrator verlet --N 2048 --steps 200 --timing 2>/dev/null)
+        OUTPUT=$(mpirun -np $P $SOLVER --mode lj --integrator verlet --N 2048 --steps $STRONG_STEPS --timing 2>/dev/null)
         W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
         [ -z "$C" ] && C="0.0"
@@ -2756,7 +2648,7 @@ done
 
 # ── 5. Size Scaling (median of 20 paired samples) ──
 echo ""
-echo "=== RESULTS 3: SIZE SCALING (20 reps, P=16, 500 steps) ==="
+echo "=== RESULTS 3: SIZE SCALING (20 reps, P=16, ${SIZE_STEPS} steps) ==="
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_size.csv"
 python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
 
@@ -2764,7 +2656,7 @@ for N in 108 256 500 864 1372 2048; do
     WALLS=""
     COMMS=""
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun -np 16 $SOLVER --mode lj --integrator verlet --N $N --steps 500 --timing 2>/dev/null)
+        OUTPUT=$(mpirun -np 16 $SOLVER --mode lj --integrator verlet --N $N --steps $SIZE_STEPS --timing 2>/dev/null)
         W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
         [ -z "$C" ] && C="0.0"
@@ -2809,7 +2701,7 @@ echo "=========================================="
 echo "Manifest written to: $OUTDIR/manifest.json"
 ```
 
-### `scripts/run_scaling.sh` (114 lines)
+### `scripts/run_scaling.sh` (115 lines)
 
 ```sh
 #!/bin/bash
@@ -2832,7 +2724,8 @@ set -euo pipefail
 
 SOLVER="./md_solver"
 OUTDIR="out"
-STEPS=100
+STRONG_STEPS=200
+SIZE_STEPS=2000
 INTEGRATOR="verlet"
 REPS=20
 
@@ -2873,7 +2766,7 @@ for P in 1 2 4 8 16 24 32; do
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun --oversubscribe -np "$P" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
-            --N "$N_STRONG" --steps "$STEPS" --timing 2>&1)
+            --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
 
         WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
@@ -2905,7 +2798,7 @@ for N in 108 256 500 864 1372 2048; do
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun --oversubscribe -np "$P_SIZE" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
-            --N "$N" --steps 500 --timing 2>&1)
+            --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
 
         WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
@@ -4021,23 +3914,25 @@ if __name__ == "__main__":
 ```
 include/md/constants.hpp                             86 lines
 include/md/integrators.hpp                          115 lines
-include/md/mic.hpp                                   18 lines
+include/md/mic.hpp                                   19 lines
 include/md/mpi_context.hpp                          103 lines
 include/md/observables.hpp                           90 lines
-include/md/params.hpp                               182 lines
+include/md/params.hpp                                72 lines
 include/md/potentials.hpp                            67 lines
-include/md/rng.hpp                                  139 lines
+include/md/rng.hpp                                  140 lines
 include/md/system.hpp                                70 lines
-src/main.cpp                                        420 lines
+src/main.cpp                                        417 lines
 src/observables.cpp                                  70 lines
 src/potentials/harmonic.cpp                          37 lines
 src/potentials/lennard_jones.cpp                    104 lines
 tests/test_force.cpp                                198 lines
-tests/test_mic.cpp                                  116 lines
+tests/test_mic.cpp                                  117 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    1848
+    1738
 ```
 
 **End of audit.**
+ai/audit.sh: line 401: /dev/tty: Device not configured
+Audit written to ai/audit_output.md

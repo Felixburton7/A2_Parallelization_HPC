@@ -79,6 +79,7 @@ std::vector<double> generateVelocities(int N, double T, double mass, std::mt1993
     std::vector<double> vel(3 * N);
 
     double sigmaV = std::sqrt(constants::kB * T / mass);
+    constexpr double pi = 3.14159265358979323846;
 
     std::uniform_real_distribution<double> uDist(0.0, 1.0);
 
@@ -94,8 +95,8 @@ std::vector<double> generateVelocities(int N, double T, double mass, std::mt1993
         u2 = uDist(gen);
 
         double mag = sigmaV * std::sqrt(-2.0 * std::log(u1));
-        double z1 = mag * std::cos(2.0 * M_PI * u2);
-        double z2 = mag * std::sin(2.0 * M_PI * u2);
+        double z1 = mag * std::cos(2.0 * pi * u2);
+        double z2 = mag * std::sin(2.0 * pi * u2);
 
         vel[i] = z1;
         if (i + 1 < totalComponents) {

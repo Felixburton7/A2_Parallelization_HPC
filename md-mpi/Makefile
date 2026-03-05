@@ -60,7 +60,7 @@ $(TEST_BIN): $(TEST_OBJS) $(TEST_DEPS)
 # ──────────────────────────────────────────────────────────────────
 clean:
 	rm -f $(OBJS) $(TEST_OBJS) $(TEST_DEPS) $(TARGET) $(TEST_BIN)
-	rm -f src/integrators/*.o src/potentials/*.o tests/*.o
+	rm -f src/potentials/*.o tests/*.o
 
 # ──────────────────────────────────────────────────────────────────
 # Submission tarball

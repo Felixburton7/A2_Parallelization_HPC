@@ -23,7 +23,7 @@
 int testForce() {
     int failures = 0;
 
-    // ── Test 1: LJ force at potential minimum r = 2^(1/6)*sigma ──
+    // Test 1: LJ force at potential minimum r = 2^(1/6)*sigma
     {
         const double sigma = md::constants::sigma;
         const double rMin = std::pow(2.0, 1.0 / 6.0) * sigma;
@@ -83,7 +83,7 @@ int testForce() {
         }
     }
 
-    // ── Test 2: Position wrapping ──
+    // Test 2: Position wrapping
     {
         double L = 10.0;
         md::System sys;
@@ -128,7 +128,7 @@ int testForce() {
         }
     }
 
-    // ── Test 3: LJ force sign check ──
+    // Test 3: LJ force sign check
     {
         const double sigma = md::constants::sigma;
         const double mass = md::constants::mass;

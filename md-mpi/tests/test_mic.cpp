@@ -2,8 +2,9 @@
  * @file test_mic.cpp
  * @brief Unit tests for the Minimum Image Convention.
  *
- * Tests that the branch-predictor-friendly MIC correctly wraps
- * inter-particle displacements to [-L/2, +L/2). Also tests that
+ * Tests that the minimum image convention correctly wraps
+ * inter-particle displacements to (-L/2, +L/2], with tie behavior
+ * from std::round at +/-L/2. Also tests that
  * the geometric safety condition r_c < L/2 holds for the Rahman
  * state point (r_c = 2.25*sigma < L/2 ≈ 5.115*sigma).
  */

@@ -18,7 +18,8 @@ set -euo pipefail
 
 SOLVER="./md_solver"
 OUTDIR="out"
-STEPS=100
+STRONG_STEPS=200
+SIZE_STEPS=2000
 INTEGRATOR="verlet"
 REPS=20
 
@@ -59,7 +60,7 @@ for P in 1 2 4 8 16 24 32; do
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun --oversubscribe -np "$P" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
-            --N "$N_STRONG" --steps "$STEPS" --timing 2>&1)
+            --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
 
         WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
@@ -91,7 +92,7 @@ for N in 108 256 500 864 1372 2048; do
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun --oversubscribe -np "$P_SIZE" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
-            --N "$N" --steps 500 --timing 2>&1)
+            --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
 
         WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
