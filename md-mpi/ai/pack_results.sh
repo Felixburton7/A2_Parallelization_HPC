@@ -58,25 +58,46 @@ if [ -f "$DATADIR/manifest.json" ]; then
     echo "" >> "$OUTFILE"
 fi
 
-get_latest_file() {
-    ls -1t $1 2>/dev/null | head -n 1
+manifest_get() {
+    local key="$1"
+    python3 - "$key" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+key = sys.argv[1]
+mpath = Path("out/manifest.json")
+if not mpath.exists():
+    sys.exit(0)
+cur = json.loads(mpath.read_text(encoding="utf-8"))
+for part in key.split("."):
+    if not isinstance(cur, dict) or part not in cur:
+        sys.exit(0)
+    cur = cur[part]
+if isinstance(cur, str):
+    print(cur)
+PY
 }
 
 # 1. SCALING DATA (Full)
-append_full_csv "$DATADIR/scaling_strong.csv" "Strong Scaling (N=2048, P=1..32)"
-append_full_csv "$DATADIR/scaling_size.csv" "Size Scaling (P=16, N=108..2048)"
+append_full_csv "$(manifest_get "scaling.strong")" "Strong Scaling (median paired timings)"
+append_full_csv "$(manifest_get "scaling.size")" "Size Scaling (median paired timings)"
 
 # 2. RADIAL DISTRIBUTION FUNCTION (Full)
-GR_LATEST=$(get_latest_file "$DATADIR/runs/lj_*_gr_*/gr.csv")
-if [ -n "$GR_LATEST" ]; then
-    append_full_csv "$GR_LATEST" "Radial Distribution Function g(r) (Latest)"
+GR_PATH=$(manifest_get "lj_rdf.verlet_long")
+if [ -n "$GR_PATH" ]; then
+    append_full_csv "$GR_PATH" "Radial Distribution Function g(r) (Extended RDF run)"
 fi
 
-# 3. LENNARD-JONES TRAJECTORIES (Truncated)
-LJ_VERLET=$(get_latest_file "$DATADIR/runs/lj_N864_*_verlet_100_*/lj_verlet.csv")
-LJ_EULER=$(get_latest_file "$DATADIR/runs/lj_N864_*_euler_100_*/lj_euler.csv")
-if [ -n "$LJ_VERLET" ]; then append_trunc_csv "$LJ_VERLET" "LJ Velocity-Verlet NVE (N=864, 100 steps)"; fi
-if [ -n "$LJ_EULER" ]; then append_trunc_csv "$LJ_EULER" "LJ Euler NVE (N=864, 100 steps)"; fi
+# 3. LENNARD-JONES TRAJECTORIES (Truncated, from manifest keys)
+LJ_BRIEF_VERLET=$(manifest_get "lj_brief.verlet")
+LJ_BRIEF_EULER=$(manifest_get "lj_brief.euler")
+LJ_EXT_VERLET=$(manifest_get "lj_extended.verlet_600")
+LJ_EXT_EULER=$(manifest_get "lj_extended.euler_600")
+if [ -n "$LJ_BRIEF_VERLET" ]; then append_trunc_csv "$LJ_BRIEF_VERLET" "LJ Brief (required) — Velocity-Verlet (100 steps)"; fi
+if [ -n "$LJ_BRIEF_EULER" ]; then append_trunc_csv "$LJ_BRIEF_EULER" "LJ Brief (required) — Euler (100 steps)"; fi
+if [ -n "$LJ_EXT_VERLET" ]; then append_trunc_csv "$LJ_EXT_VERLET" "LJ Extended (optional) — Velocity-Verlet (600 steps)"; fi
+if [ -n "$LJ_EXT_EULER" ]; then append_trunc_csv "$LJ_EXT_EULER" "LJ Extended (optional) — Euler (600 steps)"; fi
 
 # 4. HARMONIC OSCILLATOR CONVERGENCE SUMMARY
 echo "## HO Convergence Summary (all dt values, final step only)" >> "$OUTFILE"
@@ -106,16 +127,10 @@ for key, fpath in sorted(m.get('ho_convergence', {}).items()):
 echo '```' >> "$OUTFILE"
 echo "" >> "$OUTFILE"
 
-# 5. LJ EQUILIBRATED RUNS (if present)
-for f in $(find "$DATADIR/runs" -name "lj_verlet.csv" -path "*_gr_*" -o -name "lj_verlet.csv" -path "*25500*" 2>/dev/null | head -3); do
-    append_trunc_csv "$f" "LJ Equilibrated Run ($(dirname $f | xargs basename))"
-done
-
-# 6. MPI CONSISTENCY DATA
-for P in 1 2 4; do
-    if [ -f "$DATADIR/audit_p${P}/lj_verlet.csv" ]; then
-        append_full_csv "$DATADIR/audit_p${P}/lj_verlet.csv" "MPI Consistency P=$P (N=108, 5 steps)"
-    fi
-done
+# 5. LJ RDF companion trajectory (if present)
+LJ_RDF_ENERGY=$(manifest_get "lj_rdf.verlet_long_energy")
+if [ -n "$LJ_RDF_ENERGY" ]; then
+    append_trunc_csv "$LJ_RDF_ENERGY" "LJ RDF long run trajectory (energy/temperature)"
+fi
 
 echo "Results successfully bundled into $OUTFILE"

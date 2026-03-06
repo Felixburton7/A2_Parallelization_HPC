@@ -171,9 +171,9 @@ def plot_strong_scaling():
     apply_major_grid(ax3, axis="y")
     disable_offset_text(ax3)
 
-    save_figure(fig, f"{PLOT_DIR}/scaling_strong.png")
+    save_figure(fig, f"{PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/scaling_strong.png")
+    print(f"Saved {PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
 
     if f_fit is not None:
         print(f"  Amdahl serial fraction f = {f_fit:.6f}")
@@ -239,9 +239,9 @@ def plot_size_scaling():
     ax2.legend(loc="best")
     disable_offset_text(ax2)
 
-    save_figure(fig, f"{PLOT_DIR}/scaling_size.png")
+    save_figure(fig, f"{PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/scaling_size.png")
+    print(f"Saved {PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
 
 
 if __name__ == "__main__":

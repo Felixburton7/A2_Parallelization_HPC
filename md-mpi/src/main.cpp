@@ -21,9 +21,11 @@
 #include <cmath>
 #include <cstdio>
 #include <ctime>
+#include <algorithm>
 #include <fstream>
 #include <functional>
 #include <iomanip>
+#include <limits>
 #include <random>
 #include <string>
 #include <vector>
@@ -51,9 +53,11 @@ int main(int argc, char* argv[]) {
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
-    const int nSteps = params.steps;
+    const int equilibrationSteps = isHO ? 0 : std::max(0, params.equilibrationSteps);
+    const int nSteps = isHO ? params.steps : std::max(0, params.productionSteps);
     const int nFrames = nSteps + 1;
-    const int productionStart = (!isHO && params.rescaleStep >= 1) ? (params.rescaleStep + 1) : 0;
+    const int totalStepsExecuted = nSteps + equilibrationSteps;
+    const int productionStartStep = 0;
     int grDiscardSteps = params.grDiscardSteps;
     int grSampleEvery = params.grSampleEvery;
     if (grDiscardSteps < 0) {
@@ -72,7 +76,7 @@ int main(int argc, char* argv[]) {
         }
         grSampleEvery = 1;
     }
-    const int grStart = productionStart + grDiscardSteps;
+    const int grStart = productionStartStep + grDiscardSteps;
     const int maxGRFrames = (!isHO && params.gr && grStart <= nSteps)
                                 ? (1 + (nSteps - grStart) / grSampleEvery)
                                 : 0;
@@ -125,7 +129,8 @@ int main(int argc, char* argv[]) {
                 // Single RNG stream for both
                 std::mt19937_64 gen(params.seed);
                 posAll = md::buildFCCLattice(N, L, gen);
-                velAll = md::generateVelocities(N, params.T_init, md::constants::mass, gen);
+                velAll =
+                    md::generateVelocities(N, params.targetTemperature, md::constants::mass, gen);
 
                 double sumV2 = 0.0;
                 for (int i = 0; i < 3 * N; ++i) {
@@ -199,13 +204,102 @@ int main(int argc, char* argv[]) {
         intType = IntegratorType::Euler;
     else if (params.integrator == "rk4")
         intType = IntegratorType::RK4;
+    double localPE = 0.0;
+
+    auto advanceOneStep = [&]() {
+        if (intType == IntegratorType::Euler) {
+            if (isHO)
+                md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        } else if (intType == IntegratorType::RK4) {
+            if (isHO)
+                md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        } else {
+            if (isHO)
+                md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        }
+    };
 
     // Initial force evaluation
-    double localPE = 0.0;
     if (isHO) {
         evalHO(sys, ctx.posGlobal, localPE);
     } else {
         evalLJ(sys, ctx.posGlobal, localPE);
+    }
+
+    bool finalRescaleApplied = false;
+    double startupTempBeforeFinal = std::numeric_limits<double>::quiet_NaN();
+    double startupTempAfterFinal = std::numeric_limits<double>::quiet_NaN();
+
+    // LJ startup/equilibration: optional pre-production preparation with rescaling.
+    if (!isHO) {
+        for (int startupStep = 1; startupStep <= equilibrationSteps; ++startupStep) {
+            double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+            double totalKE = 0.0, totalPE = 0.0;
+            MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+            MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+            double lambda = 1.0;
+            if (ctx.isRoot()) {
+                double tMeasured = md::computeTemperature(totalKE, N);
+                if (tMeasured > md::constants::rescaleGuard) {
+                    lambda = std::sqrt(params.targetTemperature / tMeasured);
+                }
+                if (!params.timing) {
+                    std::printf(
+                        "Startup rescale step %d/%d: lambda = %.15e, T_before = %.6f K, "
+                        "target = %.6f K\n",
+                        startupStep, equilibrationSteps, lambda, tMeasured, params.targetTemperature);
+                }
+            }
+            MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+            for (int i = 0; i < 3 * sys.localN; ++i) {
+                sys.vel[i] *= lambda;
+            }
+
+            advanceOneStep();
+        }
+
+        double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+        double totalKE = 0.0, totalPE = 0.0;
+        MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+        if (ctx.isRoot()) {
+            startupTempBeforeFinal = md::computeTemperature(totalKE, N);
+        }
+
+        if (params.finalRescaleBeforeProduction) {
+            double lambda = 1.0;
+            if (ctx.isRoot()) {
+                if (startupTempBeforeFinal > md::constants::rescaleGuard) {
+                    lambda = std::sqrt(params.targetTemperature / startupTempBeforeFinal);
+                }
+                finalRescaleApplied = std::abs(lambda - 1.0) > 1e-12;
+                if (!params.timing) {
+                    std::printf("Startup->production rescale: lambda = %.15e, T_before = %.6f K\n",
+                                lambda, startupTempBeforeFinal);
+                }
+            }
+            MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+            for (int i = 0; i < 3 * sys.localN; ++i) {
+                sys.vel[i] *= lambda;
+            }
+
+            localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+            totalKE = 0.0;
+            MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+            if (ctx.isRoot()) {
+                startupTempAfterFinal = md::computeTemperature(totalKE, N);
+            }
+        } else {
+            startupTempAfterFinal = startupTempBeforeFinal;
+        }
     }
 
     // Create output directory and open file on rank 0
@@ -229,12 +323,25 @@ int main(int argc, char* argv[]) {
                     << ", steps: " << nSteps << ", n_steps: " << nSteps
                     << ", n_frames: " << nFrames
                     << ", step_indexing: 0..steps (includes initial frame)"
+                    << ", total_steps_executed: " << totalStepsExecuted
                     << ", seed: " << params.seed << ", L: " << L
                     << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                    << ", rescale_step: " << params.rescaleStep
-                    << ", production_start: " << productionStart
+                    << ", target_temperature: " << params.targetTemperature
+                    << ", equilibration_steps: " << equilibrationSteps
+                    << ", production_steps: " << nSteps
+                    << ", production_start_step: " << productionStartStep
+                    << ", final_rescale_before_production: "
+                    << (params.finalRescaleBeforeProduction ? "true" : "false")
+                    << ", final_rescale_applied: " << (finalRescaleApplied ? "true" : "false")
+                    << ", production_nve: " << (!isHO ? "true" : "false")
                     << ", gr_discard_steps: " << grDiscardSteps
                     << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart;
+            if (!isHO && std::isfinite(startupTempBeforeFinal)) {
+                outFile << ", startup_temperature_before_final_rescale: " << startupTempBeforeFinal;
+            }
+            if (!isHO && std::isfinite(startupTempAfterFinal)) {
+                outFile << ", startup_temperature_after_final_rescale: " << startupTempAfterFinal;
+            }
             if (!isHO) {
                 outFile << ", lattice: FCC, velocities: Box-Muller";
             }
@@ -255,20 +362,39 @@ int main(int argc, char* argv[]) {
         std::printf(
             "N = %d | P = %d | timesteps = %d | frames = %d (step 0..%d) | dt = %.3e\n", N,
             ctx.size, nSteps, nFrames, nSteps, params.dt);
-        std::printf(
-            "Step semantics: --steps is the number of integration updates; output includes the "
-            "initial frame at step 0.\n");
         if (!isHO) {
+            std::printf(
+                "LJ semantics: --equilibration-steps prepares the state, --production-steps "
+                "controls the reported NVE trajectory.\n");
+            std::printf(
+                "Output includes the production initial frame at step 0 (n_frames = "
+                "production_steps + 1).\n");
             std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
-            std::printf("T_init = %.1f K | seed = %d\n", params.T_init, params.seed);
-            std::printf("Total simulated time = %.3e s (= steps * dt)\n", nSteps * params.dt);
+            std::printf("Target temperature = %.1f K | seed = %d\n", params.targetTemperature,
+                        params.seed);
+            std::printf("Startup timesteps = %d | production timesteps = %d | total executed = %d\n",
+                        equilibrationSteps, nSteps, totalStepsExecuted);
+            std::printf("Production simulated time = %.3e s (= production_steps * dt)\n",
+                        nSteps * params.dt);
+            std::printf("production_start_step = %d (production-only output)\n", productionStartStep);
+            if (std::isfinite(startupTempBeforeFinal)) {
+                std::printf("Startup boundary temperature before final rescale: %.6f K\n",
+                            startupTempBeforeFinal);
+            }
+            if (std::isfinite(startupTempAfterFinal)) {
+                std::printf("Startup boundary temperature after final rescale: %.6f K\n",
+                            startupTempAfterFinal);
+            }
             if (params.gr) {
                 std::printf(
-                    "g(r): production_start=%d (first step after rescaling window), "
-                    "gr_start=%d (= production_start + gr_discard_steps=%d), sample_every=%d\n",
-                    productionStart, grStart, grDiscardSteps, grSampleEvery);
+                    "g(r): production_start_step=%d, gr_start=%d (= production_start_step + "
+                    "gr_discard_steps=%d), sample_every=%d\n",
+                    productionStartStep, grStart, grDiscardSteps, grSampleEvery);
             }
         } else {
+            std::printf(
+                "Step semantics: --steps is the number of integration updates; output includes "
+                "the initial frame at step 0.\n");
             std::printf("HO mode: periodic box size is not used\n");
         }
         std::printf("==================\n");
@@ -283,8 +409,8 @@ int main(int argc, char* argv[]) {
         } else {
             std::fprintf(stderr,
                          "WARNING: g(r) requested but no frames available "
-                         "(steps=%d, production_start=%d, gr_discard_steps=%d).\n",
-                         nSteps, productionStart, grDiscardSteps);
+                         "(production_steps=%d, production_start_step=%d, gr_discard_steps=%d).\n",
+                         nSteps, productionStartStep, grDiscardSteps);
         }
     }
 
@@ -329,26 +455,6 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            // Velocity rescaling during equilibration window
-            if (step > 0 && step <= params.rescaleStep && !isHO) {
-                double lambda = 1.0;
-                if (ctx.isRoot()) {
-                    double tMeasured = md::computeTemperature(totalKE, N);
-                    if (tMeasured > md::constants::rescaleGuard) {
-                        lambda = std::sqrt(params.T_init / tMeasured);
-                    }
-                    if (!params.timing) {
-                        std::printf(
-                            "Rescale at step %d: lambda = %.15e, T_before = %.6f K, T_after = %.6f "
-                            "K\n",
-                            step, lambda, tMeasured, params.T_init);
-                    }
-                }
-                MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-                for (int i = 0; i < 3 * sys.localN; ++i) {
-                    sys.vel[i] *= lambda;
-                }
-            }
         }
 
         // Accumulate g(r) histogram in the production window
@@ -362,24 +468,7 @@ int main(int argc, char* argv[]) {
         if (step == nSteps)
             break;
 
-        // 6-way dispatch: necessary to avoid std::function virtual dispatch overhead in the hot
-        // loop
-        if (intType == IntegratorType::Euler) {
-            if (isHO)
-                md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
-                md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
-        } else if (intType == IntegratorType::RK4) {
-            if (isHO)
-                md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
-                md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
-        } else {  // Verlet (default)
-            if (isHO)
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
-        }
+        advanceOneStep();
     }
 
     // Timing completion
@@ -440,10 +529,17 @@ int main(int argc, char* argv[]) {
                        << ", steps: " << nSteps << ", n_steps: " << nSteps
                        << ", n_frames: " << nFrames
                        << ", step_indexing: 0..steps (includes initial frame)"
+                       << ", total_steps_executed: " << totalStepsExecuted
                        << ", seed: " << params.seed << ", L: " << L
                        << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                       << ", rescale_step: " << params.rescaleStep
-                       << ", production_start: " << productionStart
+                       << ", target_temperature: " << params.targetTemperature
+                       << ", equilibration_steps: " << equilibrationSteps
+                       << ", production_steps: " << nSteps
+                       << ", production_start_step: " << productionStartStep
+                       << ", final_rescale_before_production: "
+                       << (params.finalRescaleBeforeProduction ? "true" : "false")
+                       << ", final_rescale_applied: " << (finalRescaleApplied ? "true" : "false")
+                       << ", production_nve: true"
                        << ", gr_discard_steps: " << grDiscardSteps
                        << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart
                        << ", lattice: FCC, velocities: Box-Muller, timestamp: " << tstr << "\n";
@@ -462,7 +558,8 @@ int main(int argc, char* argv[]) {
     } else if (params.gr && !isHO && ctx.isRoot() && !params.timing) {
         std::fprintf(stderr,
                      "WARNING: g(r) skipped because no frames were sampled. "
-                     "Adjust --steps, --rescale-step, --gr-discard-steps, or --gr-sample-every.\n");
+                     "Adjust --production-steps, --equilibration-steps, --gr-discard-steps, or "
+                     "--gr-sample-every.\n");
     }
 
     // Close output file

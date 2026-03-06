@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-05T14:51:33Z |
-| Git commit | 554ada0c01507780c09b7e4339871a2e728931bf |
+| Timestamp (UTC) | 2026-03-06T14:39:10Z |
+| Git commit | c4d1ad1793587477a4ca3f9678998926a2e70f0d |
 | Hostname | MacBook-Pro-434.local |
 | uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -20,6 +20,8 @@
 ./.gitignore
 ./Makefile
 ./README.md
+./ai/__pycache__/analyse_results.cpython-311.pyc
+./ai/__pycache__/analyse_results.cpython-313.pyc
 ./ai/analyse_results.py
 ./ai/archive/claude.md
 ./ai/archive/code.md
@@ -44,13 +46,24 @@
 ./include/md/rng.hpp
 ./include/md/system.hpp
 ./md_solver
+./scripts/__pycache__/check_gr_tolerance.cpython-313.pyc
+./scripts/__pycache__/plot_ho.cpython-311.pyc
+./scripts/__pycache__/plot_ho.cpython-313.pyc
+./scripts/__pycache__/plot_lj.cpython-311.pyc
+./scripts/__pycache__/plot_lj.cpython-313.pyc
+./scripts/__pycache__/plot_scaling.cpython-313.pyc
+./scripts/__pycache__/plot_style.cpython-311.pyc
+./scripts/__pycache__/plot_style.cpython-313.pyc
 ./scripts/append_manifest.py
+./scripts/check_gr_tolerance.py
 ./scripts/check_tolerance.py
 ./scripts/make_results.sh
 ./scripts/plot_ho.py
 ./scripts/plot_lj.py
 ./scripts/plot_scaling.py
+./scripts/plot_style.py
 ./scripts/run_all_data.sh
+./scripts/run_results.sh
 ./scripts/run_scaling.sh
 ./scripts/validate_manifest.py
 ./src/main.cpp
@@ -65,56 +78,64 @@
 
 ### out/plots/
 ```
-total 1472
-drwx------  11 felix  staff     352 Mar  4 17:17 .
-drwx------  17 felix  staff     544 Mar  5 12:12 ..
--rw-------   1 felix  staff   77229 Mar  5 12:15 ho_convergence.png
--rw-------   1 felix  staff   48922 Mar  5 12:15 ho_energy.png
--rw-------   1 felix  staff  118023 Mar  5 12:15 ho_trajectories.png
--rw-------   1 felix  staff  125357 Mar  5 12:16 lj_energy.png
--rw-------   1 felix  staff  120347 Mar  5 12:16 lj_equilibrated_comparison.png
--rw-------   1 felix  staff   35327 Mar  5 12:16 lj_rdf.png
--rw-------   1 felix  staff   45460 Mar  5 12:16 lj_temperature.png
--rw-------   1 felix  staff   88489 Mar  4 17:17 scaling_size.png
--rw-------   1 felix  staff   78766 Mar  4 17:17 scaling_strong.png
+total 6624
+drwx------  14 felix  staff     448 Mar  6 14:39 .
+drwx------  19 felix  staff     608 Mar  6 12:33 ..
+-rw-r--r--   1 felix  staff  283227 Mar  6 14:38 results1_ho_convergence_endpoint_position_error.png
+-rw-r--r--   1 felix  staff  266258 Mar  6 14:38 results1_ho_convergence_rms_phase_space_error.png
+-rw-r--r--   1 felix  staff  200178 Mar  6 14:38 results1_ho_energy_conservation.png
+-rw-r--r--   1 felix  staff  226074 Mar  6 14:38 results1_ho_phase_space_trajectories.png
+-rw-r--r--   1 felix  staff  404663 Mar  6 14:38 results1_ho_position_velocity_trajectories.png
+-rw-r--r--   1 felix  staff  428530 Mar  6 14:38 results2_lj_brief_energy_100step_production.png
+-rw-r--r--   1 felix  staff  156907 Mar  6 14:38 results2_lj_brief_temperature_100step_production.png
+-rw-r--r--   1 felix  staff  448922 Mar  6 14:39 results2_lj_extended_energy_stability.png
+-rw-r--r--   1 felix  staff  205271 Mar  6 14:39 results2_lj_extended_temperature_stability.png
+-rw-r--r--   1 felix  staff  175875 Mar  6 14:39 results2_lj_rdf_comparison_rahman1964.png
+-rw-r--r--   1 felix  staff  291528 Mar  6 14:39 results3_problem_size_scaling_fixed_p16.png
+-rw-r--r--   1 felix  staff  274607 Mar  6 14:39 results3_strong_scaling_speedup_efficiency_breakdown.png
 ```
 
 ### out/manifest.json
 ```json
 {
   "ho_convergence": {
-    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260305_121121/ho_euler.csv",
-    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260305_121121/ho_euler.csv",
-    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260305_121121/ho_euler.csv",
-    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260305_121121/ho_euler.csv",
-    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260305_121121/ho_euler.csv",
-    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260305_121121/ho_euler.csv",
-    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260305_121121/ho_euler.csv",
-    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260305_121121/ho_euler.csv",
-    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260305_121121/ho_verlet.csv",
-    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260305_121121/ho_verlet.csv",
-    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260305_121121/ho_verlet.csv",
-    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260305_121121/ho_verlet.csv",
-    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260305_121121/ho_verlet.csv",
-    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260305_121121/ho_verlet.csv",
-    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260305_121121/ho_verlet.csv",
-    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260305_121121/ho_verlet.csv",
-    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260305_121121/ho_rk4.csv",
-    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260305_121121/ho_rk4.csv",
-    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260305_121121/ho_rk4.csv",
-    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260305_121121/ho_rk4.csv",
-    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260305_121121/ho_rk4.csv",
-    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260305_121121/ho_rk4.csv",
-    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260305_121121/ho_rk4.csv",
-    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260305_121121/ho_rk4.csv"
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260306_123324/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260306_123324/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260306_123324/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260306_123324/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260306_123324/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260306_123324/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260306_123324/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260306_123324/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260306_123324/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260306_123324/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260306_123324/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260306_123324/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260306_123324/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260306_123324/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260306_123324/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260306_123324/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260306_123324/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260306_123324/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260306_123324/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260306_123324/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260306_123324/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260306_123324/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260306_123324/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260306_123324/ho_rk4.csv"
   },
-  "lj_production": {
-    "verlet_100": "out/runs/lj_N864_P4_verlet_100_20260305_121121/lj_verlet.csv",
-    "euler_100": "out/runs/lj_N864_P4_euler_100_20260305_121121/lj_euler.csv",
-    "verlet_200_equilibrated": "out/runs/lj_N864_P4_verlet_200_eq_20260305_121121/lj_verlet.csv"
+  "lj_brief": {
+    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_123324/lj_verlet.csv",
+    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_123324/lj_euler.csv"
   },
-  "lj_gr": "out/runs/lj_N864_P4_gr_20260305_121121/gr.csv",
-  "lj_gr_energy": "out/runs/lj_N864_P4_gr_20260305_121121/lj_verlet.csv",
+  "lj_extended": {
+    "verlet_600": "out/runs/lj_extended_N864_P4_verlet_prod600_eq50_dt1e-14_20260306_123324/lj_verlet.csv",
+    "euler_600": "out/runs/lj_extended_N864_P4_euler_prod600_eq50_dt1e-14_20260306_123324/lj_euler.csv"
+  },
+  "lj_rdf": {
+    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_123324/gr.csv",
+    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_123324/lj_verlet.csv"
+  },
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
@@ -122,38 +143,38 @@ drwx------  17 felix  staff     544 Mar  5 12:12 ..
 }
 ```
 
-### out/runs/ directories
+### out/runs/ directories referenced by manifest
 ```
-out/runs/ho_N1_euler_dt0.0005_20260304_170025/
-out/runs/ho_N1_euler_dt0.0005_20260305_121121/
-out/runs/ho_N1_euler_dt0.001_20260304_170025/
-out/runs/ho_N1_euler_dt0.001_20260305_121121/
-out/runs/ho_N1_euler_dt0.005_20260304_170025/
-out/runs/ho_N1_euler_dt0.005_20260305_121121/
-out/runs/ho_N1_euler_dt0.01_20260304_170025/
-out/runs/ho_N1_euler_dt0.01_20260305_121121/
-out/runs/ho_N1_euler_dt0.05_20260304_170025/
-out/runs/ho_N1_euler_dt0.05_20260305_121121/
-out/runs/ho_N1_euler_dt0.1_20260304_170025/
-out/runs/ho_N1_euler_dt0.1_20260305_121121/
-out/runs/ho_N1_euler_dt0.5_20260304_170025/
-out/runs/ho_N1_euler_dt0.5_20260305_121121/
-out/runs/ho_N1_euler_dt1.0_20260304_170025/
-out/runs/ho_N1_euler_dt1.0_20260305_121121/
-out/runs/ho_N1_rk4_dt0.0005_20260304_170025/
-out/runs/ho_N1_rk4_dt0.0005_20260305_121121/
-out/runs/ho_N1_rk4_dt0.001_20260304_170025/
-out/runs/ho_N1_rk4_dt0.001_20260305_121121/
-out/runs/ho_N1_rk4_dt0.005_20260304_170025/
-out/runs/ho_N1_rk4_dt0.005_20260305_121121/
-out/runs/ho_N1_rk4_dt0.01_20260304_170025/
-out/runs/ho_N1_rk4_dt0.01_20260305_121121/
-out/runs/ho_N1_rk4_dt0.05_20260304_170025/
-out/runs/ho_N1_rk4_dt0.05_20260305_121121/
-out/runs/ho_N1_rk4_dt0.1_20260304_170025/
-out/runs/ho_N1_rk4_dt0.1_20260305_121121/
-out/runs/ho_N1_rk4_dt0.5_20260304_170025/
-out/runs/ho_N1_rk4_dt0.5_20260305_121121/
+out/
+out/runs/ho_N1_euler_dt0.0005_20260306_123324/
+out/runs/ho_N1_euler_dt0.001_20260306_123324/
+out/runs/ho_N1_euler_dt0.005_20260306_123324/
+out/runs/ho_N1_euler_dt0.01_20260306_123324/
+out/runs/ho_N1_euler_dt0.05_20260306_123324/
+out/runs/ho_N1_euler_dt0.1_20260306_123324/
+out/runs/ho_N1_euler_dt0.5_20260306_123324/
+out/runs/ho_N1_euler_dt1.0_20260306_123324/
+out/runs/ho_N1_rk4_dt0.0005_20260306_123324/
+out/runs/ho_N1_rk4_dt0.001_20260306_123324/
+out/runs/ho_N1_rk4_dt0.005_20260306_123324/
+out/runs/ho_N1_rk4_dt0.01_20260306_123324/
+out/runs/ho_N1_rk4_dt0.05_20260306_123324/
+out/runs/ho_N1_rk4_dt0.1_20260306_123324/
+out/runs/ho_N1_rk4_dt0.5_20260306_123324/
+out/runs/ho_N1_rk4_dt1.0_20260306_123324/
+out/runs/ho_N1_verlet_dt0.0005_20260306_123324/
+out/runs/ho_N1_verlet_dt0.001_20260306_123324/
+out/runs/ho_N1_verlet_dt0.005_20260306_123324/
+out/runs/ho_N1_verlet_dt0.01_20260306_123324/
+out/runs/ho_N1_verlet_dt0.05_20260306_123324/
+out/runs/ho_N1_verlet_dt0.1_20260306_123324/
+out/runs/ho_N1_verlet_dt0.5_20260306_123324/
+out/runs/ho_N1_verlet_dt1.0_20260306_123324/
+out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_123324/
+out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_123324/
+out/runs/lj_extended_N864_P4_euler_prod600_eq50_dt1e-14_20260306_123324/
+out/runs/lj_extended_N864_P4_verlet_prod600_eq50_dt1e-14_20260306_123324/
+out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_123324/
 ```
 
 ## 3. Build and Warnings
@@ -213,17 +234,21 @@ ALL TESTS PASSED
 ### 5a. HO — Velocity-Verlet (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-=== MD Solver ===
-Mode: ho | Integrator: verlet
-N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
-HO mode: periodic box size is not used
-==================
-Wall time: 0.002665 s (max across 1 ranks)
+[MacBook-Pro-434.local:32770] [prterun-MacBook-Pro-434-32770@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32770] [prterun-MacBook-Pro-434-32770@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32770] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+[32770] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
+ --------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
 ```
 
 **Output (first 6 + last 3 lines):**
 ```
-# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T14:51:39Z
+# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-06T12:40:19Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.99995,-0.00999975,3.34504599142826e-30,3.34487873703803e-26,3.34521324163718e-26
@@ -238,17 +263,23 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5b. HO — RK4 (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-=== MD Solver ===
-Mode: ho | Integrator: rk4
-N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
-HO mode: periodic box size is not used
-==================
-Wall time: 0.003162 s (max across 1 ranks)
+[MacBook-Pro-434.local:32773] [prterun-MacBook-Pro-434-32773@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32773] [prterun-MacBook-Pro-434-32773@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32773] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+ --------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
+at least one available network for out-of-band messaging.
+[32773] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
+--------------------------------------------------------------------------
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T14:51:39Z
+# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-06T12:40:19Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.999950000416667,-0.00999983333333333,3.34510174382089e-30,3.34487873982557e-26,3.34521324999995e-26
@@ -263,17 +294,23 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5c. HO — Euler (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-=== MD Solver ===
-Mode: ho | Integrator: euler
-N = 1 | P = 1 | steps = 1000 | dt = 1.000e-02
-HO mode: periodic box size is not used
-==================
-Wall time: 0.002576 s (max across 1 ranks)
+[MacBook-Pro-434.local:32776] [prterun-MacBook-Pro-434-32776@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32776] [prterun-MacBook-Pro-434-32776@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32776] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+ --------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
+at least one available network for out-of-band messaging.
+--------------------------------------------------------------------------
+[32776] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-05T14:51:39Z
+# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-06T12:40:20Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,1,-0.01,3.34521325e-30,3.34521325e-26,3.345547771325e-26
@@ -288,106 +325,160 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
-=== Initial Conditions (Rank 0) ===
-Seed used for RNG: 42
-FCC lattice generated
-Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
-Box-Muller velocities applied
-Initial measured Temperature: 94.400000 K
-===================================
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 108 | P = 1 | steps = 10 | dt = 1.000e-14
-L = 1.738930e-09 m (5.1145 sigma)
-T_init = 94.4 K | seed = 42
-==================
-Wall time: 0.000393 s (max across 1 ranks)
+[MacBook-Pro-434.local:32779] [prterun-MacBook-Pro-434-32779@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32779] [prterun-MacBook-Pro-434-32779@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32779] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+[32779] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
+No sockets were able to be opened on the available protocols
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T14:51:39Z
+# mode: lj, integrator: verlet, N: 864, P: 1, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914354, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T12:40:20Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
-1,1e-14,2.08952940324273e-19,-1.12903036097961e-18,-9.20077420655337e-19,94.2953262310627
-2,2e-14,2.08327769566247e-19,-1.12840771146898e-18,-9.20079941902733e-19,94.0132020336875
-3,3e-14,2.07279814481113e-19,-1.12736342912362e-18,-9.20083614642506e-19,93.5402856608675
-4,4e-14,2.05766417434535e-19,-1.12585487169448e-18,-9.20088454259947e-19,92.8573267706855
-5,5e-14,2.03732045550683e-19,-1.12382647756107e-18,-9.20094432010392e-19,91.9392647411899
-6,6e-14,2.01109299736099e-19,-1.121210730094e-18,-9.20101430357899e-19,90.7556840180687
-7,7e-14,1.9782137105245e-19,-1.11793054604546e-18,-9.20109174993009e-19,89.2719226152952
-8,8e-14,1.93788239467119e-19,-1.11385504380398e-18,-9.2006680433686e-19,87.4518694589177
-9,9e-14,1.88932451387229e-19,-1.10900656536631e-18,-9.20074113979076e-19,85.2605716461588
-10,1e-13,1.83193844160901e-19,-1.10332388832566e-18,-9.20130044164762e-19,82.6708792509294
+0,0,1.687164123192e-18,-7.47194927673328e-18,-5.78478515354128e-18,94.3999999999999
+1,1e-14,1.68447578135402e-18,-7.46869101577964e-18,-5.78421523442562e-18,94.2495822273503
+2,2e-14,1.68047549629073e-18,-7.46552676001374e-18,-5.785051263723e-18,94.0257587683379
+3,3e-14,1.675573444974e-18,-7.46109573619852e-18,-5.78552229122452e-18,93.7514797945626
+4,4e-14,1.67031939809281e-18,-7.45631122530418e-18,-5.78599182721137e-18,93.4575060081559
+5,5e-14,1.66525309392628e-18,-7.4517277580709e-18,-5.78647466414463e-18,93.174036779083
+6,6e-14,1.66078214268927e-18,-7.44785276849725e-18,-5.78707062580798e-18,92.9238786640711
+7,7e-14,1.65716146413624e-18,-7.44493273747193e-18,-5.78777127333569e-18,92.7212949019413
+8,8e-14,1.65460549217326e-18,-7.4422058796724e-18,-5.78760038749914e-18,92.5782834722954
+9,9e-14,1.6534278355732e-18,-7.44166241106346e-18,-5.78823457549026e-18,92.5123913747116
+10,1e-13,1.65412668053239e-18,-7.44185951670639e-18,-5.787732836174e-18,92.5514930621172
+11,1.1e-13,1.65729060008612e-18,-7.44519272334869e-18,-5.78790212326257e-18,92.7285203007638
+12,1.2e-13,1.6633765818926e-18,-7.45121991594431e-18,-5.78784333405171e-18,93.0690424080291
+13,1.3e-13,1.67243894775827e-18,-7.46066468725163e-18,-5.78822573949337e-18,93.5760987909615
+14,1.4e-13,1.68396198202923e-18,-7.47224354282029e-18,-5.78828156079106e-18,94.2208341905743
+15,1.5e-13,1.69693087203493e-18,-7.48574394643748e-18,-5.78881307440254e-18,94.946467932846
+16,1.6e-13,1.71004835930324e-18,-7.49863361001208e-18,-5.78858525070884e-18,95.6804159709217
+17,1.7e-13,1.72204246107605e-18,-7.51038292801881e-18,-5.78834046694276e-18,96.3515084815964
+18,1.8e-13,1.7319859370743e-18,-7.52014405717191e-18,-5.78815812009761e-18,96.9078646305515
+19,1.9e-13,1.73943052715559e-18,-7.52748093519145e-18,-5.78805040803586e-18,97.3244034213031
+20,2e-13,1.74437066635724e-18,-7.53138155080626e-18,-5.78701088444901e-18,97.6008134837422
+21,2.1e-13,1.74710459181086e-18,-7.53494587371041e-18,-5.78784128189955e-18,97.7537817452611
+22,2.2e-13,1.7480215327952e-18,-7.53528197899024e-18,-5.78726044619504e-18,97.8050863147046
+23,2.3e-13,1.74742061897183e-18,-7.53552700056766e-18,-5.78810638159584e-18,97.7714640581936
+24,2.4e-13,1.74550899555746e-18,-7.5337051750981e-18,-5.78819617954065e-18,97.6645051394755
+25,2.5e-13,1.74247299270064e-18,-7.53152236931637e-18,-5.78904937661573e-18,97.494635080159
+26,2.6e-13,1.73848649862318e-18,-7.52773313127077e-18,-5.78924663264759e-18,97.2715832526935
+27,2.7e-13,1.73367522014907e-18,-7.52241513584086e-18,-5.78873991569179e-18,97.0023831898706
+28,2.8e-13,1.72806293984258e-18,-7.51757447856569e-18,-5.78951153872311e-18,96.6883655708078
+29,2.9e-13,1.72154970390465e-18,-7.51082018075638e-18,-5.78927047685173e-18,96.3239377928053
+30,3e-13,1.7139722306459e-18,-7.5023855342226e-18,-5.78841330357669e-18,95.8999639388139
+31,3.1e-13,1.70529887922345e-18,-7.49400830958688e-18,-5.78870943036343e-18,95.4146736442748
+32,3.2e-13,1.69577237052573e-18,-7.48450826870902e-18,-5.78873589818329e-18,94.8816475985553
+33,3.3e-13,1.68590120501956e-18,-7.47500978017349e-18,-5.78910857515394e-18,94.3293373573798
+34,3.4e-13,1.67634845633446e-18,-7.46511942093019e-18,-5.78877096459573e-18,93.7948431351063
+35,3.5e-13,1.6677929659191e-18,-7.45556989390052e-18,-5.78777692798142e-18,93.3161473851741
+36,3.6e-13,1.66083877639135e-18,-7.44858603902785e-18,-5.7877472626365e-18,92.9270474260208
+37,3.7e-13,1.65600850014213e-18,-7.44317686152285e-18,-5.78716836138073e-18,92.6567844020157
+38,3.8e-13,1.65372773163601e-18,-7.44012414698609e-18,-5.78639641535008e-18,92.5291711224195
+39,3.9e-13,1.65418403315184e-18,-7.44003268636633e-18,-5.78584865321449e-18,92.5547020488435
+40,4e-13,1.65718453956044e-18,-7.44352897663574e-18,-5.7863444370753e-18,92.722586015245
+41,4.1e-13,1.66213404395564e-18,-7.44737086246314e-18,-5.78523681850749e-18,92.9995200778442
+42,4.2e-13,1.66814274561946e-18,-7.45348725606079e-18,-5.78534451044134e-18,93.3357182160495
+43,4.3e-13,1.67431455296978e-18,-7.45888474195169e-18,-5.78457018898191e-18,93.6810424236129
+44,4.4e-13,1.67999072999343e-18,-7.46513317145133e-18,-5.7851424414579e-18,93.9986351839537
+45,4.5e-13,1.68470940965253e-18,-7.4695172552676e-18,-5.78480784561507e-18,94.2626541692412
+46,4.6e-13,1.68806190930705e-18,-7.47309571905642e-18,-5.78503380974938e-18,94.4502328185476
+47,4.7e-13,1.68958647214974e-18,-7.47469596346912e-18,-5.78510949131938e-18,94.5355349716528
+48,4.8e-13,1.68887579098233e-18,-7.47510382499278e-18,-5.78622803401045e-18,94.4957710261768
+49,4.9e-13,1.68583934152298e-18,-7.47178981302243e-18,-5.78595047149945e-18,94.3258759786103
+50,5e-13,1.68079724462429e-18,-7.46700882633075e-18,-5.78621158170646e-18,94.0437611916173
+51,5.1e-13,1.67439991753882e-18,-7.46152265511313e-18,-5.78712273757432e-18,93.6858187315051
+52,5.2e-13,1.66747541438195e-18,-7.45449092240379e-18,-5.78701550802184e-18,93.2983797805322
+53,5.3e-13,1.66091692597013e-18,-7.44803402430377e-18,-5.78711709833364e-18,92.9314200416633
+54,5.4e-13,1.6555948873512e-18,-7.44246525474839e-18,-5.7868703673972e-18,92.6336419898891
+55,5.5e-13,1.6522376336817e-18,-7.43953363575759e-18,-5.78729600207589e-18,92.4457973445201
+56,5.6e-13,1.65132600997293e-18,-7.43917348238068e-18,-5.78784747240775e-18,92.3947902866264
+57,5.7e-13,1.6530033651823e-18,-7.4408659264218e-18,-5.7878625612395e-18,92.4886414594838
+58,5.8e-13,1.65702395432951e-18,-7.44471947643592e-18,-5.78769552210641e-18,92.7136009701083
+59,5.9e-13,1.66283200787085e-18,-7.45096766852001e-18,-5.78813566064916e-18,93.0385724691851
+60,6e-13,1.66972873205194e-18,-7.45769750402273e-18,-5.7879687719708e-18,93.4244571343136
+61,6.1e-13,1.67705685909187e-18,-7.46449500676405e-18,-5.78743814767218e-18,93.8344795992655
+62,6.2e-13,1.68429376182607e-18,-7.47118370749729e-18,-5.78688994567122e-18,94.2393978930566
+63,6.3e-13,1.69109353519156e-18,-7.4785366055783e-18,-5.78744307038674e-18,94.619857978047
+64,6.4e-13,1.69723908788048e-18,-7.48387031635612e-18,-5.78663122847564e-18,94.9637131880169
+65,6.5e-13,1.70253846586652e-18,-7.4887765334233e-18,-5.78623806755678e-18,95.26022333484
+66,6.6e-13,1.70677283533266e-18,-7.49312735702395e-18,-5.78635452169129e-18,95.497144255638
+67,6.7e-13,1.70966668273834e-18,-7.49583472186753e-18,-5.78616803912919e-18,95.6590604505956
+68,6.8e-13,1.71092556816934e-18,-7.49635053865602e-18,-5.78542497048668e-18,95.7294974537614
+69,6.9e-13,1.71029490127496e-18,-7.49614154995616e-18,-5.7858466486812e-18,95.6942104570717
+70,7e-13,1.7076202140512e-18,-7.49205691500308e-18,-5.78443670095188e-18,95.5445566857211
+71,7.1e-13,1.7029018003409e-18,-7.48697009197181e-18,-5.78406829163091e-18,95.2805525807682
+72,7.2e-13,1.6963457102432e-18,-7.4809445742481e-18,-5.7845988640049e-18,94.9137270320764
+73,7.3e-13,1.68840858749515e-18,-7.4733641045854e-18,-5.78495551709025e-18,94.4696301139896
+74,7.4e-13,1.67983089699382e-18,-7.46436962712612e-18,-5.7845387301323e-18,93.9896922275716
+75,7.5e-13,1.67159821361495e-18,-7.45581419537416e-18,-5.78421598175921e-18,93.5290581373354
+76,7.6e-13,1.66477640869556e-18,-7.45040119603428e-18,-5.78562478733873e-18,93.1473653455445
+77,7.7e-13,1.66031096473095e-18,-7.44574710833835e-18,-5.7854361436074e-18,92.8975153727621
+78,7.8e-13,1.65881830201206e-18,-7.44403863136079e-18,-5.78522032934873e-18,92.8139980914696
+79,7.9e-13,1.66042409100495e-18,-7.44530837146013e-18,-5.78488428045518e-18,92.9038450001641
+80,8e-13,1.6647134835938e-18,-7.45021118290105e-18,-5.78549769930724e-18,93.1438445679723
+81,8.1e-13,1.67077911330439e-18,-7.45659990105184e-18,-5.78582078774745e-18,93.4832279372657
+82,8.2e-13,1.67744895311606e-18,-7.46298108551396e-18,-5.7855321323979e-18,93.8564179959955
+83,8.3e-13,1.68363886331392e-18,-7.46854861321558e-18,-5.78490974990166e-18,94.2027550918634
+84,8.4e-13,1.6886056495076e-18,-7.47327652659135e-18,-5.78467087708375e-18,94.4806561035303
+85,8.5e-13,1.69204171719358e-18,-7.47659996968837e-18,-5.78455825249479e-18,94.6729105410788
+86,8.6e-13,1.69401364943217e-18,-7.47808414923524e-18,-5.78407049980307e-18,94.7832438517293
+87,8.7e-13,1.69483899609822e-18,-7.47892646892905e-18,-5.78408747283083e-18,94.8294235471154
+88,8.8e-13,1.6949486953557e-18,-7.47855979565366e-18,-5.78361110029796e-18,94.8355614265095
+89,8.9e-13,1.69472100344872e-18,-7.47876353857899e-18,-5.78404253513026e-18,94.822821636869
+90,9e-13,1.69442537753834e-18,-7.47835490946036e-18,-5.78392953192202e-18,94.8062808122054
+91,9.1e-13,1.69419059567169e-18,-7.47806436382232e-18,-5.78387376815064e-18,94.7931443260111
+92,9.2e-13,1.69402683593984e-18,-7.47789746893802e-18,-5.78387063299818e-18,94.7839816615887
+93,9.3e-13,1.6939285024503e-18,-7.47764403876902e-18,-5.78371553631871e-18,94.7784797182479
+94,9.4e-13,1.69394479660581e-18,-7.47770834591809e-18,-5.78376354931229e-18,94.7793914068374
+95,9.5e-13,1.69414354335647e-18,-7.47749908245355e-18,-5.78335553909708e-18,94.7905116606434
+96,9.6e-13,1.69459173731494e-18,-7.47785073190454e-18,-5.78325899458959e-18,94.8155889540131
+97,9.7e-13,1.69527786433768e-18,-7.47915579047344e-18,-5.78387792613576e-18,94.8539790489993
+98,9.8e-13,1.69603745977495e-18,-7.47982699115722e-18,-5.78378953138227e-18,94.8964798397003
+99,9.9e-13,1.69664840466377e-18,-7.4799966425522e-18,-5.78334823788842e-18,94.9306633531548
+100,1e-12,1.69688683932431e-18,-7.48014957868897e-18,-5.78326273936466e-18,94.9440042200242
 ```
 
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
-=== Initial Conditions (Rank 0) ===
-Seed used for RNG: 42
-FCC lattice generated
-Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
-Box-Muller velocities applied
-Initial measured Temperature: 94.400000 K
-===================================
-=== MD Solver ===
-Mode: lj | Integrator: euler
-N = 108 | P = 1 | steps = 10 | dt = 1.000e-14
-L = 1.738930e-09 m (5.1145 sigma)
-T_init = 94.4 K | seed = 42
-==================
-Wall time: 0.000420 s (max across 1 ranks)
+[MacBook-Pro-434.local:32781] [prterun-MacBook-Pro-434-32781@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32781] [prterun-MacBook-Pro-434-32781@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:32781] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+ --------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
+at least one available network for out-of-band messaging.
+--------------------------------------------------------------------------
+[32781] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-05T14:51:39Z
+# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.9849184843571, startup_temperature_after_final_rescale: 94.4000000000001, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T12:40:20Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,2.09184891288e-19,-1.12926090964738e-18,-9.20076018359379e-19,94.4
-1,1e-14,2.09144192886232e-19,-1.12902994241994e-18,-9.19885749533712e-19,94.3816338115854
-2,2e-14,2.08721895925538e-19,-1.12840586521172e-18,-9.19683969286181e-19,94.1910615726245
-3,3e-14,2.07894523992715e-19,-1.12735747207365e-18,-9.19462948080934e-19,93.8176889548529
-4,4e-14,2.06625321584501e-19,-1.12583963303995e-18,-9.19214311455453e-19,93.2449291030409
-5,5e-14,2.04864000685478e-19,-1.12379287250225e-18,-9.18928871816775e-19,92.4500882718317
-6,6e-14,2.02546939150224e-19,-1.12114343244424e-18,-9.18596493294018e-19,91.4044553507292
-7,7e-14,1.99598314327998e-19,-1.11780435151736e-18,-9.1820603718936e-19,90.0738134410563
-8,8e-14,1.95932967946968e-19,-1.11362950215605e-18,-9.17696534209077e-19,88.4197327077934
-9,9e-14,1.91464855324552e-19,-1.10861809339369e-18,-9.17153238069135e-19,86.4033833005344
-10,1e-13,1.86109378411333e-19,-1.10262544990855e-18,-9.16516071497222e-19,83.986588198866
+0,0,2.09184891288e-19,-9.12916763919551e-19,-7.03731872631551e-19,94.4000000000001
+1,1e-14,2.11525263370756e-19,-9.10632329841394e-19,-6.99107066470638e-19,95.4561523982533
+2,2e-14,2.14776832951035e-19,-9.0938833883245e-19,-6.94611505881416e-19,96.9235058313255
+3,3e-14,2.18964511804124e-19,-9.08859592979484e-19,-6.89895081175361e-19,98.8133023711117
+4,4e-14,2.24108503104857e-19,-9.09809852096508e-19,-6.85701348991651e-19,101.134659213852
+5,5e-14,2.30011308581937e-19,-9.11507518253613e-19,-6.81496209671676e-19,103.798450243908
+6,6e-14,2.36298938432358e-19,-9.13451036509845e-19,-6.77152098077487e-19,106.635903055271
+7,7e-14,2.42703937969227e-19,-9.15283282486688e-19,-6.72579344517461e-19,109.526321921364
+8,8e-14,2.49116447237105e-19,-9.17520494560082e-19,-6.68404047322977e-19,112.420129744484
+9,9e-14,2.55437535169377e-19,-9.19786529495048e-19,-6.64348994325671e-19,115.272681365839
+10,1e-13,2.61440695380733e-19,-9.2212063732577e-19,-6.60679941945037e-19,117.981760020911
 ```
 
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
-=== Initial Conditions (Rank 0) ===
-Seed used for RNG: 42
-FCC lattice generated
-Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
-Box-Muller velocities applied
-Initial measured Temperature: 94.400000 K
-===================================
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 108 | P = 1 | steps = 5 | dt = 1.000e-14
-L = 1.738930e-09 m (5.1145 sigma)
-T_init = 94.4 K | seed = 42
-==================
-Wall time: 0.000202 s (max across 1 ranks)
-=== Initial Conditions (Rank 0) ===
-Seed used for RNG: 42
-FCC lattice generated
-Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
-Box-Muller velocities applied
-Initial measured Temperature: 94.400000 K
-===================================
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 108 | P = 2 | steps = 5 | dt = 1.000e-14
-L = 1.738930e-09 m (5.1145 sigma)
-T_init = 94.4 K | seed = 42
-==================
-Wall time: 0.000227 s (max across 2 ranks)
+[32784] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
+[32785] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
 MATCH
 ```
 
@@ -395,20 +486,7 @@ MATCH
 
 ### CLI help output
 ```
-=== Initial Conditions (Rank 0) ===
-Seed used for RNG: 42
-FCC lattice generated
-Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
-Box-Muller velocities applied
-Initial measured Temperature: 94.400000 K
-===================================
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 864 | P = 1 | steps = 100 | dt = 1.000e-14
-L = 3.477860e-09 m (10.2290 sigma)
-T_init = 94.4 K | seed = 42
-==================
-Wall time: 0.135407 s (max across 1 ranks)
+[32787] base/ptl_base_listener.c:604 bind() failed for socket 7 storage size 16: Operation not permitted
 ```
 
 ### Comparison
@@ -512,7 +590,7 @@ out:
 .PHONY: all clean test dist
 ```
 
-### `README.md` (91 lines)
+### `README.md` (103 lines)
 
 ```markdown
 # WA2: MPI Parallelisation of Molecular Dynamics
@@ -550,20 +628,32 @@ mpirun -np 1 ./md_solver --mode ho --integrator rk4 --dt 0.01 --steps 1000 --N 1
 ### Lennard-Jones Argon (Results 2)
 
 ```bash
-# Primary run: 500-step equilibration (velocity rescaling each step) + 100-step NVE production.
-# Production runs use P=4; see scripts/run_all_data.sh for the P=1 vs P=2 consistency check.
+# Brief-required run:
+# startup/equilibration prepares the state, then production is a clean 100-step NVE trajectory.
+# Output CSV stores the production trajectory only (step 0 is the production initial frame).
 mkdir -p out
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 600 --rescale-step 500
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
+  --final-rescale-before-production
 
-# Primary run: 500-step equilibration + 100-step Euler production
-mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --steps 600 --rescale-step 500
+# Brief-required Euler comparison
+mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
+  --final-rescale-before-production
 
-# Equilibrated comparison run (rescale at 100, then post-rescale NVE segment)
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 200 --rescale-step 100
+# Extended optional diagnostic run (longer trajectory)
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 600 \
+  --final-rescale-before-production
+mpirun -np 4 ./md_solver --mode lj --integrator euler  --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 600 \
+  --final-rescale-before-production
 
-# Supplementary g(r) (extended run, ~450 frames for smooth Rahman comparison)
-# --gr-discard is relative to production_start; with --rescale-step 500, discard=0 starts sampling at step 500.
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 25500 --rescale-step 500 --gr --gr-discard 0 --gr-interval 10
+# RDF long run (optional, for smoother g(r) statistics)
+# g(r) sampling starts at production_start_step + gr_discard_steps
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 20000 \
+  --final-rescale-before-production --gr --gr-discard-steps 200 --gr-sample-every 5
 ```
 
 ### Scaling (Results 3)
@@ -760,7 +850,7 @@ inline double applyMIC(double dx, double L) {
 #endif
 ```
 
-### `include/md/params.hpp` (72 lines)
+### `include/md/params.hpp` (88 lines)
 
 ```cpp
 /**
@@ -779,19 +869,23 @@ namespace md {
 /// @brief Runtime parameters parsed from command-line arguments.
 struct Params {
     int N = 864;                        ///< Number of particles
-    int steps = 100;                    ///< Number of timesteps
+    int steps = 100;                    ///< Number of timesteps (HO) / legacy alias for LJ production_steps
     double dt = 1.0e-14;                ///< Timestep [s] (for LJ) or dimensionless (for HO)
-    double T_init = 94.4;               ///< Initial temperature [K]
+    double T_init = 94.4;               ///< Legacy alias of targetTemperature [K]
+    double targetTemperature = 94.4;    ///< Target temperature for LJ startup/production handoff [K]
+    int equilibrationSteps = 50;        ///< LJ startup timesteps before production (with optional rescaling)
+    int productionSteps = 100;          ///< LJ production timesteps (NVE after startup/final rescale)
+    bool finalRescaleBeforeProduction = true;  ///< Apply one exact rescale at startup->production boundary
     double omega = 1.0;                 ///< HO angular frequency (only for mode "ho")
     std::string integrator = "verlet";  ///< "euler", "rk4", "verlet"
     std::string mode = "lj";            ///< "ho" or "lj"
     bool output = true;                 ///< Enable CSV output
     int seed = 42;                      ///< RNG seed for reproducibility
-    int rescaleStep = -1;               ///< Step at which to apply optional rescale (-1 = disabled)
+    int rescaleStep = -1;               ///< Legacy alias for equilibrationSteps (for CLI compatibility)
     bool timing = false;                ///< Enable wall-clock timing (disables output)
     bool gr = false;                    ///< Enable g(r) accumulation
-    int grDiscard = 500;                ///< Steps to discard AFTER production_start before g(r)
-    int grInterval = 10;                ///< Sample g(r) every N steps after discard
+    int grDiscardSteps = 200;           ///< Steps to discard after production_start_step before g(r)
+    int grSampleEvery = 5;              ///< Sample g(r) every N steps after discard
     std::string outdir = "";            ///< Output directory for per-run namespaces
 
     static void parse(int argc, char* argv[], Params& p) {
@@ -799,12 +893,19 @@ struct Params {
             std::string arg = argv[i];
             if (arg == "--N" && i + 1 < argc)
                 p.N = std::atoi(argv[++i]);
-            else if (arg == "--steps" && i + 1 < argc)
+            else if (arg == "--steps" && i + 1 < argc) {
                 p.steps = std::atoi(argv[++i]);
+                p.productionSteps = p.steps;
+            } else if (arg == "--production-steps" && i + 1 < argc)
+                p.productionSteps = std::atoi(argv[++i]);
+            else if (arg == "--equilibration-steps" && i + 1 < argc)
+                p.equilibrationSteps = std::atoi(argv[++i]);
             else if (arg == "--dt" && i + 1 < argc)
                 p.dt = std::atof(argv[++i]);
-            else if (arg == "--T" && i + 1 < argc)
+            else if ((arg == "--T" || arg == "--target-temperature") && i + 1 < argc) {
                 p.T_init = std::atof(argv[++i]);
+                p.targetTemperature = p.T_init;
+            }
             else if (arg == "--omega" && i + 1 < argc)
                 p.omega = std::atof(argv[++i]);
             else if (arg == "--integrator" && i + 1 < argc)
@@ -817,17 +918,22 @@ struct Params {
                 p.seed = std::atoi(argv[++i]);
             else if (arg == "--outdir" && i + 1 < argc)
                 p.outdir = argv[++i];
-            else if (arg == "--rescale-step" && i + 1 < argc)
+            else if (arg == "--rescale-step" && i + 1 < argc) {
                 p.rescaleStep = std::atoi(argv[++i]);
+                p.equilibrationSteps = p.rescaleStep < 0 ? 0 : p.rescaleStep;
+            } else if (arg == "--final-rescale-before-production")
+                p.finalRescaleBeforeProduction = true;
+            else if (arg == "--no-final-rescale-before-production")
+                p.finalRescaleBeforeProduction = false;
             else if (arg == "--timing") {
                 p.timing = true;
                 p.output = false;
             } else if (arg == "--gr")
                 p.gr = true;
-            else if (arg == "--gr-discard" && i + 1 < argc)
-                p.grDiscard = std::atoi(argv[++i]);
-            else if (arg == "--gr-interval" && i + 1 < argc)
-                p.grInterval = std::atoi(argv[++i]);
+            else if ((arg == "--gr-discard-steps" || arg == "--gr-discard") && i + 1 < argc)
+                p.grDiscardSteps = std::atoi(argv[++i]);
+            else if ((arg == "--gr-sample-every" || arg == "--gr-interval") && i + 1 < argc)
+                p.grSampleEvery = std::atoi(argv[++i]);
         }
     }
 };
@@ -1452,7 +1558,7 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (417 lines)
+### `src/main.cpp` (572 lines)
 
 ```cpp
 /**
@@ -1478,9 +1584,11 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #include <cmath>
 #include <cstdio>
 #include <ctime>
+#include <algorithm>
 #include <fstream>
 #include <functional>
 #include <iomanip>
+#include <limits>
 #include <random>
 #include <string>
 #include <vector>
@@ -1508,8 +1616,33 @@ int main(int argc, char* argv[]) {
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
-    const int productionStart = (!isHO && params.rescaleStep >= 0) ? params.rescaleStep : 0;
-    const int grStart = productionStart + params.grDiscard;
+    const int equilibrationSteps = isHO ? 0 : std::max(0, params.equilibrationSteps);
+    const int nSteps = isHO ? params.steps : std::max(0, params.productionSteps);
+    const int nFrames = nSteps + 1;
+    const int totalStepsExecuted = nSteps + equilibrationSteps;
+    const int productionStartStep = 0;
+    int grDiscardSteps = params.grDiscardSteps;
+    int grSampleEvery = params.grSampleEvery;
+    if (grDiscardSteps < 0) {
+        if (ctx.isRoot()) {
+            std::fprintf(stderr,
+                         "WARNING: --gr-discard-steps=%d is invalid; using 0 instead.\n",
+                         grDiscardSteps);
+        }
+        grDiscardSteps = 0;
+    }
+    if (grSampleEvery <= 0) {
+        if (ctx.isRoot()) {
+            std::fprintf(stderr,
+                         "WARNING: --gr-sample-every=%d is invalid; using 1 instead.\n",
+                         grSampleEvery);
+        }
+        grSampleEvery = 1;
+    }
+    const int grStart = productionStartStep + grDiscardSteps;
+    const int maxGRFrames = (!isHO && params.gr && grStart <= nSteps)
+                                ? (1 + (nSteps - grStart) / grSampleEvery)
+                                : 0;
 
     // Box side length (constant density scaling for LJ)
     // For LJ: scale from Rahman's L=10.229*sigma for N=864 to maintain constant density
@@ -1559,7 +1692,8 @@ int main(int argc, char* argv[]) {
                 // Single RNG stream for both
                 std::mt19937_64 gen(params.seed);
                 posAll = md::buildFCCLattice(N, L, gen);
-                velAll = md::generateVelocities(N, params.T_init, md::constants::mass, gen);
+                velAll =
+                    md::generateVelocities(N, params.targetTemperature, md::constants::mass, gen);
 
                 double sumV2 = 0.0;
                 for (int i = 0; i < 3 * N; ++i) {
@@ -1633,13 +1767,102 @@ int main(int argc, char* argv[]) {
         intType = IntegratorType::Euler;
     else if (params.integrator == "rk4")
         intType = IntegratorType::RK4;
+    double localPE = 0.0;
+
+    auto advanceOneStep = [&]() {
+        if (intType == IntegratorType::Euler) {
+            if (isHO)
+                md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        } else if (intType == IntegratorType::RK4) {
+            if (isHO)
+                md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        } else {
+            if (isHO)
+                md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
+            else
+                md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
+        }
+    };
 
     // Initial force evaluation
-    double localPE = 0.0;
     if (isHO) {
         evalHO(sys, ctx.posGlobal, localPE);
     } else {
         evalLJ(sys, ctx.posGlobal, localPE);
+    }
+
+    bool finalRescaleApplied = false;
+    double startupTempBeforeFinal = std::numeric_limits<double>::quiet_NaN();
+    double startupTempAfterFinal = std::numeric_limits<double>::quiet_NaN();
+
+    // LJ startup/equilibration: optional pre-production preparation with rescaling.
+    if (!isHO) {
+        for (int startupStep = 1; startupStep <= equilibrationSteps; ++startupStep) {
+            double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+            double totalKE = 0.0, totalPE = 0.0;
+            MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+            MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+            double lambda = 1.0;
+            if (ctx.isRoot()) {
+                double tMeasured = md::computeTemperature(totalKE, N);
+                if (tMeasured > md::constants::rescaleGuard) {
+                    lambda = std::sqrt(params.targetTemperature / tMeasured);
+                }
+                if (!params.timing) {
+                    std::printf(
+                        "Startup rescale step %d/%d: lambda = %.15e, T_before = %.6f K, "
+                        "target = %.6f K\n",
+                        startupStep, equilibrationSteps, lambda, tMeasured, params.targetTemperature);
+                }
+            }
+            MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+            for (int i = 0; i < 3 * sys.localN; ++i) {
+                sys.vel[i] *= lambda;
+            }
+
+            advanceOneStep();
+        }
+
+        double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+        double totalKE = 0.0, totalPE = 0.0;
+        MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+        if (ctx.isRoot()) {
+            startupTempBeforeFinal = md::computeTemperature(totalKE, N);
+        }
+
+        if (params.finalRescaleBeforeProduction) {
+            double lambda = 1.0;
+            if (ctx.isRoot()) {
+                if (startupTempBeforeFinal > md::constants::rescaleGuard) {
+                    lambda = std::sqrt(params.targetTemperature / startupTempBeforeFinal);
+                }
+                finalRescaleApplied = std::abs(lambda - 1.0) > 1e-12;
+                if (!params.timing) {
+                    std::printf("Startup->production rescale: lambda = %.15e, T_before = %.6f K\n",
+                                lambda, startupTempBeforeFinal);
+                }
+            }
+            MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+            for (int i = 0; i < 3 * sys.localN; ++i) {
+                sys.vel[i] *= lambda;
+            }
+
+            localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+            totalKE = 0.0;
+            MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+            if (ctx.isRoot()) {
+                startupTempAfterFinal = md::computeTemperature(totalKE, N);
+            }
+        } else {
+            startupTempAfterFinal = startupTempBeforeFinal;
+        }
     }
 
     // Create output directory and open file on rank 0
@@ -1660,12 +1883,28 @@ int main(int argc, char* argv[]) {
             std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
             outFile << "# mode: " << params.mode << ", integrator: " << params.integrator
                     << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
-                    << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
+                    << ", steps: " << nSteps << ", n_steps: " << nSteps
+                    << ", n_frames: " << nFrames
+                    << ", step_indexing: 0..steps (includes initial frame)"
+                    << ", total_steps_executed: " << totalStepsExecuted
+                    << ", seed: " << params.seed << ", L: " << L
                     << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                    << ", rescale_step: " << params.rescaleStep
-                    << ", production_start: " << productionStart
-                    << ", gr_discard: " << params.grDiscard
-                    << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart;
+                    << ", target_temperature: " << params.targetTemperature
+                    << ", equilibration_steps: " << equilibrationSteps
+                    << ", production_steps: " << nSteps
+                    << ", production_start_step: " << productionStartStep
+                    << ", final_rescale_before_production: "
+                    << (params.finalRescaleBeforeProduction ? "true" : "false")
+                    << ", final_rescale_applied: " << (finalRescaleApplied ? "true" : "false")
+                    << ", production_nve: " << (!isHO ? "true" : "false")
+                    << ", gr_discard_steps: " << grDiscardSteps
+                    << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart;
+            if (!isHO && std::isfinite(startupTempBeforeFinal)) {
+                outFile << ", startup_temperature_before_final_rescale: " << startupTempBeforeFinal;
+            }
+            if (!isHO && std::isfinite(startupTempAfterFinal)) {
+                outFile << ", startup_temperature_after_final_rescale: " << startupTempAfterFinal;
+            }
             if (!isHO) {
                 outFile << ", lattice: FCC, velocities: Box-Muller";
             }
@@ -1683,15 +1922,59 @@ int main(int argc, char* argv[]) {
     if (ctx.isRoot() && !params.timing) {
         std::printf("=== MD Solver ===\n");
         std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
-        std::printf("N = %d | P = %d | steps = %d | dt = %.3e\n", N, ctx.size, params.steps,
-                    params.dt);
+        std::printf(
+            "N = %d | P = %d | timesteps = %d | frames = %d (step 0..%d) | dt = %.3e\n", N,
+            ctx.size, nSteps, nFrames, nSteps, params.dt);
         if (!isHO) {
+            std::printf(
+                "LJ semantics: --equilibration-steps prepares the state, --production-steps "
+                "controls the reported NVE trajectory.\n");
+            std::printf(
+                "Output includes the production initial frame at step 0 (n_frames = "
+                "production_steps + 1).\n");
             std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
-            std::printf("T_init = %.1f K | seed = %d\n", params.T_init, params.seed);
+            std::printf("Target temperature = %.1f K | seed = %d\n", params.targetTemperature,
+                        params.seed);
+            std::printf("Startup timesteps = %d | production timesteps = %d | total executed = %d\n",
+                        equilibrationSteps, nSteps, totalStepsExecuted);
+            std::printf("Production simulated time = %.3e s (= production_steps * dt)\n",
+                        nSteps * params.dt);
+            std::printf("production_start_step = %d (production-only output)\n", productionStartStep);
+            if (std::isfinite(startupTempBeforeFinal)) {
+                std::printf("Startup boundary temperature before final rescale: %.6f K\n",
+                            startupTempBeforeFinal);
+            }
+            if (std::isfinite(startupTempAfterFinal)) {
+                std::printf("Startup boundary temperature after final rescale: %.6f K\n",
+                            startupTempAfterFinal);
+            }
+            if (params.gr) {
+                std::printf(
+                    "g(r): production_start_step=%d, gr_start=%d (= production_start_step + "
+                    "gr_discard_steps=%d), sample_every=%d\n",
+                    productionStartStep, grStart, grDiscardSteps, grSampleEvery);
+            }
         } else {
+            std::printf(
+                "Step semantics: --steps is the number of integration updates; output includes "
+                "the initial frame at step 0.\n");
             std::printf("HO mode: periodic box size is not used\n");
         }
         std::printf("==================\n");
+    }
+
+    if (params.gr && !isHO && maxGRFrames <= 0 && ctx.isRoot()) {
+        if (grStart > nSteps) {
+            std::fprintf(stderr,
+                         "WARNING: g(r) requested but gr_start=%d is beyond final step=%d. "
+                         "No RDF frames will be sampled.\n",
+                         grStart, nSteps);
+        } else {
+            std::fprintf(stderr,
+                         "WARNING: g(r) requested but no frames available "
+                         "(production_steps=%d, production_start_step=%d, gr_discard_steps=%d).\n",
+                         nSteps, productionStartStep, grDiscardSteps);
+        }
     }
 
     // g(r) histogram setup for LJ mode
@@ -1707,7 +1990,7 @@ int main(int argc, char* argv[]) {
     double tStart = MPI_Wtime();
 
     // Time-stepping loop
-    for (int step = 0; step <= params.steps; ++step) {
+    for (int step = 0; step <= nSteps; ++step) {
         // Compute observables (skip in timing mode)
         double totalKE = 0.0, totalPE = 0.0;
         if (!params.timing) {
@@ -1735,57 +2018,20 @@ int main(int argc, char* argv[]) {
                 }
             }
 
-            // Velocity rescaling during equilibration window
-            if (step > 0 && step <= params.rescaleStep && !isHO) {
-                double lambda = 1.0;
-                if (ctx.isRoot()) {
-                    double tMeasured = md::computeTemperature(totalKE, N);
-                    if (tMeasured > md::constants::rescaleGuard) {
-                        lambda = std::sqrt(params.T_init / tMeasured);
-                    }
-                    if (!params.timing) {
-                        std::printf(
-                            "Rescale at step %d: lambda = %.15e, T_before = %.6f K, T_after = %.6f "
-                            "K\n",
-                            step, lambda, tMeasured, params.T_init);
-                    }
-                }
-                MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-                for (int i = 0; i < 3 * sys.localN; ++i) {
-                    sys.vel[i] *= lambda;
-                }
-            }
         }
 
         // Accumulate g(r) histogram in the production window
-        if (params.gr && !isHO && step >= grStart && ((step - grStart) % params.grInterval == 0)) {
+        if (params.gr && !isHO && step >= grStart && ((step - grStart) % grSampleEvery == 0)) {
             md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
                              grHistLocal);
             ++grFrames;
         }
 
         // Advance one timestep; skip update on the last iteration
-        if (step == params.steps)
+        if (step == nSteps)
             break;
 
-        // 6-way dispatch: necessary to avoid std::function virtual dispatch overhead in the hot
-        // loop
-        if (intType == IntegratorType::Euler) {
-            if (isHO)
-                md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
-                md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
-        } else if (intType == IntegratorType::RK4) {
-            if (isHO)
-                md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
-                md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
-        } else {  // Verlet (default)
-            if (isHO)
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
-        }
+        advanceOneStep();
     }
 
     // Timing completion
@@ -1843,12 +2089,22 @@ int main(int argc, char* argv[]) {
                 std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
                 grFile << "# mode: " << params.mode << ", integrator: " << params.integrator
                        << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
-                       << ", steps: " << params.steps << ", seed: " << params.seed << ", L: " << L
+                       << ", steps: " << nSteps << ", n_steps: " << nSteps
+                       << ", n_frames: " << nFrames
+                       << ", step_indexing: 0..steps (includes initial frame)"
+                       << ", total_steps_executed: " << totalStepsExecuted
+                       << ", seed: " << params.seed << ", L: " << L
                        << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                       << ", rescale_step: " << params.rescaleStep
-                       << ", production_start: " << productionStart
-                       << ", gr_discard: " << params.grDiscard
-                       << ", gr_interval: " << params.grInterval << ", gr_start: " << grStart
+                       << ", target_temperature: " << params.targetTemperature
+                       << ", equilibration_steps: " << equilibrationSteps
+                       << ", production_steps: " << nSteps
+                       << ", production_start_step: " << productionStartStep
+                       << ", final_rescale_before_production: "
+                       << (params.finalRescaleBeforeProduction ? "true" : "false")
+                       << ", final_rescale_applied: " << (finalRescaleApplied ? "true" : "false")
+                       << ", production_nve: true"
+                       << ", gr_discard_steps: " << grDiscardSteps
+                       << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart
                        << ", lattice: FCC, velocities: Box-Muller, timestamp: " << tstr << "\n";
                 grFile << "r_sigma,gr\n";
                 for (int b = 0; b < grNBins; ++b) {
@@ -1862,6 +2118,11 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+    } else if (params.gr && !isHO && ctx.isRoot() && !params.timing) {
+        std::fprintf(stderr,
+                     "WARNING: g(r) skipped because no frames were sampled. "
+                     "Adjust --production-steps, --equilibration-steps, --gr-discard-steps, or "
+                     "--gr-sample-every.\n");
     }
 
     // Close output file
@@ -2481,7 +2742,7 @@ fi
 bash ai/make_results.sh
 ```
 
-### `scripts/run_all_data.sh` (215 lines)
+### `scripts/run_all_data.sh` (295 lines)
 
 ```sh
 #!/bin/bash
@@ -2500,6 +2761,20 @@ SKIP_SCALING=0
 STRONG_STEPS=200
 # Use longer runs for size scaling so fixed overhead is less dominant at small N.
 SIZE_STEPS=2000
+
+LJ_DT="1e-14"
+LJ_TARGET_T=94.4
+LJ_BRIEF_EQUIL=50
+LJ_BRIEF_PROD_STEPS=100
+LJ_BRIEF_FRAMES=$((LJ_BRIEF_PROD_STEPS + 1))
+LJ_EXTENDED_EQUIL=$LJ_BRIEF_EQUIL
+LJ_EXTENDED_PROD_STEPS=600
+LJ_EXTENDED_FRAMES=$((LJ_EXTENDED_PROD_STEPS + 1))
+LJ_RDF_EQUIL=$LJ_BRIEF_EQUIL
+LJ_RDF_PROD_STEPS=20000
+LJ_RDF_FRAMES=$((LJ_RDF_PROD_STEPS + 1))
+LJ_GR_DISCARD_STEPS=200
+LJ_GR_SAMPLE_EVERY=5
 for arg in "$@"; do
   [ "$arg" = "--skip-scaling" ] && SKIP_SCALING=1
 done
@@ -2537,12 +2812,35 @@ echo "=== PARALLEL CONSISTENCY CHECK ==="
 D1="$OUTDIR/runs/lj_N108_P1_test_${TIMESTAMP}"
 D2="$OUTDIR/runs/lj_N108_P2_test_${TIMESTAMP}"
 mkdir -p "$D1" "$D2"
-mpirun -np 1 $SOLVER --mode lj --integrator verlet --N 108 --steps 10 --outdir "$D1"
-mpirun -np 2 $SOLVER --mode lj --integrator verlet --N 108 --steps 10 --outdir "$D2"
+mpirun -np 1 $SOLVER --mode lj --integrator verlet --N 108 \
+    --equilibration-steps 0 --production-steps 10 \
+    --target-temperature $LJ_TARGET_T --final-rescale-before-production --outdir "$D1"
+mpirun -np 2 $SOLVER --mode lj --integrator verlet --N 108 \
+    --equilibration-steps 0 --production-steps 10 \
+    --target-temperature $LJ_TARGET_T --final-rescale-before-production --outdir "$D2"
 if python3 scripts/check_tolerance.py "$D1/lj_verlet.csv" "$D2/lj_verlet.csv" > /dev/null 2>&1; then
     echo "  P=1 vs P=2 data: MATCH ✅"
 else
     echo "  P=1 vs P=2 data: MISMATCH ❌"
+fi
+
+echo ""
+echo "=== RDF PARALLEL CONSISTENCY CHECK ==="
+DGR1="$OUTDIR/runs/lj_gr_N108_P1_test_${TIMESTAMP}"
+DGR2="$OUTDIR/runs/lj_gr_N108_P2_test_${TIMESTAMP}"
+mkdir -p "$DGR1" "$DGR2"
+mpirun -np 1 $SOLVER --mode lj --integrator verlet --N 108 --dt 1e-14 \
+    --equilibration-steps 20 --production-steps 400 \
+    --target-temperature $LJ_TARGET_T --final-rescale-before-production \
+    --gr --gr-discard-steps 20 --gr-sample-every 2 --outdir "$DGR1" > /dev/null
+mpirun -np 2 $SOLVER --mode lj --integrator verlet --N 108 --dt 1e-14 \
+    --equilibration-steps 20 --production-steps 400 \
+    --target-temperature $LJ_TARGET_T --final-rescale-before-production \
+    --gr --gr-discard-steps 20 --gr-sample-every 2 --outdir "$DGR2" > /dev/null
+if python3 scripts/check_gr_tolerance.py "$DGR1/gr.csv" "$DGR2/gr.csv" > /dev/null 2>&1; then
+    echo "  g(r) P=1 vs P=2 data: MATCH ✅"
+else
+    echo "  g(r) P=1 vs P=2 data: MISMATCH ❌"
 fi
 
 # ── 1. Results 1: HO Convergence ──
@@ -2567,46 +2865,89 @@ for INT in euler verlet rk4; do
     done
 done
 
-# ── 2. Results 2: LJ Production ──
+# ── 2. Results 2: LJ Brief + Extended ──
 echo ""
-echo "=== RESULTS 2: LJ PRODUCTION ==="
-RUNDIR_V="$OUTDIR/runs/lj_N864_P4_verlet_100_${TIMESTAMP}"
-mkdir -p "$RUNDIR_V"
-echo "  Verlet N=864 (500 equilibration + 100 production steps)..."
-mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 600 --dt 1e-14 --rescale-step 500 --outdir "$RUNDIR_V" > /dev/null
-if [ -s "$RUNDIR_V/lj_verlet.csv" ]; then
-    python3 scripts/append_manifest.py "lj_production.verlet_100" "$RUNDIR_V/lj_verlet.csv"
-    echo "  -> output saved to manifest ✅"
-fi
+echo "=== RESULTS 2: LJ BRIEF + EXTENDED ==="
+echo "  Convention: startup is configured by --equilibration-steps, production by --production-steps."
+echo "  CSV output reports production trajectory only: step 0 is the production initial frame."
 
-RUNDIR_E="$OUTDIR/runs/lj_N864_P4_euler_100_${TIMESTAMP}"
-mkdir -p "$RUNDIR_E"
-echo "  Euler N=864 (500 equilibration + 100 production steps)..."
-mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 --steps 600 --dt 1e-14 --rescale-step 500 --outdir "$RUNDIR_E" > /dev/null
-if [ -s "$RUNDIR_E/lj_euler.csv" ]; then
-    python3 scripts/append_manifest.py "lj_production.euler_100" "$RUNDIR_E/lj_euler.csv"
-    echo "  -> output saved to manifest ✅"
-fi
-
-# ── Equilibrated NVE comparison ──
-RUNDIR_EQ="$OUTDIR/runs/lj_N864_P4_verlet_200_eq_${TIMESTAMP}"
-mkdir -p "$RUNDIR_EQ"
+# Brief run (required by brief): exactly 100-step NVE production at dt=1e-14 s.
+RUNDIR_BRIEF_V="$OUTDIR/runs/lj_brief_N864_P4_verlet_prod${LJ_BRIEF_PROD_STEPS}_eq${LJ_BRIEF_EQUIL}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_BRIEF_V"
+echo "  Brief (required) Verlet: equilibration=${LJ_BRIEF_EQUIL}, production=${LJ_BRIEF_PROD_STEPS}, frames=${LJ_BRIEF_FRAMES}, dt=${LJ_DT}, target_T=${LJ_TARGET_T} K..."
 mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
-    --steps 200 --rescale-step 100 --outdir "$RUNDIR_EQ" > /dev/null
-python3 scripts/append_manifest.py "lj_production.verlet_200_equilibrated" "$RUNDIR_EQ/lj_verlet.csv"
+    --dt $LJ_DT --target-temperature $LJ_TARGET_T \
+    --equilibration-steps $LJ_BRIEF_EQUIL \
+    --production-steps $LJ_BRIEF_PROD_STEPS \
+    --final-rescale-before-production \
+    --outdir "$RUNDIR_BRIEF_V" > /dev/null
+if [ -s "$RUNDIR_BRIEF_V/lj_verlet.csv" ]; then
+    python3 scripts/append_manifest.py "lj_brief.verlet" "$RUNDIR_BRIEF_V/lj_verlet.csv"
+    echo "  -> brief Verlet output saved to manifest ✅"
+fi
 
-# ── 3. g(r) Production Run ──
+RUNDIR_BRIEF_E="$OUTDIR/runs/lj_brief_N864_P4_euler_prod${LJ_BRIEF_PROD_STEPS}_eq${LJ_BRIEF_EQUIL}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_BRIEF_E"
+echo "  Brief (required) Euler: equilibration=${LJ_BRIEF_EQUIL}, production=${LJ_BRIEF_PROD_STEPS}, frames=${LJ_BRIEF_FRAMES}, dt=${LJ_DT}, target_T=${LJ_TARGET_T} K..."
+mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 \
+    --dt $LJ_DT --target-temperature $LJ_TARGET_T \
+    --equilibration-steps $LJ_BRIEF_EQUIL \
+    --production-steps $LJ_BRIEF_PROD_STEPS \
+    --final-rescale-before-production \
+    --outdir "$RUNDIR_BRIEF_E" > /dev/null
+if [ -s "$RUNDIR_BRIEF_E/lj_euler.csv" ]; then
+    python3 scripts/append_manifest.py "lj_brief.euler" "$RUNDIR_BRIEF_E/lj_euler.csv"
+    echo "  -> brief Euler output saved to manifest ✅"
+fi
+
+# Extended run (optional): longer trajectories for diagnostics/statistics.
+RUNDIR_EXT_V="$OUTDIR/runs/lj_extended_N864_P4_verlet_prod${LJ_EXTENDED_PROD_STEPS}_eq${LJ_EXTENDED_EQUIL}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_EXT_V"
+echo "  Extended (optional) Verlet: equilibration=${LJ_EXTENDED_EQUIL}, production=${LJ_EXTENDED_PROD_STEPS}, frames=${LJ_EXTENDED_FRAMES}, dt=${LJ_DT}, target_T=${LJ_TARGET_T} K..."
+mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
+    --dt $LJ_DT --target-temperature $LJ_TARGET_T \
+    --equilibration-steps $LJ_EXTENDED_EQUIL \
+    --production-steps $LJ_EXTENDED_PROD_STEPS \
+    --final-rescale-before-production \
+    --outdir "$RUNDIR_EXT_V" > /dev/null
+if [ -s "$RUNDIR_EXT_V/lj_verlet.csv" ]; then
+    python3 scripts/append_manifest.py "lj_extended.verlet_600" "$RUNDIR_EXT_V/lj_verlet.csv"
+    echo "  -> extended Verlet output saved to manifest ✅"
+fi
+
+RUNDIR_EXT_E="$OUTDIR/runs/lj_extended_N864_P4_euler_prod${LJ_EXTENDED_PROD_STEPS}_eq${LJ_EXTENDED_EQUIL}_dt1e-14_${TIMESTAMP}"
+mkdir -p "$RUNDIR_EXT_E"
+echo "  Extended (optional) Euler: equilibration=${LJ_EXTENDED_EQUIL}, production=${LJ_EXTENDED_PROD_STEPS}, frames=${LJ_EXTENDED_FRAMES}, dt=${LJ_DT}, target_T=${LJ_TARGET_T} K..."
+mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 \
+    --dt $LJ_DT --target-temperature $LJ_TARGET_T \
+    --equilibration-steps $LJ_EXTENDED_EQUIL \
+    --production-steps $LJ_EXTENDED_PROD_STEPS \
+    --final-rescale-before-production \
+    --outdir "$RUNDIR_EXT_E" > /dev/null
+if [ -s "$RUNDIR_EXT_E/lj_euler.csv" ]; then
+    python3 scripts/append_manifest.py "lj_extended.euler_600" "$RUNDIR_EXT_E/lj_euler.csv"
+    echo "  -> extended Euler output saved to manifest ✅"
+fi
+
+# ── 3. g(r) Production Run (extended long) ──
 echo ""
-echo "=== g(r) PRODUCTION RUN ==="
-RUNDIR_GR="$OUTDIR/runs/lj_N864_P4_gr_${TIMESTAMP}"
+echo "=== g(r) PRODUCTION RUN (EXTENDED LONG) ==="
+echo "  RDF long run: equilibration=${LJ_RDF_EQUIL}, production=${LJ_RDF_PROD_STEPS}, frames=${LJ_RDF_FRAMES}, discard_steps=${LJ_GR_DISCARD_STEPS}, sample_every=${LJ_GR_SAMPLE_EVERY}"
+RUNDIR_GR="$OUTDIR/runs/lj_rdf_N864_P4_verlet_prod${LJ_RDF_PROD_STEPS}_eq${LJ_RDF_EQUIL}_dt1e-14_${TIMESTAMP}"
 mkdir -p "$RUNDIR_GR"
-# With relative --gr-discard semantics (post-production-start), discard=0
-# gives absolute g(r) sampling start at step 500 when --rescale-step=500.
-mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 --steps 25500 \
-    --rescale-step 500 --gr --gr-discard 0 --gr-interval 10 --outdir "$RUNDIR_GR" > /dev/null
+mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
+    --dt $LJ_DT \
+    --target-temperature $LJ_TARGET_T \
+    --equilibration-steps $LJ_RDF_EQUIL \
+    --production-steps $LJ_RDF_PROD_STEPS \
+    --final-rescale-before-production \
+    --gr \
+    --gr-discard-steps $LJ_GR_DISCARD_STEPS \
+    --gr-sample-every $LJ_GR_SAMPLE_EVERY \
+    --outdir "$RUNDIR_GR" > /dev/null
 if [ -s "$RUNDIR_GR/gr.csv" ]; then
-    python3 scripts/append_manifest.py "lj_gr" "$RUNDIR_GR/gr.csv"
-    python3 scripts/append_manifest.py "lj_gr_energy" "$RUNDIR_GR/lj_verlet.csv"
+    python3 scripts/append_manifest.py "lj_rdf.verlet_long" "$RUNDIR_GR/gr.csv"
+    python3 scripts/append_manifest.py "lj_rdf.verlet_long_energy" "$RUNDIR_GR/lj_verlet.csv"
     echo "  g(r) done, output saved to manifest ✅"
 else
     echo "  g(r) FAILED ❌"
@@ -2699,6 +3040,23 @@ echo "=========================================="
 echo "  ALL DONE — $(date)"
 echo "=========================================="
 echo "Manifest written to: $OUTDIR/manifest.json"
+```
+
+### `scripts/run_results.sh` (12 lines)
+
+```sh
+#!/bin/bash
+# Run end-to-end Results data generation and plotting.
+# Usage:
+#   bash scripts/run_results.sh [--skip-scaling]
+
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+bash scripts/run_all_data.sh "$@"
+python3 scripts/plot_ho.py
+python3 scripts/plot_lj.py
+python3 scripts/plot_scaling.py
 ```
 
 ### `scripts/run_scaling.sh` (115 lines)
@@ -2894,6 +3252,85 @@ if __name__ == "__main__":
     main()
 ```
 
+### `scripts/check_gr_tolerance.py` (74 lines)
+
+```py
+#!/usr/bin/env python3
+"""
+check_gr_tolerance.py — Compare two g(r) CSV files with tolerances.
+
+Usage:
+  python3 scripts/check_gr_tolerance.py <gr_p1.csv> <gr_p2.csv>
+"""
+
+import csv
+import sys
+
+
+ABS_TOL = 1e-6
+REL_TOL = 1e-5
+
+
+def filter_comments(handle):
+    for line in handle:
+        if line.strip() and not line.startswith("#"):
+            yield line
+
+
+def as_rows(path):
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        return list(csv.DictReader(filter_comments(f)))
+
+
+def close_enough(a, b):
+    diff = abs(a - b)
+    if diff <= ABS_TOL:
+        return True
+    return diff / (abs(a) + 1e-18) <= REL_TOL
+
+
+def main():
+    if len(sys.argv) != 3:
+        print("Usage: check_gr_tolerance.py <gr_p1.csv> <gr_p2.csv>")
+        sys.exit(1)
+
+    file1, file2 = sys.argv[1], sys.argv[2]
+    try:
+        rows1 = as_rows(file1)
+        rows2 = as_rows(file2)
+    except Exception as exc:
+        print(f"Error reading g(r) files: {exc}")
+        sys.exit(1)
+
+    if len(rows1) != len(rows2):
+        print(f"Length mismatch: {len(rows1)} vs {len(rows2)}")
+        sys.exit(1)
+
+    for i, (r1, r2) in enumerate(zip(rows1, rows2)):
+        try:
+            x1 = float(r1["r_sigma"])
+            x2 = float(r2["r_sigma"])
+            g1 = float(r1["gr"])
+            g2 = float(r2["gr"])
+        except Exception as exc:
+            print(f"Malformed row {i}: {exc}")
+            sys.exit(1)
+
+        if not close_enough(x1, x2):
+            print(f"Mismatch at row {i}, col r_sigma: {x1} vs {x2}")
+            sys.exit(1)
+        if not close_enough(g1, g2):
+            print(f"Mismatch at row {i}, col gr: {g1} vs {g2}")
+            sys.exit(1)
+
+    print("MATCH")
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
+```
+
 ### `scripts/check_tolerance.py` (37 lines)
 
 ```py
@@ -2936,7 +3373,7 @@ if __name__ == '__main__':
     check_csv(sys.argv[1], sys.argv[2])
 ```
 
-### `scripts/plot_ho.py` (278 lines)
+### `scripts/plot_ho.py` (499 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -2944,10 +3381,11 @@ if __name__ == '__main__':
 plot_ho.py — Generate Harmonic Oscillator verification plots (Results 1).
 
 Produces:
-  1. Position & velocity vs time for all three integrators (with exact overlay)
-  2. Phase-space (v vs x) diagrams
-  3. Log-log convergence: |x_num(T) - x_exact(T)| vs dt with fitted slopes
-  4. Energy conservation comparison
+  1. out/plots/results1_ho_position_velocity_trajectories.png
+  2. out/plots/results1_ho_phase_space_trajectories.png
+  3. out/plots/results1_ho_convergence_endpoint_position_error.png
+  4. out/plots/results1_ho_energy_conservation.png
+  5. out/plots/results1_ho_convergence_rms_phase_space_error.png
 
 Usage:
   python3 scripts/plot_ho.py           # plot from existing data in out/ho/
@@ -2959,11 +3397,20 @@ import sys
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
+
+from plot_style import (
+    INTEGRATOR_STYLE,
+    apply_major_grid,
+    apply_plot_style,
+    disable_offset_text,
+    save_figure,
+)
 
 # ── Configuration ──
 INTEGRATORS = ["euler", "verlet", "rk4"]
 INTEGRATOR_LABELS = {"euler": "Forward Euler", "rk4": "RK4", "verlet": "Velocity-Verlet"}
-INTEGRATOR_COLORS = {"euler": "#e74c3c", "rk4": "#3498db", "verlet": "#2ecc71"}
+INTEGRATOR_COLORS = {k: INTEGRATOR_STYLE[k]["color"] for k in ["euler", "rk4", "verlet"]}
 INTEGRATOR_ORDERS = {"euler": 1, "rk4": 4, "verlet": 2}
 
 DT_VALUES = [1.0, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005]
@@ -3006,10 +3453,9 @@ def run_ho_simulations():
 
 
 import json
-import csv
 
 def load_manifest():
-    with open("out/manifest.json", "r") as f:
+    with open("out/manifest.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
 def load_csv(filepath):
@@ -3025,10 +3471,10 @@ def load_csv(filepath):
 
 
 def plot_trajectories():
-    """Plot x(t), v(t), phase space for all integrators at dt=0.01."""
+    """Plot x(t), v(t) for all integrators at dt=0.01."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    fig, axes = plt.subplots(2, 1, figsize=(9, 8), constrained_layout=True)
 
     t_exact = np.linspace(0, T_FINAL, 1000)
     x_exact, v_exact = exact_solution(t_exact)
@@ -3047,52 +3493,128 @@ def plot_trajectories():
         x = data['x']
         v = data['v']
 
-        color = INTEGRATOR_COLORS[integ]
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
         label = INTEGRATOR_LABELS[integ]
 
-        axes[0].plot(t, x, color=color, label=label, linewidth=1.5, alpha=0.8)
-        axes[1].plot(t, v, color=color, label=label, linewidth=1.5, alpha=0.8)
-        axes[2].plot(x, v, color=color, label=label, linewidth=1.2, alpha=0.8)
-
+        axes[0].plot(
+            t,
+            x,
+            color=color,
+            linestyle=style["linestyle"],
+            label=label,
+            linewidth=style["linewidth"],
+        )
+        axes[1].plot(
+            t,
+            v,
+            color=color,
+            linestyle=style["linestyle"],
+            label=label,
+            linewidth=style["linewidth"],
+        )
     # Exact overlays
-    axes[0].plot(t_exact, x_exact, 'k--', linewidth=1, alpha=0.5, label='Exact')
-    axes[0].set_xlabel('Time')
-    axes[0].set_ylabel('Position x')
-    axes[0].set_title('Position vs Time')
-    axes[0].legend(fontsize=9)
-    axes[0].grid(True)
+    exact_style = INTEGRATOR_STYLE["exact"]
+    axes[0].plot(
+        t_exact,
+        x_exact,
+        color=exact_style["color"],
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_style["linewidth"],
+        alpha=0.9,
+        label="Exact",
+    )
+    axes[0].set_xlabel(r'Time $[1/\omega]$')
+    axes[0].set_ylabel('Position x [reduced units]')
+    axes[0].set_title('Position vs Time (Reduced Units)')
+    axes[0].legend(loc="upper right")
+    apply_major_grid(axes[0])
+    disable_offset_text(axes[0])
 
-    axes[1].plot(t_exact, v_exact, 'k--', linewidth=1, alpha=0.5, label='Exact')
-    axes[1].set_xlabel('Time')
-    axes[1].set_ylabel('Velocity v')
-    axes[1].set_title('Velocity vs Time')
-    axes[1].legend(fontsize=9)
-    axes[1].grid(True)
+    axes[1].plot(
+        t_exact,
+        v_exact,
+        color=exact_style["color"],
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_style["linewidth"],
+        alpha=0.9,
+        label="Exact",
+    )
+    axes[1].set_xlabel(r'Time $[1/\omega]$')
+    axes[1].set_ylabel('Velocity v [reduced units]')
+    axes[1].set_title('Velocity vs Time (Reduced Units)')
+    axes[1].legend(loc="upper right")
+    apply_major_grid(axes[1])
+    disable_offset_text(axes[1])
+
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_position_velocity_trajectories.png")
+    plt.close()
+    print(f"Saved {PLOT_DIR}/results1_ho_position_velocity_trajectories.png")
+
+
+def plot_phase_space():
+    """Plot phase-space trajectory in a dedicated figure."""
+    os.makedirs(PLOT_DIR, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(6.5, 6.2), constrained_layout=True)
+    manifest = load_manifest()
+
+    for integ in INTEGRATORS:
+        dt_key = str(TRAJ_DT).replace(".", "_")
+        fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
+        if not os.path.exists(fpath):
+            continue
+        data = load_csv(fpath)
+        style = INTEGRATOR_STYLE[integ]
+        ax.plot(
+            data["x"],
+            data["v"],
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=style["linewidth"],
+            label=INTEGRATOR_LABELS[integ],
+        )
 
     x_ep, v_ep = exact_solution(np.linspace(0, 2 * np.pi / OMEGA, 500))
-    axes[2].plot(x_ep, v_ep, 'k--', linewidth=1, alpha=0.5, label='Exact')
-    axes[2].set_xlabel('Position x')
-    axes[2].set_ylabel('Velocity v')
-    axes[2].set_title('Phase Space (v vs x)')
-    axes[2].legend(fontsize=9)
-    axes[2].set_aspect('equal')
-    axes[2].grid(True)
+    exact_style = INTEGRATOR_STYLE["exact"]
+    ax.plot(
+        x_ep,
+        v_ep,
+        color=exact_style["color"],
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_style["linewidth"],
+        alpha=0.9,
+        label="Exact",
+    )
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_trajectories.png")
+    ax.set_xlabel("Position x [reduced units]")
+    ax.set_ylabel("Velocity v [reduced units]")
+    ax.set_title("Phase Space (v vs x, Reduced Units)")
+    ax.set_aspect("equal", "box")
+    apply_major_grid(ax)
+    disable_offset_text(ax)
+    ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1.0), borderaxespad=0.0)
+
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_phase_space_trajectories.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/ho_trajectories.png")
+    print(f"Saved {PLOT_DIR}/results1_ho_phase_space_trajectories.png")
 
 
 def plot_convergence():
     """Log-log convergence plot with fitted slopes."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
 
     x_ex_final, _ = exact_solution(T_FINAL)
 
     manifest = load_manifest()
+
+    def select_fit_points(points):
+        fit_pts = [(dt, err) for dt, err in points if dt <= 0.1]
+        if len(fit_pts) < 3:
+            fit_pts = sorted(points)[: max(3, len(points) // 2)]
+        return sorted(fit_pts)
 
     for integ in INTEGRATORS:
         errors = []
@@ -3111,7 +3633,7 @@ def plot_convergence():
             x_num_final = data['x'][-1]
             err = abs(x_num_final - x_ex_final)
 
-            if err > 1e-16:  # skip if at machine epsilon
+            if err > 1e-14:  # skip if at/near machine epsilon
                 errors.append(err)
                 dts.append(dt)
 
@@ -3119,42 +3641,156 @@ def plot_convergence():
             print(f"Warning: not enough data for {integ} convergence")
             continue
 
-        dts = np.array(dts)
-        errors = np.array(errors)
+        dts = np.array(dts, dtype=float)
+        errors = np.array(errors, dtype=float)
+        raw_pts = sorted([(float(dt), float(err)) for dt, err in zip(dts, errors)])
+        fit_pts = select_fit_points(raw_pts)
+        if len(fit_pts) < 2:
+            print(f"Warning: not enough asymptotic-fit points for {integ} convergence")
+            continue
 
-        log_dt = np.log10(dts)
-        log_err = np.log10(errors)
+        fit_dts = np.array([p[0] for p in fit_pts], dtype=float)
+        fit_errs = np.array([p[1] for p in fit_pts], dtype=float)
+        log_dt = np.log10(fit_dts)
+        log_err = np.log10(fit_errs)
         slope, intercept = np.polyfit(log_dt, log_err, 1)
 
-        color = INTEGRATOR_COLORS[integ]
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
         expected = INTEGRATOR_ORDERS[integ]
         label = f"{INTEGRATOR_LABELS[integ]} (slope={slope:.2f}, expected {expected})"
 
-        ax.loglog(dts, errors, 'o-', color=color, label=label,
-                  linewidth=2, markersize=6)
+        ax.loglog(
+            dts,
+            errors,
+            marker="o",
+            linestyle=style["linestyle"],
+            color=color,
+            label=label,
+            linewidth=style["linewidth"],
+        )
 
         # Reference slope line
         dt_ref = np.array([min(dts), max(dts)])
         err_ref = errors[0] * (dt_ref / dts[0]) ** expected
-        ax.loglog(dt_ref, err_ref, '--', color=color, alpha=0.4, linewidth=1)
+        ax.loglog(dt_ref, err_ref, "--", color=color, alpha=0.45, linewidth=1.2)
 
-    ax.set_xlabel(r'$\Delta t$')
+    ax.set_xlabel(r'$\Delta t\ [1/\omega]$')
     ax.set_ylabel(r'$|x_{num}(T) - x_{exact}(T)|$')
-    ax.set_title('Convergence: Position Error vs Timestep')
-    ax.legend(fontsize=10)
-    ax.grid(True, which='both')
+    ax.set_title('Convergence: Position Error vs Timestep (Reduced Units)')
+    ax.legend(loc="best")
+    apply_major_grid(ax)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_convergence.png")
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_convergence_endpoint_position_error.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/ho_convergence.png")
+    print(f"Saved {PLOT_DIR}/results1_ho_convergence_endpoint_position_error.png")
+
+
+def phase_space_error_metric(data, metric):
+    """Whole-trajectory phase-space error metrics against exact x(t), v(t)."""
+    t = np.asarray(data["time"], dtype=float)
+    x = np.asarray(data["x"], dtype=float)
+    v = np.asarray(data["v"], dtype=float)
+    x_exact, v_exact = exact_solution(t)
+    e = np.sqrt((x - x_exact) ** 2 + (v - v_exact) ** 2)
+    finite = np.isfinite(e)
+    if not np.any(finite):
+        return np.nan
+    e = e[finite]
+    if metric == "max":
+        return float(np.max(e))
+    if metric == "rms":
+        return float(np.sqrt(np.mean(e ** 2)))
+    raise ValueError(f"Unknown phase-space error metric: {metric}")
+
+
+def plot_phase_error_convergence(metric, out_name, y_label, title):
+    """Log-log convergence plot for a whole-trajectory phase-space error metric."""
+    os.makedirs(PLOT_DIR, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+    manifest = load_manifest()
+    slopes = {}
+
+    def select_fit_points(points):
+        fit_pts = [(dt, err) for dt, err in points if dt <= 0.1]
+        if len(fit_pts) < 3:
+            fit_pts = sorted(points)[: max(3, len(points) // 2)]
+        return sorted(fit_pts)
+
+    for integ in INTEGRATORS:
+        errors = []
+        dts = []
+
+        for dt in DT_VALUES:
+            dt_key = str(dt).replace(".", "_")
+            fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
+            if not os.path.exists(fpath):
+                continue
+
+            data = load_csv(fpath)
+            err = phase_space_error_metric(data, metric)
+            if np.isfinite(err) and err > 1e-16:
+                errors.append(err)
+                dts.append(dt)
+
+        if len(dts) < 2:
+            print(f"Warning: not enough data for {integ} {metric} convergence")
+            continue
+
+        dts = np.array(dts, dtype=float)
+        errors = np.array(errors, dtype=float)
+        raw_pts = sorted([(float(dt), float(err)) for dt, err in zip(dts, errors)])
+        fit_pts = select_fit_points(raw_pts)
+        if len(fit_pts) < 2:
+            print(f"Warning: not enough asymptotic-fit points for {integ} {metric} convergence")
+            continue
+
+        fit_dts = np.array([p[0] for p in fit_pts], dtype=float)
+        fit_errs = np.array([p[1] for p in fit_pts], dtype=float)
+        log_dt = np.log10(fit_dts)
+        log_err = np.log10(fit_errs)
+        slope, _intercept = np.polyfit(log_dt, log_err, 1)
+        slopes[integ] = slope
+
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
+        expected = INTEGRATOR_ORDERS[integ]
+        label = f"{INTEGRATOR_LABELS[integ]} (slope={slope:.2f}, expected {expected})"
+
+        ax.loglog(
+            dts,
+            errors,
+            marker="o",
+            linestyle=style["linestyle"],
+            color=color,
+            label=label,
+            linewidth=style["linewidth"],
+        )
+
+        dt_ref = np.array([min(dts), max(dts)])
+        err_ref = errors[0] * (dt_ref / dts[0]) ** expected
+        ax.loglog(dt_ref, err_ref, "--", color=color, alpha=0.45, linewidth=1.2)
+
+    ax.set_xlabel(r"$\Delta t\ [1/\omega]$")
+    ax.set_ylabel(y_label)
+    ax.set_title(title)
+    ax.legend(loc="best")
+    apply_major_grid(ax)
+
+    save_figure(fig, f"{PLOT_DIR}/{out_name}")
+    plt.close()
+    print(f"Saved {PLOT_DIR}/{out_name}")
+    if slopes:
+        ordered = ", ".join(f"{k}={slopes[k]:.2f}" for k in INTEGRATORS if k in slopes)
+        print(f"Fitted slopes ({metric}): {ordered}")
 
 
 def plot_energy_conservation():
     """Energy conservation comparison for all integrators."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
 
     manifest = load_manifest()
     
@@ -3168,18 +3804,27 @@ def plot_energy_conservation():
         t = data['time']
         E = data['E_total']
 
-        color = INTEGRATOR_COLORS[integ]
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
         label = INTEGRATOR_LABELS[integ]
 
         E0 = E[0]
         rel_dev = (E - E0) / abs(E0) if abs(E0) > 1e-30 else E - E0
-        ax.plot(t, rel_dev, color=color, label=label, linewidth=1.5)
+        ax.plot(
+            t,
+            rel_dev,
+            color=color,
+            linestyle=style["linestyle"],
+            label=label,
+            linewidth=style["linewidth"],
+        )
 
-    ax.set_xlabel('Time')
-    ax.set_ylabel(r'$(E - E_0) / |E_0|$')
-    ax.set_title('HO Energy Conservation (dt=0.01)')
-    ax.legend(fontsize=10)
-    ax.grid(True)
+    ax.set_xlabel(r'Time $[1/\omega]$')
+    ax.set_ylabel(r'$(E - E_0) / |E_0|$ (dimensionless; $E$ in CSV is SI J)')
+    ax.set_title('HO Energy Conservation (relative drift, dt=0.01)')
+    ax.legend(loc="best")
+    apply_major_grid(ax)
+    disable_offset_text(ax)
 
     # Add zoomed inset to show VV vs RK4 near zero
     from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -3195,31 +3840,44 @@ def plot_energy_conservation():
         E = data['E_total']
         E0 = E[0]
         rel_dev = (E - E0) / abs(E0) if abs(E0) > 1e-30 else E - E0
-        axins.plot(t, rel_dev, color=INTEGRATOR_COLORS[integ], linewidth=1.5)
+        style = INTEGRATOR_STYLE[integ]
+        axins.plot(
+            t,
+            rel_dev,
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=style["linewidth"],
+        )
     
-    axins.set_title('Zoom: VV vs RK4')
-    axins.grid(True)
-    axins.tick_params(axis='both', which='major', labelsize=8)
-    
-    # Optional: adjust y-limits of inset manually if needed
-    # (Leaving it auto-scaled, which usually captures the O(1e-4) VV vs O(1e-15) RK4 nicely.)
+    axins.set_title("Zoom: VV vs RK4", fontsize=9)
+    axins.tick_params(axis="both", which="major", labelsize=8)
+    axins.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1e}"))
+    apply_major_grid(axins)
+    disable_offset_text(axins)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/ho_energy.png")
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_energy_conservation.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/ho_energy.png")
+    print(f"Saved {PLOT_DIR}/results1_ho_energy_conservation.png")
 
 
 if __name__ == "__main__":
+    apply_plot_style()
     if "--run" in sys.argv:
         run_ho_simulations()
 
     plot_trajectories()
+    plot_phase_space()
     plot_convergence()
+    plot_phase_error_convergence(
+        metric="rms",
+        out_name="results1_ho_convergence_rms_phase_space_error.png",
+        y_label=r"$\mathrm{RMS}_t \sqrt{(x_{num}-x_{exact})^2 + (v_{num}-v_{exact})^2}$",
+        title="Convergence: RMS Phase-Space Error vs Timestep (Reduced Units)",
+    )
     plot_energy_conservation()
 ```
 
-### `scripts/plot_lj.py` (347 lines)
+### `scripts/plot_lj.py` (717 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -3227,44 +3885,85 @@ if __name__ == "__main__":
 plot_lj.py — Generate Lennard-Jones / Argon validation plots (Results 2).
 
 Produces:
-  1. Energy conservation: E_kin, E_pot, E_total vs time for Verlet and Euler
-  2. Temperature vs time
-  3. Raw NVE vs equilibrated NVE energy comparison
-  4. g(r) vs r/sigma
-
-Usage:
-  python3 scripts/plot_lj.py
+  - out/plots/results2_lj_brief_energy_100step_production.png
+  - out/plots/results2_lj_extended_energy_stability.png
+  - out/plots/results2_lj_brief_temperature_100step_production.png
+  - out/plots/results2_lj_extended_temperature_stability.png
+  - out/plots/results2_lj_rdf_comparison_rahman1964.png
 """
 
+import json
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+from plot_style import (
+    COLOR_ACCENT,
+    COLOR_EULER,
+    COLOR_REFERENCE,
+    COLOR_VERLET,
+    INTEGRATOR_STYLE,
+    apply_major_grid,
+    apply_plot_style,
+    disable_offset_text,
+    save_figure,
+)
 
 OUT_DIR = "out"
-LJ_DIR = "out/lj"
 PLOT_DIR = "out/plots"
 
-SIGMA = 3.4e-10
 EPSILON_OVER_KB = 120.0
 KB = 1.380649e-23
 EPSILON = KB * EPSILON_OVER_KB
+SIGMA_ANGSTROM = 3.4
+TEMP_DIVERGENCE_K = 1.0e4
 
+RAHMAN_R_A = np.array([3.0, 3.7, 5.2, 7.0, 8.5, 10.4], dtype=float)
+RAHMAN_G = np.array([0.00, 2.85, 0.65, 1.25, 0.90, 1.05], dtype=float)
 
-import json
 
 def load_manifest():
-    with open("out/manifest.json", "r") as f:
-        return json.load(f)
+    manifest_path = f"{OUT_DIR}/manifest.json"
+    if not os.path.exists(manifest_path):
+        print(f"Warning: manifest not found at {manifest_path}")
+        return {}
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except json.JSONDecodeError as exc:
+        print(f"Warning: failed to parse manifest JSON: {exc}")
+        return {}
+
+
+def nested_get(obj, dotted, default=""):
+    cur = obj
+    for key in dotted.split("."):
+        if not isinstance(cur, dict) or key not in cur:
+            return default
+        cur = cur[key]
+    return cur
+
 
 def load_csv(filepath):
     """Load CSV with headers, skipping comment lines."""
-    def filter_comments(f):
-        for line in f:
-            if line.strip() and not line.startswith('#'):
+
+    def filter_comments(handle):
+        for line in handle:
+            if line.strip() and not line.startswith("#"):
                 yield line
-    with open(filepath, 'r') as f:
+
+    with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
         lines = list(filter_comments(f))
-    return np.genfromtxt(lines, delimiter=',', names=True)
+    if not lines:
+        return None
+    data = np.genfromtxt(lines, delimiter=",", names=True)
+    if data is None:
+        return None
+    if getattr(data, "shape", ()) == ():
+        data = np.array([data], dtype=data.dtype)
+    return data
 
 
 def parse_csv_metadata(filepath):
@@ -3297,281 +3996,610 @@ def parse_int_meta(meta, key, default):
         return default
 
 
-def first_prod_index(steps, production_start):
-    idx = np.where(steps >= production_start)[0]
-    return int(idx[0]) if idx.size > 0 else 0
+def parse_float_meta(meta, key, default):
+    if key not in meta:
+        return default
+    try:
+        return float(meta[key])
+    except ValueError:
+        return default
 
 
-def plot_energy_conservation():
-    """Plot E_kin, E_pot, E_total vs time for Verlet and Euler."""
+def get_meta_value(meta, preferred_key, fallback_key, default):
+    if preferred_key in meta:
+        return parse_int_meta(meta, preferred_key, default)
+    if fallback_key in meta:
+        return parse_int_meta(meta, fallback_key, default)
+    return default
+
+
+def finite_or_nan(arr):
+    arr = np.asarray(arr, dtype=float)
+    return np.where(np.isfinite(arr), arr, np.nan)
+
+
+def cubic_spline_interpolate(x, y, n_points=300):
+    """Natural cubic spline interpolation without external dependencies."""
+    x = np.asarray(x, dtype=float)
+    y = np.asarray(y, dtype=float)
+    n = len(x)
+    if n < 3:
+        x_dense = np.linspace(x[0], x[-1], n_points)
+        y_dense = np.interp(x_dense, x, y)
+        return x_dense, y_dense
+
+    h = np.diff(x)
+    if np.any(h <= 0):
+        x_dense = np.linspace(np.min(x), np.max(x), n_points)
+        y_dense = np.interp(x_dense, x, y)
+        return x_dense, y_dense
+
+    alpha = np.zeros(n, dtype=float)
+    for i in range(1, n - 1):
+        alpha[i] = (3.0 / h[i]) * (y[i + 1] - y[i]) - (3.0 / h[i - 1]) * (y[i] - y[i - 1])
+
+    l = np.ones(n, dtype=float)
+    mu = np.zeros(n, dtype=float)
+    z = np.zeros(n, dtype=float)
+
+    for i in range(1, n - 1):
+        l[i] = 2.0 * (x[i + 1] - x[i - 1]) - h[i - 1] * mu[i - 1]
+        mu[i] = h[i] / l[i]
+        z[i] = (alpha[i] - h[i - 1] * z[i - 1]) / l[i]
+
+    c = np.zeros(n, dtype=float)
+    b = np.zeros(n - 1, dtype=float)
+    d = np.zeros(n - 1, dtype=float)
+
+    for j in range(n - 2, -1, -1):
+        c[j] = z[j] - mu[j] * c[j + 1]
+        b[j] = (y[j + 1] - y[j]) / h[j] - (h[j] * (c[j + 1] + 2.0 * c[j])) / 3.0
+        d[j] = (c[j + 1] - c[j]) / (3.0 * h[j])
+
+    x_dense = np.linspace(x[0], x[-1], n_points)
+    seg = np.searchsorted(x, x_dense, side="right") - 1
+    seg = np.clip(seg, 0, n - 2)
+    dx = x_dense - x[seg]
+    y_dense = y[seg] + b[seg] * dx + c[seg] * dx * dx + d[seg] * dx * dx * dx
+    return x_dense, y_dense
+
+
+def first_nonfinite_index(*arrays):
+    if not arrays:
+        return None
+    invalid = np.zeros(len(arrays[0]), dtype=bool)
+    for arr in arrays:
+        invalid |= ~np.isfinite(arr)
+    idx = np.where(invalid)[0]
+    return int(idx[0]) if idx.size > 0 else None
+
+
+def first_exceed_index(arr, threshold):
+    idx = np.where(np.abs(arr) > threshold)[0]
+    return int(idx[0]) if idx.size > 0 else None
+
+
+def first_finite_prod_index(steps, etot, production_start):
+    for i in range(len(steps)):
+        if steps[i] >= production_start and np.isfinite(etot[i]):
+            return i
+    for i in range(len(steps)):
+        if np.isfinite(etot[i]):
+            return i
+    return None
+
+
+def divergence_crop_limit(div_time_ps, max_time_ps):
+    if div_time_ps is None or not np.isfinite(div_time_ps):
+        return None
+    pad = max(0.15, 0.1 * div_time_ps)
+    return float(min(max_time_ps, div_time_ps + pad))
+
+
+def load_series(filepath):
+    data = load_csv(filepath)
+    if data is None or len(data) == 0:
+        return None
+    names = set(data.dtype.names or [])
+    required = {"time", "E_kin", "E_pot", "E_total", "temperature"}
+    if not required.issubset(names):
+        print(f"Warning: missing required columns in {filepath}; skipping")
+        return None
+
+    meta = parse_csv_metadata(filepath)
+    steps = np.asarray(data["step"], dtype=float) if "step" in names else np.arange(len(data), dtype=float)
+    time_ps = np.asarray(data["time"], dtype=float) * 1e12
+
+    ekin_raw = np.asarray(data["E_kin"], dtype=float) / EPSILON
+    epot_raw = np.asarray(data["E_pot"], dtype=float) / EPSILON
+    etot_raw = np.asarray(data["E_total"], dtype=float) / EPSILON
+    temp_raw = np.asarray(data["temperature"], dtype=float)
+
+    divergence_idx_nonfinite = first_nonfinite_index(ekin_raw, epot_raw, etot_raw, temp_raw)
+    divergence_idx_temp = first_exceed_index(temp_raw, TEMP_DIVERGENCE_K)
+
+    divergence_candidates = [idx for idx in [divergence_idx_nonfinite, divergence_idx_temp] if idx is not None]
+    divergence_idx = min(divergence_candidates) if divergence_candidates else None
+    divergence_reason = None
+    if divergence_idx is not None:
+        if divergence_idx_nonfinite is not None and divergence_idx == divergence_idx_nonfinite:
+            divergence_reason = "non-finite values"
+        else:
+            divergence_reason = f"|T| > {TEMP_DIVERGENCE_K:.0e} K"
+
+    # Equivalent to DataFrame.replace([np.inf, -np.inf], np.nan) without pandas.
+    ekin = finite_or_nan(ekin_raw)
+    epot = finite_or_nan(epot_raw)
+    etot = finite_or_nan(etot_raw)
+    temp = finite_or_nan(temp_raw)
+
+    # If divergence starts, keep only the finite prefix for plotting clarity.
+    if divergence_idx is not None:
+        ekin[divergence_idx:] = np.nan
+        epot[divergence_idx:] = np.nan
+        etot[divergence_idx:] = np.nan
+        temp[divergence_idx:] = np.nan
+
+    divergence_step = int(steps[divergence_idx]) if divergence_idx is not None else None
+    divergence_time_ps = float(time_ps[divergence_idx]) if divergence_idx is not None else None
+
+    return {
+        "meta": meta,
+        "steps": steps,
+        "time_ps": finite_or_nan(time_ps),
+        "ekin_eps": ekin,
+        "epot_eps": epot,
+        "etot_eps": etot,
+        "temperature": temp,
+        "has_nonfinite": divergence_idx is not None,
+        "divergence_step": divergence_step,
+        "divergence_time_ps": divergence_time_ps,
+        "divergence_reason": divergence_reason,
+    }
+
+
+def plot_energy_for_run(manifest, run_key, config, out_name):
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    fig, axes = plt.subplots(2, 2, figsize=(14, 9), sharex="col", constrained_layout=True)
+    any_data = False
+    euler_divergence_time_ps = None
+    max_time_ps = 0.0
 
-    configs = [
-        ("verlet_100", "Velocity-Verlet (NVE)", "#2ecc71"),
-        ("euler_100", "Forward Euler", "#e74c3c"),
-    ]
+    for row, integrator in enumerate(config["integrators"]):
+        series_key = integrator["series_key"]
+        label = integrator["label"]
+        style = INTEGRATOR_STYLE[integrator["style_key"]]
+        color = style["color"]
+        linestyle = style["linestyle"]
+        linewidth = style["linewidth"]
 
-    manifest = load_manifest()
-    
-    for idx, (key, label, color) in enumerate(configs):
-        fpath = manifest.get("lj_production", {}).get(key, "")
-        if not os.path.exists(fpath):
-            print(f"Warning: {fpath} not found, skipping")
+        fpath = nested_get(manifest, f"{run_key}.{series_key}")
+        if not fpath or not os.path.exists(fpath):
+            print(f"Warning: missing {run_key}.{series_key}; skipping")
             continue
 
-        data = load_csv(fpath)
-        meta = parse_csv_metadata(fpath)
-        production_start = parse_int_meta(meta, "production_start", 0)
-
-        t = data['time'] * 1e12  # ps
-        steps = data['step'] if 'step' in data.dtype.names else np.arange(len(t))
-        ekin = data['E_kin'] / EPSILON
-        epot = data['E_pot'] / EPSILON
-        etot = data['E_total'] / EPSILON
-
-        ax = axes[idx, 0]
-        ax.plot(t, ekin, label=r'$E_{kin}$', color='tab:red', linewidth=1.5)
-        ax.plot(t, epot, label=r'$E_{pot}$', color='tab:blue', linewidth=1.5)
-        ax.plot(t, etot, label=r'$E_{total}$', color='k', linewidth=2)
-        ax.set_xlabel('Time [ps]')
-        ax.set_ylabel(r'Energy [$\varepsilon$]')
-        ax.set_title(f'{label}: Energy vs Time')
-        ax.legend()
-        ax.grid(True)
-
-        # Relative deviation
-        ax2 = axes[idx, 1]
-        i0 = first_prod_index(steps, production_start)
-        e0 = etot[i0]
-        rel_dev = (etot - e0) / abs(e0) if abs(e0) > 1e-30 else etot - e0
-        ax2.plot(t, rel_dev, color=color, linewidth=1.5)
-        ax2.set_xlabel('Time [ps]')
-        ax2.set_ylabel(r'$\Delta E / |E_{0,\mathrm{prod}}|$')
-        ax2.set_title(f'{label}: Relative Energy Deviation (E0 at step {production_start})')
-        ax2.grid(True)
-
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/lj_energy.png")
-    plt.close()
-    print(f"Saved {PLOT_DIR}/lj_energy.png")
-
-
-def plot_temperature():
-    """Plot temperature vs time."""
-    os.makedirs(PLOT_DIR, exist_ok=True)
-
-    fig, ax = plt.subplots(figsize=(8, 5))
-
-    configs = [
-        ("verlet_100", "Velocity-Verlet", "#2ecc71"),
-        ("euler_100", "Forward Euler", "#e74c3c"),
-    ]
-
-    manifest = load_manifest()
-    drew_prod_line = False
-
-    for key, label, color in configs:
-        fpath = manifest.get("lj_production", {}).get(key, "")
-        if not os.path.exists(fpath):
+        series = load_series(fpath)
+        if series is None:
             continue
+        any_data = True
 
-        data = load_csv(fpath)
-        meta = parse_csv_metadata(fpath)
-        t = data['time'] * 1e12
-        T = data['temperature']
-        ax.plot(t, T, label=label, color=color, linewidth=1.5)
+        steps = series["steps"]
+        t = series["time_ps"]
+        if np.any(np.isfinite(t)):
+            max_time_ps = max(max_time_ps, float(np.nanmax(t)))
+        ekin = series["ekin_eps"]
+        epot = series["epot_eps"]
+        etot = series["etot_eps"]
+        meta = series["meta"]
 
-        rescale_step = parse_int_meta(meta, "rescale_step", -1)
-        dt = float(meta.get("dt", "nan")) if meta else float("nan")
-        if rescale_step >= 0 and np.isfinite(dt):
-            t_prod_ps = rescale_step * dt * 1e12
-            if not drew_prod_line:
-                ax.axvline(
-                    x=t_prod_ps,
-                    color='gray',
-                    linestyle=':',
-                    linewidth=1.5,
-                    alpha=0.8,
-                    label='production start',
-                )
-                drew_prod_line = True
+        ref_idx = first_finite_prod_index(steps, etot, 0)
+        if ref_idx is None:
+            rel_dev = np.full_like(etot, np.nan)
+        else:
+            e0 = etot[ref_idx]
+            if np.isfinite(e0) and abs(e0) > 1e-30:
+                rel_dev = (etot - e0) / abs(e0)
+            else:
+                rel_dev = etot - e0
 
-    ax.axhline(y=94.4, color='k', linestyle='--', alpha=0.5, label='T = 94.4 K')
-    ax.set_xlabel('Time [ps]')
-    ax.set_ylabel('Temperature [K]')
-    ax.set_title('Temperature vs Time [K] (Time in ps)')
-    ax.legend()
-    ax.grid(True)
+        label_plot = label
+        if series["has_nonfinite"]:
+            label_plot = f"{label} (divergent tail omitted)"
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/lj_temperature.png")
-    plt.close()
-    print(f"Saved {PLOT_DIR}/lj_temperature.png")
+        ax_e = axes[row, 0]
+        ax_e.plot(t, ekin, label=r"$E_{kin}$", color=COLOR_ACCENT, linewidth=1.6)
+        ax_e.plot(t, epot, label=r"$E_{pot}$", color=COLOR_VERLET, linewidth=1.6)
+        ax_e.plot(t, etot, label=r"$E_{total}$", color="k", linewidth=2.0)
+        ax_e.set_ylabel(r"Energy [$\varepsilon$]")
+        ax_e.set_title(f"{label_plot}: Energy vs Time")
+        apply_major_grid(ax_e)
+        disable_offset_text(ax_e)
+        ax_e.legend(loc="best")
 
+        ax_d = axes[row, 1]
+        ax_d.plot(t, rel_dev, color=color, linestyle=linestyle, linewidth=linewidth)
+        ax_d.set_ylabel("Relative Energy Deviation")
+        ax_d.set_title(f"{label_plot}: Relative Energy Deviation")
+        apply_major_grid(ax_d)
+        disable_offset_text(ax_d)
 
-def plot_equilibrated_comparison():
-    """Compare raw NVE vs equilibrated NVE energy deviation."""
-    os.makedirs(PLOT_DIR, exist_ok=True)
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
-
-    # --- Left panel: full trajectories ---
-    configs = [
-        ("verlet_100", "Raw NVE (100 steps)", "#e74c3c", '-'),
-        ("verlet_200_equilibrated", "Equilibrated (rescale→100, NVE→200)", "#2ecc71", '-'),
-    ]
-
-    manifest = load_manifest()
-
-    for key, label, color, ls in configs:
-        fpath = manifest.get("lj_production", {}).get(key, "")
-        if not os.path.exists(fpath):
-            print(f"  {fpath} not found, skipping")
-            continue
-
-        data = load_csv(fpath)
-        meta = parse_csv_metadata(fpath)
-        production_start = parse_int_meta(meta, "production_start", 0)
-        step = data['step']
-        etot = data['E_total'] / EPSILON
-        i0 = first_prod_index(step, production_start)
-        e0 = etot[i0]
-        rel_dev = (etot - e0) / abs(e0)
-
-        ax1.plot(step, rel_dev, color=color, label=label, linewidth=1.5, linestyle=ls)
-        ax1.axvline(x=production_start, color=color, linestyle=':', linewidth=1.0, alpha=0.6)
-
-    ax1.set_xlabel('Step')
-    ax1.set_ylabel(r'$\Delta E / |E_{0,\mathrm{prod}}|$')
-    ax1.set_title('Energy Deviation: Full Trajectories')
-    ax1.legend(fontsize=9)
-    ax1.grid(True)
-
-    # --- Right panel: NVE-only phase comparison ---
-    # Raw NVE: all 100 steps
-    fpath_raw = manifest.get("lj_production", {}).get("verlet_100", "")
-    fpath_eq = manifest.get("lj_production", {}).get("verlet_200_equilibrated", "")
-
-    if os.path.exists(fpath_raw):
-        data = load_csv(fpath_raw)
-        meta = parse_csv_metadata(fpath_raw)
-        production_start = parse_int_meta(meta, "production_start", 0)
-        step = data['step']
-        mask = step >= production_start
-        if np.any(mask):
-            etot = data['E_total'][mask] / EPSILON
-            e0 = etot[0]
-            nve_steps = np.arange(len(etot))
-            drift = abs(etot[-1] - e0) / abs(e0) * 100.0
-            ax2.plot(
-                nve_steps,
-                (etot - e0) / abs(e0),
-                color='tab:red',
-                linewidth=1.5,
-                label=f'Raw NVE (from step {production_start}, drift={drift:.2f}%)',
+        divergence_step = series.get("divergence_step")
+        divergence_time_ps = series.get("divergence_time_ps")
+        divergence_reason = series.get("divergence_reason")
+        if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
+            if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
+                euler_divergence_time_ps = divergence_time_ps
+            ax_e.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
+            ax_d.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
+            note = f"Euler diverged at step {divergence_step}"
+            if divergence_reason:
+                note += f" ({divergence_reason})"
+            ax_e.text(
+                0.02,
+                0.93,
+                note,
+                transform=ax_e.transAxes,
+                fontsize=8,
+                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
+            )
+            ax_d.text(
+                0.02,
+                0.93,
+                note,
+                transform=ax_d.transAxes,
+                fontsize=8,
+                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
             )
 
-    if os.path.exists(fpath_eq):
-        data = load_csv(fpath_eq)
-        meta = parse_csv_metadata(fpath_eq)
-        production_start = parse_int_meta(meta, "production_start", 0)
-        nve_mask = data['step'] >= production_start
-        if np.any(nve_mask):
-            etot_nve = data['E_total'][nve_mask] / EPSILON
-            e0_nve = etot_nve[0]
-            nve_steps = np.arange(len(etot_nve))
-            drift = abs(etot_nve[-1] - e0_nve) / abs(e0_nve) * 100.0
-            ax2.plot(
-                nve_steps,
-                (etot_nve - e0_nve) / abs(e0_nve),
-                color='tab:green',
-                linewidth=1.5,
-                label=f'Post-equilibration NVE (from step {production_start}, drift={drift:.2f}%)',
-            )
-
-    ax2.set_xlabel('Production Step Index')
-    ax2.set_ylabel(r'$\Delta E / |E_{0,\mathrm{prod}}|$')
-    ax2.set_title('Production-Window Energy Conservation Comparison')
-    ax2.legend(fontsize=9)
-    ax2.grid(True)
-
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/lj_equilibrated_comparison.png")
-    plt.close()
-    print(f"Saved {PLOT_DIR}/lj_equilibrated_comparison.png")
-
-
-def plot_rdf():
-    """Plot g(r) radial distribution function."""
-    os.makedirs(PLOT_DIR, exist_ok=True)
-
-    manifest = load_manifest()
-    fpath = manifest.get("lj_gr", "")
-    if not os.path.exists(fpath):
-        print("No g(r) data found. Skipping RDF plot.")
+    if not any_data:
+        plt.close(fig)
+        print(f"Warning: no usable data for {run_key}; skipped {out_name}")
         return
 
-    data = load_csv(fpath)
-    meta_gr = parse_csv_metadata(fpath)
-    gr_start = parse_int_meta(
-        meta_gr,
-        "gr_start",
-        parse_int_meta(meta_gr, "production_start", 0) + parse_int_meta(meta_gr, "gr_discard", 0),
-    )
-    gr_interval = parse_int_meta(meta_gr, "gr_interval", 1)
+    if config.get("crop_to_euler_divergence", False):
+        x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
+        if x_max is not None:
+            for row in range(2):
+                for col in range(2):
+                    axes[row, col].set_xlim(0.0, x_max)
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.plot(data['r_sigma'], data['gr'], '-', color='k', linewidth=1.5)
-    ax.axhline(y=1.0, color='k', linestyle='--', label='g(r) = 1')
-    ax.set_xlabel(r'$r / \sigma$')
-    ax.set_ylabel(r'$g(r)$')
+    axes[1, 0].set_xlabel("Time [ps]")
+    axes[1, 1].set_xlabel("Time [ps]")
+    fig.suptitle(config["energy_title"], fontsize=13)
 
-    try:
-        fpath_energy = manifest.get("lj_gr_energy", "")
-        if os.path.exists(fpath_energy):
-            energy_data = load_csv(fpath_energy)
-            gr_mask = energy_data['step'] >= gr_start
-            if np.any(gr_mask):
-                T_mean = np.mean(energy_data['temperature'][gr_mask])
-                ax.set_title(
-                    rf'Radial Distribution Function (Liquid Argon, '
-                    rf'$\langle T \rangle$ = {T_mean:.0f} K, start={gr_start}, every {gr_interval})'
+    out_path = f"{PLOT_DIR}/{out_name}"
+    save_figure(fig, out_path)
+    plt.close(fig)
+    print(f"Saved {out_path}")
+
+
+def plot_temperature_for_run(manifest, run_key, config, out_name):
+    os.makedirs(PLOT_DIR, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
+    any_data = False
+    drew_prod_line = False
+    plotted_series = []
+    euler_divergence_time_ps = None
+    max_time_ps = 0.0
+    target_temp_k = config.get("target_temperature_k")
+
+    for integrator in config["integrators"]:
+        series_key = integrator["series_key"]
+        label = integrator["label"]
+        style = INTEGRATOR_STYLE[integrator["style_key"]]
+        color = style["color"]
+        linestyle = style["linestyle"]
+        linewidth = style["linewidth"]
+
+        fpath = nested_get(manifest, f"{run_key}.{series_key}")
+        if not fpath or not os.path.exists(fpath):
+            continue
+        series = load_series(fpath)
+        if series is None:
+            continue
+
+        any_data = True
+        t = series["time_ps"]
+        if np.any(np.isfinite(t)):
+            max_time_ps = max(max_time_ps, float(np.nanmax(t)))
+        temp = series["temperature"]
+        meta = series["meta"]
+        label_plot = label
+        if series["has_nonfinite"]:
+            label_plot = f"{label} (divergent tail omitted)"
+
+        ax.plot(t, temp, label=label_plot, color=color, linestyle=linestyle, linewidth=linewidth)
+        plotted_series.append(
+            {
+                "t": t,
+                "temp": temp,
+                "color": color,
+                "linestyle": linestyle,
+                "linewidth": linewidth,
+                "style_key": integrator.get("style_key", ""),
+            }
+        )
+
+        divergence_step = series.get("divergence_step")
+        divergence_time_ps = series.get("divergence_time_ps")
+        divergence_reason = series.get("divergence_reason")
+        if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
+            if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
+                euler_divergence_time_ps = divergence_time_ps
+            ax.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
+            note = f"Euler diverged at step {divergence_step}"
+            if divergence_reason:
+                note += f" ({divergence_reason})"
+            ax.text(
+                0.58,
+                0.92,
+                note,
+                transform=ax.transAxes,
+                fontsize=8,
+                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
+            )
+
+        production_start = get_meta_value(meta, "production_start_step", "production_start", 0)
+        dt = parse_float_meta(meta, "dt", float("nan"))
+        if target_temp_k is None:
+            target_temp_candidate = parse_float_meta(meta, "target_temperature", float("nan"))
+            if np.isfinite(target_temp_candidate):
+                target_temp_k = float(target_temp_candidate)
+        if production_start > 0 and np.isfinite(dt) and not drew_prod_line:
+            ax.axvline(
+                x=production_start * dt * 1e12,
+                color="gray",
+                linestyle=":",
+                linewidth=1.5,
+                alpha=0.8,
+                label="production starts",
+            )
+            drew_prod_line = True
+
+    if not any_data:
+        plt.close(fig)
+        print(f"Warning: no usable data for {run_key}; skipped {out_name}")
+        return
+
+    ax.set_xlabel("Time [ps]")
+    ax.set_ylabel("Temperature [K]")
+    ax.set_title(config["temperature_title"])
+    apply_major_grid(ax)
+    disable_offset_text(ax)
+    if target_temp_k is None:
+        target_temp_k = 94.4
+    if np.isfinite(target_temp_k):
+        ax.axhline(
+            y=target_temp_k,
+            color="#7a7a7a",
+            linestyle="--",
+            linewidth=1.4,
+            alpha=0.55,
+            zorder=0,
+            label=f"Target T = {target_temp_k:.1f} K",
+        )
+
+    ax.legend(loc=config.get("legend_loc", "best"))
+
+    zoom_cfg = config.get("zoom_inset")
+    if zoom_cfg and plotted_series:
+        inset_kwargs = {
+            "width": zoom_cfg.get("width", "30%"),
+            "height": zoom_cfg.get("height", "34%"),
+            "loc": zoom_cfg.get("loc", "lower right"),
+            "borderpad": zoom_cfg.get("borderpad", 0.8),
+        }
+        if "bbox_to_anchor" in zoom_cfg:
+            inset_kwargs["bbox_to_anchor"] = zoom_cfg["bbox_to_anchor"]
+            inset_kwargs["bbox_transform"] = ax.transAxes
+
+        axins = inset_axes(ax, **inset_kwargs)
+        for series_plot in plotted_series:
+            plot_kwargs = {
+                "color": series_plot["color"],
+                "linestyle": series_plot["linestyle"],
+                "linewidth": max(1.2, 0.9 * series_plot["linewidth"]),
+            }
+            # Show discrete samples for Verlet in the inset so short-time variation
+            # reads less like an over-smoothed curve.
+            if series_plot["style_key"] == "verlet":
+                plot_kwargs.update(
+                    {
+                        "linewidth": 1.0,
+                        "marker": "o",
+                        "markersize": 2.0,
+                        "markevery": 1,
+                        "markeredgewidth": 0.0,
+                        "antialiased": False,
+                    }
                 )
-            else:
-                ax.set_title(r'Radial Distribution Function (Liquid Argon)')
-        else:
-            ax.set_title(r'Radial Distribution Function (Liquid Argon)')
-    except Exception as e:
-        print(f"Warning: could not compute T_mean for title: {e}")
-        ax.set_title(r'Radial Distribution Function (Liquid Argon)')
+            axins.plot(series_plot["t"], series_plot["temp"], **plot_kwargs)
+        if "xlim" in zoom_cfg:
+            axins.set_xlim(*zoom_cfg["xlim"])
+        if "ylim" in zoom_cfg:
+            axins.set_ylim(*zoom_cfg["ylim"])
+        if np.isfinite(target_temp_k):
+            axins.axhline(
+                y=target_temp_k,
+                color="#7a7a7a",
+                linestyle="--",
+                linewidth=1.0,
+                alpha=0.5,
+                zorder=0,
+            )
+        axins.set_title(zoom_cfg.get("title", "Zoom"), fontsize=9, pad=4)
+        axins.patch.set_facecolor(zoom_cfg.get("facecolor", "white"))
+        axins.patch.set_alpha(zoom_cfg.get("alpha", 0.96))
+        spine_color = zoom_cfg.get("spine_color", "#333333")
+        spine_width = zoom_cfg.get("spine_width", 1.0)
+        for spine in axins.spines.values():
+            spine.set_color(spine_color)
+            spine.set_linewidth(spine_width)
+        apply_major_grid(axins)
+        disable_offset_text(axins)
+        axins.tick_params(axis="both", which="major", labelsize=8)
 
-    ax.set_xlim(0, 5)
-    ax.legend()
-    ax.grid(True)
+    if config.get("crop_to_euler_divergence", False):
+        x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
+        if x_max is not None:
+            ax.set_xlim(0.0, x_max)
 
-    # Annotate first peak
-    peak_idx = np.argmax(data['gr'])
-    ax.annotate(f"Peak: g({data['r_sigma'][peak_idx]:.2f}σ) = {data['gr'][peak_idx]:.2f}",
-                xy=(data['r_sigma'][peak_idx], data['gr'][peak_idx]),
-                xytext=(2.5, 2.5),
-                arrowprops=dict(arrowstyle='->', color='gray'))
+    out_path = f"{PLOT_DIR}/{out_name}"
+    save_figure(fig, out_path)
+    plt.close(fig)
+    print(f"Saved {out_path}")
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/lj_rdf.png")
-    plt.close()
-    print(f"Saved {PLOT_DIR}/lj_rdf.png")
+
+def plot_rdf(manifest):
+    os.makedirs(PLOT_DIR, exist_ok=True)
+
+    gr_path = nested_get(manifest, "lj_rdf.verlet_long")
+    if not gr_path or not os.path.exists(gr_path):
+        print("No RDF data found at manifest key lj_rdf.verlet_long. Skipping RDF plot.")
+        return
+
+    data = load_csv(gr_path)
+    if data is None or len(data) == 0:
+        print("RDF CSV is empty. Skipping RDF plot.")
+        return
+
+    names = set(data.dtype.names or [])
+    if "r_sigma" not in names or "gr" not in names:
+        print("RDF CSV missing r_sigma/gr columns. Skipping RDF plot.")
+        return
+
+    r_sigma = finite_or_nan(np.asarray(data["r_sigma"], dtype=float))
+    gr = finite_or_nan(np.asarray(data["gr"], dtype=float))
+    rahman_r_sigma = RAHMAN_R_A / SIGMA_ANGSTROM
+    rahman_r_smooth, rahman_g_smooth = cubic_spline_interpolate(rahman_r_sigma, RAHMAN_G, n_points=300)
+    rahman_g_smooth = np.clip(rahman_g_smooth, 0.0, None)
+    fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+    ax.plot(
+        rahman_r_smooth,
+        rahman_g_smooth,
+        color=COLOR_EULER,
+        linestyle="--",
+        linewidth=1.8,
+        alpha=0.9,
+        zorder=1,
+    )
+    ax.scatter(rahman_r_sigma, RAHMAN_G, color=COLOR_EULER, s=22, zorder=2, label="Rahman (1964) Fig. 2")
+    ax.plot(r_sigma, gr, color="k", linewidth=2.0, zorder=3, label="Present Work (Verlet, NVE)")
+    ax.axhline(y=1.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.2)
+
+    title = "RDF: Present Work vs Rahman (1964)"
+
+    ax.set_title(title)
+    ax.set_xlabel(r"Distance $r/\sigma$")
+    ax.set_ylabel("g(r)")
+    xmax = np.nanmax(np.concatenate([r_sigma[np.isfinite(r_sigma)], rahman_r_sigma])) if np.any(np.isfinite(r_sigma)) else np.max(rahman_r_sigma)
+    ax.set_xlim(0.0, max(3.3, 1.05 * float(xmax)))
+    ax.set_ylim(bottom=0.0)
+    secax = ax.secondary_xaxis(
+        "top",
+        functions=(lambda x: x * SIGMA_ANGSTROM, lambda x: x / SIGMA_ANGSTROM),
+    )
+    secax.set_xlabel("Distance r (Å)")
+    apply_major_grid(ax)
+    disable_offset_text(ax)
+    ax.legend(loc="best")
+
+    out_path = f"{PLOT_DIR}/results2_lj_rdf_comparison_rahman1964.png"
+    save_figure(fig, out_path)
+    plt.close(fig)
+    print(f"Saved {out_path}")
+
+
+def safe_plot(name, fn, *args):
+    try:
+        fn(*args)
+    except Exception as exc:
+        print(f"Warning: {name} failed: {exc}")
+
+
+def main():
+    apply_plot_style()
+    manifest = load_manifest()
+
+    brief_cfg = {
+        "integrators": [
+            {"series_key": "verlet", "label": "Velocity-Verlet", "style_key": "verlet"},
+            {"series_key": "euler", "label": "Forward Euler", "style_key": "euler"},
+        ],
+        "energy_title": "Brief (required): Energy vs Time",
+        "temperature_title": "Argon LJ (required run): Temperature vs Time (100-step NVE production)",
+        "production_only_note": False,
+    }
+    extended_cfg = {
+        "integrators": [
+            {"series_key": "verlet_600", "label": "Velocity-Verlet", "style_key": "verlet"},
+            {"series_key": "euler_600", "label": "Forward Euler", "style_key": "euler"},
+        ],
+        "energy_title": "Argon LJ (extended optional): Energy vs Time",
+        "temperature_title": "Argon LJ (extended optional): Temperature vs Time",
+        "crop_to_euler_divergence": True,
+        "production_only_note": False,
+        "legend_loc": "upper left",
+        "zoom_inset": {
+            "xlim": (0.0, 1.15),
+            "ylim": (75.0, 130.0),
+            "title": "Zoom near start (75-130 K)",
+            "width": "36%",
+            "height": "38%",
+            "loc": "center left",
+            "bbox_to_anchor": (0.06, 0.0, 1.0, 1.0),
+            "borderpad": 1.0,
+            "facecolor": "#fcfcfc",
+            "alpha": 0.97,
+            "spine_color": "#2f2f2f",
+            "spine_width": 1.0,
+        },
+    }
+
+    safe_plot(
+        "brief energy",
+        plot_energy_for_run,
+        manifest,
+        "lj_brief",
+        brief_cfg,
+        "results2_lj_brief_energy_100step_production.png",
+    )
+    safe_plot(
+        "brief temperature",
+        plot_temperature_for_run,
+        manifest,
+        "lj_brief",
+        brief_cfg,
+        "results2_lj_brief_temperature_100step_production.png",
+    )
+
+    safe_plot(
+        "extended energy",
+        plot_energy_for_run,
+        manifest,
+        "lj_extended",
+        extended_cfg,
+        "results2_lj_extended_energy_stability.png",
+    )
+    safe_plot(
+        "extended temperature",
+        plot_temperature_for_run,
+        manifest,
+        "lj_extended",
+        extended_cfg,
+        "results2_lj_extended_temperature_stability.png",
+    )
+
+    safe_plot("rdf", plot_rdf, manifest)
 
 
 if __name__ == "__main__":
-    plot_energy_conservation()
-    plot_temperature()
-    plot_equilibrated_comparison()
-    plot_rdf()
+    main()
 ```
 
-### `scripts/plot_scaling.py` (229 lines)
+### `scripts/plot_scaling.py` (250 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -3596,6 +4624,17 @@ import os
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+
+from plot_style import (
+    COLOR_EULER,
+    COLOR_REFERENCE,
+    COLOR_RK4,
+    COLOR_VERLET,
+    apply_major_grid,
+    apply_plot_style,
+    disable_offset_text,
+    save_figure,
+)
 
 PLOT_DIR = "out/plots"
 
@@ -3685,51 +4724,60 @@ def plot_strong_scaling():
         P_fit = np.linspace(1, max(P) * 1.1, 100)
         S_fit = amdahl(P_fit, f_fit)
     
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    fig, axes = plt.subplots(1, 3, figsize=(15.5, 4.8), constrained_layout=True)
 
     # --- Panel 1: Speedup ---
     ax1 = axes[0]
-    ax1.plot(P, speedup, 'o-', color='tab:green', linewidth=2, markersize=8, label='Measured')
-    ax1.plot(P, P.astype(float), 'k--', alpha=0.5, linewidth=1.5, label='Ideal (S=P)')
+    ax1.plot(P, speedup, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label="Measured")
+    ax1.plot(P, P.astype(float), "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label="Ideal (S=P)")
     if f_fit is not None:
-        ax1.plot(P_fit, S_fit, '-', color='tab:red', linewidth=1.5,
-                 label=f'Amdahl fit (f={f_fit:.4f})')
-    ax1.set_xlabel('Number of Processes P')
-    ax1.set_ylabel('Speedup S(P)')
-    ax1.set_title('Strong Scaling: Speedup')
-    ax1.legend(fontsize=10)
-    ax1.grid(True)
+        ax1.plot(P_fit, S_fit, "-", color=COLOR_EULER, linewidth=1.6, label=f"Amdahl fit (f={f_fit:.4f})")
+    ax1.set_xlabel("Number of Processes P")
+    ax1.set_ylabel("Speedup S(P)")
+    ax1.set_title("Strong Scaling: Speedup")
+    ax1.legend(loc="best")
+    apply_major_grid(ax1)
+    disable_offset_text(ax1)
 
     # --- Panel 2: Efficiency ---
     ax2 = axes[1]
-    ax2.plot(P, efficiency, 'o-', color='tab:blue', linewidth=2, markersize=8)
-    ax2.axhline(y=1.0, color='k', linestyle='--', alpha=0.5)
-    ax2.set_xlabel('Number of Processes P')
-    ax2.set_ylabel('Efficiency E(P) = S(P)/P')
-    ax2.set_title('Strong Scaling: Efficiency')
+    ax2.plot(P, efficiency, "o-", color=COLOR_RK4, linewidth=2.0, markersize=6, label="Measured efficiency")
+    ax2.axhline(y=1.0, color=COLOR_REFERENCE, linestyle="--", alpha=0.9, linewidth=1.3, label="Ideal (E=1)")
+    ax2.set_xlabel("Number of Processes P")
+    ax2.set_ylabel("Efficiency E(P) = S(P)/P")
+    ax2.set_title("Strong Scaling: Efficiency")
     ax2.set_ylim(0, 1.15)
-    ax2.grid(True)
+    ax2.legend(loc="best")
+    apply_major_grid(ax2)
+    disable_offset_text(ax2)
 
     # --- Panel 3: Stacked bar — Compute vs Communication ---
     ax3 = axes[2]
     x_pos = np.arange(len(P))
     bar_width = 0.6
     compute_display = np.maximum(compute, 0)
-    ax3.bar(x_pos, compute_display, bar_width, label='Compute', color='tab:green', alpha=0.8)
-    ax3.bar(x_pos, comm, bar_width, bottom=compute_display, label='Communication',
-            color='tab:red', alpha=0.8)
+    ax3.bar(x_pos, compute_display, bar_width, label="Compute", color=COLOR_VERLET, alpha=0.85)
+    ax3.bar(
+        x_pos,
+        comm,
+        bar_width,
+        bottom=compute_display,
+        label="Communication",
+        color=COLOR_EULER,
+        alpha=0.85,
+    )
     ax3.set_xticks(x_pos)
     ax3.set_xticklabels([str(p) for p in P])
-    ax3.set_xlabel('Number of Processes P')
-    ax3.set_ylabel('Wall Time [s]')
-    ax3.set_title('Compute vs Communication Time')
-    ax3.legend(fontsize=10)
-    ax3.grid(True, axis='y')
+    ax3.set_xlabel("Number of Processes P")
+    ax3.set_ylabel("Wall Time [s]")
+    ax3.set_title("Compute vs Communication Time")
+    ax3.legend(loc="best")
+    apply_major_grid(ax3, axis="y")
+    disable_offset_text(ax3)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/scaling_strong.png")
+    save_figure(fig, f"{PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/scaling_strong.png")
+    print(f"Saved {PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
 
     if f_fit is not None:
         print(f"  Amdahl serial fraction f = {f_fit:.6f}")
@@ -3762,50 +4810,116 @@ def plot_size_scaling():
         log_wall = np.log10(wall[mask])
         slope_wall, intercept_wall = np.polyfit(log_N, log_wall, 1)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.5, 4.8), constrained_layout=True)
 
     wall_label = 'Wall time'
     if slope_wall is not None:
         wall_label += f' (O(N^{slope_wall:.2f}))'
-    ax1.loglog(N, wall, 'o-', color='tab:green', linewidth=2, markersize=8, label=wall_label)
+    ax1.loglog(N, wall, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label=wall_label)
     
     comp_label = 'Compute time'
     if slope_comp is not None:
         comp_label += f' (O(N^{slope_comp:.2f}))'
-    ax1.loglog(N, compute, '^-', color='tab:orange', linewidth=2, markersize=8, label=comp_label)
+    ax1.loglog(N, compute, "^-", color=COLOR_RK4, linewidth=2.0, markersize=6, label=comp_label)
 
-    ax1.loglog(N, comm, 's--', color='tab:red', linewidth=1.5, markersize=6,
-               label='Comm time', alpha=0.7)
+    ax1.loglog(N, comm, "s--", color=COLOR_EULER, linewidth=1.5, markersize=5, label="Comm time", alpha=0.9)
     N_ref = np.array([min(N), max(N)])
     t_ref = wall[-1] * (N_ref / N[-1]) ** 2
-    ax1.loglog(N_ref, t_ref, 'k--', alpha=0.4, linewidth=1.5, label=r'$\sim N^2$ reference')
-    ax1.set_xlabel('Number of Particles N')
-    ax1.set_ylabel('Time [s]')
-    ax1.set_title('Size Scaling (P=16)')
-    ax1.legend(fontsize=10)
-    ax1.grid(True, which='both')
+    ax1.loglog(N_ref, t_ref, "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label=r"$\sim N^2$ reference")
+    ax1.set_xlabel("Number of Particles N")
+    ax1.set_ylabel("Time [s]")
+    ax1.set_title("Size Scaling (P=16)")
+    ax1.legend(loc="best")
+    apply_major_grid(ax1)
 
     comm_frac = comm / wall * 100
-    ax2.plot(N, comm_frac, 'o-', color='tab:red', linewidth=2, markersize=8)
-    ax2.set_xlabel('Number of Particles N')
-    ax2.set_ylabel('Communication Fraction [%]')
-    ax2.set_title('Communication Overhead vs Problem Size')
+    ax2.plot(N, comm_frac, "o-", color=COLOR_EULER, linewidth=2.0, markersize=6)
+    ax2.set_xlabel("Number of Particles N")
+    ax2.set_ylabel("Communication Fraction [%]")
+    ax2.set_title("Communication Overhead vs Problem Size")
     ax2.set_ylim(0, 100)
-    ax2.grid(True)
-    ax2.axhline(y=50, color='k', linestyle='--')
+    apply_major_grid(ax2)
+    ax2.axhline(y=50, color=COLOR_REFERENCE, linestyle="--", linewidth=1.2, label="50% reference")
+    ax2.legend(loc="best")
+    disable_offset_text(ax2)
 
-    plt.tight_layout()
-    plt.savefig(f"{PLOT_DIR}/scaling_size.png")
+    save_figure(fig, f"{PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/scaling_size.png")
+    print(f"Saved {PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
 
 
 if __name__ == "__main__":
+    apply_plot_style()
     plot_strong_scaling()
     plot_size_scaling()
 ```
 
-### `scripts/validate_manifest.py` (99 lines)
+### `scripts/plot_style.py` (60 lines)
+
+```py
+#!/usr/bin/env python3
+"""Shared Matplotlib style helpers for all report plots."""
+
+from matplotlib import pyplot as plt
+
+# Color-blind-friendly palette (Okabe-Ito inspired)
+COLOR_EULER = "#E69F00"     # orange
+COLOR_VERLET = "#0072B2"    # blue
+COLOR_RK4 = "#332288"       # indigo
+COLOR_REFERENCE = "#6C6C6C" # gray
+COLOR_ACCENT = "#CC79A7"    # magenta
+
+INTEGRATOR_STYLE = {
+    "euler": {"color": COLOR_EULER, "linestyle": "--", "linewidth": 2.0},
+    "verlet": {"color": COLOR_VERLET, "linestyle": "-", "linewidth": 2.0},
+    "rk4": {"color": COLOR_RK4, "linestyle": "-.", "linewidth": 2.0},
+    "exact": {"color": COLOR_REFERENCE, "linestyle": "--", "linewidth": 1.6},
+}
+
+
+def apply_plot_style():
+    """Apply consistent style defaults used across all figures."""
+    plt.rcParams.update(
+        {
+            "font.family": "DejaVu Sans",
+            "font.size": 11,
+            "axes.titlesize": 13,
+            "axes.labelsize": 11,
+            "xtick.labelsize": 10,
+            "ytick.labelsize": 10,
+            "legend.fontsize": 10,
+            "lines.linewidth": 2.0,
+            "lines.markersize": 5.5,
+            "axes.formatter.useoffset": False,
+            "axes.formatter.use_mathtext": True,
+            "savefig.dpi": 300,
+        }
+    )
+
+
+def apply_major_grid(ax, axis="both"):
+    """Draw a subtle major-only grid and disable minor-grid clutter."""
+    ax.grid(True, which="major", axis=axis, alpha=0.22, linewidth=0.6)
+    ax.grid(False, which="minor", axis=axis)
+
+
+def disable_offset_text(ax):
+    """Disable floating axis offset text like '1e-5'/'1e6'."""
+    for offset in (ax.xaxis.offsetText, ax.yaxis.offsetText):
+        offset.set_visible(False)
+    try:
+        ax.ticklabel_format(axis="both", style="plain", useOffset=False)
+    except Exception:
+        # Log axes do not support ticklabel_format(style='plain').
+        pass
+
+
+def save_figure(fig, path):
+    """Save with tight bounding box and constrained layout support."""
+    fig.savefig(path, bbox_inches="tight")
+```
+
+### `scripts/validate_manifest.py` (100 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -3880,11 +4994,12 @@ def main():
         for dt in DT_KEYS:
             require_file(manifest, f"ho_convergence.{integ}_dt{dt}", errors)
 
-    require_file(manifest, "lj_production.verlet_100", errors)
-    require_file(manifest, "lj_production.euler_100", errors)
-    require_file(manifest, "lj_production.verlet_200_equilibrated", errors)
-    require_file(manifest, "lj_gr", errors)
-    require_file(manifest, "lj_gr_energy", errors)
+    require_file(manifest, "lj_brief.verlet", errors)
+    require_file(manifest, "lj_brief.euler", errors)
+    require_file(manifest, "lj_extended.verlet_600", errors)
+    require_file(manifest, "lj_extended.euler_600", errors)
+    require_file(manifest, "lj_rdf.verlet_long", errors)
+    require_file(manifest, "lj_rdf.verlet_long_energy", errors)
 
     if not args.skip_scaling:
         require_file(manifest, "scaling.strong", errors)
@@ -3917,11 +5032,11 @@ include/md/integrators.hpp                          115 lines
 include/md/mic.hpp                                   19 lines
 include/md/mpi_context.hpp                          103 lines
 include/md/observables.hpp                           90 lines
-include/md/params.hpp                                72 lines
+include/md/params.hpp                                88 lines
 include/md/potentials.hpp                            67 lines
 include/md/rng.hpp                                  140 lines
 include/md/system.hpp                                70 lines
-src/main.cpp                                        417 lines
+src/main.cpp                                        572 lines
 src/observables.cpp                                  70 lines
 src/potentials/harmonic.cpp                          37 lines
 src/potentials/lennard_jones.cpp                    104 lines
@@ -3930,9 +5045,9 @@ tests/test_mic.cpp                                  117 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    1738
+    1909
 ```
 
 **End of audit.**
-ai/audit.sh: line 401: /dev/tty: Device not configured
+ai/audit.sh: line 419: /dev/tty: Operation not permitted
 Audit written to ai/audit_output.md

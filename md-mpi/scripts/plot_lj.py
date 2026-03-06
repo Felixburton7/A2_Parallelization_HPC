@@ -3,11 +3,11 @@
 plot_lj.py — Generate Lennard-Jones / Argon validation plots (Results 2).
 
 Produces:
-  - out/plots/lj_energy_brief.png
-  - out/plots/lj_energy_extended.png
-  - out/plots/lj_temperature_brief.png
-  - out/plots/lj_temperature_extended.png
-  - out/plots/lj_rdf.png
+  - out/plots/results2_lj_brief_energy_100step_production.png
+  - out/plots/results2_lj_extended_energy_stability.png
+  - out/plots/results2_lj_brief_temperature_100step_production.png
+  - out/plots/results2_lj_extended_temperature_stability.png
+  - out/plots/results2_lj_rdf_comparison_rahman1964.png
 """
 
 import json
@@ -207,6 +207,13 @@ def first_finite_prod_index(steps, etot, production_start):
     return None
 
 
+def divergence_crop_limit(div_time_ps, max_time_ps):
+    if div_time_ps is None or not np.isfinite(div_time_ps):
+        return None
+    pad = max(0.15, 0.1 * div_time_ps)
+    return float(min(max_time_ps, div_time_ps + pad))
+
+
 def load_series(filepath):
     data = load_csv(filepath)
     if data is None or len(data) == 0:
@@ -274,6 +281,8 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
     fig, axes = plt.subplots(2, 2, figsize=(14, 9), sharex="col", constrained_layout=True)
     any_data = False
+    euler_divergence_time_ps = None
+    max_time_ps = 0.0
 
     for row, integrator in enumerate(config["integrators"]):
         series_key = integrator["series_key"]
@@ -295,25 +304,22 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
         steps = series["steps"]
         t = series["time_ps"]
+        if np.any(np.isfinite(t)):
+            max_time_ps = max(max_time_ps, float(np.nanmax(t)))
         ekin = series["ekin_eps"]
         epot = series["epot_eps"]
         etot = series["etot_eps"]
         meta = series["meta"]
 
-        production_start = parse_int_meta(meta, "production_start", 0)
-        ref_idx = first_finite_prod_index(steps, etot, production_start)
+        ref_idx = first_finite_prod_index(steps, etot, 0)
         if ref_idx is None:
             rel_dev = np.full_like(etot, np.nan)
-            ref_text = "no finite reference"
         else:
             e0 = etot[ref_idx]
             if np.isfinite(e0) and abs(e0) > 1e-30:
                 rel_dev = (etot - e0) / abs(e0)
             else:
                 rel_dev = etot - e0
-            # Drift is meaningful only in production (post-rescaling) window.
-            rel_dev = np.where(steps >= production_start, rel_dev, np.nan)
-            ref_text = f"E0 at step {int(steps[ref_idx])}"
 
         label_plot = label
         if series["has_nonfinite"]:
@@ -331,9 +337,8 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
         ax_d = axes[row, 1]
         ax_d.plot(t, rel_dev, color=color, linestyle=linestyle, linewidth=linewidth)
-        ax_d.axhline(y=0.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.0, alpha=0.7)
-        ax_d.set_ylabel(r"$\Delta E / |E_{0,\mathrm{prod}}|$")
-        ax_d.set_title(f"{label_plot}: Relative Energy Deviation in Production ({ref_text})")
+        ax_d.set_ylabel("Relative Energy Deviation")
+        ax_d.set_title(f"{label_plot}: Relative Energy Deviation")
         apply_major_grid(ax_d)
         disable_offset_text(ax_d)
 
@@ -341,6 +346,8 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         divergence_time_ps = series.get("divergence_time_ps")
         divergence_reason = series.get("divergence_reason")
         if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
+            if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
+                euler_divergence_time_ps = divergence_time_ps
             ax_e.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
             ax_d.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
             note = f"Euler diverged at step {divergence_step}"
@@ -368,6 +375,13 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         print(f"Warning: no usable data for {run_key}; skipped {out_name}")
         return
 
+    if config.get("crop_to_euler_divergence", False):
+        x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
+        if x_max is not None:
+            for row in range(2):
+                for col in range(2):
+                    axes[row, col].set_xlim(0.0, x_max)
+
     axes[1, 0].set_xlabel("Time [ps]")
     axes[1, 1].set_xlabel("Time [ps]")
     fig.suptitle(config["energy_title"], fontsize=13)
@@ -385,6 +399,9 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
     any_data = False
     drew_prod_line = False
     plotted_series = []
+    euler_divergence_time_ps = None
+    max_time_ps = 0.0
+    target_temp_k = config.get("target_temperature_k")
 
     for integrator in config["integrators"]:
         series_key = integrator["series_key"]
@@ -403,6 +420,8 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
 
         any_data = True
         t = series["time_ps"]
+        if np.any(np.isfinite(t)):
+            max_time_ps = max(max_time_ps, float(np.nanmax(t)))
         temp = series["temperature"]
         meta = series["meta"]
         label_plot = label
@@ -410,18 +429,29 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
             label_plot = f"{label} (divergent tail omitted)"
 
         ax.plot(t, temp, label=label_plot, color=color, linestyle=linestyle, linewidth=linewidth)
-        plotted_series.append((t, temp, color, linestyle, linewidth))
+        plotted_series.append(
+            {
+                "t": t,
+                "temp": temp,
+                "color": color,
+                "linestyle": linestyle,
+                "linewidth": linewidth,
+                "style_key": integrator.get("style_key", ""),
+            }
+        )
 
         divergence_step = series.get("divergence_step")
         divergence_time_ps = series.get("divergence_time_ps")
         divergence_reason = series.get("divergence_reason")
         if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
+            if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
+                euler_divergence_time_ps = divergence_time_ps
             ax.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
             note = f"Euler diverged at step {divergence_step}"
             if divergence_reason:
                 note += f" ({divergence_reason})"
             ax.text(
-                0.02,
+                0.58,
                 0.92,
                 note,
                 transform=ax.transAxes,
@@ -429,16 +459,20 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
                 bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
             )
 
-        production_start = parse_int_meta(meta, "production_start", 0)
+        production_start = get_meta_value(meta, "production_start_step", "production_start", 0)
         dt = parse_float_meta(meta, "dt", float("nan"))
-        if production_start >= 0 and np.isfinite(dt) and not drew_prod_line:
+        if target_temp_k is None:
+            target_temp_candidate = parse_float_meta(meta, "target_temperature", float("nan"))
+            if np.isfinite(target_temp_candidate):
+                target_temp_k = float(target_temp_candidate)
+        if production_start > 0 and np.isfinite(dt) and not drew_prod_line:
             ax.axvline(
                 x=production_start * dt * 1e12,
                 color="gray",
                 linestyle=":",
                 linewidth=1.5,
                 alpha=0.8,
-                label=f"production start (step {production_start})",
+                label="production starts",
             )
             drew_prod_line = True
 
@@ -447,34 +481,88 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
         print(f"Warning: no usable data for {run_key}; skipped {out_name}")
         return
 
-    ax.axhline(y=94.4, color="k", linestyle="--", alpha=0.6, label="T = 94.4 K")
     ax.set_xlabel("Time [ps]")
     ax.set_ylabel("Temperature [K]")
     ax.set_title(config["temperature_title"])
     apply_major_grid(ax)
     disable_offset_text(ax)
-    ax.legend(loc="best")
+    if target_temp_k is None:
+        target_temp_k = 94.4
+    if np.isfinite(target_temp_k):
+        ax.axhline(
+            y=target_temp_k,
+            color="#7a7a7a",
+            linestyle="--",
+            linewidth=1.4,
+            alpha=0.55,
+            zorder=0,
+            label=f"Target T = {target_temp_k:.1f} K",
+        )
+
+    ax.legend(loc=config.get("legend_loc", "best"))
 
     zoom_cfg = config.get("zoom_inset")
     if zoom_cfg and plotted_series:
-        axins = inset_axes(
-            ax,
-            width=zoom_cfg.get("width", "42%"),
-            height=zoom_cfg.get("height", "46%"),
-            loc=zoom_cfg.get("loc", "upper left"),
-            borderpad=1.2,
-        )
-        for t, temp, color, linestyle, linewidth in plotted_series:
-            axins.plot(t, temp, color=color, linestyle=linestyle, linewidth=linewidth)
-        axins.axhline(y=94.4, color="k", linestyle="--", alpha=0.6, linewidth=1.0)
+        inset_kwargs = {
+            "width": zoom_cfg.get("width", "30%"),
+            "height": zoom_cfg.get("height", "34%"),
+            "loc": zoom_cfg.get("loc", "lower right"),
+            "borderpad": zoom_cfg.get("borderpad", 0.8),
+        }
+        if "bbox_to_anchor" in zoom_cfg:
+            inset_kwargs["bbox_to_anchor"] = zoom_cfg["bbox_to_anchor"]
+            inset_kwargs["bbox_transform"] = ax.transAxes
+
+        axins = inset_axes(ax, **inset_kwargs)
+        for series_plot in plotted_series:
+            plot_kwargs = {
+                "color": series_plot["color"],
+                "linestyle": series_plot["linestyle"],
+                "linewidth": max(1.2, 0.9 * series_plot["linewidth"]),
+            }
+            # Show discrete samples for Verlet in the inset so short-time variation
+            # reads less like an over-smoothed curve.
+            if series_plot["style_key"] == "verlet":
+                plot_kwargs.update(
+                    {
+                        "linewidth": 1.0,
+                        "marker": "o",
+                        "markersize": 2.0,
+                        "markevery": 1,
+                        "markeredgewidth": 0.0,
+                        "antialiased": False,
+                    }
+                )
+            axins.plot(series_plot["t"], series_plot["temp"], **plot_kwargs)
         if "xlim" in zoom_cfg:
             axins.set_xlim(*zoom_cfg["xlim"])
         if "ylim" in zoom_cfg:
             axins.set_ylim(*zoom_cfg["ylim"])
-        axins.set_title(zoom_cfg.get("title", "Zoom"), fontsize=9)
+        if np.isfinite(target_temp_k):
+            axins.axhline(
+                y=target_temp_k,
+                color="#7a7a7a",
+                linestyle="--",
+                linewidth=1.0,
+                alpha=0.5,
+                zorder=0,
+            )
+        axins.set_title(zoom_cfg.get("title", "Zoom"), fontsize=9, pad=4)
+        axins.patch.set_facecolor(zoom_cfg.get("facecolor", "white"))
+        axins.patch.set_alpha(zoom_cfg.get("alpha", 0.96))
+        spine_color = zoom_cfg.get("spine_color", "#333333")
+        spine_width = zoom_cfg.get("spine_width", 1.0)
+        for spine in axins.spines.values():
+            spine.set_color(spine_color)
+            spine.set_linewidth(spine_width)
         apply_major_grid(axins)
         disable_offset_text(axins)
         axins.tick_params(axis="both", which="major", labelsize=8)
+
+    if config.get("crop_to_euler_divergence", False):
+        x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
+        if x_max is not None:
+            ax.set_xlim(0.0, x_max)
 
     out_path = f"{PLOT_DIR}/{out_name}"
     save_figure(fig, out_path)
@@ -500,9 +588,10 @@ def plot_rdf(manifest):
         print("RDF CSV missing r_sigma/gr columns. Skipping RDF plot.")
         return
 
-    r_a = finite_or_nan(np.asarray(data["r_sigma"], dtype=float) * SIGMA_ANGSTROM)
+    r_sigma = finite_or_nan(np.asarray(data["r_sigma"], dtype=float))
     gr = finite_or_nan(np.asarray(data["gr"], dtype=float))
-    rahman_r_smooth, rahman_g_smooth = cubic_spline_interpolate(RAHMAN_R_A, RAHMAN_G, n_points=300)
+    rahman_r_sigma = RAHMAN_R_A / SIGMA_ANGSTROM
+    rahman_r_smooth, rahman_g_smooth = cubic_spline_interpolate(rahman_r_sigma, RAHMAN_G, n_points=300)
     rahman_g_smooth = np.clip(rahman_g_smooth, 0.0, None)
     fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
     ax.plot(
@@ -514,23 +603,28 @@ def plot_rdf(manifest):
         alpha=0.9,
         zorder=1,
     )
-    ax.scatter(RAHMAN_R_A, RAHMAN_G, color=COLOR_EULER, s=22, zorder=2, label="Rahman (1964) Fig. 2")
-    ax.plot(r_a, gr, color="k", linewidth=2.0, zorder=3, label="Present Work (Verlet, NVE)")
+    ax.scatter(rahman_r_sigma, RAHMAN_G, color=COLOR_EULER, s=22, zorder=2, label="Rahman (1964) Fig. 2")
+    ax.plot(r_sigma, gr, color="k", linewidth=2.0, zorder=3, label="Present Work (Verlet, NVE)")
     ax.axhline(y=1.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.2)
 
     title = "RDF: Present Work vs Rahman (1964)"
 
     ax.set_title(title)
-    ax.set_xlabel("Distance r (Å)")
+    ax.set_xlabel(r"Distance $r/\sigma$")
     ax.set_ylabel("g(r)")
-    xmax = np.nanmax(np.concatenate([r_a[np.isfinite(r_a)], RAHMAN_R_A])) if np.any(np.isfinite(r_a)) else np.max(RAHMAN_R_A)
-    ax.set_xlim(0.0, max(11.0, 1.05 * float(xmax)))
+    xmax = np.nanmax(np.concatenate([r_sigma[np.isfinite(r_sigma)], rahman_r_sigma])) if np.any(np.isfinite(r_sigma)) else np.max(rahman_r_sigma)
+    ax.set_xlim(0.0, max(3.3, 1.05 * float(xmax)))
     ax.set_ylim(bottom=0.0)
+    secax = ax.secondary_xaxis(
+        "top",
+        functions=(lambda x: x * SIGMA_ANGSTROM, lambda x: x / SIGMA_ANGSTROM),
+    )
+    secax.set_xlabel("Distance r (Å)")
     apply_major_grid(ax)
     disable_offset_text(ax)
     ax.legend(loc="best")
 
-    out_path = f"{PLOT_DIR}/lj_rdf.png"
+    out_path = f"{PLOT_DIR}/results2_lj_rdf_comparison_rahman1964.png"
     save_figure(fig, out_path)
     plt.close(fig)
     print(f"Saved {out_path}")
@@ -553,26 +647,50 @@ def main():
             {"series_key": "euler", "label": "Forward Euler", "style_key": "euler"},
         ],
         "energy_title": "Brief (required): Energy vs Time",
-        "temperature_title": "Brief (required): Temperature vs Time",
+        "temperature_title": "Argon LJ (required run): Temperature vs Time (100-step NVE production)",
+        "production_only_note": False,
     }
     extended_cfg = {
         "integrators": [
             {"series_key": "verlet_600", "label": "Velocity-Verlet", "style_key": "verlet"},
             {"series_key": "euler_600", "label": "Forward Euler", "style_key": "euler"},
         ],
-        "energy_title": "Extended (optional): Energy vs Time",
-        "temperature_title": "Extended (optional): Temperature vs Time",
-        "zoom_inset": {"xlim": (0.0, 6.0), "ylim": (70.0, 110.0), "title": "Zoom: 70-110 K"},
+        "energy_title": "Argon LJ (extended optional): Energy vs Time",
+        "temperature_title": "Argon LJ (extended optional): Temperature vs Time",
+        "crop_to_euler_divergence": True,
+        "production_only_note": False,
+        "legend_loc": "upper left",
+        "zoom_inset": {
+            "xlim": (0.0, 1.15),
+            "ylim": (75.0, 130.0),
+            "title": "Zoom near start (75-130 K)",
+            "width": "36%",
+            "height": "38%",
+            "loc": "center left",
+            "bbox_to_anchor": (0.06, 0.0, 1.0, 1.0),
+            "borderpad": 1.0,
+            "facecolor": "#fcfcfc",
+            "alpha": 0.97,
+            "spine_color": "#2f2f2f",
+            "spine_width": 1.0,
+        },
     }
 
-    safe_plot("brief energy", plot_energy_for_run, manifest, "lj_brief", brief_cfg, "lj_energy_brief.png")
+    safe_plot(
+        "brief energy",
+        plot_energy_for_run,
+        manifest,
+        "lj_brief",
+        brief_cfg,
+        "results2_lj_brief_energy_100step_production.png",
+    )
     safe_plot(
         "brief temperature",
         plot_temperature_for_run,
         manifest,
         "lj_brief",
         brief_cfg,
-        "lj_temperature_brief.png",
+        "results2_lj_brief_temperature_100step_production.png",
     )
 
     safe_plot(
@@ -581,7 +699,7 @@ def main():
         manifest,
         "lj_extended",
         extended_cfg,
-        "lj_energy_extended.png",
+        "results2_lj_extended_energy_stability.png",
     )
     safe_plot(
         "extended temperature",
@@ -589,7 +707,7 @@ def main():
         manifest,
         "lj_extended",
         extended_cfg,
-        "lj_temperature_extended.png",
+        "results2_lj_extended_temperature_stability.png",
     )
 
     safe_plot("rdf", plot_rdf, manifest)

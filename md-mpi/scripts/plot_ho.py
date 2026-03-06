@@ -3,10 +3,11 @@
 plot_ho.py — Generate Harmonic Oscillator verification plots (Results 1).
 
 Produces:
-  1. Position & velocity vs time for all three integrators (with exact overlay)
-  2. Phase-space (v vs x) diagrams
-  3. Log-log convergence: |x_num(T) - x_exact(T)| vs dt with fitted slopes
-  4. Energy conservation comparison
+  1. out/plots/results1_ho_position_velocity_trajectories.png
+  2. out/plots/results1_ho_phase_space_trajectories.png
+  3. out/plots/results1_ho_convergence_endpoint_position_error.png
+  4. out/plots/results1_ho_energy_conservation.png
+  5. out/plots/results1_ho_convergence_rms_phase_space_error.png
 
 Usage:
   python3 scripts/plot_ho.py           # plot from existing data in out/ho/
@@ -92,10 +93,10 @@ def load_csv(filepath):
 
 
 def plot_trajectories():
-    """Plot x(t), v(t), phase space for all integrators at dt=0.01."""
+    """Plot x(t), v(t) for all integrators at dt=0.01."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5), constrained_layout=True)
+    fig, axes = plt.subplots(2, 1, figsize=(9, 8), constrained_layout=True)
 
     t_exact = np.linspace(0, T_FINAL, 1000)
     x_exact, v_exact = exact_solution(t_exact)
@@ -134,15 +135,6 @@ def plot_trajectories():
             label=label,
             linewidth=style["linewidth"],
         )
-        axes[2].plot(
-            x,
-            v,
-            color=color,
-            linestyle=style["linestyle"],
-            label=label,
-            linewidth=style["linewidth"],
-        )
-
     # Exact overlays
     exact_style = INTEGRATOR_STYLE["exact"]
     axes[0].plot(
@@ -155,7 +147,7 @@ def plot_trajectories():
         label="Exact",
     )
     axes[0].set_xlabel(r'Time $[1/\omega]$')
-    axes[0].set_ylabel('Position x [arb.]')
+    axes[0].set_ylabel('Position x [reduced units]')
     axes[0].set_title('Position vs Time (Reduced Units)')
     axes[0].legend(loc="upper right")
     apply_major_grid(axes[0])
@@ -171,14 +163,43 @@ def plot_trajectories():
         label="Exact",
     )
     axes[1].set_xlabel(r'Time $[1/\omega]$')
-    axes[1].set_ylabel('Velocity v [arb.]')
+    axes[1].set_ylabel('Velocity v [reduced units]')
     axes[1].set_title('Velocity vs Time (Reduced Units)')
     axes[1].legend(loc="upper right")
     apply_major_grid(axes[1])
     disable_offset_text(axes[1])
 
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_position_velocity_trajectories.png")
+    plt.close()
+    print(f"Saved {PLOT_DIR}/results1_ho_position_velocity_trajectories.png")
+
+
+def plot_phase_space():
+    """Plot phase-space trajectory in a dedicated figure."""
+    os.makedirs(PLOT_DIR, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(6.5, 6.2), constrained_layout=True)
+    manifest = load_manifest()
+
+    for integ in INTEGRATORS:
+        dt_key = str(TRAJ_DT).replace(".", "_")
+        fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
+        if not os.path.exists(fpath):
+            continue
+        data = load_csv(fpath)
+        style = INTEGRATOR_STYLE[integ]
+        ax.plot(
+            data["x"],
+            data["v"],
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=style["linewidth"],
+            label=INTEGRATOR_LABELS[integ],
+        )
+
     x_ep, v_ep = exact_solution(np.linspace(0, 2 * np.pi / OMEGA, 500))
-    axes[2].plot(
+    exact_style = INTEGRATOR_STYLE["exact"]
+    ax.plot(
         x_ep,
         v_ep,
         color=exact_style["color"],
@@ -187,17 +208,18 @@ def plot_trajectories():
         alpha=0.9,
         label="Exact",
     )
-    axes[2].set_xlabel('Position x [arb.]')
-    axes[2].set_ylabel('Velocity v [arb.]')
-    axes[2].set_title('Phase Space (v vs x, Reduced Units)')
-    axes[2].legend(loc="upper right")
-    axes[2].set_aspect("equal", "box")
-    apply_major_grid(axes[2])
-    disable_offset_text(axes[2])
 
-    save_figure(fig, f"{PLOT_DIR}/ho_trajectories.png")
+    ax.set_xlabel("Position x [reduced units]")
+    ax.set_ylabel("Velocity v [reduced units]")
+    ax.set_title("Phase Space (v vs x, Reduced Units)")
+    ax.set_aspect("equal", "box")
+    apply_major_grid(ax)
+    disable_offset_text(ax)
+    ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1.0), borderaxespad=0.0)
+
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_phase_space_trajectories.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/ho_trajectories.png")
+    print(f"Saved {PLOT_DIR}/results1_ho_phase_space_trajectories.png")
 
 
 def plot_convergence():
@@ -209,6 +231,12 @@ def plot_convergence():
     x_ex_final, _ = exact_solution(T_FINAL)
 
     manifest = load_manifest()
+
+    def select_fit_points(points):
+        fit_pts = [(dt, err) for dt, err in points if dt <= 0.1]
+        if len(fit_pts) < 3:
+            fit_pts = sorted(points)[: max(3, len(points) // 2)]
+        return sorted(fit_pts)
 
     for integ in INTEGRATORS:
         errors = []
@@ -227,7 +255,7 @@ def plot_convergence():
             x_num_final = data['x'][-1]
             err = abs(x_num_final - x_ex_final)
 
-            if err > 1e-16:  # skip if at machine epsilon
+            if err > 1e-14:  # skip if at/near machine epsilon
                 errors.append(err)
                 dts.append(dt)
 
@@ -235,11 +263,18 @@ def plot_convergence():
             print(f"Warning: not enough data for {integ} convergence")
             continue
 
-        dts = np.array(dts)
-        errors = np.array(errors)
+        dts = np.array(dts, dtype=float)
+        errors = np.array(errors, dtype=float)
+        raw_pts = sorted([(float(dt), float(err)) for dt, err in zip(dts, errors)])
+        fit_pts = select_fit_points(raw_pts)
+        if len(fit_pts) < 2:
+            print(f"Warning: not enough asymptotic-fit points for {integ} convergence")
+            continue
 
-        log_dt = np.log10(dts)
-        log_err = np.log10(errors)
+        fit_dts = np.array([p[0] for p in fit_pts], dtype=float)
+        fit_errs = np.array([p[1] for p in fit_pts], dtype=float)
+        log_dt = np.log10(fit_dts)
+        log_err = np.log10(fit_errs)
         slope, intercept = np.polyfit(log_dt, log_err, 1)
 
         style = INTEGRATOR_STYLE[integ]
@@ -268,9 +303,109 @@ def plot_convergence():
     ax.legend(loc="best")
     apply_major_grid(ax)
 
-    save_figure(fig, f"{PLOT_DIR}/ho_convergence.png")
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_convergence_endpoint_position_error.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/ho_convergence.png")
+    print(f"Saved {PLOT_DIR}/results1_ho_convergence_endpoint_position_error.png")
+
+
+def phase_space_error_metric(data, metric):
+    """Whole-trajectory phase-space error metrics against exact x(t), v(t)."""
+    t = np.asarray(data["time"], dtype=float)
+    x = np.asarray(data["x"], dtype=float)
+    v = np.asarray(data["v"], dtype=float)
+    x_exact, v_exact = exact_solution(t)
+    e = np.sqrt((x - x_exact) ** 2 + (v - v_exact) ** 2)
+    finite = np.isfinite(e)
+    if not np.any(finite):
+        return np.nan
+    e = e[finite]
+    if metric == "max":
+        return float(np.max(e))
+    if metric == "rms":
+        return float(np.sqrt(np.mean(e ** 2)))
+    raise ValueError(f"Unknown phase-space error metric: {metric}")
+
+
+def plot_phase_error_convergence(metric, out_name, y_label, title):
+    """Log-log convergence plot for a whole-trajectory phase-space error metric."""
+    os.makedirs(PLOT_DIR, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+    manifest = load_manifest()
+    slopes = {}
+
+    def select_fit_points(points):
+        fit_pts = [(dt, err) for dt, err in points if dt <= 0.1]
+        if len(fit_pts) < 3:
+            fit_pts = sorted(points)[: max(3, len(points) // 2)]
+        return sorted(fit_pts)
+
+    for integ in INTEGRATORS:
+        errors = []
+        dts = []
+
+        for dt in DT_VALUES:
+            dt_key = str(dt).replace(".", "_")
+            fpath = manifest.get("ho_convergence", {}).get(f"{integ}_dt{dt_key}", "")
+            if not os.path.exists(fpath):
+                continue
+
+            data = load_csv(fpath)
+            err = phase_space_error_metric(data, metric)
+            if np.isfinite(err) and err > 1e-16:
+                errors.append(err)
+                dts.append(dt)
+
+        if len(dts) < 2:
+            print(f"Warning: not enough data for {integ} {metric} convergence")
+            continue
+
+        dts = np.array(dts, dtype=float)
+        errors = np.array(errors, dtype=float)
+        raw_pts = sorted([(float(dt), float(err)) for dt, err in zip(dts, errors)])
+        fit_pts = select_fit_points(raw_pts)
+        if len(fit_pts) < 2:
+            print(f"Warning: not enough asymptotic-fit points for {integ} {metric} convergence")
+            continue
+
+        fit_dts = np.array([p[0] for p in fit_pts], dtype=float)
+        fit_errs = np.array([p[1] for p in fit_pts], dtype=float)
+        log_dt = np.log10(fit_dts)
+        log_err = np.log10(fit_errs)
+        slope, _intercept = np.polyfit(log_dt, log_err, 1)
+        slopes[integ] = slope
+
+        style = INTEGRATOR_STYLE[integ]
+        color = style["color"]
+        expected = INTEGRATOR_ORDERS[integ]
+        label = f"{INTEGRATOR_LABELS[integ]} (slope={slope:.2f}, expected {expected})"
+
+        ax.loglog(
+            dts,
+            errors,
+            marker="o",
+            linestyle=style["linestyle"],
+            color=color,
+            label=label,
+            linewidth=style["linewidth"],
+        )
+
+        dt_ref = np.array([min(dts), max(dts)])
+        err_ref = errors[0] * (dt_ref / dts[0]) ** expected
+        ax.loglog(dt_ref, err_ref, "--", color=color, alpha=0.45, linewidth=1.2)
+
+    ax.set_xlabel(r"$\Delta t\ [1/\omega]$")
+    ax.set_ylabel(y_label)
+    ax.set_title(title)
+    ax.legend(loc="best")
+    apply_major_grid(ax)
+
+    save_figure(fig, f"{PLOT_DIR}/{out_name}")
+    plt.close()
+    print(f"Saved {PLOT_DIR}/{out_name}")
+    if slopes:
+        ordered = ", ".join(f"{k}={slopes[k]:.2f}" for k in INTEGRATORS if k in slopes)
+        print(f"Fitted slopes ({metric}): {ordered}")
 
 
 def plot_energy_conservation():
@@ -307,8 +442,8 @@ def plot_energy_conservation():
         )
 
     ax.set_xlabel(r'Time $[1/\omega]$')
-    ax.set_ylabel(r'$(E - E_0) / |E_0|$')
-    ax.set_title('HO Energy Conservation (Reduced Units, dt=0.01)')
+    ax.set_ylabel(r'$(E - E_0) / |E_0|$ (dimensionless; $E$ in CSV is SI J)')
+    ax.set_title('HO Energy Conservation (relative drift, dt=0.01)')
     ax.legend(loc="best")
     apply_major_grid(ax)
     disable_offset_text(ax)
@@ -342,9 +477,9 @@ def plot_energy_conservation():
     apply_major_grid(axins)
     disable_offset_text(axins)
 
-    save_figure(fig, f"{PLOT_DIR}/ho_energy.png")
+    save_figure(fig, f"{PLOT_DIR}/results1_ho_energy_conservation.png")
     plt.close()
-    print(f"Saved {PLOT_DIR}/ho_energy.png")
+    print(f"Saved {PLOT_DIR}/results1_ho_energy_conservation.png")
 
 
 if __name__ == "__main__":
@@ -353,5 +488,12 @@ if __name__ == "__main__":
         run_ho_simulations()
 
     plot_trajectories()
+    plot_phase_space()
     plot_convergence()
+    plot_phase_error_convergence(
+        metric="rms",
+        out_name="results1_ho_convergence_rms_phase_space_error.png",
+        y_label=r"$\mathrm{RMS}_t \sqrt{(x_{num}-x_{exact})^2 + (v_{num}-v_{exact})^2}$",
+        title="Convergence: RMS Phase-Space Error vs Timestep (Reduced Units)",
+    )
     plot_energy_conservation()

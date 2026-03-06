@@ -33,20 +33,32 @@ mpirun -np 1 ./md_solver --mode ho --integrator rk4 --dt 0.01 --steps 1000 --N 1
 ### Lennard-Jones Argon (Results 2)
 
 ```bash
-# Primary run: 500-step equilibration (velocity rescaling each step) + 100-step NVE production.
-# Production runs use P=4; see scripts/run_all_data.sh for the P=1 vs P=2 consistency check.
+# Brief-required run:
+# startup/equilibration prepares the state, then production is a clean 100-step NVE trajectory.
+# Output CSV stores the production trajectory only (step 0 is the production initial frame).
 mkdir -p out
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 600 --rescale-step 500
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
+  --final-rescale-before-production
 
-# Primary run: 500-step equilibration + 100-step Euler production
-mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --steps 600 --rescale-step 500
+# Brief-required Euler comparison
+mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
+  --final-rescale-before-production
 
-# Equilibrated comparison run (rescale at 100, then post-rescale NVE segment)
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 200 --rescale-step 100
+# Extended optional diagnostic run (longer trajectory)
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 600 \
+  --final-rescale-before-production
+mpirun -np 4 ./md_solver --mode lj --integrator euler  --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 600 \
+  --final-rescale-before-production
 
-# Supplementary g(r) (extended run, ~450 frames for smooth Rahman comparison)
-# --gr-discard is relative to production_start; with --rescale-step 500, discard=0 starts sampling at step 500.
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --steps 25500 --rescale-step 500 --gr --gr-discard 0 --gr-interval 10
+# RDF long run (optional, for smoother g(r) statistics)
+# g(r) sampling starts at production_start_step + gr_discard_steps
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 20000 \
+  --final-rescale-before-production --gr --gr-discard-steps 200 --gr-sample-every 5
 ```
 
 ### Scaling (Results 3)
