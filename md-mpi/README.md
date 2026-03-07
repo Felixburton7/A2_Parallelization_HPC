@@ -46,15 +46,7 @@ mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --dt 1e-14 \
   --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
   --final-rescale-before-production
 
-# Extended optional diagnostic run (longer trajectory)
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
-  --target-temperature 94.4 --equilibration-steps 50 --production-steps 600 \
-  --final-rescale-before-production
-mpirun -np 4 ./md_solver --mode lj --integrator euler  --N 864 --dt 1e-14 \
-  --target-temperature 94.4 --equilibration-steps 50 --production-steps 600 \
-  --final-rescale-before-production
-
-# RDF long run (optional, for smoother g(r) statistics)
+# RDF comparison run (longer production for smoother g(r) statistics)
 # g(r) sampling starts at production_start_step + gr_discard_steps
 mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
   --target-temperature 94.4 --equilibration-steps 50 --production-steps 20000 \

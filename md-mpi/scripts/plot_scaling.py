@@ -18,6 +18,7 @@ Prerequisites (from manifest.json):
 
 import os
 import json
+from datetime import datetime, timezone
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -33,38 +34,74 @@ from plot_style import (
 )
 
 PLOT_DIR = "out/plots"
+PLOT_META_DIR = "out/plots/metadata"
 
 
 def load_manifest():
-    with open("out/manifest.json", "r") as f:
+    manifest_path = "out/manifest.json"
+    if not os.path.exists(manifest_path):
+        print(f"Warning: manifest not found at {manifest_path}")
+        return {}
+    with open(manifest_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def load_scaling_csv(key):
-    manifest = load_manifest()
+def utc_now():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def unique_preserve_order(items):
+    out = []
+    seen = set()
+    for item in items:
+        if item in seen:
+            continue
+        seen.add(item)
+        out.append(item)
+    return out
+
+
+def write_plot_metadata(plot_png_name, section, extra):
+    os.makedirs(PLOT_META_DIR, exist_ok=True)
+    payload = {
+        "generated_utc": utc_now(),
+        "figure_filename": plot_png_name,
+        "plot_file_png": f"{PLOT_DIR}/{plot_png_name}",
+        "section": section,
+        "missing_provenance": [],
+    }
+    payload.update(extra)
+    payload["missing_provenance"] = unique_preserve_order(payload.get("missing_provenance", []))
+    sidecar = f"{PLOT_META_DIR}/{os.path.splitext(plot_png_name)[0]}.json"
+    with open(sidecar, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, sort_keys=True)
+    print(f"Saved {sidecar}")
+
+
+def load_scaling_csv(manifest, key):
     path = manifest.get("scaling", {}).get(key, "")
     if not os.path.exists(path):
-        return None
+        return None, path, False
     data = np.genfromtxt(path, delimiter=',', names=True, encoding=None)
     names = getattr(getattr(data, "dtype", None), "names", None)
     if names and "P" in names and "wall_s" in names:
-        return data
+        return data, path, False
 
     # Fallback: tolerate headerless CSVs ("P,N,wall_s,comm_s" missing).
     raw = np.genfromtxt(path, delimiter=',', encoding=None)
     if raw is None:
-        return None
+        return None, path, False
     if raw.ndim == 1:
         raw = np.array([raw])
     if raw.shape[1] < 4:
-        return None
+        return None, path, False
     out = np.zeros(raw.shape[0], dtype=[("P", float), ("N", float), ("wall_s", float), ("comm_s", float)])
     out["P"] = raw[:, 0]
     out["N"] = raw[:, 1]
     out["wall_s"] = raw[:, 2]
     out["comm_s"] = raw[:, 3]
     print(f"Warning: {path} missing header; parsed as 4-column numeric fallback.")
-    return out
+    return out, path, True
 
 
 def amdahl(P, f):
@@ -76,7 +113,8 @@ def plot_strong_scaling():
     """Plot speedup, efficiency, and compute/comm breakdown."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    data = load_scaling_csv("strong")
+    manifest = load_manifest()
+    data, strong_path, used_fallback = load_scaling_csv(manifest, "strong")
     if data is None:
         print("Warning: scaling/strong not found in manifest. Skipping strong scaling.")
         return
@@ -175,6 +213,76 @@ def plot_strong_scaling():
     plt.close()
     print(f"Saved {PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
 
+    scaling_meta_path = "out/scaling_meta.txt"
+    source_data_files = [strong_path]
+    if os.path.exists(scaling_meta_path):
+        source_data_files.append(scaling_meta_path)
+
+    missing_provenance = [
+        "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_strong.csv.",
+        "Timing step count and replication count are configured in scripts/run_all_data.sh but not encoded in scaling_strong.csv.",
+    ]
+    if used_fallback:
+        missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
+    if not os.path.exists(scaling_meta_path):
+        missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
+
+    f_fit_value = float(f_fit) if f_fit is not None else None
+    max_theoretical_speedup = float(1.0 / f_fit) if f_fit is not None and f_fit > 0 else None
+    max_measured_speedup = float(np.nanmax(speedup)) if speedup.size else None
+    min_efficiency = float(np.nanmin(efficiency)) if efficiency.size else None
+    max_efficiency = float(np.nanmax(efficiency)) if efficiency.size else None
+
+    rows = []
+    for i in range(len(P)):
+        rows.append(
+            {
+                "P": int(P[i]),
+                "N": int(data["N"][i]),
+                "wall_s": float(wall[i]),
+                "comm_s": float(comm[i]),
+                "speedup": float(speedup[i]),
+                "efficiency": float(efficiency[i]),
+            }
+        )
+
+    write_plot_metadata(
+        "results3_strong_scaling_speedup_efficiency_breakdown.png",
+        "results3",
+        {
+            "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and compute-vs-communication breakdown.",
+            "intended_claim": "The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction.",
+            "audience_tier": "brief-facing",
+            "source_data_files": unique_preserve_order(source_data_files),
+            "source_manifest_keys": ["scaling.strong"],
+            "simulation_run_identifiers": [],
+            "key_parameters": {
+                "integrator": "verlet",
+                "fixed_particle_count_N": int(data["N"][0]) if len(data) else None,
+                "process_counts_P": [int(p) for p in P.tolist()],
+                "plots_in_figure": ["speedup", "efficiency", "compute_vs_communication"],
+            },
+            "fit_or_truncation": {
+                "amdahl_fit_model": "S(P)=1/(f+(1-f)/P)",
+                "amdahl_fit_domain": "P > 1",
+                "excluded_points_from_amdahl_fit": [1] if np.any(P == 1) else [],
+                "fit_method": "two-pass grid search in f (coarse 1e-3 then refined 1e-5 step over local window)",
+            },
+            "key_quantitative_summary": {
+                "amdahl_serial_fraction_f": f_fit_value,
+                "maximum_theoretical_speedup_from_fit": max_theoretical_speedup,
+                "max_measured_speedup": max_measured_speedup,
+                "efficiency_range": [min_efficiency, max_efficiency],
+                "rows": rows,
+            },
+            "caveats": [
+                "Strong-scaling data are aggregated medians, not raw replicate traces.",
+                "Communication time is solver-reported timing and may include measurement noise at small runtimes.",
+            ],
+            "missing_provenance": missing_provenance,
+        },
+    )
+
     if f_fit is not None:
         print(f"  Amdahl serial fraction f = {f_fit:.6f}")
         print(f"  Maximum theoretical speedup = {1.0/f_fit:.1f}x")
@@ -184,7 +292,8 @@ def plot_size_scaling():
     """Plot wall time and compute time vs N."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
-    data = load_scaling_csv("size")
+    manifest = load_manifest()
+    data, size_path, used_fallback = load_scaling_csv(manifest, "size")
     if data is None:
         print("Warning: scaling/size not found in manifest. Skipping size scaling.")
         return
@@ -242,6 +351,71 @@ def plot_size_scaling():
     save_figure(fig, f"{PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
     plt.close()
     print(f"Saved {PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
+
+    scaling_meta_path = "out/scaling_meta.txt"
+    source_data_files = [size_path]
+    if os.path.exists(scaling_meta_path):
+        source_data_files.append(scaling_meta_path)
+
+    missing_provenance = [
+        "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_size.csv.",
+        "Timing step count and replication count are configured in scripts/run_all_data.sh but not encoded in scaling_size.csv.",
+    ]
+    if used_fallback:
+        missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
+    if not os.path.exists(scaling_meta_path):
+        missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
+
+    comm_frac_min = float(np.nanmin(comm_frac)) if comm_frac.size else None
+    comm_frac_max = float(np.nanmax(comm_frac)) if comm_frac.size else None
+    rows = []
+    for i in range(len(N)):
+        rows.append(
+            {
+                "N": int(N[i]),
+                "P": int(data["P"][i]),
+                "wall_s": float(wall[i]),
+                "comm_s": float(comm[i]),
+                "compute_s": float(compute[i]),
+                "communication_fraction_percent": float(comm_frac[i]),
+            }
+        )
+
+    write_plot_metadata(
+        "results3_problem_size_scaling_fixed_p16.png",
+        "results3",
+        {
+            "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
+            "intended_claim": "Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16.",
+            "audience_tier": "brief-facing",
+            "source_data_files": unique_preserve_order(source_data_files),
+            "source_manifest_keys": ["scaling.size"],
+            "simulation_run_identifiers": [],
+            "key_parameters": {
+                "integrator": "verlet",
+                "fixed_process_count_P": int(data["P"][0]) if len(data) else None,
+                "particle_counts_N": [int(n) for n in N.tolist()],
+                "fit_mask_for_power_law": "N >= 500",
+                "reference_curve": "~N^2 anchored to largest-N wall time",
+            },
+            "fit_or_truncation": {
+                "power_law_fit_domain": [int(n) for n in N[mask].tolist()],
+                "excluded_from_power_law_fit": [int(n) for n in N[~mask].tolist()],
+                "fit_method": "linear regression in log10-space on selected N values",
+            },
+            "key_quantitative_summary": {
+                "wall_time_power_law_exponent": float(slope_wall) if slope_wall is not None else None,
+                "compute_time_power_law_exponent": float(slope_comp) if slope_comp is not None else None,
+                "communication_fraction_percent_range": [comm_frac_min, comm_frac_max],
+                "rows": rows,
+            },
+            "caveats": [
+                "Power-law exponents depend on the chosen fit domain (here N >= 500).",
+                "Communication fraction uses solver-reported communication timing, not network-level profiling counters.",
+            ],
+            "missing_provenance": missing_provenance,
+        },
+    )
 
 
 if __name__ == "__main__":

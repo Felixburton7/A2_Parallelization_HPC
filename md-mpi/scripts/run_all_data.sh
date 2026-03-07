@@ -20,9 +20,6 @@ LJ_TARGET_T=94.4
 LJ_BRIEF_EQUIL=50
 LJ_BRIEF_PROD_STEPS=100
 LJ_BRIEF_FRAMES=$((LJ_BRIEF_PROD_STEPS + 1))
-LJ_EXTENDED_EQUIL=$LJ_BRIEF_EQUIL
-LJ_EXTENDED_PROD_STEPS=600
-LJ_EXTENDED_FRAMES=$((LJ_EXTENDED_PROD_STEPS + 1))
 LJ_RDF_EQUIL=$LJ_BRIEF_EQUIL
 LJ_RDF_PROD_STEPS=20000
 LJ_RDF_FRAMES=$((LJ_RDF_PROD_STEPS + 1))
@@ -118,9 +115,9 @@ for INT in euler verlet rk4; do
     done
 done
 
-# ── 2. Results 2: LJ Brief + Extended ──
+# ── 2. Results 2: LJ Brief ──
 echo ""
-echo "=== RESULTS 2: LJ BRIEF + EXTENDED ==="
+echo "=== RESULTS 2: LJ BRIEF ==="
 echo "  Convention: startup is configured by --equilibration-steps, production by --production-steps."
 echo "  CSV output reports production trajectory only: step 0 is the production initial frame."
 
@@ -153,38 +150,9 @@ if [ -s "$RUNDIR_BRIEF_E/lj_euler.csv" ]; then
     echo "  -> brief Euler output saved to manifest ✅"
 fi
 
-# Extended run (optional): longer trajectories for diagnostics/statistics.
-RUNDIR_EXT_V="$OUTDIR/runs/lj_extended_N864_P4_verlet_prod${LJ_EXTENDED_PROD_STEPS}_eq${LJ_EXTENDED_EQUIL}_dt1e-14_${TIMESTAMP}"
-mkdir -p "$RUNDIR_EXT_V"
-echo "  Extended (optional) Verlet: equilibration=${LJ_EXTENDED_EQUIL}, production=${LJ_EXTENDED_PROD_STEPS}, frames=${LJ_EXTENDED_FRAMES}, dt=${LJ_DT}, target_T=${LJ_TARGET_T} K..."
-mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
-    --dt $LJ_DT --target-temperature $LJ_TARGET_T \
-    --equilibration-steps $LJ_EXTENDED_EQUIL \
-    --production-steps $LJ_EXTENDED_PROD_STEPS \
-    --final-rescale-before-production \
-    --outdir "$RUNDIR_EXT_V" > /dev/null
-if [ -s "$RUNDIR_EXT_V/lj_verlet.csv" ]; then
-    python3 scripts/append_manifest.py "lj_extended.verlet_600" "$RUNDIR_EXT_V/lj_verlet.csv"
-    echo "  -> extended Verlet output saved to manifest ✅"
-fi
-
-RUNDIR_EXT_E="$OUTDIR/runs/lj_extended_N864_P4_euler_prod${LJ_EXTENDED_PROD_STEPS}_eq${LJ_EXTENDED_EQUIL}_dt1e-14_${TIMESTAMP}"
-mkdir -p "$RUNDIR_EXT_E"
-echo "  Extended (optional) Euler: equilibration=${LJ_EXTENDED_EQUIL}, production=${LJ_EXTENDED_PROD_STEPS}, frames=${LJ_EXTENDED_FRAMES}, dt=${LJ_DT}, target_T=${LJ_TARGET_T} K..."
-mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 \
-    --dt $LJ_DT --target-temperature $LJ_TARGET_T \
-    --equilibration-steps $LJ_EXTENDED_EQUIL \
-    --production-steps $LJ_EXTENDED_PROD_STEPS \
-    --final-rescale-before-production \
-    --outdir "$RUNDIR_EXT_E" > /dev/null
-if [ -s "$RUNDIR_EXT_E/lj_euler.csv" ]; then
-    python3 scripts/append_manifest.py "lj_extended.euler_600" "$RUNDIR_EXT_E/lj_euler.csv"
-    echo "  -> extended Euler output saved to manifest ✅"
-fi
-
-# ── 3. g(r) Production Run (extended long) ──
+# ── 3. g(r) Production Run (long) ──
 echo ""
-echo "=== g(r) PRODUCTION RUN (EXTENDED LONG) ==="
+echo "=== g(r) PRODUCTION RUN (LONG) ==="
 echo "  RDF long run: equilibration=${LJ_RDF_EQUIL}, production=${LJ_RDF_PROD_STEPS}, frames=${LJ_RDF_FRAMES}, discard_steps=${LJ_GR_DISCARD_STEPS}, sample_every=${LJ_GR_SAMPLE_EVERY}"
 RUNDIR_GR="$OUTDIR/runs/lj_rdf_N864_P4_verlet_prod${LJ_RDF_PROD_STEPS}_eq${LJ_RDF_EQUIL}_dt1e-14_${TIMESTAMP}"
 mkdir -p "$RUNDIR_GR"

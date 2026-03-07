@@ -14,7 +14,7 @@ INTEGRATOR_STYLE = {
     "euler": {"color": COLOR_EULER, "linestyle": "--", "linewidth": 2.0},
     "verlet": {"color": COLOR_VERLET, "linestyle": "-", "linewidth": 2.0},
     "rk4": {"color": COLOR_RK4, "linestyle": "-.", "linewidth": 2.0},
-    "exact": {"color": COLOR_REFERENCE, "linestyle": "--", "linewidth": 1.6},
+    "exact": {"color": COLOR_REFERENCE, "linestyle": "-", "linewidth": 2.2},
 }
 
 

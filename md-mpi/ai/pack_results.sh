@@ -49,6 +49,24 @@ append_trunc_csv() {
     fi
 }
 
+# Helper function to append plain text/markdown/json sidecars
+append_text_file() {
+    local file="$1"
+    local title="$2"
+    local fence="${3:-}"
+    if [ -f "$file" ]; then
+        echo "## $title" >> "$OUTFILE"
+        if [ -n "$fence" ]; then
+            echo '```'"$fence" >> "$OUTFILE"
+            cat "$file" >> "$OUTFILE"
+            echo '```' >> "$OUTFILE"
+        else
+            cat "$file" >> "$OUTFILE"
+        fi
+        echo "" >> "$OUTFILE"
+    fi
+}
+
 # Append manifest.json
 if [ -f "$DATADIR/manifest.json" ]; then
     echo "## out/manifest.json" >> "$OUTFILE"
@@ -79,27 +97,38 @@ if isinstance(cur, str):
 PY
 }
 
-# 1. SCALING DATA (Full)
-append_full_csv "$(manifest_get "scaling.strong")" "Strong Scaling (median paired timings)"
-append_full_csv "$(manifest_get "scaling.size")" "Size Scaling (median paired timings)"
+# 1. RESULTS 2 PACKAGE ORDER
+echo "## Results 2 Package Ordering" >> "$OUTFILE"
+echo "Main/core evidence:" >> "$OUTFILE"
+echo "1. out/plots/results2_lj_brief_energy_100step_production.png" >> "$OUTFILE"
+echo "2. out/plots/results2_lj_brief_temperature_100step_production.png" >> "$OUTFILE"
+echo "3. out/plots/results2_lj_rdf_comparison_rahman1964.png" >> "$OUTFILE"
+echo "4. out/summary/results2/results2_quantitative_summary_table.md" >> "$OUTFILE"
+echo "" >> "$OUTFILE"
+
+append_text_file "out/summary/results2/results2_quantitative_summary_table.md" "Results 2 Quantitative Summary Table (Markdown)"
+append_full_csv "out/summary/results2/results2_quantitative_summary_table.csv" "Results 2 Quantitative Summary Table (CSV)"
+append_text_file "out/summary/results2/rahman1964_fig2_manual_anchors.csv" "Rahman Fig. 2 Manual Anchor Dataset" "csv"
+append_text_file "out/summary/results2/results2_report_note.md" "Results 2 Report Note" "markdown"
+append_text_file "out/summary/results2/results2_rahman_extraction_note.md" "Rahman Extraction Note" "markdown"
 
 # 2. RADIAL DISTRIBUTION FUNCTION (Full)
 GR_PATH=$(manifest_get "lj_rdf.verlet_long")
 if [ -n "$GR_PATH" ]; then
-    append_full_csv "$GR_PATH" "Radial Distribution Function g(r) (Extended RDF run)"
+    append_full_csv "$GR_PATH" "Radial Distribution Function g(r) (Long RDF production run)"
 fi
 
 # 3. LENNARD-JONES TRAJECTORIES (Truncated, from manifest keys)
 LJ_BRIEF_VERLET=$(manifest_get "lj_brief.verlet")
 LJ_BRIEF_EULER=$(manifest_get "lj_brief.euler")
-LJ_EXT_VERLET=$(manifest_get "lj_extended.verlet_600")
-LJ_EXT_EULER=$(manifest_get "lj_extended.euler_600")
 if [ -n "$LJ_BRIEF_VERLET" ]; then append_trunc_csv "$LJ_BRIEF_VERLET" "LJ Brief (required) — Velocity-Verlet (100 steps)"; fi
 if [ -n "$LJ_BRIEF_EULER" ]; then append_trunc_csv "$LJ_BRIEF_EULER" "LJ Brief (required) — Euler (100 steps)"; fi
-if [ -n "$LJ_EXT_VERLET" ]; then append_trunc_csv "$LJ_EXT_VERLET" "LJ Extended (optional) — Velocity-Verlet (600 steps)"; fi
-if [ -n "$LJ_EXT_EULER" ]; then append_trunc_csv "$LJ_EXT_EULER" "LJ Extended (optional) — Euler (600 steps)"; fi
 
-# 4. HARMONIC OSCILLATOR CONVERGENCE SUMMARY
+# 4. SCALING DATA (Full)
+append_full_csv "$(manifest_get "scaling.strong")" "Strong Scaling (median paired timings)"
+append_full_csv "$(manifest_get "scaling.size")" "Size Scaling (median paired timings)"
+
+# 5. HARMONIC OSCILLATOR CONVERGENCE SUMMARY
 echo "## HO Convergence Summary (all dt values, final step only)" >> "$OUTFILE"
 echo '```csv' >> "$OUTFILE"
 echo "integrator,dt,x_final,v_final,E_total_final" >> "$OUTFILE"
@@ -127,7 +156,7 @@ for key, fpath in sorted(m.get('ho_convergence', {}).items()):
 echo '```' >> "$OUTFILE"
 echo "" >> "$OUTFILE"
 
-# 5. LJ RDF companion trajectory (if present)
+# 6. LJ RDF companion trajectory (if present)
 LJ_RDF_ENERGY=$(manifest_get "lj_rdf.verlet_long_energy")
 if [ -n "$LJ_RDF_ENERGY" ]; then
     append_trunc_csv "$LJ_RDF_ENERGY" "LJ RDF long run trajectory (energy/temperature)"
