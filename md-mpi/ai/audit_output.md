@@ -1,11 +1,176 @@
 # Audit Output — WA2 MPI MD Solver
 
+## Executive Summary
+
+| Field | Value |
+|---|---|
+| Purpose | Executable project-wide audit trace: build/tests/smoke runs and raw code/context evidence. |
+| Generation timestamp (UTC) | 2026-03-07T18:15:41Z |
+| Git commit | e535aaf9e86dfa3549c06a6d71e9792912fca492 |
+| Git working tree | dirty (5 changed paths) |
+| Generation succeeded | yes |
+| Generation status label | confirmed |
+| Generation note | Audit generation completed. |
+
+### Top Important Current Facts
+
+- Manifest-linked artifacts found: 44/44 paths currently exist.
+- Core final figures present: 9/9 required figure files.
+- Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
+- Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
+- Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
+- Results 3 strong scaling: max measured speedup 14.62x; fitted Amdahl serial fraction f=0.0396.
+
+## How to Read This File
+
+- Authoritative for: Build/test execution traces and raw repository state at generation time.
+- Less authoritative for: Narrative interpretation of scientific conclusions across all figures.
+- Companion files to read with this one: `ai/results.md`, `ai/results_bundle.md`.
+
+## Authoritative Facts
+
+| Fact | Status | Evidence |
+|---|---|---|
+| Manifest present | confirmed | `out/manifest.json` |
+| Core required figures present | confirmed | 9/9 required |
+| Core required tables/data present | confirmed | 8/8 required |
+| Plot metadata sidecars available | confirmed | `out/plots/metadata/*.json` |
+
+## Generated Result Summaries (High Value)
+
+- Manifest-linked artifacts found: 44/44 paths currently exist.
+- Core final figures present: 9/9 required figure files.
+- Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
+- Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
+- Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
+- Results 3 strong scaling: max measured speedup 14.62x; fitted Amdahl serial fraction f=0.0396.
+
+## Current Deliverables Map
+
+### Current final figures
+- [confirmed] Results 1: `out/plots/results1_ho_figure1_trajectories_dt0p01.png` (required)
+- [confirmed] Results 1: `out/plots/results1_ho_figure2_phase_space_dt0p01.png` (required)
+- [confirmed] Results 1: `out/plots/results1_ho_figure3_small_vs_large_dt.png` (required)
+- [confirmed] Results 1: `out/plots/results1_ho_figure4_convergence_combined.png` (required)
+- [confirmed] Results 1: `out/plots/results1_ho_figure5_energy_diagnostic.png` (optional)
+- [confirmed] Results 2: `out/plots/results2_lj_brief_energy_100step_production.png` (required)
+- [confirmed] Results 2: `out/plots/results2_lj_brief_temperature_100step_production.png` (required)
+- [confirmed] Results 2: `out/plots/results2_lj_rdf_comparison_rahman1964.png` (required)
+- [confirmed] Results 3: `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png` (required)
+- [confirmed] Results 3: `out/plots/results3_problem_size_scaling_fixed_p16.png` (required)
+
+### Current tables
+- [confirmed] Manifest: `out/manifest.json` (required)
+- [confirmed] Results 1: `out/summary/results1/results1_ho_convergence_summary.csv` (required)
+- [confirmed] Results 1: `out/summary/results1/results1_ho_small_large_summary.csv` (required)
+- [confirmed] Results 1: `out/summary/results1/results1_ho_endpoint_values.csv` (required)
+- [confirmed] Results 2: `out/summary/results2/results2_quantitative_summary_table.csv` (required)
+- [confirmed] Results 2: `out/summary/results2/results2_quantitative_summary_table.md` (required)
+- [confirmed] Results 3: `out/scaling_strong.csv` (required)
+- [confirmed] Results 3: `out/scaling_size.csv` (required)
+
+### Core deliverables
+- [confirmed] `ai/audit_output.md`
+- [confirmed] `ai/results.md`
+- [confirmed] `ai/results_bundle.md`
+- [confirmed] `out/manifest.json`
+
+### Diagnostics-only artifacts
+- [informational] `out/plots/metadata/*.json` sidecars present: 10.
+- [informational] Raw run CSV trees under `out/runs/` are primary diagnostics and provenance backing.
+
+### Deprecated / legacy artifacts
+- [expected by design] Legacy filename `out/plots/results1_ho_position_velocity_trajectories.png` replaced by `out/plots/results1_ho_figure1_trajectories_dt0p01.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_phase_space_trajectories.png` replaced by `out/plots/results1_ho_figure2_phase_space_dt0p01.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_convergence_endpoint_position_error.png` replaced by `out/plots/results1_ho_figure4_convergence_combined.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_convergence_rms_phase_space_error.png` replaced by `out/plots/results1_ho_figure4_convergence_combined.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_energy_conservation.png` replaced by `out/plots/results1_ho_figure5_energy_diagnostic.png`.
+
+## Report Claims Supported by Current Evidence
+
+| Claim | Supporting artifacts | Confidence | Caveat |
+|---|---|---|---|
+| Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_ho_figure4_convergence_combined.png` | medium | No major caveat recorded in metadata. |
+| Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_ho_figure3_small_vs_large_dt.png` | medium | No major caveat recorded in metadata. |
+| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
+| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
+| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
+| The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
+| Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
+| Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
+| Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences. | `out/plots/results1_ho_figure2_phase_space_dt0p01.png` | medium | No major caveat recorded in metadata. |
+| Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval. | `out/plots/results1_ho_figure5_energy_diagnostic.png` | medium | No major caveat recorded in metadata. |
+
+## Freshness / Staleness Metadata
+
+### Source files used to generate this file
+| Source file | Found | Last modified (UTC) | Status |
+|---|---|---|---|
+| ai/audit.sh | yes | 2026-03-07T17:11:19Z | confirmed |
+| ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
+| Makefile | yes | 2026-03-05T11:10:52Z | confirmed |
+| tests/test_runner.cpp | yes | 2026-03-02T17:08:54Z | confirmed |
+| src/main.cpp | yes | 2026-03-06T12:35:38Z | confirmed |
+| out/manifest.json | yes | 2026-03-07T17:45:00Z | confirmed |
+
+### Expected file checks
+| Path | Expectation | Role | Status |
+|---|---|---|---|
+| out/manifest.json | required | project manifest | confirmed |
+| Makefile | required | build definition | confirmed |
+| src/main.cpp | required | core solver source | confirmed |
+| tests/test_runner.cpp | required | unit-test entry | confirmed |
+| scripts/plot_ho.py | required | results generator | confirmed |
+| scripts/plot_lj.py | required | results generator | confirmed |
+| scripts/plot_scaling.py | required | results generator | confirmed |
+
+### Output currency relative to current repo evidence
+| Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
+|---|---|---|---|---|
+| ai/audit_output.md | 2026-03-07T18:15:41Z | 2026-03-07T18:15:16Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/results.md | 2026-03-07T17:48:10Z | 2026-03-07T18:15:16Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/results_bundle.md | 2026-03-07T17:48:10Z | 2026-03-07T18:15:16Z | potential issue | older than latest source/evidence; consider regeneration |
+
+## Diagnostics / Warnings
+
+- [confirmed] Required artifacts for this context view were found.
+- [potential issue] Context outputs older than latest repo evidence: `ai/results.md`, `ai/results_bundle.md`
+
+## Known Limitations / Caveats (Project-wide)
+
+- Lennard-Jones uses a hard cutoff (no potential shift), so small energy discontinuities can occur when pairs cross r_cut.
+- LJ force evaluation is direct all-pairs O(N^2) without neighbour lists; scaling trends depend strongly on chosen timestep counts.
+- MPI strategy uses particle decomposition plus Allgatherv-style position exchange each timestep; communication overhead rises with process count.
+- Results 2 reference comparison uses manual Rahman Fig. 2 anchors for part of the curve; treat as qualitative/semi-quantitative.
+- Strong/size scaling CSVs store aggregated timings rather than all replicate traces, limiting deeper uncertainty analysis.
+- Artifact naming conventions evolved (notably Results 1 plot names); legacy filename checks must be interpreted with rename context.
+
+## Potentially Stale or Informational Items
+
+| Status | Item | Interpretation |
+|---|---|---|
+| expected by design | `out/plots/results1_ho_position_velocity_trajectories.png` | Renamed; current artifact is `out/plots/results1_ho_figure1_trajectories_dt0p01.png`. |
+| expected by design | `out/plots/results1_ho_phase_space_trajectories.png` | Renamed; current artifact is `out/plots/results1_ho_figure2_phase_space_dt0p01.png`. |
+| expected by design | `out/plots/results1_ho_convergence_endpoint_position_error.png` | Renamed; current artifact is `out/plots/results1_ho_figure4_convergence_combined.png`. |
+| expected by design | `out/plots/results1_ho_convergence_rms_phase_space_error.png` | Renamed; current artifact is `out/plots/results1_ho_figure4_convergence_combined.png`. |
+| expected by design | `out/plots/results1_ho_energy_conservation.png` | Renamed; current artifact is `out/plots/results1_ho_figure5_energy_diagnostic.png`. |
+| informational | `scripts/__pycache__/` | Generated cache files may create noisy static-scan results unless excluded. |
+| informational | `out/summary/results3/` | Results 3 currently tracked via `out/scaling_*.csv` and metadata JSON sidecars. |
+
+## Cross-References
+
+- `ai/audit_output.md`: executable build/test/smoke audit and raw source/verbatim evidence.
+- `ai/results.md`: interpreted project-wide results summary and compliance-oriented checks.
+- `ai/results_bundle.md`: raw/truncated artifact bundle for direct context ingestion.
+
+## Detailed Audit Evidence (Raw and Verbose)
+
 ## 1. Metadata
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-07T16:54:01Z |
-| Git commit | 2f462cd22ec2a15e29a809c79b04f967994591ee |
+| Timestamp (UTC) | 2026-03-07T18:15:34Z |
+| Git commit | e535aaf9e86dfa3549c06a6d71e9792912fca492 |
 | Hostname | MacBook-Pro-434.local |
 | uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -30,7 +195,9 @@
 ./ai/archive/task_overview.md
 ./ai/audit.sh
 ./ai/audit_output.md
-./ai/audit_output.tmp.7EL3wR
+./ai/audit_output.tmp.CQCVD7
+./ai/audit_preface.tmp.cb58iE
+./ai/context_report.py
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
 ./ai/pack_context.sh
@@ -78,7 +245,7 @@
 
 ### out/plots/
 ```
-total 6744
+total 6360
 drwx------  13 felix  staff     416 Mar  7 16:20 .
 drwx------  20 felix  staff     640 Mar  6 16:35 ..
 drwxr-xr-x  12 felix  staff     384 Mar  7 16:21 metadata
@@ -87,9 +254,9 @@ drwxr-xr-x  12 felix  staff     384 Mar  7 16:21 metadata
 -rw-r--r--   1 felix  staff  683110 Mar  7 14:52 results1_ho_figure3_small_vs_large_dt.png
 -rw-r--r--   1 felix  staff  366090 Mar  7 14:52 results1_ho_figure4_convergence_combined.png
 -rw-r--r--   1 felix  staff  216304 Mar  7 14:52 results1_ho_figure5_energy_diagnostic.png
--rw-r--r--   1 felix  staff  406384 Mar  7 16:53 results2_lj_brief_energy_100step_production.png
--rw-r--r--   1 felix  staff  153527 Mar  7 16:53 results2_lj_brief_temperature_100step_production.png
--rw-r--r--   1 felix  staff  266964 Mar  7 16:53 results2_lj_rdf_comparison_rahman1964.png
+-rw-r--r--@  1 felix  staff  292464 Mar  7 18:15 results2_lj_brief_energy_100step_production.png
+-rw-r--r--   1 felix  staff  144510 Mar  7 17:45 results2_lj_brief_temperature_100step_production.png
+-rw-r--r--   1 felix  staff  234926 Mar  7 17:45 results2_lj_rdf_comparison_rahman1964.png
 -rw-r--r--   1 felix  staff  291528 Mar  7 15:05 results3_problem_size_scaling_fixed_p16.png
 -rw-r--r--   1 felix  staff  274607 Mar  7 15:05 results3_strong_scaling_speedup_efficiency_breakdown.png
 ```
@@ -136,7 +303,7 @@ drwxr-xr-x  12 felix  staff     384 Mar  7 16:21 metadata
     "size": "out/scaling_size.csv"
   },
   "results2_outputs": {
-    "generated_utc": "2026-03-07T16:53:17Z",
+    "generated_utc": "2026-03-07T17:45:00Z",
     "main_report_figures": [
       "out/plots/results2_lj_brief_energy_100step_production.png",
       "out/plots/results2_lj_brief_temperature_100step_production.png",
@@ -209,7 +376,7 @@ mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o s
 mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -o md_solver src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o
 ```
 
-**Build status:** SUCCESS
+**Build status:** confirmed
 
 ### Compilation flags
 
@@ -230,6 +397,7 @@ make: Nothing to be done for `all'.
 ```
 
 **Warnings found:** 0
+**Warning interpretation:** confirmed (no warning hits detected)
 
 ## 4. Unit Tests
 
@@ -246,17 +414,22 @@ mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -o test
 ALL TESTS PASSED
 ```
 
-**Test status:** ALL PASSED
+**Test status:** confirmed
 
 ## 5. Smoke Runs
 
 ### 5a. HO — Velocity-Verlet (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:71209] [prterun-MacBook-Pro-434-71209@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71209] [prterun-MacBook-Pro-434-71209@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71209] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[71209] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:16177] [prterun-MacBook-Pro-434-16177@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16177] [prterun-MacBook-Pro-434-16177@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16177] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+[16177] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+--------------------------------------------------------------------------
 ```
 
 **Output (first 6 + last 3 lines):**
@@ -276,11 +449,12 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5b. HO — RK4 (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:71212] [prterun-MacBook-Pro-434-71212@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71212] [prterun-MacBook-Pro-434-71212@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71212] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[71212] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:16180] [prterun-MacBook-Pro-434-16180@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16180] [prterun-MacBook-Pro-434-16180@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16180] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
 --------------------------------------------------------------------------
+[16180] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+No sockets were able to be opened on the available protocols
 ```
 
 **Output (first 6 + last 3):**
@@ -300,14 +474,11 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5c. HO — Euler (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:71215] [prterun-MacBook-Pro-434-71215@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71215] [prterun-MacBook-Pro-434-71215@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71215] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[MacBook-Pro-434.local:16183] [prterun-MacBook-Pro-434-16183@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16183] [prterun-MacBook-Pro-434-16183@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16183] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[16183] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 --------------------------------------------------------------------------
-No sockets were able to be opened on the available protocols
-(IPv4 and/or IPv6). Please check your network and retry.
---------------------------------------------------------------------------
-[71215] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
@@ -327,11 +498,10 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:71218] [prterun-MacBook-Pro-434-71218@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71218] [prterun-MacBook-Pro-434-71218@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71218] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[71218] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
---------------------------------------------------------------------------
+[MacBook-Pro-434.local:16186] [prterun-MacBook-Pro-434-16186@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16186] [prterun-MacBook-Pro-434-16186@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16186] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[16186] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
@@ -444,11 +614,14 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:71220] [prterun-MacBook-Pro-434-71220@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71220] [prterun-MacBook-Pro-434-71220@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:71220] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[71220] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:16188] [prterun-MacBook-Pro-434-16188@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16188] [prterun-MacBook-Pro-434-16188@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:16188] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
 --------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+[16188] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
@@ -471,8 +644,8 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
-[71223] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-[71224] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[16191] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[16192] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 MATCH
 ```
 
@@ -480,19 +653,19 @@ MATCH
 
 ### CLI help output
 ```
-[71226] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[16194] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 ### Comparison
 
-| Parameter | CLI Default | Brief Requirement | Match? |
-|-----------|------------|-------------------|--------|
-| N         | 864        | 864               | YES    |
-| steps     | 100        | 100               | YES    |
-| dt        | 1e-14      | 1e-14             | YES    |
-| mode      | lj         | lj                | YES    |
-| integrator| verlet     | verlet             | YES   |
-| T_init    | 94.4 K     | 94.4 K            | YES    |
+| Parameter | CLI Default | Brief Requirement | Interpreted status |
+|-----------|------------|-------------------|--------------------|
+| N         | 864        | 864               | confirmed          |
+| steps     | 100        | 100               | confirmed          |
+| dt        | 1e-14      | 1e-14             | confirmed          |
+| mode      | lj         | lj                | confirmed          |
+| integrator| verlet     | verlet             | confirmed          |
+| T_init    | 94.4 K     | 94.4 K            | confirmed          |
 
 ## 7. File Dump (Verbatim)
 
@@ -4800,7 +4973,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### `scripts/plot_lj.py` (1557 lines)
+### `scripts/plot_lj.py` (1505 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -4824,7 +4997,6 @@ import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 from plot_style import (
-    COLOR_ACCENT,
     COLOR_EULER,
     COLOR_REFERENCE,
     COLOR_VERLET,
@@ -5242,11 +5414,10 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
     os.makedirs(PLOT_DIR, exist_ok=True)
     fig, axes = plt.subplots(
         2,
-        2,
-        figsize=(13.2, 8.2),
-        sharex="col",
+        1,
+        figsize=(9.4, 7.2),
+        sharex=True,
         constrained_layout=True,
-        gridspec_kw={"width_ratios": [1.0, 1.28]},
     )
     any_data = False
     euler_divergence_time_ps = None
@@ -5258,7 +5429,6 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
     per_integrator_summary = []
     series_parameters = {}
     missing_provenance = []
-    energy_component_ranges = {}
 
     for row, integrator in enumerate(config["integrators"]):
         series_key = integrator["series_key"]
@@ -5286,10 +5456,7 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         t = series["time_ps"]
         if np.any(np.isfinite(t)):
             max_time_ps = max(max_time_ps, float(np.nanmax(t)))
-        ekin = series["ekin_eps"]
-        epot = series["epot_eps"]
         etot = series["etot_eps"]
-        meta = series["meta"]
         meta_typed = series["meta_typed"]
         source_data_files.append(fpath)
         source_manifest_keys.append(manifest_key)
@@ -5301,6 +5468,7 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         if ref_idx is None:
             rel_dev_pct = np.full_like(etot, np.nan)
             rel_dev_ref_step = None
+            e0 = np.nan
         else:
             e0 = etot[ref_idx]
             if np.isfinite(e0) and abs(e0) > 1e-30:
@@ -5309,55 +5477,36 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 rel_dev_pct = np.full_like(etot, np.nan)
             rel_dev_ref_step = int(steps[ref_idx])
 
-        ax_e = axes[row, 0]
-        ax_e.plot(t, ekin, label=r"$E_{kin}$", color=COLOR_ACCENT, linewidth=1.6, alpha=0.95)
-        ax_e.plot(t, epot, label=r"$E_{pot}$", color=COLOR_VERLET, linewidth=1.6, alpha=0.95)
-        ax_e.plot(t, etot, label=r"$E_{total}$", color="k", linewidth=2.1, alpha=0.98)
-        finite_energy = np.concatenate(
-            [
-                ekin[np.isfinite(ekin)],
-                epot[np.isfinite(epot)],
-                etot[np.isfinite(etot)],
-            ]
-        )
-        if finite_energy.size:
-            energy_component_ranges[row] = (float(np.nanmin(finite_energy)), float(np.nanmax(finite_energy)))
-        ax_e.set_ylabel(r"Energy [$\varepsilon$]")
-        apply_major_grid(ax_e)
-        disable_offset_text(ax_e)
-        if row == 0:
-            ax_e.set_title("Energy Components")
-            ax_e.legend(loc="best")
-        row_label = label
-        if style_key == "verlet":
-            row_label += " (stable)"
-        if style_key == "euler":
-            row_label += " (strong drift)"
-        ax_e.text(
-            0.02,
-            0.92,
-            row_label,
-            transform=ax_e.transAxes,
-            fontsize=9,
-            bbox={"facecolor": "white", "alpha": 0.86, "edgecolor": "none"},
-        )
-
-        ax_d = axes[row, 1]
+        finite_etot = etot[np.isfinite(etot)]
+        ax_d = axes[row]
         ax_d.plot(t, rel_dev_pct, color=color, linestyle=linestyle, linewidth=max(2.2, linewidth))
         ax_d.set_ylabel(r"$\Delta E / E_0$ [%]")
-        ax_d.axhline(0.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.0, alpha=0.5)
-        if row == 0:
-            ax_d.set_title("Relative Total-Energy Deviation")
+        ax_d.axhline(0.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.0, alpha=0.6)
         apply_major_grid(ax_d)
         disable_offset_text(ax_d)
 
+        row_label = label
+        ax_d.text(
+            0.98,
+            0.92,
+            row_label,
+            transform=ax_d.transAxes,
+            fontsize=9,
+            ha="right",
+            bbox={"facecolor": "white", "alpha": 0.86, "edgecolor": "none"},
+        )
+
+        if row == 0:
+            ax_d.set_title(r"Signed relative drift $\Delta E/E_0$ [%]")
+
+        finite_etot = etot[np.isfinite(etot)]
         divergence_step = series.get("divergence_step")
         divergence_time_ps = series.get("divergence_time_ps")
         divergence_reason = series.get("divergence_reason")
         finite_rel_pct = rel_dev_pct[np.isfinite(rel_dev_pct)]
-        finite_etot = etot[np.isfinite(etot)]
         max_abs_rel_pct = float(np.nanmax(np.abs(finite_rel_pct))) if finite_rel_pct.size else None
         mean_abs_rel_pct = float(np.nanmean(np.abs(finite_rel_pct))) if finite_rel_pct.size else None
+        final_rel_pct = float(finite_rel_pct[-1]) if finite_rel_pct.size else None
         per_integrator_summary.append(
             {
                 "integrator": style_key,
@@ -5369,9 +5518,7 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 "reference_step_for_relative_deviation": rel_dev_ref_step,
                 "max_abs_relative_energy_deviation_percent": max_abs_rel_pct,
                 "mean_abs_relative_energy_deviation_percent": mean_abs_rel_pct,
-                "final_relative_energy_deviation_percent": (
-                    float(finite_rel_pct[-1]) if finite_rel_pct.size else None
-                ),
+                "final_relative_energy_deviation_percent": final_rel_pct,
                 "mean_total_energy_eps": float(np.nanmean(finite_etot)) if finite_etot.size else None,
                 "divergent_tail_omitted": bool(series["has_nonfinite"]),
                 "divergence_step": divergence_step,
@@ -5379,11 +5526,17 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 "divergence_reason": divergence_reason,
             }
         )
-        if max_abs_rel_pct is not None:
+        if max_abs_rel_pct is not None and final_rel_pct is not None:
+            ann_lines = [
+                f"max |ΔE/E0| = {max_abs_rel_pct:.3f}%",
+                f"final ΔE/E0 = {final_rel_pct:.3f}%",
+            ]
+            if mean_abs_rel_pct is not None:
+                ann_lines.append(f"mean |ΔE/E0| = {mean_abs_rel_pct:.3f}%")
             ax_d.text(
                 0.02,
-                0.90,
-                f"max |ΔE/E0| = {max_abs_rel_pct:.3f}%",
+                0.93,
+                "\n".join(ann_lines),
                 transform=ax_d.transAxes,
                 ha="left",
                 fontsize=8.5,
@@ -5392,27 +5545,6 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
             if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
                 euler_divergence_time_ps = divergence_time_ps
-            ax_e.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
-            ax_d.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
-            note = f"Euler diverged at step {divergence_step}"
-            if divergence_reason:
-                note += f" ({divergence_reason})"
-            ax_e.text(
-                0.02,
-                0.93,
-                note,
-                transform=ax_e.transAxes,
-                fontsize=8,
-                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
-            )
-            ax_d.text(
-                0.02,
-                0.93,
-                note,
-                transform=ax_d.transAxes,
-                fontsize=8,
-                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
-            )
 
     if not any_data:
         plt.close(fig)
@@ -5421,40 +5553,13 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
     if config.get("crop_to_euler_divergence", False):
         x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
-        if x_max is not None:
-            for row in range(2):
-                for col in range(2):
-                    axes[row, col].set_xlim(0.0, x_max)
-    if config.get("energy_per_row_autoscale", True):
-        energy_pad_lower_frac = float(config.get("energy_pad_lower_frac", 0.08))
-        energy_pad_upper_frac = float(config.get("energy_pad_upper_frac", 0.14))
+    if x_max is None and np.isfinite(max_time_ps) and max_time_ps > 0:
+        x_max = float(max_time_ps)
+    if x_max is not None:
         for row in range(2):
-            if row not in energy_component_ranges:
-                continue
-            ymin, ymax = energy_component_ranges[row]
-            span = ymax - ymin
-            if not np.isfinite(span):
-                continue
-            if span < 1e-9:
-                center = 0.5 * (ymin + ymax)
-                pad_low = max(1.0, 0.05 * max(abs(center), 1.0))
-                pad_high = pad_low
-            else:
-                pad_low = energy_pad_lower_frac * span
-                pad_high = energy_pad_upper_frac * span
-            axes[row, 0].set_ylim(ymin - pad_low, ymax + pad_high)
-    energy_ylim = config.get("energy_ylim")
-    if energy_ylim is not None:
-        for row in range(2):
-            axes[row, 0].set_ylim(float(energy_ylim[0]), float(energy_ylim[1]))
-    else:
-        energy_ymax = config.get("energy_ymax")
-        if energy_ymax is not None:
-            for row in range(2):
-                axes[row, 0].set_ylim(top=float(energy_ymax))
+            axes[row].set_xlim(0.0, x_max)
 
-    axes[1, 0].set_xlabel("Time [ps]")
-    axes[1, 1].set_xlabel("Time [ps]")
+    axes[1].set_xlabel("Time [ps]")
     fig.suptitle(config["energy_title"], fontsize=13)
     if config.get("include_required_run_note", False):
         fig.set_constrained_layout_pads(h_pad=0.12, w_pad=0.03, hspace=0.08, wspace=0.08)
@@ -5472,6 +5577,15 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
     plt.close(fig)
     print(f"Saved {out_path}")
 
+    any_tail_omitted = any(row.get("divergent_tail_omitted") for row in per_integrator_summary)
+    energy_caveats = [
+        "Relative drift is computed from total energy with E0 taken at the first finite production frame.",
+        "LJ uses a hard cutoff without potential shifting; small energy discontinuities can occur when pairs cross r_cut.",
+        "For required-run interpretation, startup/equilibration is completed before this production trajectory.",
+    ]
+    if any_tail_omitted:
+        energy_caveats.append("Divergent non-finite tails are omitted only where the raw series becomes non-finite.")
+
     write_plot_metadata(
         out_name,
         "results2",
@@ -5486,6 +5600,12 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 "integrators_compared": [integrator["style_key"] for integrator in config["integrators"]],
                 "energy_units": "epsilon",
                 "temperature_divergence_threshold_k": TEMP_DIVERGENCE_K,
+                "figure_layout": {
+                    "rows": ["Velocity-Verlet", "Forward Euler"],
+                    "columns": ["signed relative total-energy deviation ΔE/E0 [%] vs time [ps]"],
+                },
+                "drift_only_figure": True,
+                "panel_content": "signed relative total-energy deviation only (ΔE/E0 [%])",
                 "series_parameters": series_parameters,
                 "run_semantics": {
                     "required_production_steps": 100 if run_key == "lj_brief" else None,
@@ -5497,20 +5617,21 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
             },
             "fit_or_truncation": {
                 "relative_deviation_reference": "first finite E_total point at or after production_start_step",
-                "divergent_tail_handling": "non-finite values or |T| > threshold are omitted from plotted tail",
+                "divergent_tail_handling": (
+                    "non-finite values or |T| > threshold are omitted from plotted tail"
+                    if any_tail_omitted
+                    else "no tail omitted; full available production window is plotted"
+                ),
                 "crop_to_euler_divergence": bool(config.get("crop_to_euler_divergence", False)),
                 "applied_xlim_ps": [0.0, float(x_max)] if x_max is not None else None,
+                "drift_only": True,
             },
             "key_quantitative_summary": {
                 "max_time_ps_in_source": float(max_time_ps),
                 "euler_divergence_time_ps": euler_divergence_time_ps,
                 "per_integrator": per_integrator_summary,
             },
-            "caveats": [
-                "Energy curves are shown in reduced units (E/epsilon).",
-                "Divergent tails are intentionally omitted to keep the stable regime readable.",
-                "For required-run interpretation, startup/equilibration is completed before this production trajectory.",
-            ],
+            "caveats": energy_caveats,
             "missing_provenance": missing_provenance,
         },
     )
@@ -6305,15 +6426,15 @@ def main():
             {"series_key": "verlet", "label": "Velocity-Verlet", "style_key": "verlet"},
             {"series_key": "euler", "label": "Forward Euler", "style_key": "euler"},
         ],
-        "energy_title": "Argon LJ Required Run (100 Steps, 1 ps): Energy Stability",
+        "energy_title": "Argon LJ required production run (1 ps, 100 steps): signed total-energy drift",
         "temperature_title": "Argon LJ Required Run (100 Steps, 1 ps): Temperature",
         "energy_purpose": (
-            "Core brief-facing evidence for the required 100-step production run: "
+            "Core brief-facing evidence for the required 100-step production run using signed total-energy drift only: "
             "Velocity-Verlet remains bounded while Forward Euler drifts strongly."
         ),
         "energy_claim": (
             "At the required run length, Velocity-Verlet gives a physically meaningful bounded "
-            "NVE trajectory; Forward Euler shows strong drift and is unreliable."
+            "NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable."
         ),
         "temperature_purpose": (
             "Core brief-facing evidence for the required 100-step production run temperature response."

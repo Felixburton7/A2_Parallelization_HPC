@@ -19,7 +19,6 @@ import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 from plot_style import (
-    COLOR_ACCENT,
     COLOR_EULER,
     COLOR_REFERENCE,
     COLOR_VERLET,
@@ -437,11 +436,10 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
     os.makedirs(PLOT_DIR, exist_ok=True)
     fig, axes = plt.subplots(
         2,
-        2,
-        figsize=(13.2, 8.2),
-        sharex="col",
+        1,
+        figsize=(9.4, 7.2),
+        sharex=True,
         constrained_layout=True,
-        gridspec_kw={"width_ratios": [1.0, 1.28]},
     )
     any_data = False
     euler_divergence_time_ps = None
@@ -453,7 +451,6 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
     per_integrator_summary = []
     series_parameters = {}
     missing_provenance = []
-    energy_component_ranges = {}
 
     for row, integrator in enumerate(config["integrators"]):
         series_key = integrator["series_key"]
@@ -481,10 +478,7 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         t = series["time_ps"]
         if np.any(np.isfinite(t)):
             max_time_ps = max(max_time_ps, float(np.nanmax(t)))
-        ekin = series["ekin_eps"]
-        epot = series["epot_eps"]
         etot = series["etot_eps"]
-        meta = series["meta"]
         meta_typed = series["meta_typed"]
         source_data_files.append(fpath)
         source_manifest_keys.append(manifest_key)
@@ -496,6 +490,7 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         if ref_idx is None:
             rel_dev_pct = np.full_like(etot, np.nan)
             rel_dev_ref_step = None
+            e0 = np.nan
         else:
             e0 = etot[ref_idx]
             if np.isfinite(e0) and abs(e0) > 1e-30:
@@ -504,55 +499,35 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 rel_dev_pct = np.full_like(etot, np.nan)
             rel_dev_ref_step = int(steps[ref_idx])
 
-        ax_e = axes[row, 0]
-        ax_e.plot(t, ekin, label=r"$E_{kin}$", color=COLOR_ACCENT, linewidth=1.6, alpha=0.95)
-        ax_e.plot(t, epot, label=r"$E_{pot}$", color=COLOR_VERLET, linewidth=1.6, alpha=0.95)
-        ax_e.plot(t, etot, label=r"$E_{total}$", color="k", linewidth=2.1, alpha=0.98)
-        finite_energy = np.concatenate(
-            [
-                ekin[np.isfinite(ekin)],
-                epot[np.isfinite(epot)],
-                etot[np.isfinite(etot)],
-            ]
-        )
-        if finite_energy.size:
-            energy_component_ranges[row] = (float(np.nanmin(finite_energy)), float(np.nanmax(finite_energy)))
-        ax_e.set_ylabel(r"Energy [$\varepsilon$]")
-        apply_major_grid(ax_e)
-        disable_offset_text(ax_e)
-        if row == 0:
-            ax_e.set_title("Energy Components")
-            ax_e.legend(loc="best")
+        finite_etot = etot[np.isfinite(etot)]
+        ax_d = axes[row]
+        ax_d.plot(t, rel_dev_pct, color=color, linestyle=linestyle, linewidth=max(2.2, linewidth))
+        ax_d.set_ylabel(r"$\Delta E / E_0$ [%]")
+        ax_d.axhline(0.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.0, alpha=0.6)
+        apply_major_grid(ax_d)
+        disable_offset_text(ax_d)
+
         row_label = label
-        if style_key == "verlet":
-            row_label += " (stable)"
-        if style_key == "euler":
-            row_label += " (strong drift)"
-        ax_e.text(
-            0.02,
+        ax_d.text(
+            0.98,
             0.92,
             row_label,
-            transform=ax_e.transAxes,
+            transform=ax_d.transAxes,
             fontsize=9,
+            ha="right",
             bbox={"facecolor": "white", "alpha": 0.86, "edgecolor": "none"},
         )
 
-        ax_d = axes[row, 1]
-        ax_d.plot(t, rel_dev_pct, color=color, linestyle=linestyle, linewidth=max(2.2, linewidth))
-        ax_d.set_ylabel(r"$\Delta E / E_0$ [%]")
-        ax_d.axhline(0.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.0, alpha=0.5)
         if row == 0:
-            ax_d.set_title("Relative Total-Energy Deviation")
-        apply_major_grid(ax_d)
-        disable_offset_text(ax_d)
+            ax_d.set_title(r"Signed relative drift $\Delta E/E_0$ [%]")
 
         divergence_step = series.get("divergence_step")
         divergence_time_ps = series.get("divergence_time_ps")
         divergence_reason = series.get("divergence_reason")
         finite_rel_pct = rel_dev_pct[np.isfinite(rel_dev_pct)]
-        finite_etot = etot[np.isfinite(etot)]
         max_abs_rel_pct = float(np.nanmax(np.abs(finite_rel_pct))) if finite_rel_pct.size else None
         mean_abs_rel_pct = float(np.nanmean(np.abs(finite_rel_pct))) if finite_rel_pct.size else None
+        final_rel_pct = float(finite_rel_pct[-1]) if finite_rel_pct.size else None
         per_integrator_summary.append(
             {
                 "integrator": style_key,
@@ -564,9 +539,7 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 "reference_step_for_relative_deviation": rel_dev_ref_step,
                 "max_abs_relative_energy_deviation_percent": max_abs_rel_pct,
                 "mean_abs_relative_energy_deviation_percent": mean_abs_rel_pct,
-                "final_relative_energy_deviation_percent": (
-                    float(finite_rel_pct[-1]) if finite_rel_pct.size else None
-                ),
+                "final_relative_energy_deviation_percent": final_rel_pct,
                 "mean_total_energy_eps": float(np.nanmean(finite_etot)) if finite_etot.size else None,
                 "divergent_tail_omitted": bool(series["has_nonfinite"]),
                 "divergence_step": divergence_step,
@@ -574,11 +547,17 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 "divergence_reason": divergence_reason,
             }
         )
-        if max_abs_rel_pct is not None:
+        if max_abs_rel_pct is not None and final_rel_pct is not None:
+            ann_lines = [
+                f"max |ΔE/E0| = {max_abs_rel_pct:.3f}%",
+                f"final ΔE/E0 = {final_rel_pct:.3f}%",
+            ]
+            if mean_abs_rel_pct is not None:
+                ann_lines.append(f"mean |ΔE/E0| = {mean_abs_rel_pct:.3f}%")
             ax_d.text(
                 0.02,
-                0.90,
-                f"max |ΔE/E0| = {max_abs_rel_pct:.3f}%",
+                0.93,
+                "\n".join(ann_lines),
                 transform=ax_d.transAxes,
                 ha="left",
                 fontsize=8.5,
@@ -587,27 +566,6 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
             if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
                 euler_divergence_time_ps = divergence_time_ps
-            ax_e.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
-            ax_d.axvline(divergence_time_ps, color=color, linestyle="--", linewidth=1.2, alpha=0.8)
-            note = f"Euler diverged at step {divergence_step}"
-            if divergence_reason:
-                note += f" ({divergence_reason})"
-            ax_e.text(
-                0.02,
-                0.93,
-                note,
-                transform=ax_e.transAxes,
-                fontsize=8,
-                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
-            )
-            ax_d.text(
-                0.02,
-                0.93,
-                note,
-                transform=ax_d.transAxes,
-                fontsize=8,
-                bbox={"facecolor": "white", "alpha": 0.8, "edgecolor": "none"},
-            )
 
     if not any_data:
         plt.close(fig)
@@ -616,40 +574,13 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
     if config.get("crop_to_euler_divergence", False):
         x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
-        if x_max is not None:
-            for row in range(2):
-                for col in range(2):
-                    axes[row, col].set_xlim(0.0, x_max)
-    if config.get("energy_per_row_autoscale", True):
-        energy_pad_lower_frac = float(config.get("energy_pad_lower_frac", 0.08))
-        energy_pad_upper_frac = float(config.get("energy_pad_upper_frac", 0.14))
+    if x_max is None and np.isfinite(max_time_ps) and max_time_ps > 0:
+        x_max = float(max_time_ps)
+    if x_max is not None:
         for row in range(2):
-            if row not in energy_component_ranges:
-                continue
-            ymin, ymax = energy_component_ranges[row]
-            span = ymax - ymin
-            if not np.isfinite(span):
-                continue
-            if span < 1e-9:
-                center = 0.5 * (ymin + ymax)
-                pad_low = max(1.0, 0.05 * max(abs(center), 1.0))
-                pad_high = pad_low
-            else:
-                pad_low = energy_pad_lower_frac * span
-                pad_high = energy_pad_upper_frac * span
-            axes[row, 0].set_ylim(ymin - pad_low, ymax + pad_high)
-    energy_ylim = config.get("energy_ylim")
-    if energy_ylim is not None:
-        for row in range(2):
-            axes[row, 0].set_ylim(float(energy_ylim[0]), float(energy_ylim[1]))
-    else:
-        energy_ymax = config.get("energy_ymax")
-        if energy_ymax is not None:
-            for row in range(2):
-                axes[row, 0].set_ylim(top=float(energy_ymax))
+            axes[row].set_xlim(0.0, x_max)
 
-    axes[1, 0].set_xlabel("Time [ps]")
-    axes[1, 1].set_xlabel("Time [ps]")
+    axes[1].set_xlabel("Time [ps]")
     fig.suptitle(config["energy_title"], fontsize=13)
     if config.get("include_required_run_note", False):
         fig.set_constrained_layout_pads(h_pad=0.12, w_pad=0.03, hspace=0.08, wspace=0.08)
@@ -667,6 +598,15 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
     plt.close(fig)
     print(f"Saved {out_path}")
 
+    any_tail_omitted = any(row.get("divergent_tail_omitted") for row in per_integrator_summary)
+    energy_caveats = [
+        "Relative drift is computed from total energy with E0 taken at the first finite production frame.",
+        "LJ uses a hard cutoff without potential shifting; small energy discontinuities can occur when pairs cross r_cut.",
+        "For required-run interpretation, startup/equilibration is completed before this production trajectory.",
+    ]
+    if any_tail_omitted:
+        energy_caveats.append("Divergent non-finite tails are omitted only where the raw series becomes non-finite.")
+
     write_plot_metadata(
         out_name,
         "results2",
@@ -681,6 +621,12 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
                 "integrators_compared": [integrator["style_key"] for integrator in config["integrators"]],
                 "energy_units": "epsilon",
                 "temperature_divergence_threshold_k": TEMP_DIVERGENCE_K,
+                "figure_layout": {
+                    "rows": ["Velocity-Verlet", "Forward Euler"],
+                    "columns": ["signed relative total-energy deviation ΔE/E0 [%] vs time [ps]"],
+                },
+                "drift_only_figure": True,
+                "panel_content": "signed relative total-energy deviation only (ΔE/E0 [%])",
                 "series_parameters": series_parameters,
                 "run_semantics": {
                     "required_production_steps": 100 if run_key == "lj_brief" else None,
@@ -692,20 +638,21 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
             },
             "fit_or_truncation": {
                 "relative_deviation_reference": "first finite E_total point at or after production_start_step",
-                "divergent_tail_handling": "non-finite values or |T| > threshold are omitted from plotted tail",
+                "divergent_tail_handling": (
+                    "non-finite values or |T| > threshold are omitted from plotted tail"
+                    if any_tail_omitted
+                    else "no tail omitted; full available production window is plotted"
+                ),
                 "crop_to_euler_divergence": bool(config.get("crop_to_euler_divergence", False)),
                 "applied_xlim_ps": [0.0, float(x_max)] if x_max is not None else None,
+                "drift_only": True,
             },
             "key_quantitative_summary": {
                 "max_time_ps_in_source": float(max_time_ps),
                 "euler_divergence_time_ps": euler_divergence_time_ps,
                 "per_integrator": per_integrator_summary,
             },
-            "caveats": [
-                "Energy curves are shown in reduced units (E/epsilon).",
-                "Divergent tails are intentionally omitted to keep the stable regime readable.",
-                "For required-run interpretation, startup/equilibration is completed before this production trajectory.",
-            ],
+            "caveats": energy_caveats,
             "missing_provenance": missing_provenance,
         },
     )
@@ -1500,15 +1447,15 @@ def main():
             {"series_key": "verlet", "label": "Velocity-Verlet", "style_key": "verlet"},
             {"series_key": "euler", "label": "Forward Euler", "style_key": "euler"},
         ],
-        "energy_title": "Argon LJ Required Run (100 Steps, 1 ps): Energy Stability",
+        "energy_title": "Argon LJ required production run (1 ps, 100 steps): signed total-energy drift",
         "temperature_title": "Argon LJ Required Run (100 Steps, 1 ps): Temperature",
         "energy_purpose": (
-            "Core brief-facing evidence for the required 100-step production run: "
+            "Core brief-facing evidence for the required 100-step production run using signed total-energy drift only: "
             "Velocity-Verlet remains bounded while Forward Euler drifts strongly."
         ),
         "energy_claim": (
             "At the required run length, Velocity-Verlet gives a physically meaningful bounded "
-            "NVE trajectory; Forward Euler shows strong drift and is unreliable."
+            "NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable."
         ),
         "temperature_purpose": (
             "Core brief-facing evidence for the required 100-step production run temperature response."
