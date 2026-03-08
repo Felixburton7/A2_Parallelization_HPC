@@ -1,11 +1,6 @@
 /**
  * @file mpi_context.hpp
- * @brief MPI rank/size management, particle decomposition, and Allgatherv setup.
- *
- * Encapsulates all MPI-specific state: rank, size, local particle count,
- * offset, recvcounts/displs arrays for MPI_Allgatherv, and the permanent
- * global position buffer. All MPI array arguments use int type as required
- * by the MPI standard.
+ * @brief MPI rank/size state, decomposition, and Allgatherv helpers.
  */
 
 #ifndef MD_MPI_CONTEXT_HPP
@@ -13,8 +8,9 @@
 
 #include <mpi.h>
 
-#include <algorithm>
 #include <vector>
+
+#include "md/partition.hpp"
 
 namespace md {
 
@@ -53,16 +49,15 @@ class MPIContext {
         MPI_Comm_size(MPI_COMM_WORLD, &size);
         N = totalN;
 
-        // Remainder-safe decomposition
-        localN = N / size + (rank < N % size ? 1 : 0);
-        offset = rank * (N / size) + std::min(rank, N % size);
+        computePartition(N, size, rank, localN, offset);
 
         // Pre-compute Allgatherv parameters (int arrays, values in doubles)
         recvcounts.resize(size);
         displs.resize(size);
         for (int r = 0; r < size; ++r) {
-            int ln = N / size + (r < N % size ? 1 : 0);
-            int off = r * (N / size) + std::min(r, N % size);
+            int ln = 0;
+            int off = 0;
+            computePartition(N, size, r, ln, off);
             recvcounts[r] = 3 * ln;
             displs[r] = 3 * off;
         }

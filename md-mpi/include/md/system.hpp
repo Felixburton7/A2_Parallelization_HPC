@@ -1,13 +1,6 @@
 /**
  * @file system.hpp
- * @brief Particle system state using flat, interleaved std::vector<double> arrays.
- *
- * All kinematic variables (position, velocity, acceleration/force) are stored
- * as contiguous 1D interleaved arrays of size 3*localN. Access pattern:
- *   arr[3*i + d]  for local particle i, dimension d ∈ {0, 1, 2}
- *
- * This layout ensures cache-locality and maps directly to MPI_Allgatherv
- * buffer requirements, eliminating indexing translation errors.
+ * @brief Particle state in flat interleaved arrays (x,y,z per particle).
  */
 
 #ifndef MD_SYSTEM_HPP

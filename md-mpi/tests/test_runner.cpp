@@ -1,17 +1,15 @@
 /**
  * @file test_runner.cpp
- * @brief Homebrew unit test runner (no third-party libraries).
- *
- * Calls all test functions and exits with code 0 if all pass,
- * non-zero if any fail. Intended to be invoked via `make test`.
+ * @brief Homebrew unit test runner.
  */
 
 #include <cstdio>
 #include <cstdlib>
 
-// Test function declarations (defined in separate .cpp files)
 extern int testMIC();
 extern int testForce();
+extern int testIntegrators();
+extern int testPartition();
 
 int main() {
     std::printf("=== MD Unit Tests ===\n");
@@ -20,6 +18,8 @@ int main() {
 
     totalFailures += testMIC();
     totalFailures += testForce();
+    totalFailures += testIntegrators();
+    totalFailures += testPartition();
 
     std::printf("=====================\n");
 

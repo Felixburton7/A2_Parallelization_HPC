@@ -1,10 +1,6 @@
 /**
  * @file observables.hpp
- * @brief Thermodynamic observables: energies, temperature, g(r) binning.
- *
- * Provides functions for computing kinetic energy (local), measuring
- * temperature from the equipartition theorem, and accumulating the
- * radial distribution function g(r) histogram.
+ * @brief Thermodynamic observables: energy, temperature, and g(r).
  */
 
 #ifndef MD_OBSERVABLES_HPP

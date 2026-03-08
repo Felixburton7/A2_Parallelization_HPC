@@ -1,11 +1,6 @@
 /**
  * @file rng.hpp
- * @brief FCC lattice construction and Box-Muller velocity initialisation.
- *
- * All random number generation uses std::mt19937_64 with a fixed seed,
- * executed ONLY on rank 0 for bitwise reproducibility across all MPI
- * configurations. Both functions accept a reference to a shared generator
- * to draw from a single, statistically sound random stream.
+ * @brief FCC lattice construction and Maxwell-Boltzmann velocity initialisation.
  */
 
 #ifndef MD_RNG_HPP
@@ -22,18 +17,15 @@ namespace md {
 /**
  * @brief Construct an FCC lattice with N = 4k^3 particles in a cubic box.
  *
- * Four basis atoms per unit cell at fractional coordinates:
- *   (0.0, 0.0, 0.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5)
- *
- * A small random zero-mean perturbation (~0.01*sigma per coordinate) is
- * applied to break exact symmetry and prevent force singularities.
+ * Uses the standard four-site FCC basis with a small zero-mean perturbation
+ * to avoid exact-symmetry force artefacts.
  *
  * @param N     Total number of particles (must be 4*k^3, validated by caller)
  * @param L     Box side length [m]
  * @param gen   Reference to shared RNG (caller owns lifetime)
  * @return      Flat interleaved position array of size 3*N
  */
-std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
+inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
     // Determine k such that N = 4*k^3 (validated by caller)
     int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
 
@@ -67,7 +59,9 @@ std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
 }
 
 /**
- * @brief Maxwell-Boltzmann velocities via Box-Muller. Removes CoM drift, rescales to target T.
+ * @brief Maxwell-Boltzmann velocities via Box-Muller.
+ *
+ * Removes centre-of-mass drift and rescales to match the target temperature.
  *
  * @param N      Total number of particles
  * @param T      Target temperature [K]
@@ -75,7 +69,7 @@ std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
  * @param gen    Reference to shared RNG (same stream as lattice perturbation)
  * @return       Flat interleaved velocity array of size 3*N
  */
-std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
+inline std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
     std::vector<double> vel(3 * N);
 
     double sigmaV = std::sqrt(constants::kB * T / mass);

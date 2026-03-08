@@ -1,8 +1,6 @@
 /**
  * @file constants.hpp
- * @brief Physical constants for Molecular Dynamics simulation.
- *
- * Physical constants and derived LJ parameters (SI units).
+ * @brief Physical constants and LJ parameters in SI units.
  */
 
 #ifndef MD_CONSTANTS_HPP

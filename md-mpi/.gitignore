@@ -17,3 +17,7 @@ test_runner
 .idea/
 *.swp
 *~
+
+# Python cache
+__pycache__/
+*.pyc

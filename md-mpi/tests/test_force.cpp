@@ -9,6 +9,10 @@
  *
  * Test 3: LJ force sign check — particles closer than equilibrium
  *         should repel, further should attract.
+ *
+ * Test 4: Cutoff behavior just below and above rcut.
+ *
+ * Test 5: Minimum-image interaction across a periodic boundary.
  */
 
 #include <cmath>
@@ -185,6 +189,92 @@ int testForce() {
                 std::printf("FAIL: LJ attraction: F_x on particle 0 should be > 0, got %e\n", ax0);
                 ++failures;
             }
+        }
+    }
+
+    // Test 4: Cutoff behavior around rcut
+    {
+        const double sigma = md::constants::sigma;
+        const double mass = md::constants::mass;
+        const double rcut = md::constants::rcut;
+        const double L = 10.229 * sigma;
+
+        // Just below cutoff: interaction should be non-zero.
+        {
+            double r = 0.999 * rcut;
+            md::System sys;
+            sys.init(2, 0, 2, L);
+            sys.pos[0] = 0.0;
+            sys.pos[1] = 0.0;
+            sys.pos[2] = 0.0;
+            sys.pos[3] = r;
+            sys.pos[4] = 0.0;
+            sys.pos[5] = 0.0;
+
+            std::vector<double> posGlobal(sys.pos.begin(), sys.pos.end());
+            double pe = 0.0;
+            md::computeLJForces(sys, posGlobal, pe, mass);
+
+            double fx0 = sys.acc[0] * mass;
+            if (std::abs(fx0) < 1e-20) {
+                std::printf("FAIL: LJ cutoff below rcut should interact, got |F_x|=%e\n",
+                            std::abs(fx0));
+                ++failures;
+            }
+        }
+
+        // Just above cutoff: interaction should be zero.
+        {
+            double r = 1.001 * rcut;
+            md::System sys;
+            sys.init(2, 0, 2, L);
+            sys.pos[0] = 0.0;
+            sys.pos[1] = 0.0;
+            sys.pos[2] = 0.0;
+            sys.pos[3] = r;
+            sys.pos[4] = 0.0;
+            sys.pos[5] = 0.0;
+
+            std::vector<double> posGlobal(sys.pos.begin(), sys.pos.end());
+            double pe = 0.0;
+            md::computeLJForces(sys, posGlobal, pe, mass);
+
+            double fx0 = sys.acc[0] * mass;
+            if (std::abs(fx0) > 1e-20) {
+                std::printf("FAIL: LJ cutoff above rcut should be zero, got |F_x|=%e\n",
+                            std::abs(fx0));
+                ++failures;
+            }
+        }
+    }
+
+    // Test 5: MIC interaction across periodic boundary
+    {
+        const double sigma = md::constants::sigma;
+        const double mass = md::constants::mass;
+        const double L = 10.229 * sigma;
+
+        md::System sys;
+        sys.init(2, 0, 2, L);
+
+        // Separation is 0.2*sigma through the periodic boundary.
+        sys.pos[0] = 0.1 * sigma;
+        sys.pos[1] = 0.0;
+        sys.pos[2] = 0.0;
+        sys.pos[3] = L - 0.1 * sigma;
+        sys.pos[4] = 0.0;
+        sys.pos[5] = 0.0;
+
+        std::vector<double> posGlobal(sys.pos.begin(), sys.pos.end());
+        double pe = 0.0;
+        md::computeLJForces(sys, posGlobal, pe, mass);
+
+        double fx0 = sys.acc[0] * mass;
+        if (fx0 <= 0.0) {
+            std::printf(
+                "FAIL: LJ MIC boundary interaction expected +x repulsion on particle 0, got F_x=%e\n",
+                fx0);
+            ++failures;
         }
     }
 

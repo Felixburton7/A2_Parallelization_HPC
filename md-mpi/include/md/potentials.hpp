@@ -1,13 +1,6 @@
 /**
  * @file potentials.hpp
  * @brief Harmonic Oscillator and Lennard-Jones acceleration/energy kernels.
- *
- * Both potentials implement a common interface:
- *   computeForces(system, posGlobal, localPE)
- *
- * The HO potential computes a = -omega^2 * x purely locally, ignoring
- * the global position data. The LJ potential uses the global positions
- * from MPI_Allgatherv with minimum image convention and hard cutoff.
  */
 
 #ifndef MD_POTENTIALS_HPP

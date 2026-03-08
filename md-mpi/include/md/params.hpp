@@ -50,8 +50,7 @@ struct Params {
             else if ((arg == "--T" || arg == "--target-temperature") && i + 1 < argc) {
                 p.T_init = std::atof(argv[++i]);
                 p.targetTemperature = p.T_init;
-            }
-            else if (arg == "--omega" && i + 1 < argc)
+            } else if (arg == "--omega" && i + 1 < argc)
                 p.omega = std::atof(argv[++i]);
             else if (arg == "--integrator" && i + 1 < argc)
                 p.integrator = argv[++i];
