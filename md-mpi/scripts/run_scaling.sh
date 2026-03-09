@@ -81,7 +81,7 @@ N_STRONG=2048
 for P in 1 2 4 8 16 24 32; do
     TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun --oversubscribe -np "$P" "$SOLVER" \
+        OUTPUT=$(mpirun -np "$P" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
 
@@ -133,7 +133,7 @@ P_SIZE=16
 for N in 108 256 500 864 1372 2048; do
     TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun --oversubscribe -np "$P_SIZE" "$SOLVER" \
+        OUTPUT=$(mpirun -np "$P_SIZE" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
 

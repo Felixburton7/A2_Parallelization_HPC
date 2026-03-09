@@ -713,13 +713,22 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
     plt.close(fig)
 
 
-def _plot_small_large_series(ax, x_data, y_data, exact_x, exact_y, method_color, include_coarse: bool = True):
+def _plot_small_large_series(
+    ax,
+    x_data,
+    y_data,
+    exact_x,
+    exact_y,
+    method_color,
+    include_coarse: bool = True,
+    exact_color: str | None = None,
+):
     # Keep exact clearly distinct from coarse/fine numerical styles in this comparison panel.
     exact_style = INTEGRATOR_STYLE["exact"]
     ax.plot(
         exact_x,
         exact_y,
-        color=exact_style["color"],
+        color=exact_style["color"] if exact_color is None else exact_color,
         linestyle=":",
         linewidth=max(2.0, float(exact_style["linewidth"])),
         alpha=0.95,
@@ -743,6 +752,7 @@ def plot_figure3_small_vs_large(
     fig, axes = plt.subplots(len(INTEGRATORS), 2, figsize=(12.8, 11.1), constrained_layout=False)
     t_exact = np.linspace(0.0, T_FINAL, 2400, dtype=float)
     x_exact, v_exact = exact_solution(t_exact)
+    exact_color = "black"
 
     for row_idx, integ in enumerate(INTEGRATORS):
         ax_traj = axes[row_idx, 0]
@@ -764,6 +774,7 @@ def plot_figure3_small_vs_large(
             t_exact,
             x_exact,
             color,
+            exact_color=exact_color,
         )
         _plot_small_large_series(
             ax_phase,
@@ -772,6 +783,7 @@ def plot_figure3_small_vs_large(
             x_exact,
             v_exact,
             color,
+            exact_color=exact_color,
         )
 
         ax_traj.set_xlim(0.0, T_FINAL)
@@ -793,7 +805,7 @@ def plot_figure3_small_vs_large(
         Line2D(
             [0],
             [0],
-            color=INTEGRATOR_STYLE["exact"]["color"],
+            color=exact_color,
             linestyle=":",
             linewidth=max(2.0, float(INTEGRATOR_STYLE["exact"]["linewidth"])),
             label="Exact",
@@ -1017,52 +1029,31 @@ def plot_figure5_energy_diagnostic(
     ax.set_title(r"Energy drift at $\Delta t=0.01$")
     apply_major_grid(ax)
     disable_offset_text(ax)
-    ax.legend(loc="upper right", bbox_to_anchor=(0.995, 0.60), frameon=False)
+    ax.legend(loc="upper left", bbox_to_anchor=(0.02, 0.985), frameon=False, borderaxespad=0.0)
 
+    summary_label_map = {"euler": "Euler", "verlet": "Verlet", "rk4": "RK4"}
     summary_lines = []
     for integ in INTEGRATORS:
         row = row_for(metrics_idx, integ, TRAJ_DT)
         if row is None:
             continue
-        summary_lines.append((integ, INTEGRATOR_LABELS[integ], fmt_pct_from_ratio(float(row["max_relative_energy_drift"]), 4)))
+        summary_lines.append((summary_label_map[integ], fmt_pct_from_ratio(float(row["max_relative_energy_drift"]), 3)))
     if summary_lines:
+        summary_text = "Max relative energy drift\n" + "\n".join(
+            f"{label}: {drift_text}" for label, drift_text in summary_lines
+        )
         ax.text(
             0.02,
-            0.985,
-            "Max relative energy drift",
+            0.76,
+            summary_text,
             transform=ax.transAxes,
             va="top",
             ha="left",
-            fontsize=8.7,
-            fontweight="semibold",
-            bbox={"facecolor": "white", "alpha": 0.90, "edgecolor": "none", "pad": 0.25},
+            fontsize=8.2,
+            color="#222222",
+            linespacing=1.35,
+            bbox={"facecolor": "white", "alpha": 0.92, "edgecolor": "#d9d9d9", "boxstyle": "round,pad=0.3"},
         )
-        y = 0.952
-        for integ, label, drift_text in summary_lines:
-            ax.text(
-                0.02,
-                y,
-                label,
-                transform=ax.transAxes,
-                va="top",
-                ha="left",
-                fontsize=8.2,
-                color=INTEGRATOR_STYLE[integ]["color"],
-                fontweight="semibold",
-                bbox={"facecolor": "white", "alpha": 0.90, "edgecolor": "none", "pad": 0.15},
-            )
-            ax.text(
-                0.20,
-                y,
-                f"max |ΔE/E0| = {drift_text}",
-                transform=ax.transAxes,
-                va="top",
-                ha="left",
-                fontsize=8.2,
-                color="#222222",
-                bbox={"facecolor": "white", "alpha": 0.90, "edgecolor": "none", "pad": 0.15},
-            )
-            y -= 0.038
 
     axins = inset_axes(
         ax,

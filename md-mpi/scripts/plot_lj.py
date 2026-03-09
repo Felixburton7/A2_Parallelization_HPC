@@ -509,12 +509,13 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
         row_label = label
         ax_d.text(
-            0.98,
-            0.92,
+            0.02,
+            0.96,
             row_label,
             transform=ax_d.transAxes,
             fontsize=9,
-            ha="right",
+            ha="left",
+            va="top",
             bbox={"facecolor": "white", "alpha": 0.86, "edgecolor": "none"},
         )
 
@@ -555,11 +556,12 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
             if mean_abs_rel_pct is not None:
                 ann_lines.append(f"mean |ΔE/E0| = {mean_abs_rel_pct:.3f}%")
             ax_d.text(
-                0.02,
-                0.93,
+                0.98,
+                0.06,
                 "\n".join(ann_lines),
                 transform=ax_d.transAxes,
-                ha="left",
+                ha="right",
+                va="bottom",
                 fontsize=8.5,
                 bbox={"facecolor": "white", "alpha": 0.82, "edgecolor": "none"},
             )
@@ -956,6 +958,69 @@ def extract_rdf_feature(r_vals, g_vals, rmin, rmax, mode):
     return float(rr[idx]), float(gg[idx])
 
 
+def smooth_curve_pchip(x_vals, y_vals, samples_per_segment=40):
+    x = np.asarray(x_vals, dtype=float)
+    y = np.asarray(y_vals, dtype=float)
+    valid = np.isfinite(x) & np.isfinite(y)
+    x = x[valid]
+    y = y[valid]
+    if x.size < 2:
+        return x, y
+
+    order = np.argsort(x)
+    x = x[order]
+    y = y[order]
+    x, unique_idx = np.unique(x, return_index=True)
+    y = y[unique_idx]
+
+    n = x.size
+    if n == 2:
+        xx = np.linspace(x[0], x[1], samples_per_segment + 1)
+        yy = np.interp(xx, x, y)
+        return xx, yy
+
+    h = np.diff(x)
+    delta = np.diff(y) / h
+    d = np.zeros(n, dtype=float)
+
+    def endpoint_slope(h0, h1, delta0, delta1):
+        slope = ((2.0 * h0 + h1) * delta0 - h0 * delta1) / (h0 + h1)
+        if np.sign(slope) != np.sign(delta0):
+            return 0.0
+        if np.sign(delta0) != np.sign(delta1) and abs(slope) > abs(3.0 * delta0):
+            return 3.0 * delta0
+        return slope
+
+    d[0] = endpoint_slope(h[0], h[1], delta[0], delta[1])
+    d[-1] = endpoint_slope(h[-1], h[-2], delta[-1], delta[-2])
+
+    for k in range(1, n - 1):
+        if delta[k - 1] == 0.0 or delta[k] == 0.0 or np.sign(delta[k - 1]) != np.sign(delta[k]):
+            d[k] = 0.0
+        else:
+            w1 = 2.0 * h[k] + h[k - 1]
+            w2 = h[k] + 2.0 * h[k - 1]
+            d[k] = (w1 + w2) / (w1 / delta[k - 1] + w2 / delta[k])
+
+    x_dense_parts = []
+    y_dense_parts = []
+    for i in range(n - 1):
+        t = np.linspace(0.0, 1.0, samples_per_segment, endpoint=False)
+        hi = h[i]
+        x_seg = x[i] + t * hi
+        h00 = 2.0 * t**3 - 3.0 * t**2 + 1.0
+        h10 = t**3 - 2.0 * t**2 + t
+        h01 = -2.0 * t**3 + 3.0 * t**2
+        h11 = t**3 - t**2
+        y_seg = h00 * y[i] + h10 * hi * d[i] + h01 * y[i + 1] + h11 * hi * d[i + 1]
+        x_dense_parts.append(x_seg)
+        y_dense_parts.append(y_seg)
+
+    x_dense_parts.append(np.array([x[-1]]))
+    y_dense_parts.append(np.array([y[-1]]))
+    return np.concatenate(x_dense_parts), np.concatenate(y_dense_parts)
+
+
 def plot_rdf(manifest, rahman_points):
     os.makedirs(PLOT_DIR, exist_ok=True)
 
@@ -986,28 +1051,19 @@ def plot_rdf(manifest, rahman_points):
     paper_mask = np.array([pt == "paper_anchored" for pt in rahman_types], dtype=bool)
     shape_mask = ~paper_mask
     paper_points = [p for p in rahman_points if p["point_type"] == "paper_anchored"]
+    rahman_guide_r, rahman_guide_g = smooth_curve_pchip(rahman_r_sigma, rahman_g, samples_per_segment=40)
 
     fig, ax = plt.subplots(figsize=(8.4, 5.1), constrained_layout=True)
     ax.plot(r_sigma, gr, color="k", linewidth=2.2, zorder=4, label="Present work (Velocity-Verlet, NVE)")
     ax.plot(
-        rahman_r_sigma,
-        rahman_g,
+        rahman_guide_r,
+        rahman_guide_g,
         color=COLOR_EULER,
         linestyle=(0, (4, 3)),
         linewidth=1.6,
         alpha=0.72,
         zorder=5,
-        label="Rahman guide (manual anchors)",
-    )
-    ax.scatter(
-        rahman_r_sigma[shape_mask],
-        rahman_g[shape_mask],
-        s=30,
-        facecolors="white",
-        edgecolors=COLOR_EULER,
-        linewidths=1.4,
-        zorder=6,
-        label="Rahman shape anchors (approx.)",
+        label="Rahman guide (smoothed manual anchors)",
     )
     ax.scatter(
         rahman_r_sigma[paper_mask],
@@ -1020,7 +1076,7 @@ def plot_rdf(manifest, rahman_points):
         zorder=7,
         label="Rahman paper-anchored X points",
     )
-    paper_annotation_offsets = [(30, 4), (30, 8), (26, 10)]
+    paper_annotation_offsets = [(22, -4), (22, 0), (18, 2)]
     annotation_fontsize = plt.rcParams.get("legend.fontsize", 10)
     for idx, point in enumerate(paper_points):
         dx, dy = paper_annotation_offsets[idx] if idx < len(paper_annotation_offsets) else (24, 8)
@@ -1125,7 +1181,7 @@ def plot_rdf(manifest, rahman_points):
                 },
             },
             "fit_or_truncation": {
-                "reference_guide": "piecewise-linear dashed guide connecting manual anchor points",
+                "reference_guide": "shape-preserving cubic dashed guide through manual anchor points",
                 "present_work_truncation": "none",
             },
             "key_quantitative_summary": {
