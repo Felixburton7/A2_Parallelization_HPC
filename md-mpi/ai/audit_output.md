@@ -5,21 +5,21 @@
 | Field | Value |
 |---|---|
 | Purpose | Executable project-wide audit trace: build/tests/smoke runs and raw code/context evidence. |
-| Generation timestamp (UTC) | 2026-03-09T13:10:48Z |
-| Git commit | 1ee4694830cf559e7796ee6aa54cdd4fadc467f6 |
-| Git working tree | dirty (1 changed paths) |
+| Generation timestamp (UTC) | 2026-03-09T22:16:32Z |
+| Git commit | 8d7ea5bb758e5be455cb4fca11dc716bb94b4002 |
+| Git working tree | clean |
 | Generation succeeded | yes |
 | Generation status label | confirmed |
 | Generation note | Audit generation completed. |
 
 ### Top Important Current Facts
 
-- Manifest-linked artifacts found: 44/44 paths currently exist.
+- Manifest-linked artifacts found: 28/28 paths currently exist.
 - Core final figures present: 9/9 required figure files.
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 14.92x; fitted Amdahl serial fraction f=0.0317.
+- Results 3 strong scaling: max measured speedup 15.15x; fitted Amdahl serial fraction f=0.0339.
 
 ## How to Read This File
 
@@ -38,12 +38,12 @@
 
 ## Generated Result Summaries (High Value)
 
-- Manifest-linked artifacts found: 44/44 paths currently exist.
+- Manifest-linked artifacts found: 28/28 paths currently exist.
 - Core final figures present: 9/9 required figure files.
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 14.92x; fitted Amdahl serial fraction f=0.0317.
+- Results 3 strong scaling: max measured speedup 15.15x; fitted Amdahl serial fraction f=0.0339.
 
 ## Current Deliverables Map
 
@@ -92,9 +92,9 @@
 |---|---|---|---|
 | Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_ho_figure4_convergence_combined.png` | medium | No major caveat recorded in metadata. |
 | Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_ho_figure3_small_vs_large_dt.png` | medium | No major caveat recorded in metadata. |
-| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
-| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
-| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
+| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
+| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
+| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
 | The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
 | Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
 | Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
@@ -110,8 +110,8 @@
 | ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
 | Makefile | yes | 2026-03-08T17:02:51Z | confirmed |
 | tests/test_runner.cpp | yes | 2026-03-08T15:24:59Z | confirmed |
-| src/main.cpp | yes | 2026-03-08T17:37:21Z | confirmed |
-| out/manifest.json | yes | 2026-03-08T17:44:36Z | confirmed |
+| src/main.cpp | yes | 2026-03-09T20:41:33Z | confirmed |
+| out/manifest.json | yes | 2026-03-09T16:34:08Z | confirmed |
 
 ### Expected file checks
 | Path | Expectation | Role | Status |
@@ -127,9 +127,9 @@
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
 |---|---|---|---|---|
-| ai/audit_output.md | 2026-03-09T13:10:48Z | 2026-03-08T19:58:26Z | confirmed | appears current (in-progress generation timestamp) |
-| ai/results.md | 2026-03-07T17:48:10Z | 2026-03-08T19:58:26Z | potential issue | older than latest source/evidence; consider regeneration |
-| ai/results_bundle.md | 2026-03-07T17:48:10Z | 2026-03-08T19:58:26Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/audit_output.md | 2026-03-09T22:16:32Z | 2026-03-09T16:53:41Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/results.md | 2026-03-09T13:10:48Z | 2026-03-09T16:53:41Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/results_bundle.md | 2026-03-09T13:10:49Z | 2026-03-09T16:53:41Z | potential issue | older than latest source/evidence; consider regeneration |
 
 ## Diagnostics / Warnings
 
@@ -169,8 +169,8 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-09T13:10:42Z |
-| Git commit | 1ee4694830cf559e7796ee6aa54cdd4fadc467f6 |
+| Timestamp (UTC) | 2026-03-09T22:16:24Z |
+| Git commit | 8d7ea5bb758e5be455cb4fca11dc716bb94b4002 |
 | Hostname | MacBook-Pro-434.local |
 | uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -195,8 +195,8 @@
 ./ai/archive/task_overview.md
 ./ai/audit.sh
 ./ai/audit_output.md
-./ai/audit_output.tmp.Gc0LXQ
-./ai/audit_preface.tmp.erDcRa
+./ai/audit_output.tmp.P628Qe
+./ai/audit_preface.tmp.TKQArO
 ./ai/context_report.py
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
@@ -220,6 +220,7 @@
 ./scripts/append_manifest.py
 ./scripts/check_gr_tolerance.py
 ./scripts/check_tolerance.py
+./scripts/combine_metadata.sh
 ./scripts/data/rahman1964_fig2_manual_anchors.csv
 ./scripts/make_results.sh
 ./scripts/plot_ho.py
@@ -240,91 +241,72 @@
 ./tests/test_mic.cpp
 ./tests/test_partition.cpp
 ./tests/test_runner.cpp
+./wa2-results-6381.out
 ```
 
 ### out/plots/
 ```
-total 6216
-drwx------  13 felix  staff     416 Mar  8 18:07 .
-drwx------  16 felix  staff     512 Mar  8 18:07 ..
-drwx------  12 felix  staff     384 Mar  7 20:33 metadata
--rw-------   1 felix  staff  352047 Mar  8 17:44 results1_ho_figure1_trajectories_dt0p01.png
--rw-------   1 felix  staff  221196 Mar  8 17:44 results1_ho_figure2_phase_space_dt0p01.png
--rw-------   1 felix  staff  683110 Mar  8 17:44 results1_ho_figure3_small_vs_large_dt.png
--rw-------   1 felix  staff  366090 Mar  8 17:44 results1_ho_figure4_convergence_combined.png
--rw-------   1 felix  staff  216304 Mar  8 17:44 results1_ho_figure5_energy_diagnostic.png
--rw-------   1 felix  staff  316408 Mar  8 17:44 results2_lj_brief_energy_100step_production.png
--rw-------   1 felix  staff  153527 Mar  8 17:44 results2_lj_brief_temperature_100step_production.png
--rw-------   1 felix  staff  266964 Mar  8 17:44 results2_lj_rdf_comparison_rahman1964.png
--rw-------   1 felix  staff  306087 Mar  8 15:43 results3_problem_size_scaling_fixed_p16.png
--rw-------   1 felix  staff  282049 Mar  8 19:58 results3_strong_scaling_speedup_efficiency_breakdown.png
+total 7584
+drwx------  22 felix  staff     704 Mar  7 20:33 .
+drwx------  27 felix  staff     864 Mar  9 20:07 ..
+-rw-------   1 felix  staff   77228 Mar  4 17:17 ho_convergence.png
+-rw-------   1 felix  staff   48921 Mar  4 17:17 ho_energy.png
+-rw-------   1 felix  staff  118022 Mar  4 17:17 ho_trajectories.png
+-rw-------   1 felix  staff  109938 Mar  4 17:17 lj_energy.png
+-rw-------   1 felix  staff   72465 Mar  4 17:17 lj_equilibrated_comparison.png
+-rw-------   1 felix  staff   37509 Mar  4 17:17 lj_rdf.png
+-rw-------   1 felix  staff   50699 Mar  4 17:17 lj_temperature.png
+drwx------  13 felix  staff     416 Mar  9 16:50 metadata
+-rw-------   1 felix  staff  352239 Mar  7 20:33 results1_ho_figure1_trajectories_dt0p01.png
+-rw-------   1 felix  staff  221195 Mar  7 20:33 results1_ho_figure2_phase_space_dt0p01.png
+-rw-------   1 felix  staff  683109 Mar  7 20:33 results1_ho_figure3_small_vs_large_dt.png
+-rw-------   1 felix  staff  366065 Mar  7 20:33 results1_ho_figure4_convergence_combined.png
+-rw-------   1 felix  staff  216303 Mar  7 20:33 results1_ho_figure5_energy_diagnostic.png
+-rw-------   1 felix  staff  316407 Mar  7 20:33 results2_lj_brief_energy_100step_production.png
+-rw-------   1 felix  staff  153526 Mar  7 20:33 results2_lj_brief_temperature_100step_production.png
+-rw-------   1 felix  staff  267278 Mar  7 20:33 results2_lj_rdf_comparison_rahman1964.png
+-rw-------   1 felix  staff  303830 Mar  9 16:53 results3_problem_size_scaling_fixed_p16.png
+-rw-------   1 felix  staff  284610 Mar  9 16:53 results3_strong_scaling_speedup_efficiency_breakdown.png
+-rw-------   1 felix  staff   88489 Mar  4 17:17 scaling_size.png
+-rw-------   1 felix  staff   78766 Mar  4 17:17 scaling_strong.png
 ```
 
 ### out/manifest.json
 ```json
 {
   "ho_convergence": {
-    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260308_174309/ho_euler.csv",
-    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260308_174309/ho_euler.csv",
-    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260308_174309/ho_euler.csv",
-    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260308_174309/ho_euler.csv",
-    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260308_174309/ho_euler.csv",
-    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260308_174309/ho_euler.csv",
-    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260308_174309/ho_euler.csv",
-    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260308_174309/ho_euler.csv",
-    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260308_174309/ho_verlet.csv",
-    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260308_174309/ho_verlet.csv",
-    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260308_174309/ho_verlet.csv",
-    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260308_174309/ho_verlet.csv",
-    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260308_174309/ho_verlet.csv",
-    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260308_174309/ho_verlet.csv",
-    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260308_174309/ho_verlet.csv",
-    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260308_174309/ho_verlet.csv",
-    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260308_174309/ho_rk4.csv",
-    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260308_174309/ho_rk4.csv",
-    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260308_174309/ho_rk4.csv",
-    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260308_174309/ho_rk4.csv",
-    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260308_174309/ho_rk4.csv",
-    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260308_174309/ho_rk4.csv",
-    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260308_174309/ho_rk4.csv",
-    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260308_174309/ho_rk4.csv"
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260308_182329/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260308_182329/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260308_182329/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260308_182329/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260308_182329/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260308_182329/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260308_182329/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260308_182329/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260308_182329/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260308_182329/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260308_182329/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260308_182329/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260308_182329/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260308_182329/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260308_182329/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260308_182329/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260308_182329/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260308_182329/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260308_182329/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260308_182329/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260308_182329/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260308_182329/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260308_182329/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260308_182329/ho_rk4.csv"
   },
   "lj_brief": {
-    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv",
-    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv"
-  },
-  "lj_rdf": {
-    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/gr.csv",
-    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/lj_verlet.csv"
+    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_182329/lj_verlet.csv",
+    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_182329/lj_euler.csv"
   },
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
-  },
-  "results2_outputs": {
-    "generated_utc": "2026-03-08T17:44:36Z",
-    "main_report_figures": [
-      "out/plots/results2_lj_brief_energy_100step_production.png",
-      "out/plots/results2_lj_brief_temperature_100step_production.png",
-      "out/plots/results2_lj_rdf_comparison_rahman1964.png"
-    ],
-    "main_report_tables": [
-      "out/summary/results2/results2_quantitative_summary_table.md",
-      "out/summary/results2/results2_quantitative_summary_table.csv",
-      "out/summary/results2/results2_quantitative_summary_table.json"
-    ],
-    "rahman_reference_dataset": "out/summary/results2/rahman1964_fig2_manual_anchors.csv",
-    "notes": [
-      "out/summary/results2/results2_report_note.md",
-      "out/summary/results2/results2_recommended_figure_set.md",
-      "out/summary/results2/results2_rahman_extraction_note.md",
-      "out/summary/results2/results2_what_changed_and_why.md"
-    ],
-    "plot_metadata_files": [
-      "out/plots/metadata/results2_lj_brief_energy_100step_production.json",
-      "out/plots/metadata/results2_lj_brief_temperature_100step_production.json",
-      "out/plots/metadata/results2_lj_rdf_comparison_rahman1964.json"
-    ]
   }
 }
 ```
@@ -332,34 +314,32 @@ drwx------  12 felix  staff     384 Mar  7 20:33 metadata
 ### out/runs/ directories referenced by manifest
 ```
 out/
-out/runs/ho_N1_euler_dt0.0005_20260308_174309/
-out/runs/ho_N1_euler_dt0.001_20260308_174309/
-out/runs/ho_N1_euler_dt0.005_20260308_174309/
-out/runs/ho_N1_euler_dt0.01_20260308_174309/
-out/runs/ho_N1_euler_dt0.05_20260308_174309/
-out/runs/ho_N1_euler_dt0.1_20260308_174309/
-out/runs/ho_N1_euler_dt0.5_20260308_174309/
-out/runs/ho_N1_euler_dt1.0_20260308_174309/
-out/runs/ho_N1_rk4_dt0.0005_20260308_174309/
-out/runs/ho_N1_rk4_dt0.001_20260308_174309/
-out/runs/ho_N1_rk4_dt0.005_20260308_174309/
-out/runs/ho_N1_rk4_dt0.01_20260308_174309/
-out/runs/ho_N1_rk4_dt0.05_20260308_174309/
-out/runs/ho_N1_rk4_dt0.1_20260308_174309/
-out/runs/ho_N1_rk4_dt0.5_20260308_174309/
-out/runs/ho_N1_rk4_dt1.0_20260308_174309/
-out/runs/ho_N1_verlet_dt0.0005_20260308_174309/
-out/runs/ho_N1_verlet_dt0.001_20260308_174309/
-out/runs/ho_N1_verlet_dt0.005_20260308_174309/
-out/runs/ho_N1_verlet_dt0.01_20260308_174309/
-out/runs/ho_N1_verlet_dt0.05_20260308_174309/
-out/runs/ho_N1_verlet_dt0.1_20260308_174309/
-out/runs/ho_N1_verlet_dt0.5_20260308_174309/
-out/runs/ho_N1_verlet_dt1.0_20260308_174309/
-out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/
-out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/
-out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/
-out/summary/results2/
+out/runs/ho_N1_euler_dt0.0005_20260308_182329/
+out/runs/ho_N1_euler_dt0.001_20260308_182329/
+out/runs/ho_N1_euler_dt0.005_20260308_182329/
+out/runs/ho_N1_euler_dt0.01_20260308_182329/
+out/runs/ho_N1_euler_dt0.05_20260308_182329/
+out/runs/ho_N1_euler_dt0.1_20260308_182329/
+out/runs/ho_N1_euler_dt0.5_20260308_182329/
+out/runs/ho_N1_euler_dt1.0_20260308_182329/
+out/runs/ho_N1_rk4_dt0.0005_20260308_182329/
+out/runs/ho_N1_rk4_dt0.001_20260308_182329/
+out/runs/ho_N1_rk4_dt0.005_20260308_182329/
+out/runs/ho_N1_rk4_dt0.01_20260308_182329/
+out/runs/ho_N1_rk4_dt0.05_20260308_182329/
+out/runs/ho_N1_rk4_dt0.1_20260308_182329/
+out/runs/ho_N1_rk4_dt0.5_20260308_182329/
+out/runs/ho_N1_rk4_dt1.0_20260308_182329/
+out/runs/ho_N1_verlet_dt0.0005_20260308_182329/
+out/runs/ho_N1_verlet_dt0.001_20260308_182329/
+out/runs/ho_N1_verlet_dt0.005_20260308_182329/
+out/runs/ho_N1_verlet_dt0.01_20260308_182329/
+out/runs/ho_N1_verlet_dt0.05_20260308_182329/
+out/runs/ho_N1_verlet_dt0.1_20260308_182329/
+out/runs/ho_N1_verlet_dt0.5_20260308_182329/
+out/runs/ho_N1_verlet_dt1.0_20260308_182329/
+out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_182329/
+out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_182329/
 ```
 
 ## 3. Build and Warnings
@@ -424,15 +404,18 @@ ALL TESTS PASSED
 ### 5a. HO — Velocity-Verlet (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:40428] [prterun-MacBook-Pro-434-40428@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40428] [prterun-MacBook-Pro-434-40428@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40428] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[40428] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+=== MD Solver ===
+Mode: ho | Integrator: verlet
+N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
+Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
+HO mode: periodic box size is not used
+==================
+Wall time: 0.003253 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3 lines):**
 ```
-# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-04T17:17:19Z
+# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-09T22:16:31Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.99995,-0.00999975,3.34504599142826e-30,3.34487873703803e-26,3.34521324163718e-26
@@ -447,15 +430,18 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5b. HO — RK4 (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:40431] [prterun-MacBook-Pro-434-40431@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40431] [prterun-MacBook-Pro-434-40431@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40431] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[40431] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+=== MD Solver ===
+Mode: ho | Integrator: rk4
+N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
+Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
+HO mode: periodic box size is not used
+==================
+Wall time: 0.004063 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-04T17:17:20Z
+# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-09T22:16:31Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.999950000416667,-0.00999983333333333,3.34510174382089e-30,3.34487873982557e-26,3.34521324999995e-26
@@ -470,15 +456,18 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5c. HO — Euler (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:40434] [prterun-MacBook-Pro-434-40434@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40434] [prterun-MacBook-Pro-434-40434@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40434] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[40434] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+=== MD Solver ===
+Mode: ho | Integrator: euler
+N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
+Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
+HO mode: periodic box size is not used
+==================
+Wall time: 0.003259 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-04T17:17:20Z
+# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-09T22:16:31Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,1,-0.01,3.34521325e-30,3.34521325e-26,3.345547771325e-26
@@ -493,68 +482,402 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:40437] [prterun-MacBook-Pro-434-40437@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40437] [prterun-MacBook-Pro-434-40437@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40437] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[40437] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+=== Initial Conditions (Rank 0) ===
+Seed: 42 | FCC lattice | Box-Muller velocities
+Perturbation: 0.0100 sigma | T_initial: 94.400000 K
+===================================
+Startup rescale step 1/50: lambda = 9.999999999999999e-01, T_before = 94.400000 K, target = 94.400000 K
+Startup rescale step 2/50: lambda = 1.000554877641383e+00, T_before = 94.295326 K, target = 94.400000 K
+Startup rescale step 3/50: lambda = 1.001498776481246e+00, T_before = 94.117666 K, target = 94.400000 K
+Startup rescale step 4/50: lambda = 1.002521267698682e+00, T_before = 93.925779 K, target = 94.400000 K
+Startup rescale step 5/50: lambda = 1.003660072928603e+00, T_before = 93.712754 K, target = 94.400000 K
+Startup rescale step 6/50: lambda = 1.004955613062417e+00, T_before = 93.471289 K, target = 94.400000 K
+Startup rescale step 7/50: lambda = 1.006450727263260e+00, T_before = 93.193787 K, target = 94.400000 K
+Startup rescale step 8/50: lambda = 1.008189156197059e+00, T_before = 92.872674 K, target = 94.400000 K
+Startup rescale step 9/50: lambda = 1.010208435879377e+00, T_before = 92.501764 K, target = 94.400000 K
+Startup rescale step 10/50: lambda = 1.012542591158752e+00, T_before = 92.075777 K, target = 94.400000 K
+Startup rescale step 11/50: lambda = 1.015193706053781e+00, T_before = 91.595505 K, target = 94.400000 K
+Startup rescale step 12/50: lambda = 1.018115024804627e+00, T_before = 91.070622 K, target = 94.400000 K
+Startup rescale step 13/50: lambda = 1.021216008534779e+00, T_before = 90.518379 K, target = 94.400000 K
+Startup rescale step 14/50: lambda = 1.024295894062565e+00, T_before = 89.974850 K, target = 94.400000 K
+Startup rescale step 15/50: lambda = 1.027049158400991e+00, T_before = 89.493096 K, target = 94.400000 K
+Startup rescale step 16/50: lambda = 1.029150810591021e+00, T_before = 89.127957 K, target = 94.400000 K
+Startup rescale step 17/50: lambda = 1.030332085024976e+00, T_before = 88.923704 K, target = 94.400000 K
+Startup rescale step 18/50: lambda = 1.030473240735531e+00, T_before = 88.899344 K, target = 94.400000 K
+Startup rescale step 19/50: lambda = 1.029678364278692e+00, T_before = 89.036652 K, target = 94.400000 K
+Startup rescale step 20/50: lambda = 1.028193446250227e+00, T_before = 89.294011 K, target = 94.400000 K
+Startup rescale step 21/50: lambda = 1.026204269492264e+00, T_before = 89.640518 K, target = 94.400000 K
+Startup rescale step 22/50: lambda = 1.023804756229235e+00, T_before = 90.061196 K, target = 94.400000 K
+Startup rescale step 23/50: lambda = 1.021033704859721e+00, T_before = 90.550705 K, target = 94.400000 K
+Startup rescale step 24/50: lambda = 1.017892546148408e+00, T_before = 91.110436 K, target = 94.400000 K
+Startup rescale step 25/50: lambda = 1.014433135766224e+00, T_before = 91.732904 K, target = 94.400000 K
+Startup rescale step 26/50: lambda = 1.010803967900348e+00, T_before = 92.392798 K, target = 94.400000 K
+Startup rescale step 27/50: lambda = 1.007180454989398e+00, T_before = 93.058793 K, target = 94.400000 K
+Startup rescale step 28/50: lambda = 1.003763043104544e+00, T_before = 93.693528 K, target = 94.400000 K
+Startup rescale step 29/50: lambda = 1.000752561769121e+00, T_before = 94.258077 K, target = 94.400000 K
+Startup rescale step 30/50: lambda = 9.982756142734640e-01, T_before = 94.726408 K, target = 94.400000 K
+Startup rescale step 31/50: lambda = 9.963969313600508e-01, T_before = 95.083954 K, target = 94.400000 K
+Startup rescale step 32/50: lambda = 9.951401646596638e-01, T_before = 95.324269 K, target = 94.400000 K
+Startup rescale step 33/50: lambda = 9.944783429440419e-01, T_before = 95.451187 K, target = 94.400000 K
+Startup rescale step 34/50: lambda = 9.943646876548935e-01, T_before = 95.473009 K, target = 94.400000 K
+Startup rescale step 35/50: lambda = 9.947272752386551e-01, T_before = 95.403420 K, target = 94.400000 K
+Startup rescale step 36/50: lambda = 9.955008328446894e-01, T_before = 95.255210 K, target = 94.400000 K
+Startup rescale step 37/50: lambda = 9.966354597852637e-01, T_before = 95.038445 K, target = 94.400000 K
+Startup rescale step 38/50: lambda = 9.980729448199758e-01, T_before = 94.764882 K, target = 94.400000 K
+Startup rescale step 39/50: lambda = 9.997465980754853e-01, T_before = 94.447860 K, target = 94.400000 K
+Startup rescale step 40/50: lambda = 1.001561399173793e+00, T_before = 94.105897 K, target = 94.400000 K
+Startup rescale step 41/50: lambda = 1.003421850012588e+00, T_before = 93.757256 K, target = 94.400000 K
+Startup rescale step 42/50: lambda = 1.005228473399085e+00, T_before = 93.420552 K, target = 94.400000 K
+Startup rescale step 43/50: lambda = 1.006889243861888e+00, T_before = 93.112629 K, target = 94.400000 K
+Startup rescale step 44/50: lambda = 1.008325591523771e+00, T_before = 92.847543 K, target = 94.400000 K
+Startup rescale step 45/50: lambda = 1.009521504735243e+00, T_before = 92.627692 K, target = 94.400000 K
+Startup rescale step 46/50: lambda = 1.010497330715534e+00, T_before = 92.448880 K, target = 94.400000 K
+Startup rescale step 47/50: lambda = 1.011257626882456e+00, T_before = 92.309920 K, target = 94.400000 K
+Startup rescale step 48/50: lambda = 1.011751477531147e+00, T_before = 92.219826 K, target = 94.400000 K
+Startup rescale step 49/50: lambda = 1.011823943944249e+00, T_before = 92.206617 K, target = 94.400000 K
+Startup rescale step 50/50: lambda = 1.011208781320699e+00, T_before = 92.318838 K, target = 94.400000 K
+Startup->production rescale: lambda = 1.009614991355338e+00, T_before = 92.610539 K
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 108 | P = 1 | timesteps = 10 | frames = 11 (step 0..10) | dt = 1.000e-14
+LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
+Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
+L = 1.738930e-09 m (5.1145 sigma)
+Target temperature = 94.4 K | seed = 42
+Startup timesteps = 50 | production timesteps = 10 | total executed = 60
+Production simulated time = 1.000e-13 s (= production_steps * dt)
+production_start_step = 0 (production-only output)
+Startup boundary temperature before final rescale: 92.610539 K
+Startup boundary temperature after final rescale: 94.400000 K
+==================
+Wall time: 0.000733 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:17:21Z
+# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 92.6105392665026, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-09T22:16:31Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,2.09184891288e-19,-1.12926090964738e-18,-9.2007601835938e-19,94.4
-1,1e-14,2.08952940324273e-19,-1.12903036097961e-18,-9.20077420655337e-19,94.2953262310627
-2,2e-14,2.08327769566247e-19,-1.12840771146898e-18,-9.20079941902734e-19,94.0132020336875
-3,3e-14,2.07279814481113e-19,-1.12736342912362e-18,-9.20083614642507e-19,93.5402856608675
-4,4e-14,2.05766417434535e-19,-1.12585487169448e-18,-9.20088454259947e-19,92.8573267706855
-5,5e-14,2.03732045550683e-19,-1.12382647756108e-18,-9.20094432010392e-19,91.9392647411899
-6,6e-14,2.01109299736099e-19,-1.121210730094e-18,-9.201014303579e-19,90.7556840180687
-7,7e-14,1.9782137105245e-19,-1.11793054604546e-18,-9.2010917499301e-19,89.2719226152952
-8,8e-14,1.93788239467119e-19,-1.11385504380398e-18,-9.20066804336861e-19,87.4518694589177
-9,9e-14,1.88932451387229e-19,-1.10900656536631e-18,-9.20074113979076e-19,85.2605716461587
-10,1e-13,1.83193844160901e-19,-1.10332388832566e-18,-9.20130044164762e-19,82.6708792509294
+0,0,2.09184891288e-19,-9.20669527803387e-19,-7.11484636515388e-19,94.3999999999999
+1,1e-14,2.0629946851695e-19,-9.17766278588534e-19,-7.11466810071583e-19,93.0978796226154
+2,2e-14,2.04827441248049e-19,-9.1614257594132e-19,-7.11315134693272e-19,92.4335898962938
+3,3e-14,2.0481582202525e-19,-9.16299395319138e-19,-7.11483573293887e-19,92.4283464266273
+4,4e-14,2.06045870018546e-19,-9.17656698021879e-19,-7.11610828003333e-19,92.9834368533411
+5,5e-14,2.08162886638895e-19,-9.19490886894372e-19,-7.11328000255477e-19,93.9387944211389
+6,6e-14,2.10816355339998e-19,-9.22110217867209e-19,-7.11293862527211e-19,95.1362396278256
+7,7e-14,2.13717071153711e-19,-9.24919772743325e-19,-7.11202701589614e-19,96.445261379485
+8,8e-14,2.16620526703765e-19,-9.27835684081094e-19,-7.11215157377329e-19,97.7555195068167
+9,9e-14,2.19305621768438e-19,-9.30631300561334e-19,-7.11325678792896e-19,98.9672369140559
+10,1e-13,2.21586992845223e-19,-9.32970213245798e-19,-7.11383220400575e-19,99.9967636084672
 ```
 
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:40439] [prterun-MacBook-Pro-434-40439@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40439] [prterun-MacBook-Pro-434-40439@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:40439] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[40439] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+=== Initial Conditions (Rank 0) ===
+Seed: 42 | FCC lattice | Box-Muller velocities
+Perturbation: 0.0100 sigma | T_initial: 94.400000 K
+===================================
+Startup rescale step 1/50: lambda = 9.999999999999999e-01, T_before = 94.400000 K, target = 94.400000 K
+Startup rescale step 2/50: lambda = 1.000097292737305e+00, T_before = 94.381634 K, target = 94.400000 K
+Startup rescale step 3/50: lambda = 1.001011016385241e+00, T_before = 94.209409 K, target = 94.400000 K
+Startup rescale step 4/50: lambda = 1.001985803587490e+00, T_before = 94.026194 K, target = 94.400000 K
+Startup rescale step 5/50: lambda = 1.003058445169696e+00, T_before = 93.825204 K, target = 94.400000 K
+Startup rescale step 6/50: lambda = 1.004268752957570e+00, T_before = 93.599191 K, target = 94.400000 K
+Startup rescale step 7/50: lambda = 1.005659921324776e+00, T_before = 93.340411 K, target = 94.400000 K
+Startup rescale step 8/50: lambda = 1.007278166467727e+00, T_before = 93.040739 K, target = 94.400000 K
+Startup rescale step 9/50: lambda = 1.009170882757520e+00, T_before = 92.692068 K, target = 94.400000 K
+Startup rescale step 10/50: lambda = 1.011375281881796e+00, T_before = 92.288444 K, target = 94.400000 K
+Startup rescale step 11/50: lambda = 1.013935968234880e+00, T_before = 91.822885 K, target = 94.400000 K
+Startup rescale step 12/50: lambda = 1.016829248312590e+00, T_before = 91.301084 K, target = 94.400000 K
+Startup rescale step 13/50: lambda = 1.019999664834544e+00, T_before = 90.734393 K, target = 94.400000 K
+Startup rescale step 14/50: lambda = 1.023314540748604e+00, T_before = 90.147503 K, target = 94.400000 K
+Startup rescale step 15/50: lambda = 1.026442110084154e+00, T_before = 89.598981 K, target = 94.400000 K
+Startup rescale step 16/50: lambda = 1.028928556239429e+00, T_before = 89.166466 K, target = 94.400000 K
+Startup rescale step 17/50: lambda = 1.030283213707263e+00, T_before = 88.932141 K, target = 94.400000 K
+Startup rescale step 18/50: lambda = 1.030093168033584e+00, T_before = 88.964959 K, target = 94.400000 K
+Startup rescale step 19/50: lambda = 1.028381069024043e+00, T_before = 89.261432 K, target = 94.400000 K
+Startup rescale step 20/50: lambda = 1.025595246283770e+00, T_before = 89.747012 K, target = 94.400000 K
+Startup rescale step 21/50: lambda = 1.022389332616122e+00, T_before = 90.310735 K, target = 94.400000 K
+Startup rescale step 22/50: lambda = 1.019138319950166e+00, T_before = 90.887829 K, target = 94.400000 K
+Startup rescale step 23/50: lambda = 1.015887900197463e+00, T_before = 91.470366 K, target = 94.400000 K
+Startup rescale step 24/50: lambda = 1.012443364100991e+00, T_before = 92.093826 K, target = 94.400000 K
+Startup rescale step 25/50: lambda = 1.008664033055558e+00, T_before = 92.785246 K, target = 94.400000 K
+Startup rescale step 26/50: lambda = 1.004559224869558e+00, T_before = 93.545070 K, target = 94.400000 K
+Startup rescale step 27/50: lambda = 1.000354370355204e+00, T_before = 94.333130 K, target = 94.400000 K
+Startup rescale step 28/50: lambda = 9.963316219394099e-01, T_before = 95.096420 K, target = 94.400000 K
+Startup rescale step 29/50: lambda = 9.927933660346838e-01, T_before = 95.775463 K, target = 94.400000 K
+Startup rescale step 30/50: lambda = 9.899566179085865e-01, T_before = 96.325144 K, target = 94.400000 K
+Startup rescale step 31/50: lambda = 9.879185951103187e-01, T_before = 96.722981 K, target = 94.400000 K
+Startup rescale step 32/50: lambda = 9.866944672582958e-01, T_before = 96.963126 K, target = 94.400000 K
+Startup rescale step 33/50: lambda = 9.862226701999177e-01, T_before = 97.055920 K, target = 94.400000 K
+Startup rescale step 34/50: lambda = 9.864251119066297e-01, T_before = 97.016087 K, target = 94.400000 K
+Startup rescale step 35/50: lambda = 9.872031927960692e-01, T_before = 96.863218 K, target = 94.400000 K
+Startup rescale step 36/50: lambda = 9.884583033297875e-01, T_before = 96.617387 K, target = 94.400000 K
+Startup rescale step 37/50: lambda = 9.900827575253606e-01, T_before = 96.300602 K, target = 94.400000 K
+Startup rescale step 38/50: lambda = 9.920272600726052e-01, T_before = 95.923448 K, target = 94.400000 K
+Startup rescale step 39/50: lambda = 9.942153220547932e-01, T_before = 95.501697 K, target = 94.400000 K
+Startup rescale step 40/50: lambda = 9.965952711012718e-01, T_before = 95.046111 K, target = 94.400000 K
+Startup rescale step 41/50: lambda = 9.990609503718284e-01, T_before = 94.577543 K, target = 94.400000 K
+Startup rescale step 42/50: lambda = 1.001514641845916e+00, T_before = 94.114684 K, target = 94.400000 K
+Startup rescale step 43/50: lambda = 1.003767648996644e+00, T_before = 93.692668 K, target = 94.400000 K
+Startup rescale step 44/50: lambda = 1.005644216307353e+00, T_before = 93.343326 K, target = 94.400000 K
+Startup rescale step 45/50: lambda = 1.006927247486000e+00, T_before = 93.105601 K, target = 94.400000 K
+Startup rescale step 46/50: lambda = 1.007423294570262e+00, T_before = 93.013935 K, target = 94.400000 K
+Startup rescale step 47/50: lambda = 1.006967866521357e+00, T_before = 93.098090 K, target = 94.400000 K
+Startup rescale step 48/50: lambda = 1.005460190724841e+00, T_before = 93.377498 K, target = 94.400000 K
+Startup rescale step 49/50: lambda = 1.002974704620362e+00, T_before = 93.840872 K, target = 94.400000 K
+Startup rescale step 50/50: lambda = 9.999119001761519e-01, T_before = 94.416635 K, target = 94.400000 K
+Startup->production rescale: lambda = 9.969162380664538e-01, T_before = 94.984918 K
+=== MD Solver ===
+Mode: lj | Integrator: euler
+N = 108 | P = 1 | timesteps = 10 | frames = 11 (step 0..10) | dt = 1.000e-14
+LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
+Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
+L = 1.738930e-09 m (5.1145 sigma)
+Target temperature = 94.4 K | seed = 42
+Startup timesteps = 50 | production timesteps = 10 | total executed = 60
+Production simulated time = 1.000e-13 s (= production_steps * dt)
+production_start_step = 0 (production-only output)
+Startup boundary temperature before final rescale: 94.984918 K
+Startup boundary temperature after final rescale: 94.400000 K
+==================
+Wall time: 0.000771 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:17:21Z
+# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.9849184843571, startup_temperature_after_final_rescale: 94.4000000000001, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-09T22:16:31Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,2.09184891288e-19,-1.12926090964738e-18,-9.2007601835938e-19,94.4
-1,1e-14,2.09144192886232e-19,-1.12902994241994e-18,-9.19885749533712e-19,94.3816338115854
-2,2e-14,2.08721895925538e-19,-1.12840586521172e-18,-9.19683969286181e-19,94.1910615726245
-3,3e-14,2.07894523992715e-19,-1.12735747207365e-18,-9.19462948080934e-19,93.8176889548529
-4,4e-14,2.06625321584501e-19,-1.12583963303995e-18,-9.19214311455454e-19,93.2449291030409
-5,5e-14,2.04864000685478e-19,-1.12379287250225e-18,-9.18928871816775e-19,92.4500882718317
-6,6e-14,2.02546939150224e-19,-1.12114343244424e-18,-9.18596493294019e-19,91.4044553507292
-7,7e-14,1.99598314327998e-19,-1.11780435151736e-18,-9.1820603718936e-19,90.0738134410563
-8,8e-14,1.95932967946968e-19,-1.11362950215605e-18,-9.17696534209078e-19,88.4197327077933
-9,9e-14,1.91464855324552e-19,-1.10861809339369e-18,-9.17153238069135e-19,86.4033833005344
-10,1e-13,1.86109378411333e-19,-1.10262544990856e-18,-9.16516071497223e-19,83.986588198866
+0,0,2.09184891288e-19,-9.12916763919551e-19,-7.03731872631551e-19,94.4000000000001
+1,1e-14,2.11525263370756e-19,-9.10632329841394e-19,-6.99107066470638e-19,95.4561523982533
+2,2e-14,2.14776832951035e-19,-9.0938833883245e-19,-6.94611505881416e-19,96.9235058313255
+3,3e-14,2.18964511804124e-19,-9.08859592979484e-19,-6.89895081175361e-19,98.8133023711117
+4,4e-14,2.24108503104857e-19,-9.09809852096508e-19,-6.85701348991651e-19,101.134659213852
+5,5e-14,2.30011308581937e-19,-9.11507518253613e-19,-6.81496209671676e-19,103.798450243908
+6,6e-14,2.36298938432358e-19,-9.13451036509845e-19,-6.77152098077487e-19,106.635903055271
+7,7e-14,2.42703937969227e-19,-9.15283282486688e-19,-6.72579344517461e-19,109.526321921364
+8,8e-14,2.49116447237105e-19,-9.17520494560082e-19,-6.68404047322977e-19,112.420129744484
+9,9e-14,2.55437535169377e-19,-9.19786529495048e-19,-6.64348994325671e-19,115.272681365839
+10,1e-13,2.61440695380733e-19,-9.2212063732577e-19,-6.60679941945037e-19,117.981760020911
 ```
 
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
-[40442] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-[40443] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-Error checking tolerance: [Errno 2] No such file or directory: 'out/audit_p1/lj_verlet.csv'
+=== Initial Conditions (Rank 0) ===
+Seed: 42 | FCC lattice | Box-Muller velocities
+Perturbation: 0.0100 sigma | T_initial: 94.400000 K
+===================================
+Startup rescale step 1/50: lambda = 9.999999999999999e-01, T_before = 94.400000 K, target = 94.400000 K
+Startup rescale step 2/50: lambda = 1.000554877641383e+00, T_before = 94.295326 K, target = 94.400000 K
+Startup rescale step 3/50: lambda = 1.001498776481246e+00, T_before = 94.117666 K, target = 94.400000 K
+Startup rescale step 4/50: lambda = 1.002521267698682e+00, T_before = 93.925779 K, target = 94.400000 K
+Startup rescale step 5/50: lambda = 1.003660072928603e+00, T_before = 93.712754 K, target = 94.400000 K
+Startup rescale step 6/50: lambda = 1.004955613062417e+00, T_before = 93.471289 K, target = 94.400000 K
+Startup rescale step 7/50: lambda = 1.006450727263260e+00, T_before = 93.193787 K, target = 94.400000 K
+Startup rescale step 8/50: lambda = 1.008189156197059e+00, T_before = 92.872674 K, target = 94.400000 K
+Startup rescale step 9/50: lambda = 1.010208435879377e+00, T_before = 92.501764 K, target = 94.400000 K
+Startup rescale step 10/50: lambda = 1.012542591158752e+00, T_before = 92.075777 K, target = 94.400000 K
+Startup rescale step 11/50: lambda = 1.015193706053781e+00, T_before = 91.595505 K, target = 94.400000 K
+Startup rescale step 12/50: lambda = 1.018115024804627e+00, T_before = 91.070622 K, target = 94.400000 K
+Startup rescale step 13/50: lambda = 1.021216008534779e+00, T_before = 90.518379 K, target = 94.400000 K
+Startup rescale step 14/50: lambda = 1.024295894062565e+00, T_before = 89.974850 K, target = 94.400000 K
+Startup rescale step 15/50: lambda = 1.027049158400991e+00, T_before = 89.493096 K, target = 94.400000 K
+Startup rescale step 16/50: lambda = 1.029150810591021e+00, T_before = 89.127957 K, target = 94.400000 K
+Startup rescale step 17/50: lambda = 1.030332085024976e+00, T_before = 88.923704 K, target = 94.400000 K
+Startup rescale step 18/50: lambda = 1.030473240735531e+00, T_before = 88.899344 K, target = 94.400000 K
+Startup rescale step 19/50: lambda = 1.029678364278692e+00, T_before = 89.036652 K, target = 94.400000 K
+Startup rescale step 20/50: lambda = 1.028193446250227e+00, T_before = 89.294011 K, target = 94.400000 K
+Startup rescale step 21/50: lambda = 1.026204269492264e+00, T_before = 89.640518 K, target = 94.400000 K
+Startup rescale step 22/50: lambda = 1.023804756229235e+00, T_before = 90.061196 K, target = 94.400000 K
+Startup rescale step 23/50: lambda = 1.021033704859721e+00, T_before = 90.550705 K, target = 94.400000 K
+Startup rescale step 24/50: lambda = 1.017892546148408e+00, T_before = 91.110436 K, target = 94.400000 K
+Startup rescale step 25/50: lambda = 1.014433135766224e+00, T_before = 91.732904 K, target = 94.400000 K
+Startup rescale step 26/50: lambda = 1.010803967900348e+00, T_before = 92.392798 K, target = 94.400000 K
+Startup rescale step 27/50: lambda = 1.007180454989398e+00, T_before = 93.058793 K, target = 94.400000 K
+Startup rescale step 28/50: lambda = 1.003763043104544e+00, T_before = 93.693528 K, target = 94.400000 K
+Startup rescale step 29/50: lambda = 1.000752561769121e+00, T_before = 94.258077 K, target = 94.400000 K
+Startup rescale step 30/50: lambda = 9.982756142734640e-01, T_before = 94.726408 K, target = 94.400000 K
+Startup rescale step 31/50: lambda = 9.963969313600508e-01, T_before = 95.083954 K, target = 94.400000 K
+Startup rescale step 32/50: lambda = 9.951401646596638e-01, T_before = 95.324269 K, target = 94.400000 K
+Startup rescale step 33/50: lambda = 9.944783429440419e-01, T_before = 95.451187 K, target = 94.400000 K
+Startup rescale step 34/50: lambda = 9.943646876548935e-01, T_before = 95.473009 K, target = 94.400000 K
+Startup rescale step 35/50: lambda = 9.947272752386551e-01, T_before = 95.403420 K, target = 94.400000 K
+Startup rescale step 36/50: lambda = 9.955008328446894e-01, T_before = 95.255210 K, target = 94.400000 K
+Startup rescale step 37/50: lambda = 9.966354597852637e-01, T_before = 95.038445 K, target = 94.400000 K
+Startup rescale step 38/50: lambda = 9.980729448199758e-01, T_before = 94.764882 K, target = 94.400000 K
+Startup rescale step 39/50: lambda = 9.997465980754853e-01, T_before = 94.447860 K, target = 94.400000 K
+Startup rescale step 40/50: lambda = 1.001561399173793e+00, T_before = 94.105897 K, target = 94.400000 K
+Startup rescale step 41/50: lambda = 1.003421850012588e+00, T_before = 93.757256 K, target = 94.400000 K
+Startup rescale step 42/50: lambda = 1.005228473399085e+00, T_before = 93.420552 K, target = 94.400000 K
+Startup rescale step 43/50: lambda = 1.006889243861888e+00, T_before = 93.112629 K, target = 94.400000 K
+Startup rescale step 44/50: lambda = 1.008325591523771e+00, T_before = 92.847543 K, target = 94.400000 K
+Startup rescale step 45/50: lambda = 1.009521504735243e+00, T_before = 92.627692 K, target = 94.400000 K
+Startup rescale step 46/50: lambda = 1.010497330715534e+00, T_before = 92.448880 K, target = 94.400000 K
+Startup rescale step 47/50: lambda = 1.011257626882456e+00, T_before = 92.309920 K, target = 94.400000 K
+Startup rescale step 48/50: lambda = 1.011751477531147e+00, T_before = 92.219826 K, target = 94.400000 K
+Startup rescale step 49/50: lambda = 1.011823943944249e+00, T_before = 92.206617 K, target = 94.400000 K
+Startup rescale step 50/50: lambda = 1.011208781320699e+00, T_before = 92.318838 K, target = 94.400000 K
+Startup->production rescale: lambda = 1.009614991355338e+00, T_before = 92.610539 K
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 108 | P = 1 | timesteps = 5 | frames = 6 (step 0..5) | dt = 1.000e-14
+LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
+Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
+L = 1.738930e-09 m (5.1145 sigma)
+Target temperature = 94.4 K | seed = 42
+Startup timesteps = 50 | production timesteps = 5 | total executed = 55
+Production simulated time = 5.000e-14 s (= production_steps * dt)
+production_start_step = 0 (production-only output)
+Startup boundary temperature before final rescale: 92.610539 K
+Startup boundary temperature after final rescale: 94.400000 K
+==================
+Wall time: 0.000361 s (max across 1 ranks)
+=== Initial Conditions (Rank 0) ===
+Seed: 42 | FCC lattice | Box-Muller velocities
+Perturbation: 0.0100 sigma | T_initial: 94.400000 K
+===================================
+Startup rescale step 1/50: lambda = 1.000000000000000e+00, T_before = 94.400000 K, target = 94.400000 K
+Startup rescale step 2/50: lambda = 1.000554877641383e+00, T_before = 94.295326 K, target = 94.400000 K
+Startup rescale step 3/50: lambda = 1.001498776481246e+00, T_before = 94.117666 K, target = 94.400000 K
+Startup rescale step 4/50: lambda = 1.002521267698681e+00, T_before = 93.925779 K, target = 94.400000 K
+Startup rescale step 5/50: lambda = 1.003660072928603e+00, T_before = 93.712754 K, target = 94.400000 K
+Startup rescale step 6/50: lambda = 1.004955613062417e+00, T_before = 93.471289 K, target = 94.400000 K
+Startup rescale step 7/50: lambda = 1.006450727263259e+00, T_before = 93.193787 K, target = 94.400000 K
+Startup rescale step 8/50: lambda = 1.008189156197060e+00, T_before = 92.872674 K, target = 94.400000 K
+Startup rescale step 9/50: lambda = 1.010208435879377e+00, T_before = 92.501764 K, target = 94.400000 K
+Startup rescale step 10/50: lambda = 1.012542591158752e+00, T_before = 92.075777 K, target = 94.400000 K
+Startup rescale step 11/50: lambda = 1.015193706053781e+00, T_before = 91.595505 K, target = 94.400000 K
+Startup rescale step 12/50: lambda = 1.018115024804627e+00, T_before = 91.070622 K, target = 94.400000 K
+Startup rescale step 13/50: lambda = 1.021216008534779e+00, T_before = 90.518379 K, target = 94.400000 K
+Startup rescale step 14/50: lambda = 1.024295894062565e+00, T_before = 89.974850 K, target = 94.400000 K
+Startup rescale step 15/50: lambda = 1.027049158400990e+00, T_before = 89.493096 K, target = 94.400000 K
+Startup rescale step 16/50: lambda = 1.029150810591021e+00, T_before = 89.127957 K, target = 94.400000 K
+Startup rescale step 17/50: lambda = 1.030332085024977e+00, T_before = 88.923704 K, target = 94.400000 K
+Startup rescale step 18/50: lambda = 1.030473240735531e+00, T_before = 88.899344 K, target = 94.400000 K
+Startup rescale step 19/50: lambda = 1.029678364278692e+00, T_before = 89.036652 K, target = 94.400000 K
+Startup rescale step 20/50: lambda = 1.028193446250227e+00, T_before = 89.294011 K, target = 94.400000 K
+Startup rescale step 21/50: lambda = 1.026204269492264e+00, T_before = 89.640518 K, target = 94.400000 K
+Startup rescale step 22/50: lambda = 1.023804756229235e+00, T_before = 90.061196 K, target = 94.400000 K
+Startup rescale step 23/50: lambda = 1.021033704859721e+00, T_before = 90.550705 K, target = 94.400000 K
+Startup rescale step 24/50: lambda = 1.017892546148408e+00, T_before = 91.110436 K, target = 94.400000 K
+Startup rescale step 25/50: lambda = 1.014433135766224e+00, T_before = 91.732904 K, target = 94.400000 K
+Startup rescale step 26/50: lambda = 1.010803967900348e+00, T_before = 92.392798 K, target = 94.400000 K
+Startup rescale step 27/50: lambda = 1.007180454989398e+00, T_before = 93.058793 K, target = 94.400000 K
+Startup rescale step 28/50: lambda = 1.003763043104544e+00, T_before = 93.693528 K, target = 94.400000 K
+Startup rescale step 29/50: lambda = 1.000752561769121e+00, T_before = 94.258077 K, target = 94.400000 K
+Startup rescale step 30/50: lambda = 9.982756142734638e-01, T_before = 94.726408 K, target = 94.400000 K
+Startup rescale step 31/50: lambda = 9.963969313600507e-01, T_before = 95.083954 K, target = 94.400000 K
+Startup rescale step 32/50: lambda = 9.951401646596637e-01, T_before = 95.324269 K, target = 94.400000 K
+Startup rescale step 33/50: lambda = 9.944783429440424e-01, T_before = 95.451187 K, target = 94.400000 K
+Startup rescale step 34/50: lambda = 9.943646876548934e-01, T_before = 95.473009 K, target = 94.400000 K
+Startup rescale step 35/50: lambda = 9.947272752386551e-01, T_before = 95.403420 K, target = 94.400000 K
+Startup rescale step 36/50: lambda = 9.955008328446893e-01, T_before = 95.255210 K, target = 94.400000 K
+Startup rescale step 37/50: lambda = 9.966354597852635e-01, T_before = 95.038445 K, target = 94.400000 K
+Startup rescale step 38/50: lambda = 9.980729448199760e-01, T_before = 94.764882 K, target = 94.400000 K
+Startup rescale step 39/50: lambda = 9.997465980754849e-01, T_before = 94.447860 K, target = 94.400000 K
+Startup rescale step 40/50: lambda = 1.001561399173794e+00, T_before = 94.105897 K, target = 94.400000 K
+Startup rescale step 41/50: lambda = 1.003421850012588e+00, T_before = 93.757256 K, target = 94.400000 K
+Startup rescale step 42/50: lambda = 1.005228473399085e+00, T_before = 93.420552 K, target = 94.400000 K
+Startup rescale step 43/50: lambda = 1.006889243861887e+00, T_before = 93.112629 K, target = 94.400000 K
+Startup rescale step 44/50: lambda = 1.008325591523771e+00, T_before = 92.847543 K, target = 94.400000 K
+Startup rescale step 45/50: lambda = 1.009521504735243e+00, T_before = 92.627692 K, target = 94.400000 K
+Startup rescale step 46/50: lambda = 1.010497330715535e+00, T_before = 92.448880 K, target = 94.400000 K
+Startup rescale step 47/50: lambda = 1.011257626882457e+00, T_before = 92.309920 K, target = 94.400000 K
+Startup rescale step 48/50: lambda = 1.011751477531147e+00, T_before = 92.219826 K, target = 94.400000 K
+Startup rescale step 49/50: lambda = 1.011823943944249e+00, T_before = 92.206617 K, target = 94.400000 K
+Startup rescale step 50/50: lambda = 1.011208781320699e+00, T_before = 92.318838 K, target = 94.400000 K
+Startup->production rescale: lambda = 1.009614991355338e+00, T_before = 92.610539 K
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 108 | P = 2 | timesteps = 5 | frames = 6 (step 0..5) | dt = 1.000e-14
+LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
+Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
+L = 1.738930e-09 m (5.1145 sigma)
+Target temperature = 94.4 K | seed = 42
+Startup timesteps = 50 | production timesteps = 5 | total executed = 55
+Production simulated time = 5.000e-14 s (= production_steps * dt)
+production_start_step = 0 (production-only output)
+Startup boundary temperature before final rescale: 92.610539 K
+Startup boundary temperature after final rescale: 94.400000 K
+==================
+Wall time: 0.000204 s (max across 2 ranks)
+MATCH
 ```
 
 ## 6. CLI Defaults vs. Brief Requirements
 
 ### CLI help output
 ```
-[40445] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+=== Initial Conditions (Rank 0) ===
+Seed: 42 | FCC lattice | Box-Muller velocities
+Perturbation: 0.0100 sigma | T_initial: 94.400000 K
+===================================
+Startup rescale step 1/50: lambda = 1.000000000000001e+00, T_before = 94.400000 K, target = 94.400000 K
+Startup rescale step 2/50: lambda = 1.000448572582493e+00, T_before = 94.315366 K, target = 94.400000 K
+Startup rescale step 3/50: lambda = 1.001369169679296e+00, T_before = 94.142031 K, target = 94.400000 K
+Startup rescale step 4/50: lambda = 1.002336044518751e+00, T_before = 93.960495 K, target = 94.400000 K
+Startup rescale step 5/50: lambda = 1.003384155020134e+00, T_before = 93.764300 K, target = 94.400000 K
+Startup rescale step 6/50: lambda = 1.004549837667511e+00, T_before = 93.546818 K, target = 94.400000 K
+Startup rescale step 7/50: lambda = 1.005870906430890e+00, T_before = 93.301258 K, target = 94.400000 K
+Startup rescale step 8/50: lambda = 1.007385576261256e+00, T_before = 93.020900 K, target = 94.400000 K
+Startup rescale step 9/50: lambda = 1.009130968491733e+00, T_before = 92.699401 K, target = 94.400000 K
+Startup rescale step 10/50: lambda = 1.011138993969964e+00, T_before = 92.331582 K, target = 94.400000 K
+Startup rescale step 11/50: lambda = 1.013424112782515e+00, T_before = 91.915664 K, target = 94.400000 K
+Startup rescale step 12/50: lambda = 1.015981346761528e+00, T_before = 91.453541 K, target = 94.400000 K
+Startup rescale step 13/50: lambda = 1.018777411119338e+00, T_before = 90.952236 K, target = 94.400000 K
+Startup rescale step 14/50: lambda = 1.021706734978981e+00, T_before = 90.431447 K, target = 94.400000 K
+Startup rescale step 15/50: lambda = 1.024592250547181e+00, T_before = 89.922808 K, target = 94.400000 K
+Startup rescale step 16/50: lambda = 1.027178057038569e+00, T_before = 89.470637 K, target = 94.400000 K
+Startup rescale step 17/50: lambda = 1.029148258584685e+00, T_before = 89.128399 K, target = 94.400000 K
+Startup rescale step 18/50: lambda = 1.030212155968560e+00, T_before = 88.944409 K, target = 94.400000 K
+Startup rescale step 19/50: lambda = 1.030180773287125e+00, T_before = 88.949828 K, target = 94.400000 K
+Startup rescale step 20/50: lambda = 1.029029964043456e+00, T_before = 89.148892 K, target = 94.400000 K
+Startup rescale step 21/50: lambda = 1.026918938210060e+00, T_before = 89.515794 K, target = 94.400000 K
+Startup rescale step 22/50: lambda = 1.024133136928806e+00, T_before = 90.003450 K, target = 94.400000 K
+Startup rescale step 23/50: lambda = 1.020985095096201e+00, T_before = 90.559328 K, target = 94.400000 K
+Startup rescale step 24/50: lambda = 1.017758545243542e+00, T_before = 91.134430 K, target = 94.400000 K
+Startup rescale step 25/50: lambda = 1.014658296458772e+00, T_before = 91.692196 K, target = 94.400000 K
+Startup rescale step 26/50: lambda = 1.011807645251829e+00, T_before = 92.209588 K, target = 94.400000 K
+Startup rescale step 27/50: lambda = 1.009282212173632e+00, T_before = 92.671620 K, target = 94.400000 K
+Startup rescale step 28/50: lambda = 1.007120809277233e+00, T_before = 93.069816 K, target = 94.400000 K
+Startup rescale step 29/50: lambda = 1.005344152117530e+00, T_before = 93.399055 K, target = 94.400000 K
+Startup rescale step 30/50: lambda = 1.003970854887324e+00, T_before = 93.654744 K, target = 94.400000 K
+Startup rescale step 31/50: lambda = 1.003016234605057e+00, T_before = 93.833101 K, target = 94.400000 K
+Startup rescale step 32/50: lambda = 1.002470108835248e+00, T_before = 93.935366 K, target = 94.400000 K
+Startup rescale step 33/50: lambda = 1.002284311902083e+00, T_before = 93.970195 K, target = 94.400000 K
+Startup rescale step 34/50: lambda = 1.002366552426738e+00, T_before = 93.954776 K, target = 94.400000 K
+Startup rescale step 35/50: lambda = 1.002575207279342e+00, T_before = 93.915673 K, target = 94.400000 K
+Startup rescale step 36/50: lambda = 1.002766813194066e+00, T_before = 93.879786 K, target = 94.400000 K
+Startup rescale step 37/50: lambda = 1.002842056728859e+00, T_before = 93.865699 K, target = 94.400000 K
+Startup rescale step 38/50: lambda = 1.002751952365477e+00, T_before = 93.882568 K, target = 94.400000 K
+Startup rescale step 39/50: lambda = 1.002500076720989e+00, T_before = 93.929750 K, target = 94.400000 K
+Startup rescale step 40/50: lambda = 1.002117899590258e+00, T_before = 94.001407 K, target = 94.400000 K
+Startup rescale step 41/50: lambda = 1.001642168471565e+00, T_before = 94.090721 K, target = 94.400000 K
+Startup rescale step 42/50: lambda = 1.001121408517460e+00, T_before = 94.188634 K, target = 94.400000 K
+Startup rescale step 43/50: lambda = 1.000614710973050e+00, T_before = 94.284049 K, target = 94.400000 K
+Startup rescale step 44/50: lambda = 1.000171942547846e+00, T_before = 94.367546 K, target = 94.400000 K
+Startup rescale step 45/50: lambda = 9.998252865723313e-01, T_before = 94.432995 K, target = 94.400000 K
+Startup rescale step 46/50: lambda = 9.995965918750089e-01, T_before = 94.476210 K, target = 94.400000 K
+Startup rescale step 47/50: lambda = 9.994967377519257e-01, T_before = 94.495088 K, target = 94.400000 K
+Startup rescale step 48/50: lambda = 9.995312695558261e-01, T_before = 94.488559 K, target = 94.400000 K
+Startup rescale step 49/50: lambda = 9.996960242118366e-01, T_before = 94.457417 K, target = 94.400000 K
+Startup rescale step 50/50: lambda = 9.999826416110550e-01, T_before = 94.403277 K, target = 94.400000 K
+Startup->production rescale: lambda = 1.000368412753439e+00, T_before = 94.330482 K
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 864 | P = 1 | timesteps = 100 | frames = 101 (step 0..100) | dt = 1.000e-14
+LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
+Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
+L = 3.477860e-09 m (10.2290 sigma)
+Target temperature = 94.4 K | seed = 42
+Startup timesteps = 50 | production timesteps = 100 | total executed = 150
+Production simulated time = 1.000e-12 s (= production_steps * dt)
+production_start_step = 0 (production-only output)
+Startup boundary temperature before final rescale: 94.330482 K
+Startup boundary temperature after final rescale: 94.400000 K
+==================
+Wall time: 0.179375 s (max across 1 ranks)
 ```
 
 ### Comparison
@@ -1507,7 +1830,7 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (533 lines)
+### `src/main.cpp` (535 lines)
 
 ```cpp
 /**
@@ -1925,6 +2248,8 @@ int main(int argc, char* argv[]) {
     int grFrames = 0;
 
     // Synchronise clocks before timed production loop (exclude startup/output setup).
+    // Reset accumulated comm timer so reported communication matches this timing window.
+    ctx.commTime = 0.0;
     MPI_Barrier(MPI_COMM_WORLD);
     const double tStart = MPI_Wtime();
 
@@ -2724,6 +3049,35 @@ int testForce() {
 }
 ```
 
+### `scripts/combine_metadata.sh` (24 lines)
+
+```sh
+#!/usr/bin/env bash
+set -euo pipefail
+
+metadata_dir="out/plots/metadata"
+output_file="$metadata_dir/all_metadata.txt"
+
+if [ ! -d "$metadata_dir" ]; then
+  echo "Metadata directory not found: $metadata_dir" >&2
+  exit 1
+fi
+
+tmp_file="$(mktemp)"
+trap 'rm -f "$tmp_file"' EXIT
+
+find "$metadata_dir" -maxdepth 1 -type f -name '*.json' | sort | while IFS= read -r file; do
+  printf '===== %s =====\n' "$(basename "$file")" >> "$tmp_file"
+  cat "$file" >> "$tmp_file"
+  printf '\n\n' >> "$tmp_file"
+done
+
+mv "$tmp_file" "$output_file"
+trap - EXIT
+
+printf 'Wrote %s\n' "$output_file"
+```
+
 ### `scripts/make_results.sh` (13 lines)
 
 ```sh
@@ -2758,7 +3112,7 @@ set -euo pipefail
 SOLVER="./md_solver"
 OUTDIR="out"
 SKIP_SCALING=0
-STRONG_STEPS=200
+STRONG_STEPS=500
 # Use longer runs for size scaling so fixed overhead is less dominant at small N.
 SIZE_STEPS=2000
 
@@ -3033,7 +3387,7 @@ python3 scripts/plot_lj.py
 python3 scripts/plot_scaling.py
 ```
 
-### `scripts/run_scaling.sh` (115 lines)
+### `scripts/run_scaling.sh` (206 lines)
 
 ```sh
 #!/bin/bash
@@ -3050,71 +3404,113 @@ python3 scripts/plot_scaling.py
 # Produces:
 #   out/scaling_strong.csv   (P,N,wall_s,comm_s)
 #   out/scaling_size.csv     (P,N,wall_s,comm_s)
+#   out/scaling_strong_raw.csv
+#   out/scaling_size_raw.csv
+#   out/scaling_strong_stats.csv
+#   out/scaling_size_stats.csv
+#   out/scaling_meta.txt
 # ──────────────────────────────────────────────────────────────────
 
 set -euo pipefail
 
 SOLVER="./md_solver"
 OUTDIR="out"
-STRONG_STEPS=200
-SIZE_STEPS=2000
+STRONG_STEPS=1000
+SIZE_STEPS=5000
 INTEGRATOR="verlet"
-REPS=20
+REPS=31
 
 mkdir -p "$OUTDIR"
 
-# Helper: given parallel arrays of wall and comm times, pick the
-# median by wall time and return the paired (wall, comm).
-# Usage: pick_median_pair "w1 ... wn" "c1 ... cn"
-# Prints: wall_median comm_from_same_rep
-pick_median_pair() {
-    local walls=($1)
-    local comms=($2)
-    local n=${#walls[@]}
+if [ $((REPS % 2)) -eq 0 ]; then
+    echo "ERROR: REPS must be odd for an unambiguous median-by-sample selection (got REPS=$REPS)." >&2
+    exit 1
+fi
 
-    # Create index-sorted-by-wall array using a temp file
-    local tmpfile
-    tmpfile=$(mktemp)
-    for i in $(seq 0 $((n-1))); do
-        echo "${walls[$i]} ${comms[$i]}"
-    done | sort -n -k1 > "$tmpfile"
+# Helper: from a sorted [rep wall comm] temp file, emit robust wall-time spread stats.
+# Prints CSV fields:
+# reps,median_rep,median_wall_s,median_comm_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s
+summarize_sorted_samples() {
+    local sorted_file="$1"
+    local n
+    n=$(wc -l < "$sorted_file" | tr -d ' ')
 
-    # Pick the middle row (0-indexed: row (n-1)/2 for odd n)
-    local mid=$(( (n - 1) / 2 ))
-    local line
-    line=$(sed -n "$((mid+1))p" "$tmpfile")
-    rm -f "$tmpfile"
+    if [ "$n" -le 0 ]; then
+        return 1
+    fi
 
-    echo "$line"
+    local mid q1 q3
+    mid=$(( n / 2 + 1 ))
+    q1=$(( (n + 1) / 4 ))
+    q3=$(( (3 * n + 3) / 4 ))
+
+    local median_line q1_line q3_line min_line max_line
+    median_line=$(sed -n "${mid}p" "$sorted_file")
+    q1_line=$(sed -n "${q1}p" "$sorted_file")
+    q3_line=$(sed -n "${q3}p" "$sorted_file")
+    min_line=$(sed -n "1p" "$sorted_file")
+    max_line=$(sed -n "${n}p" "$sorted_file")
+
+    local median_rep median_wall median_comm q1_wall q3_wall min_wall max_wall iqr_wall
+    median_rep=$(echo "$median_line" | awk '{print $1}')
+    median_wall=$(echo "$median_line" | awk '{print $2}')
+    median_comm=$(echo "$median_line" | awk '{print $3}')
+    q1_wall=$(echo "$q1_line" | awk '{print $2}')
+    q3_wall=$(echo "$q3_line" | awk '{print $2}')
+    min_wall=$(echo "$min_line" | awk '{print $2}')
+    max_wall=$(echo "$max_line" | awk '{print $2}')
+    iqr_wall=$(awk -v q1="$q1_wall" -v q3="$q3_wall" 'BEGIN{printf "%.6f", q3 - q1}')
+
+    echo "$n,$median_rep,$median_wall,$median_comm,$q1_wall,$q3_wall,$iqr_wall,$min_wall,$max_wall"
 }
 
 # ─── Strong Scaling: N=2048, vary P ──────────────────────────────
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_strong.csv"
+echo "kind,P,N,rep,wall_s,comm_s" > "$OUTDIR/scaling_strong_raw.csv"
+echo "P,N,reps,median_rep,median_wall_s,median_comm_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_strong_stats.csv"
 
 N_STRONG=2048
 for P in 1 2 4 8 16 24 32; do
-    WALLS=""
-    COMMS=""
+    TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun --oversubscribe -np "$P" "$SOLVER" \
+        OUTPUT=$(mpirun -np "$P" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
 
         WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
+        if [ -z "$WALL" ]; then
+            echo "ERROR: failed to parse wall time for strong scaling (P=$P, rep=$REP)." >&2
+            echo "$OUTPUT" >&2
+            rm -f "$TMP_SAMPLES"
+            exit 1
+        fi
         # P=1 has no comm line
         if [ -z "$COMM" ]; then COMM="0.000000"; fi
         COMM=$(awk -v w="$WALL" -v c="$COMM" 'BEGIN{if (c > w) print w; else print c}')
 
-        WALLS="$WALLS $WALL"
-        COMMS="$COMMS $COMM"
+        echo "$REP $WALL $COMM" >> "$TMP_SAMPLES"
+        echo "strong,$P,$N_STRONG,$REP,$WALL,$COMM" >> "$OUTDIR/scaling_strong_raw.csv"
         echo "  P=$P rep=$REP wall=$WALL comm=$COMM"
     done
 
-    PAIR=$(pick_median_pair "$WALLS" "$COMMS")
-    MED_WALL=$(echo "$PAIR" | awk '{print $1}')
-    MED_COMM=$(echo "$PAIR" | awk '{print $2}')
+    SORTED_SAMPLES=$(mktemp)
+    sort -n -k2 "$TMP_SAMPLES" > "$SORTED_SAMPLES"
+    STATS=$(summarize_sorted_samples "$SORTED_SAMPLES")
+    rm -f "$TMP_SAMPLES" "$SORTED_SAMPLES"
+
+    REPS_OUT=$(echo "$STATS" | cut -d, -f1)
+    MEDIAN_REP=$(echo "$STATS" | cut -d, -f2)
+    MED_WALL=$(echo "$STATS" | cut -d, -f3)
+    MED_COMM=$(echo "$STATS" | cut -d, -f4)
+    Q1_WALL=$(echo "$STATS" | cut -d, -f5)
+    Q3_WALL=$(echo "$STATS" | cut -d, -f6)
+    IQR_WALL=$(echo "$STATS" | cut -d, -f7)
+    MIN_WALL=$(echo "$STATS" | cut -d, -f8)
+    MAX_WALL=$(echo "$STATS" | cut -d, -f9)
+
     echo "$P,$N_STRONG,$MED_WALL,$MED_COMM" >> "$OUTDIR/scaling_strong.csv"
+    echo "$P,$N_STRONG,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_strong_stats.csv"
     echo ">> P=$P MEDIAN: wall=$MED_WALL comm=$MED_COMM"
 done
 
@@ -3122,35 +3518,84 @@ echo ""
 
 # ─── Size Scaling: P=16, vary N ──────────────────────────────────
 echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_size.csv"
+echo "kind,P,N,rep,wall_s,comm_s" > "$OUTDIR/scaling_size_raw.csv"
+echo "P,N,reps,median_rep,median_wall_s,median_comm_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_size_stats.csv"
 
 P_SIZE=16
 for N in 108 256 500 864 1372 2048; do
-    WALLS=""
-    COMMS=""
+    TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun --oversubscribe -np "$P_SIZE" "$SOLVER" \
+        OUTPUT=$(mpirun -np "$P_SIZE" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
 
         WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
         COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
+        if [ -z "$WALL" ]; then
+            echo "ERROR: failed to parse wall time for size scaling (N=$N, rep=$REP)." >&2
+            echo "$OUTPUT" >&2
+            rm -f "$TMP_SAMPLES"
+            exit 1
+        fi
         if [ -z "$COMM" ]; then COMM="0.000000"; fi
         COMM=$(awk -v w="$WALL" -v c="$COMM" 'BEGIN{if (c > w) print w; else print c}')
 
-        WALLS="$WALLS $WALL"
-        COMMS="$COMMS $COMM"
+        echo "$REP $WALL $COMM" >> "$TMP_SAMPLES"
+        echo "size,$P_SIZE,$N,$REP,$WALL,$COMM" >> "$OUTDIR/scaling_size_raw.csv"
         echo "  N=$N rep=$REP wall=$WALL comm=$COMM"
     done
 
-    PAIR=$(pick_median_pair "$WALLS" "$COMMS")
-    MED_WALL=$(echo "$PAIR" | awk '{print $1}')
-    MED_COMM=$(echo "$PAIR" | awk '{print $2}')
+    SORTED_SAMPLES=$(mktemp)
+    sort -n -k2 "$TMP_SAMPLES" > "$SORTED_SAMPLES"
+    STATS=$(summarize_sorted_samples "$SORTED_SAMPLES")
+    rm -f "$TMP_SAMPLES" "$SORTED_SAMPLES"
+
+    REPS_OUT=$(echo "$STATS" | cut -d, -f1)
+    MEDIAN_REP=$(echo "$STATS" | cut -d, -f2)
+    MED_WALL=$(echo "$STATS" | cut -d, -f3)
+    MED_COMM=$(echo "$STATS" | cut -d, -f4)
+    Q1_WALL=$(echo "$STATS" | cut -d, -f5)
+    Q3_WALL=$(echo "$STATS" | cut -d, -f6)
+    IQR_WALL=$(echo "$STATS" | cut -d, -f7)
+    MIN_WALL=$(echo "$STATS" | cut -d, -f8)
+    MAX_WALL=$(echo "$STATS" | cut -d, -f9)
+
     echo "$P_SIZE,$N,$MED_WALL,$MED_COMM" >> "$OUTDIR/scaling_size.csv"
+    echo "$P_SIZE,$N,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_size_stats.csv"
     echo ">> N=$N MEDIAN: wall=$MED_WALL comm=$MED_COMM"
 done
 
+{
+  echo "hostname: $(hostname)"
+  if command -v lscpu &>/dev/null; then
+    echo "cpu: $(lscpu | grep 'Model name' | sed 's/.*: *//')"
+  elif [ -r /proc/cpuinfo ]; then
+    echo "cpu: $(grep -m1 'model name' /proc/cpuinfo | sed 's/.*: *//')"
+  else
+    echo "cpu: unknown"
+  fi
+  if command -v mpicxx &>/dev/null; then
+    echo "compiler: $(mpicxx --version | head -1)"
+  else
+    echo "compiler: unknown"
+  fi
+  if command -v mpirun &>/dev/null; then
+    echo "mpi: $(mpirun --version | head -1)"
+  else
+    echo "mpi: unknown"
+  fi
+  echo "date: $(date -Iseconds)"
+} > "$OUTDIR/scaling_meta.txt"
+
 echo ""
-echo "Done. Results in $OUTDIR/scaling_strong.csv and $OUTDIR/scaling_size.csv"
+echo "Done. Results in:"
+echo "  $OUTDIR/scaling_strong.csv"
+echo "  $OUTDIR/scaling_size.csv"
+echo "  $OUTDIR/scaling_strong_raw.csv"
+echo "  $OUTDIR/scaling_size_raw.csv"
+echo "  $OUTDIR/scaling_strong_stats.csv"
+echo "  $OUTDIR/scaling_size_stats.csv"
+echo "  $OUTDIR/scaling_meta.txt"
 ```
 
 ### `scripts/append_manifest.py` (68 lines)
@@ -3347,7 +3792,7 @@ if __name__ == '__main__':
     check_csv(sys.argv[1], sys.argv[2])
 ```
 
-### `scripts/plot_ho.py` (1468 lines)
+### `scripts/plot_ho.py` (1459 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -4065,13 +4510,22 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
     plt.close(fig)
 
 
-def _plot_small_large_series(ax, x_data, y_data, exact_x, exact_y, method_color, include_coarse: bool = True):
+def _plot_small_large_series(
+    ax,
+    x_data,
+    y_data,
+    exact_x,
+    exact_y,
+    method_color,
+    include_coarse: bool = True,
+    exact_color: str | None = None,
+):
     # Keep exact clearly distinct from coarse/fine numerical styles in this comparison panel.
     exact_style = INTEGRATOR_STYLE["exact"]
     ax.plot(
         exact_x,
         exact_y,
-        color=exact_style["color"],
+        color=exact_style["color"] if exact_color is None else exact_color,
         linestyle=":",
         linewidth=max(2.0, float(exact_style["linewidth"])),
         alpha=0.95,
@@ -4095,6 +4549,7 @@ def plot_figure3_small_vs_large(
     fig, axes = plt.subplots(len(INTEGRATORS), 2, figsize=(12.8, 11.1), constrained_layout=False)
     t_exact = np.linspace(0.0, T_FINAL, 2400, dtype=float)
     x_exact, v_exact = exact_solution(t_exact)
+    exact_color = "black"
 
     for row_idx, integ in enumerate(INTEGRATORS):
         ax_traj = axes[row_idx, 0]
@@ -4116,6 +4571,7 @@ def plot_figure3_small_vs_large(
             t_exact,
             x_exact,
             color,
+            exact_color=exact_color,
         )
         _plot_small_large_series(
             ax_phase,
@@ -4124,6 +4580,7 @@ def plot_figure3_small_vs_large(
             x_exact,
             v_exact,
             color,
+            exact_color=exact_color,
         )
 
         ax_traj.set_xlim(0.0, T_FINAL)
@@ -4145,7 +4602,7 @@ def plot_figure3_small_vs_large(
         Line2D(
             [0],
             [0],
-            color=INTEGRATOR_STYLE["exact"]["color"],
+            color=exact_color,
             linestyle=":",
             linewidth=max(2.0, float(INTEGRATOR_STYLE["exact"]["linewidth"])),
             label="Exact",
@@ -4369,52 +4826,31 @@ def plot_figure5_energy_diagnostic(
     ax.set_title(r"Energy drift at $\Delta t=0.01$")
     apply_major_grid(ax)
     disable_offset_text(ax)
-    ax.legend(loc="upper right", bbox_to_anchor=(0.995, 0.60), frameon=False)
+    ax.legend(loc="upper left", bbox_to_anchor=(0.02, 0.985), frameon=False, borderaxespad=0.0)
 
+    summary_label_map = {"euler": "Euler", "verlet": "Verlet", "rk4": "RK4"}
     summary_lines = []
     for integ in INTEGRATORS:
         row = row_for(metrics_idx, integ, TRAJ_DT)
         if row is None:
             continue
-        summary_lines.append((integ, INTEGRATOR_LABELS[integ], fmt_pct_from_ratio(float(row["max_relative_energy_drift"]), 4)))
+        summary_lines.append((summary_label_map[integ], fmt_pct_from_ratio(float(row["max_relative_energy_drift"]), 3)))
     if summary_lines:
+        summary_text = "Max relative energy drift\n" + "\n".join(
+            f"{label}: {drift_text}" for label, drift_text in summary_lines
+        )
         ax.text(
             0.02,
-            0.985,
-            "Max relative energy drift",
+            0.76,
+            summary_text,
             transform=ax.transAxes,
             va="top",
             ha="left",
-            fontsize=8.7,
-            fontweight="semibold",
-            bbox={"facecolor": "white", "alpha": 0.90, "edgecolor": "none", "pad": 0.25},
+            fontsize=8.2,
+            color="#222222",
+            linespacing=1.35,
+            bbox={"facecolor": "white", "alpha": 0.92, "edgecolor": "#d9d9d9", "boxstyle": "round,pad=0.3"},
         )
-        y = 0.952
-        for integ, label, drift_text in summary_lines:
-            ax.text(
-                0.02,
-                y,
-                label,
-                transform=ax.transAxes,
-                va="top",
-                ha="left",
-                fontsize=8.2,
-                color=INTEGRATOR_STYLE[integ]["color"],
-                fontweight="semibold",
-                bbox={"facecolor": "white", "alpha": 0.90, "edgecolor": "none", "pad": 0.15},
-            )
-            ax.text(
-                0.20,
-                y,
-                f"max |ΔE/E0| = {drift_text}",
-                transform=ax.transAxes,
-                va="top",
-                ha="left",
-                fontsize=8.2,
-                color="#222222",
-                bbox={"facecolor": "white", "alpha": 0.90, "edgecolor": "none", "pad": 0.15},
-            )
-            y -= 0.038
 
     axins = inset_axes(
         ax,
@@ -4820,7 +5256,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### `scripts/plot_lj.py` (1504 lines)
+### `scripts/plot_lj.py` (1560 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -5334,12 +5770,13 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
         row_label = label
         ax_d.text(
-            0.98,
-            0.92,
+            0.02,
+            0.96,
             row_label,
             transform=ax_d.transAxes,
             fontsize=9,
-            ha="right",
+            ha="left",
+            va="top",
             bbox={"facecolor": "white", "alpha": 0.86, "edgecolor": "none"},
         )
 
@@ -5380,11 +5817,12 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
             if mean_abs_rel_pct is not None:
                 ann_lines.append(f"mean |ΔE/E0| = {mean_abs_rel_pct:.3f}%")
             ax_d.text(
-                0.02,
-                0.93,
+                0.98,
+                0.06,
                 "\n".join(ann_lines),
                 transform=ax_d.transAxes,
-                ha="left",
+                ha="right",
+                va="bottom",
                 fontsize=8.5,
                 bbox={"facecolor": "white", "alpha": 0.82, "edgecolor": "none"},
             )
@@ -5781,6 +6219,69 @@ def extract_rdf_feature(r_vals, g_vals, rmin, rmax, mode):
     return float(rr[idx]), float(gg[idx])
 
 
+def smooth_curve_pchip(x_vals, y_vals, samples_per_segment=40):
+    x = np.asarray(x_vals, dtype=float)
+    y = np.asarray(y_vals, dtype=float)
+    valid = np.isfinite(x) & np.isfinite(y)
+    x = x[valid]
+    y = y[valid]
+    if x.size < 2:
+        return x, y
+
+    order = np.argsort(x)
+    x = x[order]
+    y = y[order]
+    x, unique_idx = np.unique(x, return_index=True)
+    y = y[unique_idx]
+
+    n = x.size
+    if n == 2:
+        xx = np.linspace(x[0], x[1], samples_per_segment + 1)
+        yy = np.interp(xx, x, y)
+        return xx, yy
+
+    h = np.diff(x)
+    delta = np.diff(y) / h
+    d = np.zeros(n, dtype=float)
+
+    def endpoint_slope(h0, h1, delta0, delta1):
+        slope = ((2.0 * h0 + h1) * delta0 - h0 * delta1) / (h0 + h1)
+        if np.sign(slope) != np.sign(delta0):
+            return 0.0
+        if np.sign(delta0) != np.sign(delta1) and abs(slope) > abs(3.0 * delta0):
+            return 3.0 * delta0
+        return slope
+
+    d[0] = endpoint_slope(h[0], h[1], delta[0], delta[1])
+    d[-1] = endpoint_slope(h[-1], h[-2], delta[-1], delta[-2])
+
+    for k in range(1, n - 1):
+        if delta[k - 1] == 0.0 or delta[k] == 0.0 or np.sign(delta[k - 1]) != np.sign(delta[k]):
+            d[k] = 0.0
+        else:
+            w1 = 2.0 * h[k] + h[k - 1]
+            w2 = h[k] + 2.0 * h[k - 1]
+            d[k] = (w1 + w2) / (w1 / delta[k - 1] + w2 / delta[k])
+
+    x_dense_parts = []
+    y_dense_parts = []
+    for i in range(n - 1):
+        t = np.linspace(0.0, 1.0, samples_per_segment, endpoint=False)
+        hi = h[i]
+        x_seg = x[i] + t * hi
+        h00 = 2.0 * t**3 - 3.0 * t**2 + 1.0
+        h10 = t**3 - 2.0 * t**2 + t
+        h01 = -2.0 * t**3 + 3.0 * t**2
+        h11 = t**3 - t**2
+        y_seg = h00 * y[i] + h10 * hi * d[i] + h01 * y[i + 1] + h11 * hi * d[i + 1]
+        x_dense_parts.append(x_seg)
+        y_dense_parts.append(y_seg)
+
+    x_dense_parts.append(np.array([x[-1]]))
+    y_dense_parts.append(np.array([y[-1]]))
+    return np.concatenate(x_dense_parts), np.concatenate(y_dense_parts)
+
+
 def plot_rdf(manifest, rahman_points):
     os.makedirs(PLOT_DIR, exist_ok=True)
 
@@ -5811,28 +6312,19 @@ def plot_rdf(manifest, rahman_points):
     paper_mask = np.array([pt == "paper_anchored" for pt in rahman_types], dtype=bool)
     shape_mask = ~paper_mask
     paper_points = [p for p in rahman_points if p["point_type"] == "paper_anchored"]
+    rahman_guide_r, rahman_guide_g = smooth_curve_pchip(rahman_r_sigma, rahman_g, samples_per_segment=40)
 
     fig, ax = plt.subplots(figsize=(8.4, 5.1), constrained_layout=True)
     ax.plot(r_sigma, gr, color="k", linewidth=2.2, zorder=4, label="Present work (Velocity-Verlet, NVE)")
     ax.plot(
-        rahman_r_sigma,
-        rahman_g,
+        rahman_guide_r,
+        rahman_guide_g,
         color=COLOR_EULER,
         linestyle=(0, (4, 3)),
         linewidth=1.6,
         alpha=0.72,
         zorder=5,
-        label="Rahman guide (manual anchors)",
-    )
-    ax.scatter(
-        rahman_r_sigma[shape_mask],
-        rahman_g[shape_mask],
-        s=30,
-        facecolors="white",
-        edgecolors=COLOR_EULER,
-        linewidths=1.4,
-        zorder=6,
-        label="Rahman shape anchors (approx.)",
+        label="Rahman guide (smoothed manual anchors)",
     )
     ax.scatter(
         rahman_r_sigma[paper_mask],
@@ -5845,7 +6337,7 @@ def plot_rdf(manifest, rahman_points):
         zorder=7,
         label="Rahman paper-anchored X points",
     )
-    paper_annotation_offsets = [(30, 4), (30, 8), (26, 10)]
+    paper_annotation_offsets = [(22, -4), (22, 0), (18, 2)]
     annotation_fontsize = plt.rcParams.get("legend.fontsize", 10)
     for idx, point in enumerate(paper_points):
         dx, dy = paper_annotation_offsets[idx] if idx < len(paper_annotation_offsets) else (24, 8)
@@ -5950,7 +6442,7 @@ def plot_rdf(manifest, rahman_points):
                 },
             },
             "fit_or_truncation": {
-                "reference_guide": "piecewise-linear dashed guide connecting manual anchor points",
+                "reference_guide": "shape-preserving cubic dashed guide through manual anchor points",
                 "present_work_truncation": "none",
             },
             "key_quantitative_summary": {
@@ -6950,7 +7442,7 @@ include/md/partition.hpp                             26 lines
 include/md/potentials.hpp                            60 lines
 include/md/rng.hpp                                  134 lines
 include/md/system.hpp                                63 lines
-src/main.cpp                                        533 lines
+src/main.cpp                                        535 lines
 src/observables.cpp                                  70 lines
 src/potentials/harmonic.cpp                          37 lines
 src/potentials/lennard_jones.cpp                    104 lines
@@ -6961,7 +7453,7 @@ tests/test_partition.cpp                             68 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    2123
+    2125
 ```
 
 **End of audit.**

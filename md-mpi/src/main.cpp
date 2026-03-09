@@ -460,22 +460,20 @@ int main(int argc, char* argv[]) {
 
     const double elapsed = MPI_Wtime() - tStart;
 
-    struct {
-        double val;
-        int rank;
-    } localData{elapsed, ctx.rank}, globalData{0.0, 0};
-    // Report wall time from the slowest rank; comm time is tracked in MPIContext::allgatherPositions.
-    MPI_Allreduce(&localData, &globalData, 1, MPI_DOUBLE_INT, MPI_MAXLOC, MPI_COMM_WORLD);
-
-    const double maxTime = globalData.val;
-    const int slowestRank = globalData.rank;
+    // Wall time: max across all ranks (the bottleneck determines completion).
+    // Comm time: average Allgatherv time across ranks (cancels per-rank
+    // synchronisation noise inherent to blocking collectives).
+    // Pattern follows MPI lecture-notes slide 78: independent MPI_Reduce calls.
+    double maxTime = 0.0;
+    MPI_Reduce(&elapsed, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
     double reportedCommTime = 0.0;
     if (params.timing) {
-        if (ctx.rank == slowestRank) {
-            reportedCommTime = ctx.commTime;
+        double sumComm = 0.0;
+        MPI_Reduce(&ctx.commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        if (ctx.isRoot()) {
+            reportedCommTime = (ctx.size > 1) ? sumComm / ctx.size : 0.0;
         }
-        MPI_Bcast(&reportedCommTime, 1, MPI_DOUBLE, slowestRank, MPI_COMM_WORLD);
     }
 
     if (ctx.isRoot()) {
