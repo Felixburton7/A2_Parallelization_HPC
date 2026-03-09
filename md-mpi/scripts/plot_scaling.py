@@ -119,10 +119,15 @@ def plot_strong_scaling():
         print("Warning: scaling/strong not found in manifest. Skipping strong scaling.")
         return
 
+    names = getattr(getattr(data, "dtype", None), "names", ()) or ()
+    has_n_column = "N" in names
+
     P = data['P'].astype(int)
     wall = data['wall_s']
     comm = data['comm_s']
     compute = np.maximum(wall - comm, 1e-9)  # floor to avoid log(0) at small N
+    # Some exported strong-scaling tables omit N; Results 3 strong scaling uses fixed N=2048.
+    N_values = data["N"].astype(int) if has_n_column else np.full(len(P), 2048, dtype=int)
 
     t1 = wall[0]
     speedup = t1 / wall
@@ -224,6 +229,8 @@ def plot_strong_scaling():
     ]
     if used_fallback:
         missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
+    if not has_n_column:
+        missing_provenance.append("Strong-scaling CSV omitted N column; metadata assumes fixed N=2048.")
     if not os.path.exists(scaling_meta_path):
         missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
 
@@ -238,7 +245,7 @@ def plot_strong_scaling():
         rows.append(
             {
                 "P": int(P[i]),
-                "N": int(data["N"][i]),
+                "N": int(N_values[i]),
                 "wall_s": float(wall[i]),
                 "comm_s": float(comm[i]),
                 "speedup": float(speedup[i]),
@@ -258,7 +265,7 @@ def plot_strong_scaling():
             "simulation_run_identifiers": [],
             "key_parameters": {
                 "integrator": "verlet",
-                "fixed_particle_count_N": int(data["N"][0]) if len(data) else None,
+                "fixed_particle_count_N": int(N_values[0]) if len(data) else None,
                 "process_counts_P": [int(p) for p in P.tolist()],
                 "plots_in_figure": ["speedup", "efficiency", "compute_vs_communication"],
             },
@@ -296,6 +303,10 @@ def plot_size_scaling():
     data, size_path, used_fallback = load_scaling_csv(manifest, "size")
     if data is None:
         print("Warning: scaling/size not found in manifest. Skipping size scaling.")
+        return
+    names = getattr(getattr(data, "dtype", None), "names", ()) or ()
+    if "N" not in names:
+        print("Warning: scaling/size is missing N column. Skipping size scaling plot.")
         return
 
     N = data['N']

@@ -5,9 +5,9 @@
 | Field | Value |
 |---|---|
 | Purpose | Executable project-wide audit trace: build/tests/smoke runs and raw code/context evidence. |
-| Generation timestamp (UTC) | 2026-03-07T18:15:41Z |
-| Git commit | e535aaf9e86dfa3549c06a6d71e9792912fca492 |
-| Git working tree | dirty (5 changed paths) |
+| Generation timestamp (UTC) | 2026-03-09T13:10:48Z |
+| Git commit | 1ee4694830cf559e7796ee6aa54cdd4fadc467f6 |
+| Git working tree | dirty (1 changed paths) |
 | Generation succeeded | yes |
 | Generation status label | confirmed |
 | Generation note | Audit generation completed. |
@@ -19,7 +19,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 14.62x; fitted Amdahl serial fraction f=0.0396.
+- Results 3 strong scaling: max measured speedup 14.92x; fitted Amdahl serial fraction f=0.0317.
 
 ## How to Read This File
 
@@ -43,7 +43,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 14.62x; fitted Amdahl serial fraction f=0.0396.
+- Results 3 strong scaling: max measured speedup 14.92x; fitted Amdahl serial fraction f=0.0317.
 
 ## Current Deliverables Map
 
@@ -92,9 +92,9 @@
 |---|---|---|---|
 | Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_ho_figure4_convergence_combined.png` | medium | No major caveat recorded in metadata. |
 | Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_ho_figure3_small_vs_large_dt.png` | medium | No major caveat recorded in metadata. |
-| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
-| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
-| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
+| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
+| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
+| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
 | The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
 | Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
 | Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
@@ -108,10 +108,10 @@
 |---|---|---|---|
 | ai/audit.sh | yes | 2026-03-07T17:11:19Z | confirmed |
 | ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
-| Makefile | yes | 2026-03-05T11:10:52Z | confirmed |
-| tests/test_runner.cpp | yes | 2026-03-02T17:08:54Z | confirmed |
-| src/main.cpp | yes | 2026-03-06T12:35:38Z | confirmed |
-| out/manifest.json | yes | 2026-03-07T17:45:00Z | confirmed |
+| Makefile | yes | 2026-03-08T17:02:51Z | confirmed |
+| tests/test_runner.cpp | yes | 2026-03-08T15:24:59Z | confirmed |
+| src/main.cpp | yes | 2026-03-08T17:37:21Z | confirmed |
+| out/manifest.json | yes | 2026-03-08T17:44:36Z | confirmed |
 
 ### Expected file checks
 | Path | Expectation | Role | Status |
@@ -127,9 +127,9 @@
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
 |---|---|---|---|---|
-| ai/audit_output.md | 2026-03-07T18:15:41Z | 2026-03-07T18:15:16Z | confirmed | appears current (in-progress generation timestamp) |
-| ai/results.md | 2026-03-07T17:48:10Z | 2026-03-07T18:15:16Z | potential issue | older than latest source/evidence; consider regeneration |
-| ai/results_bundle.md | 2026-03-07T17:48:10Z | 2026-03-07T18:15:16Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/audit_output.md | 2026-03-09T13:10:48Z | 2026-03-08T19:58:26Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/results.md | 2026-03-07T17:48:10Z | 2026-03-08T19:58:26Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/results_bundle.md | 2026-03-07T17:48:10Z | 2026-03-08T19:58:26Z | potential issue | older than latest source/evidence; consider regeneration |
 
 ## Diagnostics / Warnings
 
@@ -169,8 +169,8 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-07T18:15:34Z |
-| Git commit | e535aaf9e86dfa3549c06a6d71e9792912fca492 |
+| Timestamp (UTC) | 2026-03-09T13:10:42Z |
+| Git commit | 1ee4694830cf559e7796ee6aa54cdd4fadc467f6 |
 | Hostname | MacBook-Pro-434.local |
 | uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -195,8 +195,8 @@
 ./ai/archive/task_overview.md
 ./ai/audit.sh
 ./ai/audit_output.md
-./ai/audit_output.tmp.CQCVD7
-./ai/audit_preface.tmp.cb58iE
+./ai/audit_output.tmp.Gc0LXQ
+./ai/audit_preface.tmp.erDcRa
 ./ai/context_report.py
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
@@ -210,16 +210,13 @@
 ./include/md/mpi_context.hpp
 ./include/md/observables.hpp
 ./include/md/params.hpp
+./include/md/partition.hpp
 ./include/md/potentials.hpp
 ./include/md/rng.hpp
 ./include/md/system.hpp
 ./md_solver
-./scripts/__pycache__/plot_lj.cpython-311.pyc
-./scripts/__pycache__/plot_lj.cpython-313.pyc
-./scripts/__pycache__/plot_scaling.cpython-313.pyc
 ./scripts/__pycache__/plot_style.cpython-311.pyc
 ./scripts/__pycache__/plot_style.cpython-313.pyc
-./scripts/__pycache__/validate_manifest.cpython-311.pyc
 ./scripts/append_manifest.py
 ./scripts/check_gr_tolerance.py
 ./scripts/check_tolerance.py
@@ -239,71 +236,73 @@
 ./src/potentials/lennard_jones.cpp
 ./test_runner
 ./tests/test_force.cpp
+./tests/test_integrators.cpp
 ./tests/test_mic.cpp
+./tests/test_partition.cpp
 ./tests/test_runner.cpp
 ```
 
 ### out/plots/
 ```
-total 6360
-drwx------  13 felix  staff     416 Mar  7 16:20 .
-drwx------  20 felix  staff     640 Mar  6 16:35 ..
-drwxr-xr-x  12 felix  staff     384 Mar  7 16:21 metadata
--rw-r--r--   1 felix  staff  352240 Mar  7 14:52 results1_ho_figure1_trajectories_dt0p01.png
--rw-r--r--   1 felix  staff  221196 Mar  7 14:52 results1_ho_figure2_phase_space_dt0p01.png
--rw-r--r--   1 felix  staff  683110 Mar  7 14:52 results1_ho_figure3_small_vs_large_dt.png
--rw-r--r--   1 felix  staff  366090 Mar  7 14:52 results1_ho_figure4_convergence_combined.png
--rw-r--r--   1 felix  staff  216304 Mar  7 14:52 results1_ho_figure5_energy_diagnostic.png
--rw-r--r--@  1 felix  staff  292464 Mar  7 18:15 results2_lj_brief_energy_100step_production.png
--rw-r--r--   1 felix  staff  144510 Mar  7 17:45 results2_lj_brief_temperature_100step_production.png
--rw-r--r--   1 felix  staff  234926 Mar  7 17:45 results2_lj_rdf_comparison_rahman1964.png
--rw-r--r--   1 felix  staff  291528 Mar  7 15:05 results3_problem_size_scaling_fixed_p16.png
--rw-r--r--   1 felix  staff  274607 Mar  7 15:05 results3_strong_scaling_speedup_efficiency_breakdown.png
+total 6216
+drwx------  13 felix  staff     416 Mar  8 18:07 .
+drwx------  16 felix  staff     512 Mar  8 18:07 ..
+drwx------  12 felix  staff     384 Mar  7 20:33 metadata
+-rw-------   1 felix  staff  352047 Mar  8 17:44 results1_ho_figure1_trajectories_dt0p01.png
+-rw-------   1 felix  staff  221196 Mar  8 17:44 results1_ho_figure2_phase_space_dt0p01.png
+-rw-------   1 felix  staff  683110 Mar  8 17:44 results1_ho_figure3_small_vs_large_dt.png
+-rw-------   1 felix  staff  366090 Mar  8 17:44 results1_ho_figure4_convergence_combined.png
+-rw-------   1 felix  staff  216304 Mar  8 17:44 results1_ho_figure5_energy_diagnostic.png
+-rw-------   1 felix  staff  316408 Mar  8 17:44 results2_lj_brief_energy_100step_production.png
+-rw-------   1 felix  staff  153527 Mar  8 17:44 results2_lj_brief_temperature_100step_production.png
+-rw-------   1 felix  staff  266964 Mar  8 17:44 results2_lj_rdf_comparison_rahman1964.png
+-rw-------   1 felix  staff  306087 Mar  8 15:43 results3_problem_size_scaling_fixed_p16.png
+-rw-------   1 felix  staff  282049 Mar  8 19:58 results3_strong_scaling_speedup_efficiency_breakdown.png
 ```
 
 ### out/manifest.json
 ```json
 {
   "ho_convergence": {
-    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260306_163529/ho_euler.csv",
-    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260306_163529/ho_euler.csv",
-    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260306_163529/ho_euler.csv",
-    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260306_163529/ho_euler.csv",
-    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260306_163529/ho_euler.csv",
-    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260306_163529/ho_euler.csv",
-    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260306_163529/ho_euler.csv",
-    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260306_163529/ho_euler.csv",
-    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260306_163529/ho_verlet.csv",
-    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260306_163529/ho_rk4.csv"
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260308_174309/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260308_174309/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260308_174309/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260308_174309/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260308_174309/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260308_174309/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260308_174309/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260308_174309/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260308_174309/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260308_174309/ho_rk4.csv"
   },
   "lj_brief": {
-    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv",
-    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv"
+    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv",
+    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv"
   },
   "lj_rdf": {
-    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/gr.csv",
-    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/lj_verlet.csv"
+    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/gr.csv",
+    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/lj_verlet.csv"
   },
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
   },
   "results2_outputs": {
-    "generated_utc": "2026-03-07T17:45:00Z",
+    "generated_utc": "2026-03-08T17:44:36Z",
     "main_report_figures": [
       "out/plots/results2_lj_brief_energy_100step_production.png",
       "out/plots/results2_lj_brief_temperature_100step_production.png",
@@ -333,47 +332,47 @@ drwxr-xr-x  12 felix  staff     384 Mar  7 16:21 metadata
 ### out/runs/ directories referenced by manifest
 ```
 out/
-out/runs/ho_N1_euler_dt0.0005_20260306_163529/
-out/runs/ho_N1_euler_dt0.001_20260306_163529/
-out/runs/ho_N1_euler_dt0.005_20260306_163529/
-out/runs/ho_N1_euler_dt0.01_20260306_163529/
-out/runs/ho_N1_euler_dt0.05_20260306_163529/
-out/runs/ho_N1_euler_dt0.1_20260306_163529/
-out/runs/ho_N1_euler_dt0.5_20260306_163529/
-out/runs/ho_N1_euler_dt1.0_20260306_163529/
-out/runs/ho_N1_rk4_dt0.0005_20260306_163529/
-out/runs/ho_N1_rk4_dt0.001_20260306_163529/
-out/runs/ho_N1_rk4_dt0.005_20260306_163529/
-out/runs/ho_N1_rk4_dt0.01_20260306_163529/
-out/runs/ho_N1_rk4_dt0.05_20260306_163529/
-out/runs/ho_N1_rk4_dt0.1_20260306_163529/
-out/runs/ho_N1_rk4_dt0.5_20260306_163529/
-out/runs/ho_N1_rk4_dt1.0_20260306_163529/
-out/runs/ho_N1_verlet_dt0.0005_20260306_163529/
-out/runs/ho_N1_verlet_dt0.001_20260306_163529/
-out/runs/ho_N1_verlet_dt0.005_20260306_163529/
-out/runs/ho_N1_verlet_dt0.01_20260306_163529/
-out/runs/ho_N1_verlet_dt0.05_20260306_163529/
-out/runs/ho_N1_verlet_dt0.1_20260306_163529/
-out/runs/ho_N1_verlet_dt0.5_20260306_163529/
-out/runs/ho_N1_verlet_dt1.0_20260306_163529/
-out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/
-out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/
-out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/
+out/runs/ho_N1_euler_dt0.0005_20260308_174309/
+out/runs/ho_N1_euler_dt0.001_20260308_174309/
+out/runs/ho_N1_euler_dt0.005_20260308_174309/
+out/runs/ho_N1_euler_dt0.01_20260308_174309/
+out/runs/ho_N1_euler_dt0.05_20260308_174309/
+out/runs/ho_N1_euler_dt0.1_20260308_174309/
+out/runs/ho_N1_euler_dt0.5_20260308_174309/
+out/runs/ho_N1_euler_dt1.0_20260308_174309/
+out/runs/ho_N1_rk4_dt0.0005_20260308_174309/
+out/runs/ho_N1_rk4_dt0.001_20260308_174309/
+out/runs/ho_N1_rk4_dt0.005_20260308_174309/
+out/runs/ho_N1_rk4_dt0.01_20260308_174309/
+out/runs/ho_N1_rk4_dt0.05_20260308_174309/
+out/runs/ho_N1_rk4_dt0.1_20260308_174309/
+out/runs/ho_N1_rk4_dt0.5_20260308_174309/
+out/runs/ho_N1_rk4_dt1.0_20260308_174309/
+out/runs/ho_N1_verlet_dt0.0005_20260308_174309/
+out/runs/ho_N1_verlet_dt0.001_20260308_174309/
+out/runs/ho_N1_verlet_dt0.005_20260308_174309/
+out/runs/ho_N1_verlet_dt0.01_20260308_174309/
+out/runs/ho_N1_verlet_dt0.05_20260308_174309/
+out/runs/ho_N1_verlet_dt0.1_20260308_174309/
+out/runs/ho_N1_verlet_dt0.5_20260308_174309/
+out/runs/ho_N1_verlet_dt1.0_20260308_174309/
+out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/
+out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/
+out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/
 out/summary/results2/
 ```
 
 ## 3. Build and Warnings
 
 ```
-rm -f src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o tests/test_runner.o tests/test_mic.o tests/test_force.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o md_solver test_runner
+rm -f src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o tests/test_runner.o tests/test_mic.o tests/test_force.o tests/test_integrators.o tests/test_partition.o md_solver test_runner
 rm -f src/potentials/*.o tests/*.o
 
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/main.o src/main.cpp
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/potentials/harmonic.o src/potentials/harmonic.cpp
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/potentials/lennard_jones.o src/potentials/lennard_jones.cpp
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/observables.o src/observables.cpp
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -o md_solver src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o src/main.o src/main.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o src/potentials/harmonic.o src/potentials/harmonic.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o src/potentials/lennard_jones.o src/potentials/lennard_jones.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o src/observables.o src/observables.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -o md_solver src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o
 ```
 
 **Build status:** confirmed
@@ -382,7 +381,7 @@ mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -o md_s
 
 From Makefile line 12:
 ```
-CXXFLAGS  = -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic
+CXXFLAGS = -std=c++17 $(OPT) $(MARCH) -g -Wall -Wextra -pedantic
 ```
 
 Flags include: `-std=c++17 -O3 -march=native -Wall -Wextra -pedantic`
@@ -391,7 +390,7 @@ Flags include: `-std=c++17 -O3 -march=native -Wall -Wextra -pedantic`
 
 Re-building to capture warnings explicitly:
 ```
-rm -f src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o tests/test_runner.o tests/test_mic.o tests/test_force.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o md_solver test_runner
+rm -f src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o tests/test_runner.o tests/test_mic.o tests/test_force.o tests/test_integrators.o tests/test_partition.o md_solver test_runner
 rm -f src/potentials/*.o tests/*.o
 make: Nothing to be done for `all'.
 ```
@@ -402,14 +401,18 @@ make: Nothing to be done for `all'.
 ## 4. Unit Tests
 
 ```
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_runner.o tests/test_runner.cpp
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_mic.o tests/test_mic.cpp
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_force.o tests/test_force.cpp
-mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -o test_runner tests/test_runner.o tests/test_mic.o tests/test_force.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_runner.o tests/test_runner.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_mic.o tests/test_mic.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_force.o tests/test_force.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_integrators.o tests/test_integrators.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_partition.o tests/test_partition.cpp
+mpicxx -std=c++17 -O3  -g -Wall -Wextra -pedantic -Iinclude -o test_runner tests/test_runner.o tests/test_mic.o tests/test_force.o tests/test_integrators.o tests/test_partition.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o
 ./test_runner
 === MD Unit Tests ===
   MIC tests: ALL PASSED
   Force/Wrapping tests: ALL PASSED
+  Integrator tests: ALL PASSED (Euler=5.126961e-02 Verlet=3.615073e-05 RK4=8.333331e-10)
+  Partition tests: ALL PASSED
 =====================
 ALL TESTS PASSED
 ```
@@ -421,20 +424,15 @@ ALL TESTS PASSED
 ### 5a. HO — Velocity-Verlet (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:16177] [prterun-MacBook-Pro-434-16177@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16177] [prterun-MacBook-Pro-434-16177@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16177] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
---------------------------------------------------------------------------
-No sockets were able to be opened on the available protocols
-(IPv4 and/or IPv6). Please check your network and retry.
---------------------------------------------------------------------------
-[16177] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
---------------------------------------------------------------------------
+[MacBook-Pro-434.local:40428] [prterun-MacBook-Pro-434-40428@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40428] [prterun-MacBook-Pro-434-40428@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40428] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[40428] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3 lines):**
 ```
-# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-06T12:40:19Z
+# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-04T17:17:19Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.99995,-0.00999975,3.34504599142826e-30,3.34487873703803e-26,3.34521324163718e-26
@@ -449,17 +447,15 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5b. HO — RK4 (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:16180] [prterun-MacBook-Pro-434-16180@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16180] [prterun-MacBook-Pro-434-16180@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16180] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
---------------------------------------------------------------------------
-[16180] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-No sockets were able to be opened on the available protocols
+[MacBook-Pro-434.local:40431] [prterun-MacBook-Pro-434-40431@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40431] [prterun-MacBook-Pro-434-40431@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40431] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[40431] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-06T12:40:19Z
+# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-04T17:17:20Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.999950000416667,-0.00999983333333333,3.34510174382089e-30,3.34487873982557e-26,3.34521324999995e-26
@@ -474,16 +470,15 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5c. HO — Euler (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:16183] [prterun-MacBook-Pro-434-16183@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16183] [prterun-MacBook-Pro-434-16183@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16183] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[16183] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
---------------------------------------------------------------------------
+[MacBook-Pro-434.local:40434] [prterun-MacBook-Pro-434-40434@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40434] [prterun-MacBook-Pro-434-40434@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40434] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[40434] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-06T12:40:20Z
+# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, timestamp: 2026-03-04T17:17:20Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,1,-0.01,3.34521325e-30,3.34521325e-26,3.345547771325e-26
@@ -498,162 +493,68 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:16186] [prterun-MacBook-Pro-434-16186@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16186] [prterun-MacBook-Pro-434-16186@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16186] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[16186] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:40437] [prterun-MacBook-Pro-434-40437@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40437] [prterun-MacBook-Pro-434-40437@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40437] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[40437] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: verlet, N: 864, P: 1, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914354, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T12:40:20Z
+# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:17:21Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,1.687164123192e-18,-7.47194927673328e-18,-5.78478515354128e-18,94.3999999999999
-1,1e-14,1.68447578135402e-18,-7.46869101577964e-18,-5.78421523442562e-18,94.2495822273503
-2,2e-14,1.68047549629073e-18,-7.46552676001374e-18,-5.785051263723e-18,94.0257587683379
-3,3e-14,1.675573444974e-18,-7.46109573619852e-18,-5.78552229122452e-18,93.7514797945626
-4,4e-14,1.67031939809281e-18,-7.45631122530418e-18,-5.78599182721137e-18,93.4575060081559
-5,5e-14,1.66525309392628e-18,-7.4517277580709e-18,-5.78647466414463e-18,93.174036779083
-6,6e-14,1.66078214268927e-18,-7.44785276849725e-18,-5.78707062580798e-18,92.9238786640711
-7,7e-14,1.65716146413624e-18,-7.44493273747193e-18,-5.78777127333569e-18,92.7212949019413
-8,8e-14,1.65460549217326e-18,-7.4422058796724e-18,-5.78760038749914e-18,92.5782834722954
-9,9e-14,1.6534278355732e-18,-7.44166241106346e-18,-5.78823457549026e-18,92.5123913747116
-10,1e-13,1.65412668053239e-18,-7.44185951670639e-18,-5.787732836174e-18,92.5514930621172
-11,1.1e-13,1.65729060008612e-18,-7.44519272334869e-18,-5.78790212326257e-18,92.7285203007638
-12,1.2e-13,1.6633765818926e-18,-7.45121991594431e-18,-5.78784333405171e-18,93.0690424080291
-13,1.3e-13,1.67243894775827e-18,-7.46066468725163e-18,-5.78822573949337e-18,93.5760987909615
-14,1.4e-13,1.68396198202923e-18,-7.47224354282029e-18,-5.78828156079106e-18,94.2208341905743
-15,1.5e-13,1.69693087203493e-18,-7.48574394643748e-18,-5.78881307440254e-18,94.946467932846
-16,1.6e-13,1.71004835930324e-18,-7.49863361001208e-18,-5.78858525070884e-18,95.6804159709217
-17,1.7e-13,1.72204246107605e-18,-7.51038292801881e-18,-5.78834046694276e-18,96.3515084815964
-18,1.8e-13,1.7319859370743e-18,-7.52014405717191e-18,-5.78815812009761e-18,96.9078646305515
-19,1.9e-13,1.73943052715559e-18,-7.52748093519145e-18,-5.78805040803586e-18,97.3244034213031
-20,2e-13,1.74437066635724e-18,-7.53138155080626e-18,-5.78701088444901e-18,97.6008134837422
-21,2.1e-13,1.74710459181086e-18,-7.53494587371041e-18,-5.78784128189955e-18,97.7537817452611
-22,2.2e-13,1.7480215327952e-18,-7.53528197899024e-18,-5.78726044619504e-18,97.8050863147046
-23,2.3e-13,1.74742061897183e-18,-7.53552700056766e-18,-5.78810638159584e-18,97.7714640581936
-24,2.4e-13,1.74550899555746e-18,-7.5337051750981e-18,-5.78819617954065e-18,97.6645051394755
-25,2.5e-13,1.74247299270064e-18,-7.53152236931637e-18,-5.78904937661573e-18,97.494635080159
-26,2.6e-13,1.73848649862318e-18,-7.52773313127077e-18,-5.78924663264759e-18,97.2715832526935
-27,2.7e-13,1.73367522014907e-18,-7.52241513584086e-18,-5.78873991569179e-18,97.0023831898706
-28,2.8e-13,1.72806293984258e-18,-7.51757447856569e-18,-5.78951153872311e-18,96.6883655708078
-29,2.9e-13,1.72154970390465e-18,-7.51082018075638e-18,-5.78927047685173e-18,96.3239377928053
-30,3e-13,1.7139722306459e-18,-7.5023855342226e-18,-5.78841330357669e-18,95.8999639388139
-31,3.1e-13,1.70529887922345e-18,-7.49400830958688e-18,-5.78870943036343e-18,95.4146736442748
-32,3.2e-13,1.69577237052573e-18,-7.48450826870902e-18,-5.78873589818329e-18,94.8816475985553
-33,3.3e-13,1.68590120501956e-18,-7.47500978017349e-18,-5.78910857515394e-18,94.3293373573798
-34,3.4e-13,1.67634845633446e-18,-7.46511942093019e-18,-5.78877096459573e-18,93.7948431351063
-35,3.5e-13,1.6677929659191e-18,-7.45556989390052e-18,-5.78777692798142e-18,93.3161473851741
-36,3.6e-13,1.66083877639135e-18,-7.44858603902785e-18,-5.7877472626365e-18,92.9270474260208
-37,3.7e-13,1.65600850014213e-18,-7.44317686152285e-18,-5.78716836138073e-18,92.6567844020157
-38,3.8e-13,1.65372773163601e-18,-7.44012414698609e-18,-5.78639641535008e-18,92.5291711224195
-39,3.9e-13,1.65418403315184e-18,-7.44003268636633e-18,-5.78584865321449e-18,92.5547020488435
-40,4e-13,1.65718453956044e-18,-7.44352897663574e-18,-5.7863444370753e-18,92.722586015245
-41,4.1e-13,1.66213404395564e-18,-7.44737086246314e-18,-5.78523681850749e-18,92.9995200778442
-42,4.2e-13,1.66814274561946e-18,-7.45348725606079e-18,-5.78534451044134e-18,93.3357182160495
-43,4.3e-13,1.67431455296978e-18,-7.45888474195169e-18,-5.78457018898191e-18,93.6810424236129
-44,4.4e-13,1.67999072999343e-18,-7.46513317145133e-18,-5.7851424414579e-18,93.9986351839537
-45,4.5e-13,1.68470940965253e-18,-7.4695172552676e-18,-5.78480784561507e-18,94.2626541692412
-46,4.6e-13,1.68806190930705e-18,-7.47309571905642e-18,-5.78503380974938e-18,94.4502328185476
-47,4.7e-13,1.68958647214974e-18,-7.47469596346912e-18,-5.78510949131938e-18,94.5355349716528
-48,4.8e-13,1.68887579098233e-18,-7.47510382499278e-18,-5.78622803401045e-18,94.4957710261768
-49,4.9e-13,1.68583934152298e-18,-7.47178981302243e-18,-5.78595047149945e-18,94.3258759786103
-50,5e-13,1.68079724462429e-18,-7.46700882633075e-18,-5.78621158170646e-18,94.0437611916173
-51,5.1e-13,1.67439991753882e-18,-7.46152265511313e-18,-5.78712273757432e-18,93.6858187315051
-52,5.2e-13,1.66747541438195e-18,-7.45449092240379e-18,-5.78701550802184e-18,93.2983797805322
-53,5.3e-13,1.66091692597013e-18,-7.44803402430377e-18,-5.78711709833364e-18,92.9314200416633
-54,5.4e-13,1.6555948873512e-18,-7.44246525474839e-18,-5.7868703673972e-18,92.6336419898891
-55,5.5e-13,1.6522376336817e-18,-7.43953363575759e-18,-5.78729600207589e-18,92.4457973445201
-56,5.6e-13,1.65132600997293e-18,-7.43917348238068e-18,-5.78784747240775e-18,92.3947902866264
-57,5.7e-13,1.6530033651823e-18,-7.4408659264218e-18,-5.7878625612395e-18,92.4886414594838
-58,5.8e-13,1.65702395432951e-18,-7.44471947643592e-18,-5.78769552210641e-18,92.7136009701083
-59,5.9e-13,1.66283200787085e-18,-7.45096766852001e-18,-5.78813566064916e-18,93.0385724691851
-60,6e-13,1.66972873205194e-18,-7.45769750402273e-18,-5.7879687719708e-18,93.4244571343136
-61,6.1e-13,1.67705685909187e-18,-7.46449500676405e-18,-5.78743814767218e-18,93.8344795992655
-62,6.2e-13,1.68429376182607e-18,-7.47118370749729e-18,-5.78688994567122e-18,94.2393978930566
-63,6.3e-13,1.69109353519156e-18,-7.4785366055783e-18,-5.78744307038674e-18,94.619857978047
-64,6.4e-13,1.69723908788048e-18,-7.48387031635612e-18,-5.78663122847564e-18,94.9637131880169
-65,6.5e-13,1.70253846586652e-18,-7.4887765334233e-18,-5.78623806755678e-18,95.26022333484
-66,6.6e-13,1.70677283533266e-18,-7.49312735702395e-18,-5.78635452169129e-18,95.497144255638
-67,6.7e-13,1.70966668273834e-18,-7.49583472186753e-18,-5.78616803912919e-18,95.6590604505956
-68,6.8e-13,1.71092556816934e-18,-7.49635053865602e-18,-5.78542497048668e-18,95.7294974537614
-69,6.9e-13,1.71029490127496e-18,-7.49614154995616e-18,-5.7858466486812e-18,95.6942104570717
-70,7e-13,1.7076202140512e-18,-7.49205691500308e-18,-5.78443670095188e-18,95.5445566857211
-71,7.1e-13,1.7029018003409e-18,-7.48697009197181e-18,-5.78406829163091e-18,95.2805525807682
-72,7.2e-13,1.6963457102432e-18,-7.4809445742481e-18,-5.7845988640049e-18,94.9137270320764
-73,7.3e-13,1.68840858749515e-18,-7.4733641045854e-18,-5.78495551709025e-18,94.4696301139896
-74,7.4e-13,1.67983089699382e-18,-7.46436962712612e-18,-5.7845387301323e-18,93.9896922275716
-75,7.5e-13,1.67159821361495e-18,-7.45581419537416e-18,-5.78421598175921e-18,93.5290581373354
-76,7.6e-13,1.66477640869556e-18,-7.45040119603428e-18,-5.78562478733873e-18,93.1473653455445
-77,7.7e-13,1.66031096473095e-18,-7.44574710833835e-18,-5.7854361436074e-18,92.8975153727621
-78,7.8e-13,1.65881830201206e-18,-7.44403863136079e-18,-5.78522032934873e-18,92.8139980914696
-79,7.9e-13,1.66042409100495e-18,-7.44530837146013e-18,-5.78488428045518e-18,92.9038450001641
-80,8e-13,1.6647134835938e-18,-7.45021118290105e-18,-5.78549769930724e-18,93.1438445679723
-81,8.1e-13,1.67077911330439e-18,-7.45659990105184e-18,-5.78582078774745e-18,93.4832279372657
-82,8.2e-13,1.67744895311606e-18,-7.46298108551396e-18,-5.7855321323979e-18,93.8564179959955
-83,8.3e-13,1.68363886331392e-18,-7.46854861321558e-18,-5.78490974990166e-18,94.2027550918634
-84,8.4e-13,1.6886056495076e-18,-7.47327652659135e-18,-5.78467087708375e-18,94.4806561035303
-85,8.5e-13,1.69204171719358e-18,-7.47659996968837e-18,-5.78455825249479e-18,94.6729105410788
-86,8.6e-13,1.69401364943217e-18,-7.47808414923524e-18,-5.78407049980307e-18,94.7832438517293
-87,8.7e-13,1.69483899609822e-18,-7.47892646892905e-18,-5.78408747283083e-18,94.8294235471154
-88,8.8e-13,1.6949486953557e-18,-7.47855979565366e-18,-5.78361110029796e-18,94.8355614265095
-89,8.9e-13,1.69472100344872e-18,-7.47876353857899e-18,-5.78404253513026e-18,94.822821636869
-90,9e-13,1.69442537753834e-18,-7.47835490946036e-18,-5.78392953192202e-18,94.8062808122054
-91,9.1e-13,1.69419059567169e-18,-7.47806436382232e-18,-5.78387376815064e-18,94.7931443260111
-92,9.2e-13,1.69402683593984e-18,-7.47789746893802e-18,-5.78387063299818e-18,94.7839816615887
-93,9.3e-13,1.6939285024503e-18,-7.47764403876902e-18,-5.78371553631871e-18,94.7784797182479
-94,9.4e-13,1.69394479660581e-18,-7.47770834591809e-18,-5.78376354931229e-18,94.7793914068374
-95,9.5e-13,1.69414354335647e-18,-7.47749908245355e-18,-5.78335553909708e-18,94.7905116606434
-96,9.6e-13,1.69459173731494e-18,-7.47785073190454e-18,-5.78325899458959e-18,94.8155889540131
-97,9.7e-13,1.69527786433768e-18,-7.47915579047344e-18,-5.78387792613576e-18,94.8539790489993
-98,9.8e-13,1.69603745977495e-18,-7.47982699115722e-18,-5.78378953138227e-18,94.8964798397003
-99,9.9e-13,1.69664840466377e-18,-7.4799966425522e-18,-5.78334823788842e-18,94.9306633531548
-100,1e-12,1.69688683932431e-18,-7.48014957868897e-18,-5.78326273936466e-18,94.9440042200242
+0,0,2.09184891288e-19,-1.12926090964738e-18,-9.2007601835938e-19,94.4
+1,1e-14,2.08952940324273e-19,-1.12903036097961e-18,-9.20077420655337e-19,94.2953262310627
+2,2e-14,2.08327769566247e-19,-1.12840771146898e-18,-9.20079941902734e-19,94.0132020336875
+3,3e-14,2.07279814481113e-19,-1.12736342912362e-18,-9.20083614642507e-19,93.5402856608675
+4,4e-14,2.05766417434535e-19,-1.12585487169448e-18,-9.20088454259947e-19,92.8573267706855
+5,5e-14,2.03732045550683e-19,-1.12382647756108e-18,-9.20094432010392e-19,91.9392647411899
+6,6e-14,2.01109299736099e-19,-1.121210730094e-18,-9.201014303579e-19,90.7556840180687
+7,7e-14,1.9782137105245e-19,-1.11793054604546e-18,-9.2010917499301e-19,89.2719226152952
+8,8e-14,1.93788239467119e-19,-1.11385504380398e-18,-9.20066804336861e-19,87.4518694589177
+9,9e-14,1.88932451387229e-19,-1.10900656536631e-18,-9.20074113979076e-19,85.2605716461587
+10,1e-13,1.83193844160901e-19,-1.10332388832566e-18,-9.20130044164762e-19,82.6708792509294
 ```
 
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:16188] [prterun-MacBook-Pro-434-16188@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16188] [prterun-MacBook-Pro-434-16188@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:16188] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
---------------------------------------------------------------------------
-No sockets were able to be opened on the available protocols
-(IPv4 and/or IPv6). Please check your network and retry.
---------------------------------------------------------------------------
-[16188] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:40439] [prterun-MacBook-Pro-434-40439@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40439] [prterun-MacBook-Pro-434-40439@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:40439] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[40439] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.9849184843571, startup_temperature_after_final_rescale: 94.4000000000001, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T12:40:20Z
+# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, rescale_step: -1, production_start: 0, gr_discard: 500, gr_interval: 10, gr_start: 500, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-04T17:17:21Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,2.09184891288e-19,-9.12916763919551e-19,-7.03731872631551e-19,94.4000000000001
-1,1e-14,2.11525263370756e-19,-9.10632329841394e-19,-6.99107066470638e-19,95.4561523982533
-2,2e-14,2.14776832951035e-19,-9.0938833883245e-19,-6.94611505881416e-19,96.9235058313255
-3,3e-14,2.18964511804124e-19,-9.08859592979484e-19,-6.89895081175361e-19,98.8133023711117
-4,4e-14,2.24108503104857e-19,-9.09809852096508e-19,-6.85701348991651e-19,101.134659213852
-5,5e-14,2.30011308581937e-19,-9.11507518253613e-19,-6.81496209671676e-19,103.798450243908
-6,6e-14,2.36298938432358e-19,-9.13451036509845e-19,-6.77152098077487e-19,106.635903055271
-7,7e-14,2.42703937969227e-19,-9.15283282486688e-19,-6.72579344517461e-19,109.526321921364
-8,8e-14,2.49116447237105e-19,-9.17520494560082e-19,-6.68404047322977e-19,112.420129744484
-9,9e-14,2.55437535169377e-19,-9.19786529495048e-19,-6.64348994325671e-19,115.272681365839
-10,1e-13,2.61440695380733e-19,-9.2212063732577e-19,-6.60679941945037e-19,117.981760020911
+0,0,2.09184891288e-19,-1.12926090964738e-18,-9.2007601835938e-19,94.4
+1,1e-14,2.09144192886232e-19,-1.12902994241994e-18,-9.19885749533712e-19,94.3816338115854
+2,2e-14,2.08721895925538e-19,-1.12840586521172e-18,-9.19683969286181e-19,94.1910615726245
+3,3e-14,2.07894523992715e-19,-1.12735747207365e-18,-9.19462948080934e-19,93.8176889548529
+4,4e-14,2.06625321584501e-19,-1.12583963303995e-18,-9.19214311455454e-19,93.2449291030409
+5,5e-14,2.04864000685478e-19,-1.12379287250225e-18,-9.18928871816775e-19,92.4500882718317
+6,6e-14,2.02546939150224e-19,-1.12114343244424e-18,-9.18596493294019e-19,91.4044553507292
+7,7e-14,1.99598314327998e-19,-1.11780435151736e-18,-9.1820603718936e-19,90.0738134410563
+8,8e-14,1.95932967946968e-19,-1.11362950215605e-18,-9.17696534209078e-19,88.4197327077933
+9,9e-14,1.91464855324552e-19,-1.10861809339369e-18,-9.17153238069135e-19,86.4033833005344
+10,1e-13,1.86109378411333e-19,-1.10262544990856e-18,-9.16516071497223e-19,83.986588198866
 ```
 
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
-[16191] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-[16192] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-MATCH
+[40442] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[40443] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+Error checking tolerance: [Errno 2] No such file or directory: 'out/audit_p1/lj_verlet.csv'
 ```
 
 ## 6. CLI Defaults vs. Brief Requirements
 
 ### CLI help output
 ```
-[16194] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[40445] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 ### Comparison
@@ -669,76 +570,52 @@ MATCH
 
 ## 7. File Dump (Verbatim)
 
-### `Makefile` (83 lines)
+### `Makefile` (56 lines)
 
 ```makefile
-# ──────────────────────────────────────────────────────────────────
-# Makefile — WA2: MPI Parallelisation of Molecular Dynamics
-# ──────────────────────────────────────────────────────────────────
-# Targets:
-#   make          Build the md_solver executable
-#   make test     Build and run unit tests (exits non-zero on failure)
-#   make clean    Remove object files and binaries
-#   make dist     Create submission tarball (excludes out/, ai/, etc.)
-# ──────────────────────────────────────────────────────────────────
+CXX = mpicxx
+OPT ?= -O3
+MARCH ?=
+CXXFLAGS = -std=c++17 $(OPT) $(MARCH) -g -Wall -Wextra -pedantic
+INCLUDES = -Iinclude
 
-CXX       = mpicxx
-CXXFLAGS  = -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic
-INCLUDES  = -Iinclude
-
-# Source files
-SRC_MAIN        = src/main.cpp
-SRC_HARMONIC    = src/potentials/harmonic.cpp
-SRC_LJ          = src/potentials/lennard_jones.cpp
+SRC_MAIN = src/main.cpp
+SRC_HARMONIC = src/potentials/harmonic.cpp
+SRC_LJ = src/potentials/lennard_jones.cpp
 SRC_OBSERVABLES = src/observables.cpp
 
 SRCS = $(SRC_MAIN) $(SRC_HARMONIC) $(SRC_LJ) $(SRC_OBSERVABLES)
 OBJS = $(SRCS:.cpp=.o)
 
-# Test files
-TEST_SRCS = tests/test_runner.cpp tests/test_mic.cpp tests/test_force.cpp
+TEST_SRCS = tests/test_runner.cpp tests/test_mic.cpp tests/test_force.cpp \
+            tests/test_integrators.cpp tests/test_partition.cpp
 TEST_OBJS = $(TEST_SRCS:.cpp=.o)
-# Tests also need the LJ potential (for test_force.cpp)
 TEST_DEPS = src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o
 
-TARGET    = md_solver
-TEST_BIN  = test_runner
+TARGET = md_solver
+TEST_BIN = test_runner
 
-TARBALL   = candidate_fb638_wa2.tar.gz
+BCN ?= fb638
+TARBALL = $(BCN)_wa2.tar.gz
 
-# ──────────────────────────────────────────────────────────────────
-# Default target
-# ──────────────────────────────────────────────────────────────────
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^
 
-# ──────────────────────────────────────────────────────────────────
-# Compilation rules
-# ──────────────────────────────────────────────────────────────────
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c -o $@ $<
 
-# ──────────────────────────────────────────────────────────────────
-# Unit tests (homebrew, no third-party libraries)
-# ──────────────────────────────────────────────────────────────────
 test: $(TEST_BIN)
 	./$(TEST_BIN)
 
 $(TEST_BIN): $(TEST_OBJS) $(TEST_DEPS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^
 
-# ──────────────────────────────────────────────────────────────────
-# Clean
-# ──────────────────────────────────────────────────────────────────
 clean:
-	rm -f $(OBJS) $(TEST_OBJS) $(TEST_DEPS) $(TARGET) $(TEST_BIN)
+	rm -f $(OBJS) $(TEST_OBJS) $(TARGET) $(TEST_BIN)
 	rm -f src/potentials/*.o tests/*.o
 
-# ──────────────────────────────────────────────────────────────────
-# Submission tarball
-# ──────────────────────────────────────────────────────────────────
 dist: clean
 	tar -czvf $(TARBALL) \
 		include/ src/ tests/ scripts/ \
@@ -748,113 +625,54 @@ dist: clean
 	@echo "Contents:"
 	@tar -tzvf $(TARBALL) | head -30
 
-# ──────────────────────────────────────────────────────────────────
-# Create output directory
-# ──────────────────────────────────────────────────────────────────
 out:
 	mkdir -p out
 
-.PHONY: all clean test dist
+.PHONY: all clean test dist out
 ```
 
-### `README.md` (95 lines)
+### `README.md` (39 lines)
 
 ```markdown
 # WA2: MPI Parallelisation of Molecular Dynamics
 
 ## Dependencies
 
-- C++17 compiler with MPI (tested with OpenMPI 4.x + GCC 8+)
-- Python 3 with matplotlib, numpy (for plotting scripts)
+- C++17 compiler with MPI (tested with OpenMPI 4.x)
+- Python 3 with `numpy` and `matplotlib` for plotting scripts
 
-## Build
+## Build and test
 
 ```bash
-make            # builds md_solver
-make test       # runs unit tests (exits non-zero on failure)
+make
+make test
 ```
 
-All plots in the report are generated from `out/manifest.json` to guarantee provenance.
+## Example runs
 
-
-## Run Examples
-
-### Harmonic Oscillator (Results 1)
+### Harmonic oscillator
 
 ```bash
-# Single integrator run
 mpirun -np 1 ./md_solver --mode ho --integrator verlet --dt 0.01 --steps 1000 --N 1
-
-# Euler
-mpirun -np 1 ./md_solver --mode ho --integrator euler --dt 0.01 --steps 1000 --N 1
-
-# RK4
-mpirun -np 1 ./md_solver --mode ho --integrator rk4 --dt 0.01 --steps 1000 --N 1
 ```
 
-### Lennard-Jones Argon (Results 2)
+### Lennard-Jones Argon
 
 ```bash
-# Brief-required run:
-# startup/equilibration prepares the state, then production is a clean 100-step NVE trajectory.
-# Output CSV stores the production trajectory only (step 0 is the production initial frame).
-mkdir -p out
 mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
   --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
   --final-rescale-before-production
-
-# Brief-required Euler comparison
-mpirun -np 4 ./md_solver --mode lj --integrator euler --N 864 --dt 1e-14 \
-  --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
-  --final-rescale-before-production
-
-# RDF comparison run (longer production for smoother g(r) statistics)
-# g(r) sampling starts at production_start_step + gr_discard_steps
-mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
-  --target-temperature 94.4 --equilibration-steps 50 --production-steps 20000 \
-  --final-rescale-before-production --gr --gr-discard-steps 200 --gr-sample-every 5
 ```
 
-### Scaling (Results 3)
+### Scaling / timing
 
 ```bash
-# Recommended: use the automation script (median-of-20 paired runs)
-bash scripts/run_all_data.sh
-
-# On cerberus1, run scaling on an exclusive node:
-srun --exclusive -N 1 --ntasks-per-node=32 bash scripts/run_all_data.sh
-
-# Direct timing examples (single run each):
-mpirun -np 1  ./md_solver --mode lj --integrator verlet --N 2048 --steps 200 --timing
-mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864  --steps 2000 --timing
+mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864 --steps 2000 --timing
 ```
 
-## Generate Plots
+## Reproducibility
 
-```bash
-python3 scripts/plot_ho.py        # Phase-space and convergence plots
-python3 scripts/plot_lj.py        # Energy conservation and g(r)
-python3 scripts/plot_scaling.py   # Speedup, efficiency, Amdahl fit
-```
-
-## Clean / Package
-
-```bash
-make clean      # removes objects and binaries
-make dist       # creates submission tarball
-```
-
-## Project Structure
-
-```
-include/md/    — C++ headers (constants, params, system, integrators, potentials, observables, MPI utilities)
-src/           — Source implementations (main.cpp, potentials/lennard_jones.cpp)
-tests/         — Unit tests (MIC wrapping, LJ force, position wrapping)
-scripts/       — Python plotting scripts and bash automation
-out/           — Generated data (excluded from submission)
-```
-
-Integrators (Euler, Velocity-Verlet, RK4) are implemented as inline functions in `include/md/integrators.hpp`.
+The report figures are produced from data in `out/manifest.json` using scripts in `scripts/`.
 ```
 
 ### `.clang-format` (8 lines)
@@ -870,7 +688,7 @@ BreakBeforeBraces: Attach
 PointerAlignment: Left
 ```
 
-### `.gitignore` (19 lines)
+### `.gitignore` (23 lines)
 
 ```
 # Generated data
@@ -892,16 +710,18 @@ test_runner
 .idea/
 *.swp
 *~
+
+# Python cache
+__pycache__/
+*.pyc
 ```
 
-### `include/md/constants.hpp` (86 lines)
+### `include/md/constants.hpp` (84 lines)
 
 ```cpp
 /**
  * @file constants.hpp
- * @brief Physical constants for Molecular Dynamics simulation.
- *
- * Physical constants and derived LJ parameters (SI units).
+ * @brief Physical constants and LJ parameters in SI units.
  */
 
 #ifndef MD_CONSTANTS_HPP
@@ -1009,7 +829,7 @@ inline double applyMIC(double dx, double L) {
 #endif
 ```
 
-### `include/md/params.hpp` (88 lines)
+### `include/md/params.hpp` (87 lines)
 
 ```cpp
 /**
@@ -1064,8 +884,7 @@ struct Params {
             else if ((arg == "--T" || arg == "--target-temperature") && i + 1 < argc) {
                 p.T_init = std::atof(argv[++i]);
                 p.targetTemperature = p.T_init;
-            }
-            else if (arg == "--omega" && i + 1 < argc)
+            } else if (arg == "--omega" && i + 1 < argc)
                 p.omega = std::atof(argv[++i]);
             else if (arg == "--integrator" && i + 1 < argc)
                 p.integrator = argv[++i];
@@ -1102,17 +921,12 @@ struct Params {
 #endif  // MD_PARAMS_HPP
 ```
 
-### `include/md/mpi_context.hpp` (103 lines)
+### `include/md/mpi_context.hpp` (98 lines)
 
 ```cpp
 /**
  * @file mpi_context.hpp
- * @brief MPI rank/size management, particle decomposition, and Allgatherv setup.
- *
- * Encapsulates all MPI-specific state: rank, size, local particle count,
- * offset, recvcounts/displs arrays for MPI_Allgatherv, and the permanent
- * global position buffer. All MPI array arguments use int type as required
- * by the MPI standard.
+ * @brief MPI rank/size state, decomposition, and Allgatherv helpers.
  */
 
 #ifndef MD_MPI_CONTEXT_HPP
@@ -1120,8 +934,9 @@ struct Params {
 
 #include <mpi.h>
 
-#include <algorithm>
 #include <vector>
+
+#include "md/partition.hpp"
 
 namespace md {
 
@@ -1160,16 +975,15 @@ class MPIContext {
         MPI_Comm_size(MPI_COMM_WORLD, &size);
         N = totalN;
 
-        // Remainder-safe decomposition
-        localN = N / size + (rank < N % size ? 1 : 0);
-        offset = rank * (N / size) + std::min(rank, N % size);
+        computePartition(N, size, rank, localN, offset);
 
         // Pre-compute Allgatherv parameters (int arrays, values in doubles)
         recvcounts.resize(size);
         displs.resize(size);
         for (int r = 0; r < size; ++r) {
-            int ln = N / size + (r < N % size ? 1 : 0);
-            int off = r * (N / size) + std::min(r, N % size);
+            int ln = 0;
+            int off = 0;
+            computePartition(N, size, r, ln, off);
             recvcounts[r] = 3 * ln;
             displs[r] = 3 * off;
         }
@@ -1210,19 +1024,12 @@ class MPIContext {
 #endif  // MD_MPI_CONTEXT_HPP
 ```
 
-### `include/md/system.hpp` (70 lines)
+### `include/md/system.hpp` (63 lines)
 
 ```cpp
 /**
  * @file system.hpp
- * @brief Particle system state using flat, interleaved std::vector<double> arrays.
- *
- * All kinematic variables (position, velocity, acceleration/force) are stored
- * as contiguous 1D interleaved arrays of size 3*localN. Access pattern:
- *   arr[3*i + d]  for local particle i, dimension d ∈ {0, 1, 2}
- *
- * This layout ensures cache-locality and maps directly to MPI_Allgatherv
- * buffer requirements, eliminating indexing translation errors.
+ * @brief Particle state in flat interleaved arrays (x,y,z per particle).
  */
 
 #ifndef MD_SYSTEM_HPP
@@ -1285,17 +1092,12 @@ struct System {
 #endif  // MD_SYSTEM_HPP
 ```
 
-### `include/md/rng.hpp` (140 lines)
+### `include/md/rng.hpp` (134 lines)
 
 ```cpp
 /**
  * @file rng.hpp
- * @brief FCC lattice construction and Box-Muller velocity initialisation.
- *
- * All random number generation uses std::mt19937_64 with a fixed seed,
- * executed ONLY on rank 0 for bitwise reproducibility across all MPI
- * configurations. Both functions accept a reference to a shared generator
- * to draw from a single, statistically sound random stream.
+ * @brief FCC lattice construction and Maxwell-Boltzmann velocity initialisation.
  */
 
 #ifndef MD_RNG_HPP
@@ -1312,18 +1114,15 @@ namespace md {
 /**
  * @brief Construct an FCC lattice with N = 4k^3 particles in a cubic box.
  *
- * Four basis atoms per unit cell at fractional coordinates:
- *   (0.0, 0.0, 0.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5)
- *
- * A small random zero-mean perturbation (~0.01*sigma per coordinate) is
- * applied to break exact symmetry and prevent force singularities.
+ * Uses the standard four-site FCC basis with a small zero-mean perturbation
+ * to avoid exact-symmetry force artefacts.
  *
  * @param N     Total number of particles (must be 4*k^3, validated by caller)
  * @param L     Box side length [m]
  * @param gen   Reference to shared RNG (caller owns lifetime)
  * @return      Flat interleaved position array of size 3*N
  */
-std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
+inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
     // Determine k such that N = 4*k^3 (validated by caller)
     int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
 
@@ -1357,7 +1156,9 @@ std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
 }
 
 /**
- * @brief Maxwell-Boltzmann velocities via Box-Muller. Removes CoM drift, rescales to target T.
+ * @brief Maxwell-Boltzmann velocities via Box-Muller.
+ *
+ * Removes centre-of-mass drift and rescales to match the target temperature.
  *
  * @param N      Total number of particles
  * @param T      Target temperature [K]
@@ -1365,7 +1166,7 @@ std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
  * @param gen    Reference to shared RNG (same stream as lattice perturbation)
  * @return       Flat interleaved velocity array of size 3*N
  */
-std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
+inline std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
     std::vector<double> vel(3 * N);
 
     double sigmaV = std::sqrt(constants::kB * T / mass);
@@ -1430,19 +1231,12 @@ std::vector<double> generateVelocities(int N, double T, double mass, std::mt1993
 #endif  // MD_RNG_HPP
 ```
 
-### `include/md/potentials.hpp` (67 lines)
+### `include/md/potentials.hpp` (60 lines)
 
 ```cpp
 /**
  * @file potentials.hpp
  * @brief Harmonic Oscillator and Lennard-Jones acceleration/energy kernels.
- *
- * Both potentials implement a common interface:
- *   computeForces(system, posGlobal, localPE)
- *
- * The HO potential computes a = -omega^2 * x purely locally, ignoring
- * the global position data. The LJ potential uses the global positions
- * from MPI_Allgatherv with minimum image convention and hard cutoff.
  */
 
 #ifndef MD_POTENTIALS_HPP
@@ -1622,16 +1416,12 @@ inline void stepVelocityVerlet(System& sys, MPIContext& ctx, double dt, ForceFun
 #endif  // MD_INTEGRATORS_HPP
 ```
 
-### `include/md/observables.hpp` (90 lines)
+### `include/md/observables.hpp` (86 lines)
 
 ```cpp
 /**
  * @file observables.hpp
- * @brief Thermodynamic observables: energies, temperature, g(r) binning.
- *
- * Provides functions for computing kinetic energy (local), measuring
- * temperature from the equipartition theorem, and accumulating the
- * radial distribution function g(r) histogram.
+ * @brief Thermodynamic observables: energy, temperature, and g(r).
  */
 
 #ifndef MD_OBSERVABLES_HPP
@@ -1717,35 +1507,22 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (572 lines)
+### `src/main.cpp` (533 lines)
 
 ```cpp
 /**
  * @file main.cpp
  * @brief Main entry point for the MPI Molecular Dynamics solver.
- *
- * Workflow:
- *   1. MPI_Init, parse CLI parameters
- *   2. Rank 0 generates initial conditions (FCC lattice + Box-Muller velocities)
- *   3. MPI_Bcast distributes complete state to all ranks
- *   4. Each rank extracts its local partition
- *   5. Initial force evaluation
- *   6. Time-stepping loop with selected integrator
- *   7. Observables computed and output (rank 0 only)
- *   8. MPI_Finalize
- *
- * All runtime parameters come from CLI arguments (see params.hpp).
  */
 
 #include <mpi.h>
 #include <sys/stat.h>
 
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <ctime>
-#include <algorithm>
 #include <fstream>
-#include <functional>
 #include <iomanip>
 #include <limits>
 #include <random>
@@ -1761,14 +1538,227 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #include "md/rng.hpp"
 #include "md/system.hpp"
 
+namespace {
+
+int buildInitialConditions(const md::Params& params, bool isHO, int N, double L,
+                           std::vector<double>& posAll, std::vector<double>& velAll) {
+    if (isHO) {
+        if (params.N != 1) {
+            std::fprintf(
+                stderr,
+                "WARNING: HO validation expects N=1. Continuing with N>1 treats particles as "
+                "independent copies.\n");
+        }
+        // HO validation state: x(0)=1, v(0)=0 for each particle copy.
+        for (int i = 0; i < N; ++i) {
+            posAll[3 * i] = 1.0;
+            posAll[3 * i + 1] = 0.0;
+            posAll[3 * i + 2] = 0.0;
+            velAll[3 * i] = 0.0;
+            velAll[3 * i + 1] = 0.0;
+            velAll[3 * i + 2] = 0.0;
+        }
+        return 0;
+    }
+
+    // FCC lattice requires N = 4*k^3.
+    const int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
+    if (4 * k * k * k != N) {
+        std::fprintf(stderr,
+                     "ERROR: N = %d is not a valid FCC particle count "
+                     "(need N = 4*k^3, nearest k = %d gives N = %d)\n",
+                     N, k, 4 * k * k * k);
+        return 1;
+    }
+
+    std::mt19937_64 gen(params.seed);
+    posAll = md::buildFCCLattice(N, L, gen);
+    velAll = md::generateVelocities(N, params.targetTemperature, md::constants::mass, gen);
+
+    double sumV2 = 0.0;
+    for (int i = 0; i < 3 * N; ++i) {
+        sumV2 += velAll[i] * velAll[i];
+    }
+    const double tMeasured0 = md::computeTemperature(0.5 * md::constants::mass * sumV2, N);
+
+    std::printf("=== Initial Conditions (Rank 0) ===\n");
+    std::printf("Seed: %d | FCC lattice | Box-Muller velocities\n", params.seed);
+    std::printf("Perturbation: %.4f sigma | T_initial: %.6f K\n", md::constants::fccPerturbation,
+                tMeasured0);
+    std::printf("===================================\n");
+    return 0;
+}
+
+void writeCSVMetadataLine(std::ostream& out, const md::Params& params, int N, int P, int nSteps,
+                          int nFrames, int totalStepsExecuted, int equilibrationSteps,
+                          bool finalRescaleApplied, int productionStartStep, int grDiscardSteps,
+                          int grSampleEvery, int grStart, double startupTempBeforeFinal,
+                          double startupTempAfterFinal, double L, bool productionNVE,
+                          bool includeLattice) {
+    const std::time_t t = std::time(nullptr);
+    char tstr[100];
+    std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
+
+    out << "# mode: " << params.mode << ", integrator: " << params.integrator
+        << ", N: " << N << ", P: " << P << ", dt: " << params.dt << ", steps: " << nSteps
+        << ", n_steps: " << nSteps << ", n_frames: " << nFrames
+        << ", step_indexing: 0..steps (includes initial frame)"
+        << ", total_steps_executed: " << totalStepsExecuted << ", seed: " << params.seed
+        << ", L: " << L << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
+        << ", target_temperature: " << params.targetTemperature
+        << ", equilibration_steps: " << equilibrationSteps
+        << ", production_steps: " << nSteps << ", production_start_step: " << productionStartStep
+        << ", final_rescale_before_production: "
+        << (params.finalRescaleBeforeProduction ? "true" : "false")
+        << ", final_rescale_applied: " << (finalRescaleApplied ? "true" : "false")
+        << ", production_nve: " << (productionNVE ? "true" : "false")
+        << ", gr_discard_steps: " << grDiscardSteps << ", gr_sample_every: " << grSampleEvery
+        << ", gr_start: " << grStart;
+
+    if (std::isfinite(startupTempBeforeFinal)) {
+        out << ", startup_temperature_before_final_rescale: " << startupTempBeforeFinal;
+    }
+    if (std::isfinite(startupTempAfterFinal)) {
+        out << ", startup_temperature_after_final_rescale: " << startupTempAfterFinal;
+    }
+    if (includeLattice) {
+        out << ", lattice: FCC, velocities: Box-Muller";
+    }
+    out << ", timestamp: " << tstr << "\n";
+}
+
+template <typename AdvanceFn>
+void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& params, int N,
+                       int equilibrationSteps, double& localPE, AdvanceFn&& advanceOneStep,
+                       bool& finalRescaleApplied, double& startupTempBeforeFinal,
+                       double& startupTempAfterFinal) {
+    for (int startupStep = 1; startupStep <= equilibrationSteps; ++startupStep) {
+        const double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+        double totalKE = 0.0;
+        double totalPE = 0.0;
+        MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+        double lambda = 1.0;
+        if (ctx.isRoot()) {
+            const double tMeasured = md::computeTemperature(totalKE, N);
+            if (tMeasured > md::constants::rescaleGuard) {
+                lambda = std::sqrt(params.targetTemperature / tMeasured);
+            }
+            if (!params.timing) {
+                std::printf(
+                    "Startup rescale step %d/%d: lambda = %.15e, T_before = %.6f K, "
+                    "target = %.6f K\n",
+                    startupStep, equilibrationSteps, lambda, tMeasured, params.targetTemperature);
+            }
+        }
+
+        MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        for (int i = 0; i < 3 * sys.localN; ++i) {
+            sys.vel[i] *= lambda;
+        }
+
+        advanceOneStep();
+    }
+
+    double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+    double totalKE = 0.0;
+    double totalPE = 0.0;
+    MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if (ctx.isRoot()) {
+        startupTempBeforeFinal = md::computeTemperature(totalKE, N);
+    }
+
+    if (params.finalRescaleBeforeProduction) {
+        double lambda = 1.0;
+        if (ctx.isRoot()) {
+            if (startupTempBeforeFinal > md::constants::rescaleGuard) {
+                lambda = std::sqrt(params.targetTemperature / startupTempBeforeFinal);
+            }
+            finalRescaleApplied = std::abs(lambda - 1.0) > 1e-12;
+            if (!params.timing) {
+                std::printf("Startup->production rescale: lambda = %.15e, T_before = %.6f K\n",
+                            lambda, startupTempBeforeFinal);
+            }
+        }
+        MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        for (int i = 0; i < 3 * sys.localN; ++i) {
+            sys.vel[i] *= lambda;
+        }
+
+        localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+        totalKE = 0.0;
+        MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        if (ctx.isRoot()) {
+            startupTempAfterFinal = md::computeTemperature(totalKE, N);
+        }
+    } else {
+        startupTempAfterFinal = startupTempBeforeFinal;
+    }
+}
+
+void printSimulationInfo(const md::Params& params, const md::MPIContext& ctx, bool isHO, int N,
+                         int nSteps, int nFrames, int totalStepsExecuted, int equilibrationSteps,
+                         double L, int productionStartStep, int grStart, int grDiscardSteps,
+                         int grSampleEvery, double startupTempBeforeFinal,
+                         double startupTempAfterFinal) {
+    if (!ctx.isRoot() || params.timing) {
+        return;
+    }
+
+    std::printf("=== MD Solver ===\n");
+    std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
+    std::printf("N = %d | P = %d | timesteps = %d | frames = %d (step 0..%d) | dt = %.3e\n", N,
+                ctx.size, nSteps, nFrames, nSteps, params.dt);
+    if (!isHO) {
+        std::printf(
+            "LJ semantics: --equilibration-steps prepares the state, --production-steps "
+            "controls the reported NVE trajectory.\n");
+        std::printf(
+            "Output includes the production initial frame at step 0 (n_frames = "
+            "production_steps + 1).\n");
+        std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
+        std::printf("Target temperature = %.1f K | seed = %d\n", params.targetTemperature,
+                    params.seed);
+        std::printf("Startup timesteps = %d | production timesteps = %d | total executed = %d\n",
+                    equilibrationSteps, nSteps, totalStepsExecuted);
+        std::printf("Production simulated time = %.3e s (= production_steps * dt)\n",
+                    nSteps * params.dt);
+        std::printf("production_start_step = %d (production-only output)\n", productionStartStep);
+        if (std::isfinite(startupTempBeforeFinal)) {
+            std::printf("Startup boundary temperature before final rescale: %.6f K\n",
+                        startupTempBeforeFinal);
+        }
+        if (std::isfinite(startupTempAfterFinal)) {
+            std::printf("Startup boundary temperature after final rescale: %.6f K\n",
+                        startupTempAfterFinal);
+        }
+        if (params.gr) {
+            std::printf(
+                "g(r): production_start_step=%d, gr_start=%d (= production_start_step + "
+                "gr_discard_steps=%d), sample_every=%d\n",
+                productionStartStep, grStart, grDiscardSteps, grSampleEvery);
+        }
+    } else {
+        std::printf(
+            "Step semantics: --steps is the number of integration updates; output includes "
+            "the initial frame at step 0.\n");
+        std::printf("HO mode: periodic box size is not used\n");
+    }
+
+    std::printf("==================\n");
+}
+
+}  // namespace
+
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
 
-    // Parse parameters
     md::Params params;
     md::Params::parse(argc, argv, params);
 
-    // MPI setup and particle decomposition
     md::MPIContext ctx;
     ctx.init(params.N);
     ctx.timingMode = params.timing;
@@ -1780,101 +1770,27 @@ int main(int argc, char* argv[]) {
     const int nFrames = nSteps + 1;
     const int totalStepsExecuted = nSteps + equilibrationSteps;
     const int productionStartStep = 0;
-    int grDiscardSteps = params.grDiscardSteps;
-    int grSampleEvery = params.grSampleEvery;
-    if (grDiscardSteps < 0) {
-        if (ctx.isRoot()) {
-            std::fprintf(stderr,
-                         "WARNING: --gr-discard-steps=%d is invalid; using 0 instead.\n",
-                         grDiscardSteps);
-        }
-        grDiscardSteps = 0;
-    }
-    if (grSampleEvery <= 0) {
-        if (ctx.isRoot()) {
-            std::fprintf(stderr,
-                         "WARNING: --gr-sample-every=%d is invalid; using 1 instead.\n",
-                         grSampleEvery);
-        }
-        grSampleEvery = 1;
-    }
+
+    const int grDiscardSteps = params.grDiscardSteps;
+    const int grSampleEvery = params.grSampleEvery;
     const int grStart = productionStartStep + grDiscardSteps;
     const int maxGRFrames = (!isHO && params.gr && grStart <= nSteps)
                                 ? (1 + (nSteps - grStart) / grSampleEvery)
                                 : 0;
 
-    // Box side length (constant density scaling for LJ)
-    // For LJ: scale from Rahman's L=10.229*sigma for N=864 to maintain constant density
-    // For HO: L is irrelevant (non-interacting), set to a large value
-    double L;
-    if (isHO) {
-        L = md::constants::L_ho_dummy;  // effectively unused for HO
-    } else {
-        L = md::constants::L_sigma_rahman * md::constants::sigma *
-            std::cbrt(static_cast<double>(N) / md::constants::N_rahman);
-    }
+    // Constant-density LJ scaling from Rahman's N=864 reference state.
+    const double L = isHO ? md::constants::L_ho_dummy
+                          : md::constants::L_sigma_rahman * md::constants::sigma *
+                                std::cbrt(static_cast<double>(N) / md::constants::N_rahman);
 
-    // Generate initial conditions on rank 0, broadcast to all
     std::vector<double> posAll(3 * N, 0.0);
     std::vector<double> velAll(3 * N, 0.0);
-    int fccError = 0;  // broadcast from root to all ranks (LJ only)
+    int fccError = 0;
 
     if (ctx.isRoot()) {
-        if (isHO) {
-            if (params.N != 1) {
-                std::fprintf(
-                    stderr,
-                    "WARNING: HO validation expects N=1. Continuing with N>1 treats particles as "
-                    "independent copies.\n");
-            }
-            // HO: single particle (or N independent particles) with simple IC
-            // x(0) = 1.0, v(0) = 0.0 for each particle (each dimension)
-            for (int i = 0; i < N; ++i) {
-                posAll[3 * i + 0] = 1.0;  // x = 1
-                posAll[3 * i + 1] = 0.0;  // y = 0
-                posAll[3 * i + 2] = 0.0;  // z = 0
-                velAll[3 * i + 0] = 0.0;
-                velAll[3 * i + 1] = 0.0;
-                velAll[3 * i + 2] = 0.0;
-            }
-        } else {
-            // Validate FCC particle count: N must equal 4*k^3
-            int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
-            if (4 * k * k * k != N) {
-                std::fprintf(stderr,
-                             "ERROR: N = %d is not a valid FCC particle count "
-                             "(need N = 4*k^3, nearest k = %d gives N = %d)\n",
-                             N, k, 4 * k * k * k);
-                fccError = 1;
-            } else {
-                // LJ: FCC lattice with perturbation + Box-Muller velocities
-                // Single RNG stream for both
-                std::mt19937_64 gen(params.seed);
-                posAll = md::buildFCCLattice(N, L, gen);
-                velAll =
-                    md::generateVelocities(N, params.targetTemperature, md::constants::mass, gen);
-
-                double sumV2 = 0.0;
-                for (int i = 0; i < 3 * N; ++i) {
-                    sumV2 += velAll[i] * velAll[i];
-                }
-                double eKin0 = 0.5 * md::constants::mass * sumV2;
-                double tMeasured0 = md::computeTemperature(eKin0, N);
-
-                std::printf("=== Initial Conditions (Rank 0) ===\n");
-                std::printf("Seed used for RNG: %d\n", params.seed);
-                std::printf("FCC lattice generated\n");
-                std::printf("Perturbation amplitude: %.6e m (%.4f sigma)\n",
-                            md::constants::fccPerturbation * md::constants::sigma,
-                            md::constants::fccPerturbation);
-                std::printf("Box-Muller velocities applied\n");
-                std::printf("Initial measured Temperature: %.6f K\n", tMeasured0);
-                std::printf("===================================\n");
-            }
-        }
+        fccError = buildInitialConditions(params, isHO, N, L, posAll, velAll);
     }
 
-    // All ranks check FCC validation result (LJ only)
     if (!isHO) {
         MPI_Bcast(&fccError, 1, MPI_INT, 0, MPI_COMM_WORLD);
         if (fccError) {
@@ -1883,16 +1799,13 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Broadcast complete initial state to all ranks
-    // (NOT MPI_Scatterv — every rank needs global positions for first force eval)
+    // Every rank needs global positions/velocities for force evaluation and integrator state.
     MPI_Bcast(posAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(velAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    // Initialise local system state
     md::System sys;
     sys.init(ctx.localN, ctx.offset, N, L);
 
-    // Extract local partition from global arrays
     for (int i = 0; i < ctx.localN; ++i) {
         for (int d = 0; d < 3; ++d) {
             sys.pos[3 * i + d] = posAll[3 * (ctx.offset + i) + d];
@@ -1900,18 +1813,22 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Copy full positions into global buffer for first force evaluation
     ctx.posGlobal = posAll;
-
-    // Wrap positions into [0, L)
     if (!isHO) {
         sys.wrapPositions();
         ctx.allgatherPositions(sys.pos);
     }
 
-    // Build force function
-    double omega = params.omega;
-    double mass = md::constants::mass;
+    const double omega = params.omega;
+    const double mass = md::constants::mass;
+
+    enum class IntegratorType { Euler, RK4, Verlet };
+    IntegratorType intType = IntegratorType::Verlet;
+    if (params.integrator == "euler") {
+        intType = IntegratorType::Euler;
+    } else if (params.integrator == "rk4") {
+        intType = IntegratorType::RK4;
+    }
 
     auto evalHO = [omega, mass](md::System& s, const std::vector<double>& pg, double& pe) {
         md::computeHOForces(s, pg, pe, omega, mass);
@@ -1920,34 +1837,29 @@ int main(int argc, char* argv[]) {
         md::computeLJForces(s, pg, pe, mass);
     };
 
-    enum class IntegratorType { Euler, RK4, Verlet };
-    IntegratorType intType = IntegratorType::Verlet;
-    if (params.integrator == "euler")
-        intType = IntegratorType::Euler;
-    else if (params.integrator == "rk4")
-        intType = IntegratorType::RK4;
     double localPE = 0.0;
-
     auto advanceOneStep = [&]() {
         if (intType == IntegratorType::Euler) {
-            if (isHO)
+            if (isHO) {
                 md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
+            } else {
                 md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
+            }
         } else if (intType == IntegratorType::RK4) {
-            if (isHO)
+            if (isHO) {
                 md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
+            } else {
                 md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
+            }
         } else {
-            if (isHO)
+            if (isHO) {
                 md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
-            else
+            } else {
                 md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
+            }
         }
     };
 
-    // Initial force evaluation
     if (isHO) {
         evalHO(sys, ctx.posGlobal, localPE);
     } else {
@@ -1958,73 +1870,11 @@ int main(int argc, char* argv[]) {
     double startupTempBeforeFinal = std::numeric_limits<double>::quiet_NaN();
     double startupTempAfterFinal = std::numeric_limits<double>::quiet_NaN();
 
-    // LJ startup/equilibration: optional pre-production preparation with rescaling.
     if (!isHO) {
-        for (int startupStep = 1; startupStep <= equilibrationSteps; ++startupStep) {
-            double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
-            double totalKE = 0.0, totalPE = 0.0;
-            MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-            MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-
-            double lambda = 1.0;
-            if (ctx.isRoot()) {
-                double tMeasured = md::computeTemperature(totalKE, N);
-                if (tMeasured > md::constants::rescaleGuard) {
-                    lambda = std::sqrt(params.targetTemperature / tMeasured);
-                }
-                if (!params.timing) {
-                    std::printf(
-                        "Startup rescale step %d/%d: lambda = %.15e, T_before = %.6f K, "
-                        "target = %.6f K\n",
-                        startupStep, equilibrationSteps, lambda, tMeasured, params.targetTemperature);
-                }
-            }
-            MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-            for (int i = 0; i < 3 * sys.localN; ++i) {
-                sys.vel[i] *= lambda;
-            }
-
-            advanceOneStep();
-        }
-
-        double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
-        double totalKE = 0.0, totalPE = 0.0;
-        MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-        MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-
-        if (ctx.isRoot()) {
-            startupTempBeforeFinal = md::computeTemperature(totalKE, N);
-        }
-
-        if (params.finalRescaleBeforeProduction) {
-            double lambda = 1.0;
-            if (ctx.isRoot()) {
-                if (startupTempBeforeFinal > md::constants::rescaleGuard) {
-                    lambda = std::sqrt(params.targetTemperature / startupTempBeforeFinal);
-                }
-                finalRescaleApplied = std::abs(lambda - 1.0) > 1e-12;
-                if (!params.timing) {
-                    std::printf("Startup->production rescale: lambda = %.15e, T_before = %.6f K\n",
-                                lambda, startupTempBeforeFinal);
-                }
-            }
-            MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-            for (int i = 0; i < 3 * sys.localN; ++i) {
-                sys.vel[i] *= lambda;
-            }
-
-            localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
-            totalKE = 0.0;
-            MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-            if (ctx.isRoot()) {
-                startupTempAfterFinal = md::computeTemperature(totalKE, N);
-            }
-        } else {
-            startupTempAfterFinal = startupTempBeforeFinal;
-        }
+        runStartupPhaseLJ(sys, ctx, params, N, equilibrationSteps, localPE, advanceOneStep,
+                          finalRescaleApplied, startupTempBeforeFinal, startupTempAfterFinal);
     }
 
-    // Create output directory and open file on rank 0
     std::ofstream outFile;
     if (params.output && ctx.isRoot()) {
         std::string fname;
@@ -2034,42 +1884,15 @@ int main(int argc, char* argv[]) {
             mkdir("out", 0755);
             fname = "out/" + params.mode + "_" + params.integrator + ".csv";
         }
+
         outFile.open(fname);
         if (outFile.is_open()) {
             outFile << std::setprecision(15);
-            std::time_t t = std::time(nullptr);
-            char tstr[100];
-            std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
-            outFile << "# mode: " << params.mode << ", integrator: " << params.integrator
-                    << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
-                    << ", steps: " << nSteps << ", n_steps: " << nSteps
-                    << ", n_frames: " << nFrames
-                    << ", step_indexing: 0..steps (includes initial frame)"
-                    << ", total_steps_executed: " << totalStepsExecuted
-                    << ", seed: " << params.seed << ", L: " << L
-                    << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                    << ", target_temperature: " << params.targetTemperature
-                    << ", equilibration_steps: " << equilibrationSteps
-                    << ", production_steps: " << nSteps
-                    << ", production_start_step: " << productionStartStep
-                    << ", final_rescale_before_production: "
-                    << (params.finalRescaleBeforeProduction ? "true" : "false")
-                    << ", final_rescale_applied: " << (finalRescaleApplied ? "true" : "false")
-                    << ", production_nve: " << (!isHO ? "true" : "false")
-                    << ", gr_discard_steps: " << grDiscardSteps
-                    << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart;
-            if (!isHO && std::isfinite(startupTempBeforeFinal)) {
-                outFile << ", startup_temperature_before_final_rescale: " << startupTempBeforeFinal;
-            }
-            if (!isHO && std::isfinite(startupTempAfterFinal)) {
-                outFile << ", startup_temperature_after_final_rescale: " << startupTempAfterFinal;
-            }
-            if (!isHO) {
-                outFile << ", lattice: FCC, velocities: Box-Muller";
-            }
-            outFile << ", timestamp: " << tstr << "\n";
+            writeCSVMetadataLine(outFile, params, N, ctx.size, nSteps, nFrames,
+                                 totalStepsExecuted, equilibrationSteps, finalRescaleApplied,
+                                 productionStartStep, grDiscardSteps, grSampleEvery, grStart,
+                                 startupTempBeforeFinal, startupTempAfterFinal, L, !isHO, !isHO);
             if (isHO) {
-                // HO: output position, velocity, energy for phase-space & convergence plots
                 outFile << "step,time,x,v,E_kin,E_pot,E_total\n";
             } else {
                 outFile << "step,time,E_kin,E_pot,E_total,temperature\n";
@@ -2077,50 +1900,9 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Print simulation info on rank 0
-    if (ctx.isRoot() && !params.timing) {
-        std::printf("=== MD Solver ===\n");
-        std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
-        std::printf(
-            "N = %d | P = %d | timesteps = %d | frames = %d (step 0..%d) | dt = %.3e\n", N,
-            ctx.size, nSteps, nFrames, nSteps, params.dt);
-        if (!isHO) {
-            std::printf(
-                "LJ semantics: --equilibration-steps prepares the state, --production-steps "
-                "controls the reported NVE trajectory.\n");
-            std::printf(
-                "Output includes the production initial frame at step 0 (n_frames = "
-                "production_steps + 1).\n");
-            std::printf("L = %.6e m (%.4f sigma)\n", L, L / md::constants::sigma);
-            std::printf("Target temperature = %.1f K | seed = %d\n", params.targetTemperature,
-                        params.seed);
-            std::printf("Startup timesteps = %d | production timesteps = %d | total executed = %d\n",
-                        equilibrationSteps, nSteps, totalStepsExecuted);
-            std::printf("Production simulated time = %.3e s (= production_steps * dt)\n",
-                        nSteps * params.dt);
-            std::printf("production_start_step = %d (production-only output)\n", productionStartStep);
-            if (std::isfinite(startupTempBeforeFinal)) {
-                std::printf("Startup boundary temperature before final rescale: %.6f K\n",
-                            startupTempBeforeFinal);
-            }
-            if (std::isfinite(startupTempAfterFinal)) {
-                std::printf("Startup boundary temperature after final rescale: %.6f K\n",
-                            startupTempAfterFinal);
-            }
-            if (params.gr) {
-                std::printf(
-                    "g(r): production_start_step=%d, gr_start=%d (= production_start_step + "
-                    "gr_discard_steps=%d), sample_every=%d\n",
-                    productionStartStep, grStart, grDiscardSteps, grSampleEvery);
-            }
-        } else {
-            std::printf(
-                "Step semantics: --steps is the number of integration updates; output includes "
-                "the initial frame at step 0.\n");
-            std::printf("HO mode: periodic box size is not used\n");
-        }
-        std::printf("==================\n");
-    }
+    printSimulationInfo(params, ctx, isHO, N, nSteps, nFrames, totalStepsExecuted,
+                        equilibrationSteps, L, productionStartStep, grStart, grDiscardSteps,
+                        grSampleEvery, startupTempBeforeFinal, startupTempAfterFinal);
 
     if (params.gr && !isHO && maxGRFrames <= 0 && ctx.isRoot()) {
         if (grStart > nSteps) {
@@ -2136,80 +1918,68 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // g(r) histogram setup for LJ mode
-    // Keep HO mode at zero-sized buffers to avoid meaningless allocations.
-    const double grDr = md::constants::grBinWidthSigma * md::constants::sigma;  // bin width
-    const double grRMax = isHO ? 0.0 : 0.5 * L;                                  // [0, L/2] for LJ
+    const double grDr = md::constants::grBinWidthSigma * md::constants::sigma;
+    const double grRMax = isHO ? 0.0 : 0.5 * L;
     const int grNBins = isHO ? 0 : static_cast<int>(grRMax / grDr);
     std::vector<double> grHistLocal(grNBins, 0.0);
     int grFrames = 0;
 
-    // Timing setup
+    // Synchronise clocks before timed production loop (exclude startup/output setup).
     MPI_Barrier(MPI_COMM_WORLD);
-    double tStart = MPI_Wtime();
+    const double tStart = MPI_Wtime();
 
-    // Time-stepping loop
     for (int step = 0; step <= nSteps; ++step) {
-        // Compute observables (skip in timing mode)
-        double totalKE = 0.0, totalPE = 0.0;
-        if (!params.timing) {
-            double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
+        double totalKE = 0.0;
+        double totalPE = 0.0;
 
-            // Reduce energies to rank 0
+        if (!params.timing) {
+            const double localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
             MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
             MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-            double totalE = totalKE + totalPE;
-
-            // Output (rank 0 only)
             if (params.output && ctx.isRoot() && outFile.is_open()) {
-                double time = step * params.dt;
+                const double totalE = totalKE + totalPE;
+                const double time = step * params.dt;
                 if (isHO) {
-                    // HO: output x, v for first particle (1D oscillator on x-axis)
-                    double x = sys.pos[0];  // position of particle 0, x-component
-                    double v = sys.vel[0];  // velocity of particle 0, x-component
-                    outFile << step << "," << time << "," << x << "," << v << "," << totalKE << ","
-                            << totalPE << "," << totalE << "\n";
+                    const double x = sys.pos[0];
+                    const double v = sys.vel[0];
+                    outFile << step << "," << time << "," << x << "," << v << "," << totalKE
+                            << "," << totalPE << "," << totalE << "\n";
                 } else {
-                    double T = md::computeTemperature(totalKE, N);
+                    const double T = md::computeTemperature(totalKE, N);
                     outFile << step << "," << time << "," << totalKE << "," << totalPE << ","
                             << totalE << "," << T << "\n";
                 }
             }
-
         }
 
-        // Accumulate g(r) histogram in the production window
+        // Sample RDF only on production frames that pass discard/stride filters.
         if (params.gr && !isHO && step >= grStart && ((step - grStart) % grSampleEvery == 0)) {
             md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
                              grHistLocal);
             ++grFrames;
         }
 
-        // Advance one timestep; skip update on the last iteration
-        if (step == nSteps)
+        // Step 0 is the production initial condition; advance after writing/sampling.
+        if (step == nSteps) {
             break;
+        }
 
         advanceOneStep();
     }
 
-    // Timing completion
-    double tEnd = MPI_Wtime();
-    double elapsed = tEnd - tStart;
+    const double elapsed = MPI_Wtime() - tStart;
 
-    // Find the slowest rank using MPI_MAXLOC — ensures wall and comm come
-    // from the SAME rank, guaranteeing comm <= wall. Allreduce so all ranks
-    // know slowestRank (needed for the subsequent MPI_Bcast).
     struct {
         double val;
         int rank;
     } localData{elapsed, ctx.rank}, globalData{0.0, 0};
+    // Report wall time from the slowest rank; comm time is tracked in MPIContext::allgatherPositions.
     MPI_Allreduce(&localData, &globalData, 1, MPI_DOUBLE_INT, MPI_MAXLOC, MPI_COMM_WORLD);
 
-    double maxTime = globalData.val;
-    int slowestRank = globalData.rank;
+    const double maxTime = globalData.val;
+    const int slowestRank = globalData.rank;
 
-    // Get comm time from the slowest rank (not the max comm across all ranks)
     double reportedCommTime = 0.0;
     if (params.timing) {
         if (ctx.rank == slowestRank) {
@@ -2221,7 +1991,7 @@ int main(int argc, char* argv[]) {
     if (ctx.isRoot()) {
         std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, ctx.size);
         if (params.timing) {
-            double computeTime = maxTime - reportedCommTime;
+            const double computeTime = maxTime - reportedCommTime;
             std::printf("  Comm time: %.6f s (%.1f%%)\n", reportedCommTime,
                         100.0 * reportedCommTime / maxTime);
             std::printf("  Compute time: %.6f s (%.1f%%)\n", computeTime,
@@ -2229,45 +1999,27 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Write g(r) to file for LJ mode
     if (params.gr && !isHO && grFrames > 0) {
-        // Reduce histogram across all ranks
         std::vector<double> grHistGlobal(grNBins, 0.0);
         MPI_Reduce(grHistLocal.data(), grHistGlobal.data(), grNBins, MPI_DOUBLE, MPI_SUM, 0,
                    MPI_COMM_WORLD);
 
         if (ctx.isRoot()) {
-            // Normalise: g(r) = (1 / (rho * N)) * count / (4*pi*r^2 * dr * nFrames)
+            // RDF is sampled per frame, then normalised after summing histograms across ranks.
             md::normaliseGR(grHistGlobal, grDr, N, L, grFrames);
 
-            std::string grFname = params.outdir.empty() ? "out/gr.csv" : params.outdir + "/gr.csv";
+            const std::string grFname =
+                params.outdir.empty() ? "out/gr.csv" : params.outdir + "/gr.csv";
             std::ofstream grFile(grFname);
             if (grFile.is_open()) {
-                std::time_t t = std::time(nullptr);
-                char tstr[100];
-                std::strftime(tstr, sizeof(tstr), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&t));
-                grFile << "# mode: " << params.mode << ", integrator: " << params.integrator
-                       << ", N: " << N << ", P: " << ctx.size << ", dt: " << params.dt
-                       << ", steps: " << nSteps << ", n_steps: " << nSteps
-                       << ", n_frames: " << nFrames
-                       << ", step_indexing: 0..steps (includes initial frame)"
-                       << ", total_steps_executed: " << totalStepsExecuted
-                       << ", seed: " << params.seed << ", L: " << L
-                       << ", rcut: " << md::constants::rcut_sigma * md::constants::sigma
-                       << ", target_temperature: " << params.targetTemperature
-                       << ", equilibration_steps: " << equilibrationSteps
-                       << ", production_steps: " << nSteps
-                       << ", production_start_step: " << productionStartStep
-                       << ", final_rescale_before_production: "
-                       << (params.finalRescaleBeforeProduction ? "true" : "false")
-                       << ", final_rescale_applied: " << (finalRescaleApplied ? "true" : "false")
-                       << ", production_nve: true"
-                       << ", gr_discard_steps: " << grDiscardSteps
-                       << ", gr_sample_every: " << grSampleEvery << ", gr_start: " << grStart
-                       << ", lattice: FCC, velocities: Box-Muller, timestamp: " << tstr << "\n";
+                writeCSVMetadataLine(grFile, params, N, ctx.size, nSteps, nFrames,
+                                     totalStepsExecuted, equilibrationSteps, finalRescaleApplied,
+                                     productionStartStep, grDiscardSteps, grSampleEvery, grStart,
+                                     startupTempBeforeFinal, startupTempAfterFinal, L, true,
+                                     true);
                 grFile << "r_sigma,gr\n";
                 for (int b = 0; b < grNBins; ++b) {
-                    double rMid = (b + 0.5) * grDr;
+                    const double rMid = (b + 0.5) * grDr;
                     grFile << (rMid / md::constants::sigma) << "," << grHistGlobal[b] << "\n";
                 }
                 grFile.close();
@@ -2284,7 +2036,6 @@ int main(int argc, char* argv[]) {
                      "--gr-sample-every.\n");
     }
 
-    // Close output file
     if (outFile.is_open()) {
         outFile.close();
     }
@@ -2525,18 +2276,16 @@ void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& 
 ```cpp
 /**
  * @file test_runner.cpp
- * @brief Homebrew unit test runner (no third-party libraries).
- *
- * Calls all test functions and exits with code 0 if all pass,
- * non-zero if any fail. Intended to be invoked via `make test`.
+ * @brief Homebrew unit test runner.
  */
 
 #include <cstdio>
 #include <cstdlib>
 
-// Test function declarations (defined in separate .cpp files)
 extern int testMIC();
 extern int testForce();
+extern int testIntegrators();
+extern int testPartition();
 
 int main() {
     std::printf("=== MD Unit Tests ===\n");
@@ -2545,6 +2294,8 @@ int main() {
 
     totalFailures += testMIC();
     totalFailures += testForce();
+    totalFailures += testIntegrators();
+    totalFailures += testPartition();
 
     std::printf("=====================\n");
 
@@ -2680,7 +2431,7 @@ int testMIC() {
 }
 ```
 
-### `tests/test_force.cpp` (198 lines)
+### `tests/test_force.cpp` (288 lines)
 
 ```cpp
 /**
@@ -2694,6 +2445,10 @@ int testMIC() {
  *
  * Test 3: LJ force sign check — particles closer than equilibrium
  *         should repel, further should attract.
+ *
+ * Test 4: Cutoff behavior just below and above rcut.
+ *
+ * Test 5: Minimum-image interaction across a periodic boundary.
  */
 
 #include <cmath>
@@ -2870,6 +2625,92 @@ int testForce() {
                 std::printf("FAIL: LJ attraction: F_x on particle 0 should be > 0, got %e\n", ax0);
                 ++failures;
             }
+        }
+    }
+
+    // Test 4: Cutoff behavior around rcut
+    {
+        const double sigma = md::constants::sigma;
+        const double mass = md::constants::mass;
+        const double rcut = md::constants::rcut;
+        const double L = 10.229 * sigma;
+
+        // Just below cutoff: interaction should be non-zero.
+        {
+            double r = 0.999 * rcut;
+            md::System sys;
+            sys.init(2, 0, 2, L);
+            sys.pos[0] = 0.0;
+            sys.pos[1] = 0.0;
+            sys.pos[2] = 0.0;
+            sys.pos[3] = r;
+            sys.pos[4] = 0.0;
+            sys.pos[5] = 0.0;
+
+            std::vector<double> posGlobal(sys.pos.begin(), sys.pos.end());
+            double pe = 0.0;
+            md::computeLJForces(sys, posGlobal, pe, mass);
+
+            double fx0 = sys.acc[0] * mass;
+            if (std::abs(fx0) < 1e-20) {
+                std::printf("FAIL: LJ cutoff below rcut should interact, got |F_x|=%e\n",
+                            std::abs(fx0));
+                ++failures;
+            }
+        }
+
+        // Just above cutoff: interaction should be zero.
+        {
+            double r = 1.001 * rcut;
+            md::System sys;
+            sys.init(2, 0, 2, L);
+            sys.pos[0] = 0.0;
+            sys.pos[1] = 0.0;
+            sys.pos[2] = 0.0;
+            sys.pos[3] = r;
+            sys.pos[4] = 0.0;
+            sys.pos[5] = 0.0;
+
+            std::vector<double> posGlobal(sys.pos.begin(), sys.pos.end());
+            double pe = 0.0;
+            md::computeLJForces(sys, posGlobal, pe, mass);
+
+            double fx0 = sys.acc[0] * mass;
+            if (std::abs(fx0) > 1e-20) {
+                std::printf("FAIL: LJ cutoff above rcut should be zero, got |F_x|=%e\n",
+                            std::abs(fx0));
+                ++failures;
+            }
+        }
+    }
+
+    // Test 5: MIC interaction across periodic boundary
+    {
+        const double sigma = md::constants::sigma;
+        const double mass = md::constants::mass;
+        const double L = 10.229 * sigma;
+
+        md::System sys;
+        sys.init(2, 0, 2, L);
+
+        // Separation is 0.2*sigma through the periodic boundary.
+        sys.pos[0] = 0.1 * sigma;
+        sys.pos[1] = 0.0;
+        sys.pos[2] = 0.0;
+        sys.pos[3] = L - 0.1 * sigma;
+        sys.pos[4] = 0.0;
+        sys.pos[5] = 0.0;
+
+        std::vector<double> posGlobal(sys.pos.begin(), sys.pos.end());
+        double pe = 0.0;
+        md::computeLJForces(sys, posGlobal, pe, mass);
+
+        double fx0 = sys.acc[0] * mass;
+        if (fx0 <= 0.0) {
+            std::printf(
+                "FAIL: LJ MIC boundary interaction expected +x repulsion on particle 0, got F_x=%e\n",
+                fx0);
+            ++failures;
         }
     }
 
@@ -3169,7 +3010,7 @@ echo "=========================================="
 echo "Manifest written to: $OUTDIR/manifest.json"
 ```
 
-### `scripts/run_results.sh` (12 lines)
+### `scripts/run_results.sh` (18 lines)
 
 ```sh
 #!/bin/bash
@@ -3181,6 +3022,12 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 bash scripts/run_all_data.sh "$@"
+
+# Keep only canonical report plot artifacts (results*.png + results*.json metadata).
+mkdir -p out/plots out/plots/metadata
+find out/plots -maxdepth 1 -type f ! -name 'results*' -delete
+find out/plots/metadata -maxdepth 1 -type f -name '*.json' ! -name 'results*.json' -delete
+
 python3 scripts/plot_ho.py
 python3 scripts/plot_lj.py
 python3 scripts/plot_scaling.py
@@ -4973,7 +4820,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### `scripts/plot_lj.py` (1505 lines)
+### `scripts/plot_lj.py` (1504 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -5499,7 +5346,6 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         if row == 0:
             ax_d.set_title(r"Signed relative drift $\Delta E/E_0$ [%]")
 
-        finite_etot = etot[np.isfinite(etot)]
         divergence_step = series.get("divergence_step")
         divergence_time_ps = series.get("divergence_time_ps")
         divergence_reason = series.get("divergence_reason")
@@ -5862,7 +5708,7 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
         fig.text(
             0.5,
             0.01,
-            "Required production run: 100 steps (1 ps), after startup/equilibration and final rescale. "
+            "Required production run: 100 steps (1 ps), after startup/equilibration. "
             "Temperature evidence complements the energy-stability and RDF comparison results.",
             ha="center",
             fontsize=9,
@@ -6379,7 +6225,7 @@ Interpretation rule:
 2. Kept only the three brief-facing Results 2 figures plus a compact quantitative table.
 3. Replaced old sparse hard-coded Rahman points with a transparent 9-point two-tier anchor dataset (paper_anchored + shape_anchor) stored in machine-readable CSV.
 4. Updated RDF figure and metadata to make provenance explicit and to avoid implying exact Rahman tabulated data.
-5. Tightened required-run energy/temperature metadata to explicitly state startup/equilibration, final rescale, and step-0 production semantics.
+5. Tightened required-run energy/temperature metadata to explicitly state startup/equilibration and step-0 production semantics.
 6. Added automatic Results 2 quantitative summary table generation (Markdown + CSV + JSON).
 7. Added report-ready claim-safe notes and explicit final Results 2 figure ordering.
 """,
@@ -6483,7 +6329,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### `scripts/plot_scaling.py` (424 lines)
+### `scripts/plot_scaling.py` (435 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -6607,10 +6453,15 @@ def plot_strong_scaling():
         print("Warning: scaling/strong not found in manifest. Skipping strong scaling.")
         return
 
+    names = getattr(getattr(data, "dtype", None), "names", ()) or ()
+    has_n_column = "N" in names
+
     P = data['P'].astype(int)
     wall = data['wall_s']
     comm = data['comm_s']
     compute = np.maximum(wall - comm, 1e-9)  # floor to avoid log(0) at small N
+    # Some exported strong-scaling tables omit N; Results 3 strong scaling uses fixed N=2048.
+    N_values = data["N"].astype(int) if has_n_column else np.full(len(P), 2048, dtype=int)
 
     t1 = wall[0]
     speedup = t1 / wall
@@ -6712,6 +6563,8 @@ def plot_strong_scaling():
     ]
     if used_fallback:
         missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
+    if not has_n_column:
+        missing_provenance.append("Strong-scaling CSV omitted N column; metadata assumes fixed N=2048.")
     if not os.path.exists(scaling_meta_path):
         missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
 
@@ -6726,7 +6579,7 @@ def plot_strong_scaling():
         rows.append(
             {
                 "P": int(P[i]),
-                "N": int(data["N"][i]),
+                "N": int(N_values[i]),
                 "wall_s": float(wall[i]),
                 "comm_s": float(comm[i]),
                 "speedup": float(speedup[i]),
@@ -6746,7 +6599,7 @@ def plot_strong_scaling():
             "simulation_run_identifiers": [],
             "key_parameters": {
                 "integrator": "verlet",
-                "fixed_particle_count_N": int(data["N"][0]) if len(data) else None,
+                "fixed_particle_count_N": int(N_values[0]) if len(data) else None,
                 "process_counts_P": [int(p) for p in P.tolist()],
                 "plots_in_figure": ["speedup", "efficiency", "compute_vs_communication"],
             },
@@ -6784,6 +6637,10 @@ def plot_size_scaling():
     data, size_path, used_fallback = load_scaling_csv(manifest, "size")
     if data is None:
         print("Warning: scaling/size not found in manifest. Skipping size scaling.")
+        return
+    names = getattr(getattr(data, "dtype", None), "names", ()) or ()
+    if "N" not in names:
+        print("Warning: scaling/size is missing N column. Skipping size scaling plot.")
         return
 
     N = data['N']
@@ -7083,25 +6940,28 @@ if __name__ == "__main__":
 ## 8. File Sizes
 
 ```
-include/md/constants.hpp                             86 lines
+include/md/constants.hpp                             84 lines
 include/md/integrators.hpp                          115 lines
 include/md/mic.hpp                                   19 lines
-include/md/mpi_context.hpp                          103 lines
-include/md/observables.hpp                           90 lines
-include/md/params.hpp                                88 lines
-include/md/potentials.hpp                            67 lines
-include/md/rng.hpp                                  140 lines
-include/md/system.hpp                                70 lines
-src/main.cpp                                        572 lines
+include/md/mpi_context.hpp                           98 lines
+include/md/observables.hpp                           86 lines
+include/md/params.hpp                                87 lines
+include/md/partition.hpp                             26 lines
+include/md/potentials.hpp                            60 lines
+include/md/rng.hpp                                  134 lines
+include/md/system.hpp                                63 lines
+src/main.cpp                                        533 lines
 src/observables.cpp                                  70 lines
 src/potentials/harmonic.cpp                          37 lines
 src/potentials/lennard_jones.cpp                    104 lines
-tests/test_force.cpp                                198 lines
+tests/test_force.cpp                                288 lines
+tests/test_integrators.cpp                          101 lines
 tests/test_mic.cpp                                  117 lines
+tests/test_partition.cpp                             68 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    1909
+    2123
 ```
 
 **End of audit.**

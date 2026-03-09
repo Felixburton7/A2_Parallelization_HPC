@@ -5,9 +5,9 @@
 | Field | Value |
 |---|---|
 | Purpose | Project-wide raw artifact bundle: manifest-linked CSV/notes with truncation for context-size control. |
-| Generation timestamp (UTC) | 2026-03-07T17:48:10Z |
-| Git commit | e535aaf9e86dfa3549c06a6d71e9792912fca492 |
-| Git working tree | dirty (4 changed paths) |
+| Generation timestamp (UTC) | 2026-03-09T13:10:49Z |
+| Git commit | 1ee4694830cf559e7796ee6aa54cdd4fadc467f6 |
+| Git working tree | dirty (2 changed paths) |
 | Generation succeeded | yes |
 | Generation status label | confirmed |
 | Generation note | Raw bundle assembled from current manifest-linked project artifacts. |
@@ -19,7 +19,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 14.62x; fitted Amdahl serial fraction f=0.0396.
+- Results 3 strong scaling: max measured speedup 14.92x; fitted Amdahl serial fraction f=0.0317.
 
 ## How to Read This File
 
@@ -43,7 +43,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 14.62x; fitted Amdahl serial fraction f=0.0396.
+- Results 3 strong scaling: max measured speedup 14.92x; fitted Amdahl serial fraction f=0.0317.
 
 ## Current Deliverables Map
 
@@ -92,9 +92,9 @@
 |---|---|---|---|
 | Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_ho_figure4_convergence_combined.png` | medium | No major caveat recorded in metadata. |
 | Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_ho_figure3_small_vs_large_dt.png` | medium | No major caveat recorded in metadata. |
-| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv` | high | Energy curves are shown in reduced units (E/epsilon). |
-| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
-| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
+| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
+| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
+| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
 | The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
 | Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
 | Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
@@ -108,8 +108,8 @@
 |---|---|---|---|
 | ai/pack_results.sh | yes | 2026-03-07T17:14:25Z | confirmed |
 | ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
-| out/manifest.json | yes | 2026-03-07T17:45:00Z | confirmed |
-| out/summary/results2/results2_quantitative_summary_table.csv | yes | 2026-03-07T17:45:00Z | confirmed |
+| out/manifest.json | yes | 2026-03-08T17:44:36Z | confirmed |
+| out/summary/results2/results2_quantitative_summary_table.csv | yes | 2026-03-08T17:44:36Z | confirmed |
 
 ### Expected file checks
 | Path | Expectation | Role | Status |
@@ -138,9 +138,9 @@
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
 |---|---|---|---|---|
-| ai/audit_output.md | 2026-03-07T17:47:51Z | 2026-03-07T17:45:00Z | confirmed | appears current |
-| ai/results.md | 2026-03-07T17:47:34Z | 2026-03-07T17:45:00Z | confirmed | appears current |
-| ai/results_bundle.md | 2026-03-07T17:48:10Z | 2026-03-07T17:45:00Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/audit_output.md | 2026-03-09T13:10:48Z | 2026-03-08T19:58:26Z | confirmed | appears current |
+| ai/results.md | 2026-03-09T13:10:48Z | 2026-03-08T19:58:26Z | confirmed | appears current |
+| ai/results_bundle.md | 2026-03-09T13:10:49Z | 2026-03-08T19:58:26Z | confirmed | appears current (in-progress generation timestamp) |
 
 ## Diagnostics / Warnings
 
@@ -182,45 +182,45 @@ This section preserves raw artifact payloads (with explicit truncation for long 
 ```json
 {
   "ho_convergence": {
-    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260306_163529/ho_euler.csv",
-    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260306_163529/ho_euler.csv",
-    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260306_163529/ho_euler.csv",
-    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260306_163529/ho_euler.csv",
-    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260306_163529/ho_euler.csv",
-    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260306_163529/ho_euler.csv",
-    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260306_163529/ho_euler.csv",
-    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260306_163529/ho_euler.csv",
-    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260306_163529/ho_verlet.csv",
-    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260306_163529/ho_verlet.csv",
-    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260306_163529/ho_rk4.csv",
-    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260306_163529/ho_rk4.csv"
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260308_174309/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260308_174309/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260308_174309/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260308_174309/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260308_174309/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260308_174309/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260308_174309/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260308_174309/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260308_174309/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260308_174309/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260308_174309/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260308_174309/ho_rk4.csv"
   },
   "lj_brief": {
-    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260306_163529/lj_verlet.csv",
-    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260306_163529/lj_euler.csv"
+    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_174309/lj_verlet.csv",
+    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_174309/lj_euler.csv"
   },
   "lj_rdf": {
-    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/gr.csv",
-    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260306_163529/lj_verlet.csv"
+    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/gr.csv",
+    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260308_174309/lj_verlet.csv"
   },
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
   },
   "results2_outputs": {
-    "generated_utc": "2026-03-07T17:45:00Z",
+    "generated_utc": "2026-03-08T17:44:36Z",
     "main_report_figures": [
       "out/plots/results2_lj_brief_energy_100step_production.png",
       "out/plots/results2_lj_brief_temperature_100step_production.png",
@@ -262,7 +262,7 @@ This section preserves raw artifact payloads (with explicit truncation for long 
 ```markdown
 # Results 1 HO Convergence Summary
 
-Generated: 2026-03-07T14:52:51Z
+Generated: 2026-03-08T17:44:19Z
 
 | Integrator | Endpoint slope | RMS slope | Endpoint fit dt values | RMS fit dt values | Excluded coarse dt values |
 |---|---|---|---|---|---|
@@ -389,7 +389,7 @@ Interpretation rule:
 
 ## Radial Distribution Function g(r) (Long RDF production run)
 ```csv
-# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 20000, n_steps: 20000, n_frames: 20001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 20050, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 20000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T16:35:55Z
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 20000, n_steps: 20000, n_frames: 20001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 20050, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 20000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3305, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-08T17:43:33Z
 r_sigma,gr
 0.01,0
 0.03,0
@@ -650,7 +650,7 @@ r_sigma,gr
 
 ## LJ Brief (required) — Velocity-Verlet (100 steps) (Truncated)
 ```csv
-# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914355, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T16:35:34Z
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914355, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-08T17:43:13Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,1.687164123192e-18,-7.47194927673327e-18,-5.78478515354127e-18,94.4
 1,1e-14,1.68447578135403e-18,-7.46869101577964e-18,-5.78421523442562e-18,94.2495822273505
@@ -670,7 +670,7 @@ step,time,E_kin,E_pot,E_total,temperature
 
 ## LJ Brief (required) — Euler (100 steps) (Truncated)
 ```csv
-# mode: lj, integrator: euler, N: 864, P: 4, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 95.9438964430546, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T16:35:34Z
+# mode: lj, integrator: euler, N: 864, P: 4, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 95.9438964430546, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-08T17:43:13Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,1.687164123192e-18,-7.45788627945411e-18,-5.7707221562621e-18,94.4
 1,1e-14,1.71215309673989e-18,-7.45868004418276e-18,-5.74652694744287e-18,95.7981799817184
@@ -690,25 +690,26 @@ step,time,E_kin,E_pot,E_total,temperature
 
 ## Strong Scaling (median paired timings)
 ```csv
-P,N,wall_s,comm_s
-1,2048,11.368837,0.000334
-2,2048,5.711975,0.009069
-4,2048,3.298142,0.442105
-8,2048,1.967324,0.008102
-16,2048,1.046600,0.037558
-24,2048,0.960694,0.068600
-32,2048,0.777739,0.023672
+P,wall_s,comm_s,speedup,efficiency
+1,2.701,0.000,1.00,1.000
+2,1.362,0.024,1.98,0.991
+4,0.728,0.022,3.71,0.927
+8,0.372,0.005,7.26,0.907
+16,0.229,0.027,11.80,0.737
+24,0.182,0.059,14.82,0.617
+32,0.181,0.089,14.96,0.468
 ```
 
 ## Size Scaling (median paired timings)
 ```csv
-P,N,wall_s,comm_s
-16,108,0.021791,0.008301
-16,256,0.077733,0.011611
-16,500,0.229446,0.050040
-16,864,0.540230,0.061907
-16,1372,1.237975,0.079826
-16,2048,2.510348,0.090846
+P,wall_s,comm_s,comm_percent,speedup,efficiency
+1,2.701,0.000,0.0,1.00,1.000
+2,1.362,0.024,1.7,1.98,0.991
+4,0.728,0.022,3.1,3.71,0.927
+8,0.372,0.005,1.4,7.26,0.907
+16,0.229,0.027,11.8,11.80,0.737
+24,0.182,0.059,32.4,14.82,0.617
+32,0.181,0.089,49.2,14.96,0.468
 ```
 
 ## HO Convergence Summary (all dt values, final step only)
@@ -742,7 +743,7 @@ verlet,1.0,-0.5,0.75,2.717985765625e-26
 
 ## LJ RDF long run trajectory (energy/temperature) (Truncated)
 ```csv
-# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 20000, n_steps: 20000, n_frames: 20001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 20050, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 20000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914355, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-06T16:35:35Z
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 20000, n_steps: 20000, n_frames: 20001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 20050, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 20000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914355, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-08T17:43:14Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,1.687164123192e-18,-7.47194927673327e-18,-5.78478515354127e-18,94.4
 1,1e-14,1.68447578135403e-18,-7.46869101577964e-18,-5.78421523442562e-18,94.2495822273505
