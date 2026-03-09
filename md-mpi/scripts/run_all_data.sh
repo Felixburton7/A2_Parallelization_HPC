@@ -11,7 +11,7 @@ set -euo pipefail
 SOLVER="./md_solver"
 OUTDIR="out"
 SKIP_SCALING=0
-STRONG_STEPS=200
+STRONG_STEPS=500
 # Use longer runs for size scaling so fixed overhead is less dominant at small N.
 SIZE_STEPS=2000
 

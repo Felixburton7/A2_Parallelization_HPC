@@ -1,0 +1,434 @@
+Host: phy-cerberus4
+Start: Sat  7 Mar 20:15:33 GMT 2026
+rm -f src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o tests/test_runner.o tests/test_mic.o tests/test_force.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o md_solver test_runner
+rm -f src/potentials/*.o tests/*.o
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/main.o src/main.cpp
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/potentials/harmonic.o src/potentials/harmonic.cpp
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/potentials/lennard_jones.o src/potentials/lennard_jones.cpp
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o src/observables.o src/observables.cpp
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -o md_solver src/main.o src/potentials/harmonic.o src/potentials/lennard_jones.o src/observables.o
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_runner.o tests/test_runner.cpp
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_mic.o tests/test_mic.cpp
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -c -o tests/test_force.o tests/test_force.cpp
+mpicxx -std=c++17 -O3 -march=native -g -Wall -Wextra -pedantic -Iinclude -o test_runner tests/test_runner.o tests/test_mic.o tests/test_force.o src/potentials/lennard_jones.o src/potentials/harmonic.o src/observables.o
+./test_runner
+=== MD Unit Tests ===
+  MIC tests: ALL PASSED
+  Force/Wrapping tests: ALL PASSED
+=====================
+ALL TESTS PASSED
+==========================================
+  FULL DATA GENERATION — Sat  7 Mar 20:15:36 GMT 2026
+==========================================
+
+=== PARALLEL CONSISTENCY CHECK ===
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
+Startup->production rescale: lambda = 9.999999999999999e-01, T_before = 94.400000 K
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 108 | P = 1 | timesteps = 10 | frames = 11 (step 0..10) | dt = 1.000e-14
+LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
+Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
+L = 1.738930e-09 m (5.1145 sigma)
+Target temperature = 94.4 K | seed = 42
+Startup timesteps = 0 | production timesteps = 10 | total executed = 10
+Production simulated time = 1.000e-13 s (= production_steps * dt)
+production_start_step = 0 (production-only output)
+Startup boundary temperature before final rescale: 94.400000 K
+Startup boundary temperature after final rescale: 94.400000 K
+==================
+Wall time: 0.004287 s (max across 1 ranks)
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
+Startup->production rescale: lambda = 1.000000000000000e+00, T_before = 94.400000 K
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 108 | P = 2 | timesteps = 10 | frames = 11 (step 0..10) | dt = 1.000e-14
+LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
+Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
+L = 1.738930e-09 m (5.1145 sigma)
+Target temperature = 94.4 K | seed = 42
+Startup timesteps = 0 | production timesteps = 10 | total executed = 10
+Production simulated time = 1.000e-13 s (= production_steps * dt)
+production_start_step = 0 (production-only output)
+Startup boundary temperature before final rescale: 94.400000 K
+Startup boundary temperature after final rescale: 94.400000 K
+==================
+Wall time: 0.002253 s (max across 2 ranks)
+  P=1 vs P=2 data: MATCH ✅
+
+=== RDF PARALLEL CONSISTENCY CHECK ===
+  g(r) P=1 vs P=2 data: MATCH ✅
+
+=== RESULTS 1: HO CONVERGENCE ===
+  euler dt=1.0 steps=10 -> out/runs/ho_N1_euler_dt1.0_20260307_201536/ho_euler.csv ✅
+  euler dt=0.5 steps=20 -> out/runs/ho_N1_euler_dt0.5_20260307_201536/ho_euler.csv ✅
+  euler dt=0.1 steps=100 -> out/runs/ho_N1_euler_dt0.1_20260307_201536/ho_euler.csv ✅
+  euler dt=0.05 steps=200 -> out/runs/ho_N1_euler_dt0.05_20260307_201536/ho_euler.csv ✅
+  euler dt=0.01 steps=1000 -> out/runs/ho_N1_euler_dt0.01_20260307_201536/ho_euler.csv ✅
+  euler dt=0.005 steps=2000 -> out/runs/ho_N1_euler_dt0.005_20260307_201536/ho_euler.csv ✅
+  euler dt=0.001 steps=10000 -> out/runs/ho_N1_euler_dt0.001_20260307_201536/ho_euler.csv ✅
+  euler dt=0.0005 steps=20000 -> out/runs/ho_N1_euler_dt0.0005_20260307_201536/ho_euler.csv ✅
+  verlet dt=1.0 steps=10 -> out/runs/ho_N1_verlet_dt1.0_20260307_201536/ho_verlet.csv ✅
+  verlet dt=0.5 steps=20 -> out/runs/ho_N1_verlet_dt0.5_20260307_201536/ho_verlet.csv ✅
+  verlet dt=0.1 steps=100 -> out/runs/ho_N1_verlet_dt0.1_20260307_201536/ho_verlet.csv ✅
+  verlet dt=0.05 steps=200 -> out/runs/ho_N1_verlet_dt0.05_20260307_201536/ho_verlet.csv ✅
+  verlet dt=0.01 steps=1000 -> out/runs/ho_N1_verlet_dt0.01_20260307_201536/ho_verlet.csv ✅
+  verlet dt=0.005 steps=2000 -> out/runs/ho_N1_verlet_dt0.005_20260307_201536/ho_verlet.csv ✅
+  verlet dt=0.001 steps=10000 -> out/runs/ho_N1_verlet_dt0.001_20260307_201536/ho_verlet.csv ✅
+  verlet dt=0.0005 steps=20000 -> out/runs/ho_N1_verlet_dt0.0005_20260307_201536/ho_verlet.csv ✅
+  rk4 dt=1.0 steps=10 -> out/runs/ho_N1_rk4_dt1.0_20260307_201536/ho_rk4.csv ✅
+  rk4 dt=0.5 steps=20 -> out/runs/ho_N1_rk4_dt0.5_20260307_201536/ho_rk4.csv ✅
+  rk4 dt=0.1 steps=100 -> out/runs/ho_N1_rk4_dt0.1_20260307_201536/ho_rk4.csv ✅
+  rk4 dt=0.05 steps=200 -> out/runs/ho_N1_rk4_dt0.05_20260307_201536/ho_rk4.csv ✅
+  rk4 dt=0.01 steps=1000 -> out/runs/ho_N1_rk4_dt0.01_20260307_201536/ho_rk4.csv ✅
+  rk4 dt=0.005 steps=2000 -> out/runs/ho_N1_rk4_dt0.005_20260307_201536/ho_rk4.csv ✅
+  rk4 dt=0.001 steps=10000 -> out/runs/ho_N1_rk4_dt0.001_20260307_201536/ho_rk4.csv ✅
+  rk4 dt=0.0005 steps=20000 -> out/runs/ho_N1_rk4_dt0.0005_20260307_201536/ho_rk4.csv ✅
+
+=== RESULTS 2: LJ BRIEF ===
+  Convention: startup is configured by --equilibration-steps, production by --production-steps.
+  CSV output reports production trajectory only: step 0 is the production initial frame.
+  Brief (required) Verlet: equilibration=50, production=100, frames=101, dt=1e-14, target_T=94.4 K...
+  -> brief Verlet output saved to manifest ✅
+  Brief (required) Euler: equilibration=50, production=100, frames=101, dt=1e-14, target_T=94.4 K...
+  -> brief Euler output saved to manifest ✅
+
+=== g(r) PRODUCTION RUN (LONG) ===
+  RDF long run: equilibration=50, production=20000, frames=20001, discard_steps=200, sample_every=5
+  g(r) done, output saved to manifest ✅
+
+=== RESULTS 3: STRONG SCALING (20 reps, N=2048, 200 steps) ===
+    P=1 rep=1 wall=9.387852 comm=0.000576
+    P=1 rep=2 wall=9.359403 comm=0.000560
+    P=1 rep=3 wall=9.385073 comm=0.000554
+    P=1 rep=4 wall=9.354842 comm=0.000557
+    P=1 rep=5 wall=9.345176 comm=0.000590
+    P=1 rep=6 wall=9.401943 comm=0.000522
+    P=1 rep=7 wall=9.362233 comm=0.000577
+    P=1 rep=8 wall=9.300973 comm=0.000574
+    P=1 rep=9 wall=9.334025 comm=0.000566
+    P=1 rep=10 wall=9.333616 comm=0.000582
+    P=1 rep=11 wall=9.340434 comm=0.000563
+    P=1 rep=12 wall=9.392340 comm=0.000578
+    P=1 rep=13 wall=9.407961 comm=0.000572
+    P=1 rep=14 wall=9.372128 comm=0.000557
+    P=1 rep=15 wall=9.357382 comm=0.000573
+    P=1 rep=16 wall=9.396723 comm=0.000581
+    P=1 rep=17 wall=9.392955 comm=0.000610
+    P=1 rep=18 wall=9.307695 comm=0.000557
+    P=1 rep=19 wall=9.346273 comm=0.000576
+    P=1 rep=20 wall=9.384845 comm=0.000600
+  >> P=1 MEDIAN: wall=9.359403 comm=0.000560
+    P=2 rep=1 wall=4.715837 comm=0.002039
+    P=2 rep=2 wall=4.721931 comm=0.002028
+    P=2 rep=3 wall=4.719349 comm=0.002902
+    P=2 rep=4 wall=4.732963 comm=0.002046
+    P=2 rep=5 wall=4.701294 comm=0.001920
+    P=2 rep=6 wall=4.724676 comm=0.001975
+    P=2 rep=7 wall=4.711666 comm=0.001892
+    P=2 rep=8 wall=4.715690 comm=0.002064
+    P=2 rep=9 wall=4.720551 comm=0.001911
+    P=2 rep=10 wall=4.727953 comm=0.001868
+    P=2 rep=11 wall=4.728934 comm=0.001955
+    P=2 rep=12 wall=4.732097 comm=0.001881
+    P=2 rep=13 wall=4.723613 comm=0.001867
+    P=2 rep=14 wall=4.708733 comm=0.001845
+    P=2 rep=15 wall=4.722115 comm=0.001889
+    P=2 rep=16 wall=4.721717 comm=0.001996
+    P=2 rep=17 wall=4.705864 comm=0.002007
+    P=2 rep=18 wall=4.701647 comm=0.002017
+    P=2 rep=19 wall=4.709443 comm=0.001870
+    P=2 rep=20 wall=4.733592 comm=0.001943
+  >> P=2 MEDIAN: wall=4.720551 comm=0.001911
+    P=4 rep=1 wall=2.405580 comm=0.031842
+    P=4 rep=2 wall=2.402586 comm=0.026550
+    P=4 rep=3 wall=2.423830 comm=0.016679
+    P=4 rep=4 wall=2.665907 comm=0.016179
+    P=4 rep=5 wall=2.425374 comm=0.022200
+    P=4 rep=6 wall=2.387829 comm=0.009139
+    P=4 rep=7 wall=2.388145 comm=0.020885
+    P=4 rep=8 wall=2.405637 comm=0.010721
+    P=4 rep=9 wall=2.380633 comm=0.019692
+    P=4 rep=10 wall=2.388032 comm=0.018871
+    P=4 rep=11 wall=2.385273 comm=0.028505
+    P=4 rep=12 wall=2.411509 comm=0.015945
+    P=4 rep=13 wall=2.394890 comm=0.016002
+    P=4 rep=14 wall=2.389747 comm=0.019128
+    P=4 rep=15 wall=2.387706 comm=0.011506
+    P=4 rep=16 wall=2.386917 comm=0.012126
+    P=4 rep=17 wall=2.410005 comm=0.007282
+    P=4 rep=18 wall=2.379575 comm=0.021995
+    P=4 rep=19 wall=2.392279 comm=0.011362
+    P=4 rep=20 wall=2.481625 comm=0.090664
+  >> P=4 MEDIAN: wall=2.392279 comm=0.011362
+    P=8 rep=1 wall=1.347724 comm=0.144188
+    P=8 rep=2 wall=1.309333 comm=0.108734
+    P=8 rep=3 wall=1.633013 comm=0.430256
+    P=8 rep=4 wall=1.238899 comm=0.009811
+    P=8 rep=5 wall=1.309727 comm=0.094335
+    P=8 rep=6 wall=1.213103 comm=0.015462
+    P=8 rep=7 wall=1.306607 comm=0.097472
+    P=8 rep=8 wall=1.273935 comm=0.080351
+    P=8 rep=9 wall=1.235956 comm=0.020004
+    P=8 rep=10 wall=1.575619 comm=0.377232
+    P=8 rep=11 wall=1.260466 comm=0.068881
+    P=8 rep=12 wall=1.250701 comm=0.043936
+    P=8 rep=13 wall=1.650432 comm=0.453054
+    P=8 rep=14 wall=1.220735 comm=0.012623
+    P=8 rep=15 wall=1.222365 comm=0.016967
+    P=8 rep=16 wall=1.251884 comm=0.058824
+    P=8 rep=17 wall=1.434253 comm=0.225426
+    P=8 rep=18 wall=1.215260 comm=0.015976
+    P=8 rep=19 wall=1.226718 comm=0.029172
+    P=8 rep=20 wall=1.219684 comm=0.019475
+  >> P=8 MEDIAN: wall=1.251884 comm=0.058824
+    P=16 rep=1 wall=0.909074 comm=0.044203
+    P=16 rep=2 wall=0.977061 comm=0.052068
+    P=16 rep=3 wall=0.842076 comm=0.014819
+    P=16 rep=4 wall=0.924669 comm=0.314496
+    P=16 rep=5 wall=0.850944 comm=0.236261
+    P=16 rep=6 wall=0.893171 comm=0.274206
+    P=16 rep=7 wall=0.900621 comm=0.286145
+    P=16 rep=8 wall=0.881151 comm=0.274308
+    P=16 rep=9 wall=0.633432 comm=0.018775
+    P=16 rep=10 wall=0.822244 comm=0.217011
+    P=16 rep=11 wall=0.776811 comm=0.163555
+    P=16 rep=12 wall=0.690333 comm=0.082901
+    P=16 rep=13 wall=0.986197 comm=0.008362
+    P=16 rep=14 wall=0.991715 comm=0.012996
+    P=16 rep=15 wall=0.933439 comm=0.306143
+    P=16 rep=16 wall=0.735024 comm=0.118640
+    P=16 rep=17 wall=0.623262 comm=0.016624
+    P=16 rep=18 wall=0.835433 comm=0.225206
+    P=16 rep=19 wall=0.905811 comm=0.301007
+    P=16 rep=20 wall=0.894311 comm=0.286213
+  >> P=16 MEDIAN: wall=0.881151 comm=0.274308
+    P=24 rep=1 wall=0.746730 comm=0.009015
+    P=24 rep=2 wall=0.725922 comm=0.271904
+    P=24 rep=3 wall=0.756797 comm=0.010547
+    P=24 rep=4 wall=0.755832 comm=0.008915
+    P=24 rep=5 wall=0.758505 comm=0.009367
+    P=24 rep=6 wall=0.693917 comm=0.097580
+    P=24 rep=7 wall=0.746805 comm=0.008651
+    P=24 rep=8 wall=0.466373 comm=0.027336
+    P=24 rep=9 wall=0.765154 comm=0.008246
+    P=24 rep=10 wall=0.742728 comm=0.036644
+    P=24 rep=11 wall=0.462913 comm=0.022647
+    P=24 rep=12 wall=0.722104 comm=0.008317
+    P=24 rep=13 wall=0.749622 comm=0.008709
+    P=24 rep=14 wall=0.747238 comm=0.008314
+    P=24 rep=15 wall=0.762656 comm=0.017313
+    P=24 rep=16 wall=0.681115 comm=0.227261
+    P=24 rep=17 wall=0.746083 comm=0.305962
+    P=24 rep=18 wall=0.706720 comm=0.243760
+    P=24 rep=19 wall=0.753717 comm=0.008533
+    P=24 rep=20 wall=0.730910 comm=0.299771
+  >> P=24 MEDIAN: wall=0.746083 comm=0.305962
+    P=32 rep=1 wall=0.570017 comm=0.030618
+    P=32 rep=2 wall=0.496750 comm=0.142913
+    P=32 rep=3 wall=0.531507 comm=0.011191
+    P=32 rep=4 wall=0.550245 comm=0.007861
+    P=32 rep=5 wall=0.566326 comm=0.024501
+    P=32 rep=6 wall=0.388945 comm=0.028101
+    P=32 rep=7 wall=0.554692 comm=0.011847
+    P=32 rep=8 wall=0.506520 comm=0.147354
+    P=32 rep=9 wall=0.376884 comm=0.024432
+    P=32 rep=10 wall=0.387961 comm=0.017975
+    P=32 rep=11 wall=0.376732 comm=0.026235
+    P=32 rep=12 wall=0.383528 comm=0.023320
+    P=32 rep=13 wall=0.382832 comm=0.026365
+    P=32 rep=14 wall=0.388842 comm=0.028251
+    P=32 rep=15 wall=0.379491 comm=0.024368
+    P=32 rep=16 wall=0.378979 comm=0.020646
+    P=32 rep=17 wall=0.548439 comm=0.007930
+    P=32 rep=18 wall=0.399055 comm=0.042234
+    P=32 rep=19 wall=0.383754 comm=0.017293
+    P=32 rep=20 wall=0.557820 comm=0.008279
+  >> P=32 MEDIAN: wall=0.388945 comm=0.028101
+
+=== RESULTS 3: SIZE SCALING (20 reps, P=16, 2000 steps) ===
+    N=108 rep=1 wall=0.043805 comm=0.013582
+    N=108 rep=2 wall=0.029391 comm=0.011999
+    N=108 rep=3 wall=0.031834 comm=0.011792
+    N=108 rep=4 wall=0.039676 comm=0.015989
+    N=108 rep=5 wall=0.030999 comm=0.011279
+    N=108 rep=6 wall=0.031733 comm=0.011213
+    N=108 rep=7 wall=0.040215 comm=0.016462
+    N=108 rep=8 wall=0.043114 comm=0.012401
+    N=108 rep=9 wall=0.029504 comm=0.011374
+    N=108 rep=10 wall=0.030757 comm=0.012346
+    N=108 rep=11 wall=0.047847 comm=0.014388
+    N=108 rep=12 wall=0.047728 comm=0.015470
+    N=108 rep=13 wall=0.071790 comm=0.020120
+    N=108 rep=14 wall=0.046239 comm=0.018054
+    N=108 rep=15 wall=0.046319 comm=0.015857
+    N=108 rep=16 wall=0.048595 comm=0.015235
+    N=108 rep=17 wall=0.048721 comm=0.016101
+    N=108 rep=18 wall=0.043416 comm=0.013306
+    N=108 rep=19 wall=0.047113 comm=0.014160
+    N=108 rep=20 wall=0.047639 comm=0.015572
+  >> N=108 MEDIAN: wall=0.043416 comm=0.013306
+    N=256 rep=1 wall=0.249643 comm=0.018005
+    N=256 rep=2 wall=0.267019 comm=0.022406
+    N=256 rep=3 wall=0.262419 comm=0.018261
+    N=256 rep=4 wall=0.259688 comm=0.022940
+    N=256 rep=5 wall=0.263792 comm=0.018749
+    N=256 rep=6 wall=0.259054 comm=0.055865
+    N=256 rep=7 wall=0.264720 comm=0.054290
+    N=256 rep=8 wall=0.258367 comm=0.020861
+    N=256 rep=9 wall=0.255052 comm=0.017646
+    N=256 rep=10 wall=0.256724 comm=0.018925
+    N=256 rep=11 wall=0.260053 comm=0.020055
+    N=256 rep=12 wall=0.256174 comm=0.018830
+    N=256 rep=13 wall=0.261700 comm=0.020553
+    N=256 rep=14 wall=0.296676 comm=0.060217
+    N=256 rep=15 wall=0.266302 comm=0.022568
+    N=256 rep=16 wall=0.260659 comm=0.023440
+    N=256 rep=17 wall=0.263467 comm=0.027169
+    N=256 rep=18 wall=0.256810 comm=0.019103
+    N=256 rep=19 wall=0.309487 comm=0.064435
+    N=256 rep=20 wall=0.306325 comm=0.070749
+  >> N=256 MEDIAN: wall=0.260659 comm=0.023440
+    N=500 rep=1 wall=0.958109 comm=0.032881
+    N=500 rep=2 wall=0.925340 comm=0.028707
+    N=500 rep=3 wall=0.922689 comm=0.026990
+    N=500 rep=4 wall=0.945814 comm=0.033169
+    N=500 rep=5 wall=0.941980 comm=0.027290
+    N=500 rep=6 wall=0.792260 comm=0.269838
+    N=500 rep=7 wall=0.885881 comm=0.064221
+    N=500 rep=8 wall=0.934168 comm=0.026922
+    N=500 rep=9 wall=0.935945 comm=0.029869
+    N=500 rep=10 wall=0.926777 comm=0.031295
+    N=500 rep=11 wall=0.877676 comm=0.362219
+    N=500 rep=12 wall=0.849827 comm=0.332233
+    N=500 rep=13 wall=0.876089 comm=0.036525
+    N=500 rep=14 wall=0.879889 comm=0.374570
+    N=500 rep=15 wall=0.889919 comm=0.074457
+    N=500 rep=16 wall=0.871076 comm=0.355322
+    N=500 rep=17 wall=0.872663 comm=0.073607
+    N=500 rep=18 wall=0.854540 comm=0.327000
+    N=500 rep=19 wall=0.881667 comm=0.077477
+    N=500 rep=20 wall=0.959293 comm=0.033048
+  >> N=500 MEDIAN: wall=0.885881 comm=0.064221
+    N=864 rep=1 wall=1.801942 comm=0.407480
+    N=864 rep=2 wall=1.619544 comm=0.245672
+    N=864 rep=3 wall=1.955328 comm=0.571309
+    N=864 rep=4 wall=1.697454 comm=0.316475
+    N=864 rep=5 wall=1.749373 comm=0.381058
+    N=864 rep=6 wall=1.740979 comm=0.361340
+    N=864 rep=7 wall=1.617904 comm=0.227659
+    N=864 rep=8 wall=1.727020 comm=0.357419
+    N=864 rep=9 wall=1.807431 comm=0.418029
+    N=864 rep=10 wall=1.945693 comm=0.567321
+    N=864 rep=11 wall=1.636535 comm=0.256684
+    N=864 rep=12 wall=1.728640 comm=0.346642
+    N=864 rep=13 wall=1.748605 comm=0.374138
+    N=864 rep=14 wall=1.767321 comm=0.379126
+    N=864 rep=15 wall=1.720061 comm=0.343266
+    N=864 rep=16 wall=1.461790 comm=0.080000
+    N=864 rep=17 wall=1.664955 comm=0.303436
+    N=864 rep=18 wall=1.444737 comm=0.072198
+    N=864 rep=19 wall=1.757072 comm=0.360089
+    N=864 rep=20 wall=1.758794 comm=0.120171
+  >> N=864 MEDIAN: wall=1.728640 comm=0.346642
+    N=1372 rep=1 wall=3.587727 comm=0.366180
+    N=1372 rep=2 wall=3.644184 comm=0.479758
+    N=1372 rep=3 wall=3.896549 comm=0.440194
+    N=1372 rep=4 wall=3.624174 comm=0.080217
+    N=1372 rep=5 wall=3.484113 comm=0.225268
+    N=1372 rep=6 wall=3.688655 comm=0.399234
+    N=1372 rep=7 wall=3.588003 comm=0.337337
+    N=1372 rep=8 wall=3.724983 comm=0.448537
+    N=1372 rep=9 wall=3.598018 comm=0.328387
+    N=1372 rep=10 wall=3.351052 comm=0.148792
+    N=1372 rep=11 wall=3.516544 comm=0.270670
+    N=1372 rep=12 wall=3.571554 comm=0.305627
+    N=1372 rep=13 wall=4.070415 comm=0.679199
+    N=1372 rep=14 wall=3.606148 comm=0.355271
+    N=1372 rep=15 wall=3.656190 comm=0.403363
+    N=1372 rep=16 wall=3.709530 comm=0.097260
+    N=1372 rep=17 wall=3.662551 comm=0.147535
+    N=1372 rep=18 wall=3.671991 comm=0.308252
+    N=1372 rep=19 wall=3.629183 comm=0.310959
+    N=1372 rep=20 wall=3.696793 comm=0.279701
+  >> N=1372 MEDIAN: wall=3.629183 comm=0.310959
+    N=2048 rep=1 wall=7.307761 comm=0.379754
+    N=2048 rep=2 wall=7.334786 comm=0.373589
+    N=2048 rep=3 wall=7.556363 comm=0.195727
+    N=2048 rep=4 wall=7.691708 comm=0.737921
+    N=2048 rep=5 wall=7.552325 comm=0.229032
+    N=2048 rep=6 wall=7.415589 comm=0.505091
+    N=2048 rep=7 wall=7.403512 comm=0.355469
+    N=2048 rep=8 wall=7.548431 comm=0.640838
+    N=2048 rep=9 wall=7.472418 comm=0.402646
+    N=2048 rep=10 wall=7.361454 comm=0.450333
+    N=2048 rep=11 wall=7.514041 comm=0.483130
+    N=2048 rep=12 wall=7.294647 comm=0.388944
+    N=2048 rep=13 wall=7.342499 comm=0.328028
+    N=2048 rep=14 wall=7.961084 comm=1.030573
+    N=2048 rep=15 wall=7.450915 comm=0.506269
+    N=2048 rep=16 wall=7.292827 comm=0.260262
+    N=2048 rep=17 wall=7.445794 comm=0.291842
+    N=2048 rep=18 wall=7.485953 comm=0.565292
+    N=2048 rep=19 wall=7.487702 comm=0.614394
+    N=2048 rep=20 wall=7.467678 comm=0.494867
+  >> N=2048 MEDIAN: wall=7.450915 comm=0.506269
+Manifest validation OK
+
+==========================================
+  ALL DONE — Sat  7 Mar 20:33:25 GMT 2026
+==========================================
+Manifest written to: out/manifest.json
+Saved out/plots/results1_ho_figure1_trajectories_dt0p01.png
+Saved out/plots/metadata/results1_ho_figure1_trajectories_dt0p01.json
+Saved out/plots/results1_ho_figure2_phase_space_dt0p01.png
+Saved out/plots/metadata/results1_ho_figure2_phase_space_dt0p01.json
+Saved out/plots/results1_ho_figure3_small_vs_large_dt.png
+Saved out/plots/metadata/results1_ho_figure3_small_vs_large_dt.json
+Saved out/plots/results1_ho_figure4_convergence_combined.png
+Saved out/plots/metadata/results1_ho_figure4_convergence_combined.json
+Saved out/plots/results1_ho_figure5_energy_diagnostic.png
+Saved out/plots/metadata/results1_ho_figure5_energy_diagnostic.json
+Saved out/summary/results1/results1_ho_small_large_summary.csv
+Saved out/summary/results1/results1_ho_small_large_summary.md
+Saved out/summary/results1/results1_ho_convergence_summary.csv
+Saved out/summary/results1/results1_ho_convergence_summary.md
+Saved out/summary/results1/results1_ho_endpoint_values.csv
+Saved out/summary/results1/results1_ho_endpoint_values.md
+Saved out/summary/results1/results1_ho_caption_notes.md
+Saved out/summary/results1/results1_results_section_notes.md
+All numerical sanity checks passed.
+Copied scripts/data/rahman1964_fig2_manual_anchors.csv -> out/summary/results2/rahman1964_fig2_manual_anchors.csv
+Saved out/plots/results2_lj_brief_energy_100step_production.png
+Saved out/plots/metadata/results2_lj_brief_energy_100step_production.json
+Saved out/plots/results2_lj_brief_temperature_100step_production.png
+Saved out/plots/metadata/results2_lj_brief_temperature_100step_production.json
+Saved out/plots/results2_lj_rdf_comparison_rahman1964.png
+Saved out/plots/metadata/results2_lj_rdf_comparison_rahman1964.json
+Saved out/summary/results2/results2_quantitative_summary_table.md
+Saved out/summary/results2/results2_quantitative_summary_table.csv
+Saved out/summary/results2/results2_quantitative_summary_table.json
+Saved out/summary/results2/results2_report_note.md
+Saved out/summary/results2/results2_recommended_figure_set.md
+Saved out/summary/results2/results2_rahman_extraction_note.md
+Saved out/summary/results2/results2_what_changed_and_why.md
+Updated out/manifest.json with results2_outputs
+Saved out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png
+Saved out/plots/metadata/results3_strong_scaling_speedup_efficiency_breakdown.json
+  Amdahl serial fraction f = 0.018232
+  Maximum theoretical speedup = 54.8x
+Saved out/plots/results3_problem_size_scaling_fixed_p16.png
+Saved out/plots/metadata/results3_problem_size_scaling_fixed_p16.json
+End: Sat  7 Mar 20:33:33 GMT 2026

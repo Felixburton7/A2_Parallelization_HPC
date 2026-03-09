@@ -413,6 +413,8 @@ int main(int argc, char* argv[]) {
     int grFrames = 0;
 
     // Synchronise clocks before timed production loop (exclude startup/output setup).
+    // Reset accumulated comm timer so reported communication matches this timing window.
+    ctx.commTime = 0.0;
     MPI_Barrier(MPI_COMM_WORLD);
     const double tStart = MPI_Wtime();
 
