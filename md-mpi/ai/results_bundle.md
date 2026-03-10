@@ -5,9 +5,9 @@
 | Field | Value |
 |---|---|
 | Purpose | Project-wide raw artifact bundle: manifest-linked CSV/notes with truncation for context-size control. |
-| Generation timestamp (UTC) | 2026-03-10T14:59:55Z |
-| Git commit | ad4ae8ee365425cab47d6852a67f471770ad6a8d |
-| Git working tree | dirty (15 changed paths) |
+| Generation timestamp (UTC) | 2026-03-10T17:33:34Z |
+| Git commit | ccf5f1350359a1bc69a1ba7a6e4a295ae0f6aaad |
+| Git working tree | dirty (16 changed paths) |
 | Generation succeeded | yes |
 | Generation status label | potential issue |
 | Generation note | Bundle generated with warnings; review missing/empty artifact keys. |
@@ -19,7 +19,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
+- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
 
 ## How to Read This File
 
@@ -43,7 +43,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
+- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
 
 ## Current Deliverables Map
 
@@ -95,7 +95,7 @@
 | At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
 | Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
 | The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
-| The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
+| The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
 | Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
 | Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
 | Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences. | `out/plots/results1_ho_figure2_phase_space_dt0p01.png` | medium | No major caveat recorded in metadata. |
@@ -138,9 +138,9 @@
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
 |---|---|---|---|---|
-| ai/audit_output.md | 2026-03-10T14:59:54Z | 2026-03-10T14:47:38Z | confirmed | appears current |
-| ai/results.md | 2026-03-10T14:59:54Z | 2026-03-10T14:47:38Z | confirmed | appears current |
-| ai/results_bundle.md | 2026-03-10T14:59:55Z | 2026-03-10T14:47:38Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/audit_output.md | 2026-03-10T17:33:33Z | 2026-03-10T16:35:08Z | confirmed | appears current |
+| ai/results.md | 2026-03-10T17:33:34Z | 2026-03-10T16:35:08Z | confirmed | appears current |
+| ai/results_bundle.md | 2026-03-10T17:33:34Z | 2026-03-10T16:35:08Z | confirmed | appears current (in-progress generation timestamp) |
 
 ## Diagnostics / Warnings
 
@@ -400,25 +400,25 @@ step,time,E_kin,E_pot,E_total,temperature
 
 ## Strong Scaling (median paired timings)
 ```csv
-P,N,wall_s,comm_s
-1,2048,47.472812,0.000000
-2,2048,23.741062,0.119966
-4,2048,12.324147,0.406551
-8,2048,6.321563,0.286507
-16,2048,3.297202,0.191395
-24,2048,2.409784,0.182140
-32,2048,1.950562,0.163879
+P,N,wall_s,comm_max_s
+1,2048,45.964284,0.001237
+2,2048,23.148061,0.244091
+4,2048,12.002224,0.660859
+8,2048,6.089443,0.554423
+16,2048,3.213709,0.367247
+24,2048,2.366625,0.318543
+32,2048,1.905649,0.289675
 ```
 
 ## Size Scaling (median paired timings)
 ```csv
-P,N,wall_s,comm_s
-16,108,0.069119,0.029157
-16,256,0.363684,0.067851
-16,500,1.432264,0.213095
-16,864,3.932334,0.437881
-16,1372,9.430750,0.926384
-16,2048,19.709470,1.586496
+P,N,wall_s,comm_max_s
+16,108,0.068603,0.034871
+16,256,0.361851,0.098397
+16,500,1.419085,0.323552
+16,864,3.848148,0.711096
+16,1372,9.102605,1.511462
+16,2048,19.195878,2.507444
 ```
 
 ## HO Convergence Summary (all dt values, final step only)

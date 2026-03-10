@@ -5,9 +5,9 @@
 | Field | Value |
 |---|---|
 | Purpose | Executable project-wide audit trace: build/tests/smoke runs and raw code/context evidence. |
-| Generation timestamp (UTC) | 2026-03-10T14:59:54Z |
-| Git commit | ad4ae8ee365425cab47d6852a67f471770ad6a8d |
-| Git working tree | dirty (14 changed paths) |
+| Generation timestamp (UTC) | 2026-03-10T17:33:33Z |
+| Git commit | ccf5f1350359a1bc69a1ba7a6e4a295ae0f6aaad |
+| Git working tree | dirty (15 changed paths) |
 | Generation succeeded | yes |
 | Generation status label | confirmed |
 | Generation note | Audit generation completed. |
@@ -19,7 +19,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
+- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
 
 ## How to Read This File
 
@@ -43,7 +43,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
+- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
 
 ## Current Deliverables Map
 
@@ -95,7 +95,7 @@
 | At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
 | Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
 | The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
-| The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
+| The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
 | Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
 | Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
 | Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences. | `out/plots/results1_ho_figure2_phase_space_dt0p01.png` | medium | No major caveat recorded in metadata. |
@@ -110,7 +110,7 @@
 | ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
 | Makefile | yes | 2026-03-08T17:02:51Z | confirmed |
 | tests/test_runner.cpp | yes | 2026-03-08T15:24:59Z | confirmed |
-| src/main.cpp | yes | 2026-03-09T22:43:00Z | confirmed |
+| src/main.cpp | yes | 2026-03-10T15:40:11Z | confirmed |
 | out/manifest.json | yes | 2026-03-09T16:34:08Z | confirmed |
 
 ### Expected file checks
@@ -127,9 +127,9 @@
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
 |---|---|---|---|---|
-| ai/audit_output.md | 2026-03-10T14:59:54Z | 2026-03-10T14:47:38Z | confirmed | appears current (in-progress generation timestamp) |
-| ai/results.md | 2026-03-09T22:16:33Z | 2026-03-10T14:47:38Z | potential issue | older than latest source/evidence; consider regeneration |
-| ai/results_bundle.md | 2026-03-09T22:16:34Z | 2026-03-10T14:47:38Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/audit_output.md | 2026-03-10T17:33:33Z | 2026-03-10T16:35:08Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/results.md | 2026-03-10T14:59:54Z | 2026-03-10T16:35:08Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/results_bundle.md | 2026-03-10T14:59:55Z | 2026-03-10T16:35:08Z | potential issue | older than latest source/evidence; consider regeneration |
 
 ## Diagnostics / Warnings
 
@@ -169,8 +169,8 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-10T14:59:45Z |
-| Git commit | ad4ae8ee365425cab47d6852a67f471770ad6a8d |
+| Timestamp (UTC) | 2026-03-10T17:33:26Z |
+| Git commit | ccf5f1350359a1bc69a1ba7a6e4a295ae0f6aaad |
 | Hostname | dock-sc-r1l.dar.private.cam.ac.uk |
 | uname -a | Darwin dock-sc-r1l.dar.private.cam.ac.uk 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -195,8 +195,8 @@
 ./ai/archive/task_overview.md
 ./ai/audit.sh
 ./ai/audit_output.md
-./ai/audit_output.tmp.lMAnLm
-./ai/audit_preface.tmp.A2FowJ
+./ai/audit_output.tmp.ReXLiH
+./ai/audit_preface.tmp.MSDD91
 ./ai/context_report.py
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
@@ -215,8 +215,10 @@
 ./include/md/rng.hpp
 ./include/md/system.hpp
 ./md_solver
+./scripts/__pycache__/plot_scaling.cpython-313.pyc
 ./scripts/__pycache__/plot_style.cpython-311.pyc
 ./scripts/__pycache__/plot_style.cpython-313.pyc
+./scripts/__pycache__/validate_manifest.cpython-313.pyc
 ./scripts/append_manifest.py
 ./scripts/check_gr_tolerance.py
 ./scripts/check_tolerance.py
@@ -248,7 +250,7 @@
 ```
 total 7720
 drwx------  22 felix  staff     704 Mar  7 20:33 .
-drwx------  27 felix  staff     864 Mar  9 20:07 ..
+drwx------  28 felix  staff     896 Mar 10 17:33 ..
 -rw-------   1 felix  staff   77228 Mar  4 17:17 ho_convergence.png
 -rw-------   1 felix  staff   48921 Mar  4 17:17 ho_energy.png
 -rw-------   1 felix  staff  118022 Mar  4 17:17 ho_trajectories.png
@@ -265,8 +267,8 @@ drwx------  13 felix  staff     416 Mar  9 16:50 metadata
 -rw-------   1 felix  staff  316407 Mar  7 20:33 results2_lj_brief_energy_100step_production.png
 -rw-------   1 felix  staff  153526 Mar  7 20:33 results2_lj_brief_temperature_100step_production.png
 -rw-------   1 felix  staff  267278 Mar  7 20:33 results2_lj_rdf_comparison_rahman1964.png
--rw-------   1 felix  staff  293875 Mar 10 14:47 results3_problem_size_scaling_fixed_p16.png
--rw-------   1 felix  staff  279742 Mar 10 14:47 results3_strong_scaling_speedup_efficiency_breakdown.png
+-rw-------   1 felix  staff  312854 Mar 10 16:35 results3_problem_size_scaling_fixed_p16.png
+-rw-------   1 felix  staff  297714 Mar 10 16:35 results3_strong_scaling_speedup_efficiency_breakdown.png
 -rw-------   1 felix  staff   88489 Mar  4 17:17 scaling_size.png
 -rw-------   1 felix  staff   78766 Mar  4 17:17 scaling_strong.png
 ```
@@ -404,13 +406,14 @@ ALL TESTS PASSED
 ### 5a. HO — Velocity-Verlet (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-=== MD Solver ===
-Mode: ho | Integrator: verlet
-N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
-Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
-HO mode: periodic box size is not used
-==================
-Wall time: 0.003525 s (max across 1 ranks)
+[dock-sc-r1l.dar.private.cam.ac.uk:99051] [prterun-dock-sc-r1l-99051@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99051] [prterun-dock-sc-r1l-99051@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99051] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+[99051] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3 lines):**
@@ -430,13 +433,11 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5b. HO — RK4 (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-=== MD Solver ===
-Mode: ho | Integrator: rk4
-N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
-Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
-HO mode: periodic box size is not used
-==================
-Wall time: 0.003983 s (max across 1 ranks)
+[dock-sc-r1l.dar.private.cam.ac.uk:99054] [prterun-dock-sc-r1l-99054@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99054] [prterun-dock-sc-r1l-99054@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99054] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[99054] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+--------------------------------------------------------------------------
 ```
 
 **Output (first 6 + last 3):**
@@ -456,13 +457,18 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5c. HO — Euler (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-=== MD Solver ===
-Mode: ho | Integrator: euler
-N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
-Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
-HO mode: periodic box size is not used
-==================
-Wall time: 0.003440 s (max across 1 ranks)
+[dock-sc-r1l.dar.private.cam.ac.uk:99057] [prterun-dock-sc-r1l-99057@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99057] [prterun-dock-sc-r1l-99057@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99057] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
+at least one available network for out-of-band messaging.
+--------------------------------------------------------------------------
+[99057] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
@@ -482,166 +488,140 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
-=== Initial Conditions (Rank 0) ===
-Seed: 42 | FCC lattice | Box-Muller velocities
-Perturbation: 0.0100 sigma | T_initial: 94.400000 K
-===================================
-Startup rescale step 1/50: lambda = 9.999999999999999e-01, T_before = 94.400000 K, target = 94.400000 K
-Startup rescale step 2/50: lambda = 1.000554877641383e+00, T_before = 94.295326 K, target = 94.400000 K
-Startup rescale step 3/50: lambda = 1.001498776481246e+00, T_before = 94.117666 K, target = 94.400000 K
-Startup rescale step 4/50: lambda = 1.002521267698682e+00, T_before = 93.925779 K, target = 94.400000 K
-Startup rescale step 5/50: lambda = 1.003660072928603e+00, T_before = 93.712754 K, target = 94.400000 K
-Startup rescale step 6/50: lambda = 1.004955613062417e+00, T_before = 93.471289 K, target = 94.400000 K
-Startup rescale step 7/50: lambda = 1.006450727263260e+00, T_before = 93.193787 K, target = 94.400000 K
-Startup rescale step 8/50: lambda = 1.008189156197059e+00, T_before = 92.872674 K, target = 94.400000 K
-Startup rescale step 9/50: lambda = 1.010208435879377e+00, T_before = 92.501764 K, target = 94.400000 K
-Startup rescale step 10/50: lambda = 1.012542591158752e+00, T_before = 92.075777 K, target = 94.400000 K
-Startup rescale step 11/50: lambda = 1.015193706053781e+00, T_before = 91.595505 K, target = 94.400000 K
-Startup rescale step 12/50: lambda = 1.018115024804627e+00, T_before = 91.070622 K, target = 94.400000 K
-Startup rescale step 13/50: lambda = 1.021216008534779e+00, T_before = 90.518379 K, target = 94.400000 K
-Startup rescale step 14/50: lambda = 1.024295894062565e+00, T_before = 89.974850 K, target = 94.400000 K
-Startup rescale step 15/50: lambda = 1.027049158400991e+00, T_before = 89.493096 K, target = 94.400000 K
-Startup rescale step 16/50: lambda = 1.029150810591021e+00, T_before = 89.127957 K, target = 94.400000 K
-Startup rescale step 17/50: lambda = 1.030332085024976e+00, T_before = 88.923704 K, target = 94.400000 K
-Startup rescale step 18/50: lambda = 1.030473240735531e+00, T_before = 88.899344 K, target = 94.400000 K
-Startup rescale step 19/50: lambda = 1.029678364278692e+00, T_before = 89.036652 K, target = 94.400000 K
-Startup rescale step 20/50: lambda = 1.028193446250227e+00, T_before = 89.294011 K, target = 94.400000 K
-Startup rescale step 21/50: lambda = 1.026204269492264e+00, T_before = 89.640518 K, target = 94.400000 K
-Startup rescale step 22/50: lambda = 1.023804756229235e+00, T_before = 90.061196 K, target = 94.400000 K
-Startup rescale step 23/50: lambda = 1.021033704859721e+00, T_before = 90.550705 K, target = 94.400000 K
-Startup rescale step 24/50: lambda = 1.017892546148408e+00, T_before = 91.110436 K, target = 94.400000 K
-Startup rescale step 25/50: lambda = 1.014433135766224e+00, T_before = 91.732904 K, target = 94.400000 K
-Startup rescale step 26/50: lambda = 1.010803967900348e+00, T_before = 92.392798 K, target = 94.400000 K
-Startup rescale step 27/50: lambda = 1.007180454989398e+00, T_before = 93.058793 K, target = 94.400000 K
-Startup rescale step 28/50: lambda = 1.003763043104544e+00, T_before = 93.693528 K, target = 94.400000 K
-Startup rescale step 29/50: lambda = 1.000752561769121e+00, T_before = 94.258077 K, target = 94.400000 K
-Startup rescale step 30/50: lambda = 9.982756142734640e-01, T_before = 94.726408 K, target = 94.400000 K
-Startup rescale step 31/50: lambda = 9.963969313600508e-01, T_before = 95.083954 K, target = 94.400000 K
-Startup rescale step 32/50: lambda = 9.951401646596638e-01, T_before = 95.324269 K, target = 94.400000 K
-Startup rescale step 33/50: lambda = 9.944783429440419e-01, T_before = 95.451187 K, target = 94.400000 K
-Startup rescale step 34/50: lambda = 9.943646876548935e-01, T_before = 95.473009 K, target = 94.400000 K
-Startup rescale step 35/50: lambda = 9.947272752386551e-01, T_before = 95.403420 K, target = 94.400000 K
-Startup rescale step 36/50: lambda = 9.955008328446894e-01, T_before = 95.255210 K, target = 94.400000 K
-Startup rescale step 37/50: lambda = 9.966354597852637e-01, T_before = 95.038445 K, target = 94.400000 K
-Startup rescale step 38/50: lambda = 9.980729448199758e-01, T_before = 94.764882 K, target = 94.400000 K
-Startup rescale step 39/50: lambda = 9.997465980754853e-01, T_before = 94.447860 K, target = 94.400000 K
-Startup rescale step 40/50: lambda = 1.001561399173793e+00, T_before = 94.105897 K, target = 94.400000 K
-Startup rescale step 41/50: lambda = 1.003421850012588e+00, T_before = 93.757256 K, target = 94.400000 K
-Startup rescale step 42/50: lambda = 1.005228473399085e+00, T_before = 93.420552 K, target = 94.400000 K
-Startup rescale step 43/50: lambda = 1.006889243861888e+00, T_before = 93.112629 K, target = 94.400000 K
-Startup rescale step 44/50: lambda = 1.008325591523771e+00, T_before = 92.847543 K, target = 94.400000 K
-Startup rescale step 45/50: lambda = 1.009521504735243e+00, T_before = 92.627692 K, target = 94.400000 K
-Startup rescale step 46/50: lambda = 1.010497330715534e+00, T_before = 92.448880 K, target = 94.400000 K
-Startup rescale step 47/50: lambda = 1.011257626882456e+00, T_before = 92.309920 K, target = 94.400000 K
-Startup rescale step 48/50: lambda = 1.011751477531147e+00, T_before = 92.219826 K, target = 94.400000 K
-Startup rescale step 49/50: lambda = 1.011823943944249e+00, T_before = 92.206617 K, target = 94.400000 K
-Startup rescale step 50/50: lambda = 1.011208781320699e+00, T_before = 92.318838 K, target = 94.400000 K
-Startup->production rescale: lambda = 1.009614991355338e+00, T_before = 92.610539 K
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 108 | P = 1 | timesteps = 10 | frames = 11 (step 0..10) | dt = 1.000e-14
-LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
-Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
-L = 1.738930e-09 m (5.1145 sigma)
-Target temperature = 94.4 K | seed = 42
-Startup timesteps = 50 | production timesteps = 10 | total executed = 60
-Production simulated time = 1.000e-13 s (= production_steps * dt)
-production_start_step = 0 (production-only output)
-Startup boundary temperature before final rescale: 92.610539 K
-Startup boundary temperature after final rescale: 94.400000 K
-==================
-Wall time: 0.000713 s (max across 1 ranks)
+[dock-sc-r1l.dar.private.cam.ac.uk:99060] [prterun-dock-sc-r1l-99060@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99060] [prterun-dock-sc-r1l-99060@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99060] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
+at least one available network for out-of-band messaging.
+--------------------------------------------------------------------------
+[99060] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 92.6105392665026, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-10T14:59:52Z
+# mode: lj, integrator: verlet, N: 864, P: 1, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914354, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-10T14:59:53Z
 step,time,E_kin,E_pot,E_total,temperature
-0,0,2.09184891288e-19,-9.20669527803387e-19,-7.11484636515388e-19,94.3999999999999
-1,1e-14,2.0629946851695e-19,-9.17766278588534e-19,-7.11466810071583e-19,93.0978796226154
-2,2e-14,2.04827441248049e-19,-9.1614257594132e-19,-7.11315134693272e-19,92.4335898962938
-3,3e-14,2.0481582202525e-19,-9.16299395319138e-19,-7.11483573293887e-19,92.4283464266273
-4,4e-14,2.06045870018546e-19,-9.17656698021879e-19,-7.11610828003333e-19,92.9834368533411
-5,5e-14,2.08162886638895e-19,-9.19490886894372e-19,-7.11328000255477e-19,93.9387944211389
-6,6e-14,2.10816355339998e-19,-9.22110217867209e-19,-7.11293862527211e-19,95.1362396278256
-7,7e-14,2.13717071153711e-19,-9.24919772743325e-19,-7.11202701589614e-19,96.445261379485
-8,8e-14,2.16620526703765e-19,-9.27835684081094e-19,-7.11215157377329e-19,97.7555195068167
-9,9e-14,2.19305621768438e-19,-9.30631300561334e-19,-7.11325678792896e-19,98.9672369140559
-10,1e-13,2.21586992845223e-19,-9.32970213245798e-19,-7.11383220400575e-19,99.9967636084672
+0,0,1.687164123192e-18,-7.47194927673328e-18,-5.78478515354128e-18,94.3999999999999
+1,1e-14,1.68447578135402e-18,-7.46869101577964e-18,-5.78421523442562e-18,94.2495822273503
+2,2e-14,1.68047549629073e-18,-7.46552676001374e-18,-5.785051263723e-18,94.0257587683379
+3,3e-14,1.675573444974e-18,-7.46109573619852e-18,-5.78552229122452e-18,93.7514797945626
+4,4e-14,1.67031939809281e-18,-7.45631122530418e-18,-5.78599182721137e-18,93.4575060081559
+5,5e-14,1.66525309392628e-18,-7.4517277580709e-18,-5.78647466414463e-18,93.174036779083
+6,6e-14,1.66078214268927e-18,-7.44785276849725e-18,-5.78707062580798e-18,92.9238786640711
+7,7e-14,1.65716146413624e-18,-7.44493273747193e-18,-5.78777127333569e-18,92.7212949019413
+8,8e-14,1.65460549217326e-18,-7.4422058796724e-18,-5.78760038749914e-18,92.5782834722954
+9,9e-14,1.6534278355732e-18,-7.44166241106346e-18,-5.78823457549026e-18,92.5123913747116
+10,1e-13,1.65412668053239e-18,-7.44185951670639e-18,-5.787732836174e-18,92.5514930621172
+11,1.1e-13,1.65729060008612e-18,-7.44519272334869e-18,-5.78790212326257e-18,92.7285203007638
+12,1.2e-13,1.6633765818926e-18,-7.45121991594431e-18,-5.78784333405171e-18,93.0690424080291
+13,1.3e-13,1.67243894775827e-18,-7.46066468725163e-18,-5.78822573949337e-18,93.5760987909615
+14,1.4e-13,1.68396198202923e-18,-7.47224354282029e-18,-5.78828156079106e-18,94.2208341905743
+15,1.5e-13,1.69693087203493e-18,-7.48574394643748e-18,-5.78881307440254e-18,94.946467932846
+16,1.6e-13,1.71004835930324e-18,-7.49863361001208e-18,-5.78858525070884e-18,95.6804159709217
+17,1.7e-13,1.72204246107605e-18,-7.51038292801881e-18,-5.78834046694276e-18,96.3515084815964
+18,1.8e-13,1.7319859370743e-18,-7.52014405717191e-18,-5.78815812009761e-18,96.9078646305515
+19,1.9e-13,1.73943052715559e-18,-7.52748093519145e-18,-5.78805040803586e-18,97.3244034213031
+20,2e-13,1.74437066635724e-18,-7.53138155080626e-18,-5.78701088444901e-18,97.6008134837422
+21,2.1e-13,1.74710459181086e-18,-7.53494587371041e-18,-5.78784128189955e-18,97.7537817452611
+22,2.2e-13,1.7480215327952e-18,-7.53528197899024e-18,-5.78726044619504e-18,97.8050863147046
+23,2.3e-13,1.74742061897183e-18,-7.53552700056766e-18,-5.78810638159584e-18,97.7714640581936
+24,2.4e-13,1.74550899555746e-18,-7.5337051750981e-18,-5.78819617954065e-18,97.6645051394755
+25,2.5e-13,1.74247299270064e-18,-7.53152236931637e-18,-5.78904937661573e-18,97.494635080159
+26,2.6e-13,1.73848649862318e-18,-7.52773313127077e-18,-5.78924663264759e-18,97.2715832526935
+27,2.7e-13,1.73367522014907e-18,-7.52241513584086e-18,-5.78873991569179e-18,97.0023831898706
+28,2.8e-13,1.72806293984258e-18,-7.51757447856569e-18,-5.78951153872311e-18,96.6883655708078
+29,2.9e-13,1.72154970390465e-18,-7.51082018075638e-18,-5.78927047685173e-18,96.3239377928053
+30,3e-13,1.7139722306459e-18,-7.5023855342226e-18,-5.78841330357669e-18,95.8999639388139
+31,3.1e-13,1.70529887922345e-18,-7.49400830958688e-18,-5.78870943036343e-18,95.4146736442748
+32,3.2e-13,1.69577237052573e-18,-7.48450826870902e-18,-5.78873589818329e-18,94.8816475985553
+33,3.3e-13,1.68590120501956e-18,-7.47500978017349e-18,-5.78910857515394e-18,94.3293373573798
+34,3.4e-13,1.67634845633446e-18,-7.46511942093019e-18,-5.78877096459573e-18,93.7948431351063
+35,3.5e-13,1.6677929659191e-18,-7.45556989390052e-18,-5.78777692798142e-18,93.3161473851741
+36,3.6e-13,1.66083877639135e-18,-7.44858603902785e-18,-5.7877472626365e-18,92.9270474260208
+37,3.7e-13,1.65600850014213e-18,-7.44317686152285e-18,-5.78716836138073e-18,92.6567844020157
+38,3.8e-13,1.65372773163601e-18,-7.44012414698609e-18,-5.78639641535008e-18,92.5291711224195
+39,3.9e-13,1.65418403315184e-18,-7.44003268636633e-18,-5.78584865321449e-18,92.5547020488435
+40,4e-13,1.65718453956044e-18,-7.44352897663574e-18,-5.7863444370753e-18,92.722586015245
+41,4.1e-13,1.66213404395564e-18,-7.44737086246314e-18,-5.78523681850749e-18,92.9995200778442
+42,4.2e-13,1.66814274561946e-18,-7.45348725606079e-18,-5.78534451044134e-18,93.3357182160495
+43,4.3e-13,1.67431455296978e-18,-7.45888474195169e-18,-5.78457018898191e-18,93.6810424236129
+44,4.4e-13,1.67999072999343e-18,-7.46513317145133e-18,-5.7851424414579e-18,93.9986351839537
+45,4.5e-13,1.68470940965253e-18,-7.4695172552676e-18,-5.78480784561507e-18,94.2626541692412
+46,4.6e-13,1.68806190930705e-18,-7.47309571905642e-18,-5.78503380974938e-18,94.4502328185476
+47,4.7e-13,1.68958647214974e-18,-7.47469596346912e-18,-5.78510949131938e-18,94.5355349716528
+48,4.8e-13,1.68887579098233e-18,-7.47510382499278e-18,-5.78622803401045e-18,94.4957710261768
+49,4.9e-13,1.68583934152298e-18,-7.47178981302243e-18,-5.78595047149945e-18,94.3258759786103
+50,5e-13,1.68079724462429e-18,-7.46700882633075e-18,-5.78621158170646e-18,94.0437611916173
+51,5.1e-13,1.67439991753882e-18,-7.46152265511313e-18,-5.78712273757432e-18,93.6858187315051
+52,5.2e-13,1.66747541438195e-18,-7.45449092240379e-18,-5.78701550802184e-18,93.2983797805322
+53,5.3e-13,1.66091692597013e-18,-7.44803402430377e-18,-5.78711709833364e-18,92.9314200416633
+54,5.4e-13,1.6555948873512e-18,-7.44246525474839e-18,-5.7868703673972e-18,92.6336419898891
+55,5.5e-13,1.6522376336817e-18,-7.43953363575759e-18,-5.78729600207589e-18,92.4457973445201
+56,5.6e-13,1.65132600997293e-18,-7.43917348238068e-18,-5.78784747240775e-18,92.3947902866264
+57,5.7e-13,1.6530033651823e-18,-7.4408659264218e-18,-5.7878625612395e-18,92.4886414594838
+58,5.8e-13,1.65702395432951e-18,-7.44471947643592e-18,-5.78769552210641e-18,92.7136009701083
+59,5.9e-13,1.66283200787085e-18,-7.45096766852001e-18,-5.78813566064916e-18,93.0385724691851
+60,6e-13,1.66972873205194e-18,-7.45769750402273e-18,-5.7879687719708e-18,93.4244571343136
+61,6.1e-13,1.67705685909187e-18,-7.46449500676405e-18,-5.78743814767218e-18,93.8344795992655
+62,6.2e-13,1.68429376182607e-18,-7.47118370749729e-18,-5.78688994567122e-18,94.2393978930566
+63,6.3e-13,1.69109353519156e-18,-7.4785366055783e-18,-5.78744307038674e-18,94.619857978047
+64,6.4e-13,1.69723908788048e-18,-7.48387031635612e-18,-5.78663122847564e-18,94.9637131880169
+65,6.5e-13,1.70253846586652e-18,-7.4887765334233e-18,-5.78623806755678e-18,95.26022333484
+66,6.6e-13,1.70677283533266e-18,-7.49312735702395e-18,-5.78635452169129e-18,95.497144255638
+67,6.7e-13,1.70966668273834e-18,-7.49583472186753e-18,-5.78616803912919e-18,95.6590604505956
+68,6.8e-13,1.71092556816934e-18,-7.49635053865602e-18,-5.78542497048668e-18,95.7294974537614
+69,6.9e-13,1.71029490127496e-18,-7.49614154995616e-18,-5.7858466486812e-18,95.6942104570717
+70,7e-13,1.7076202140512e-18,-7.49205691500308e-18,-5.78443670095188e-18,95.5445566857211
+71,7.1e-13,1.7029018003409e-18,-7.48697009197181e-18,-5.78406829163091e-18,95.2805525807682
+72,7.2e-13,1.6963457102432e-18,-7.4809445742481e-18,-5.7845988640049e-18,94.9137270320764
+73,7.3e-13,1.68840858749515e-18,-7.4733641045854e-18,-5.78495551709025e-18,94.4696301139896
+74,7.4e-13,1.67983089699382e-18,-7.46436962712612e-18,-5.7845387301323e-18,93.9896922275716
+75,7.5e-13,1.67159821361495e-18,-7.45581419537416e-18,-5.78421598175921e-18,93.5290581373354
+76,7.6e-13,1.66477640869556e-18,-7.45040119603428e-18,-5.78562478733873e-18,93.1473653455445
+77,7.7e-13,1.66031096473095e-18,-7.44574710833835e-18,-5.7854361436074e-18,92.8975153727621
+78,7.8e-13,1.65881830201206e-18,-7.44403863136079e-18,-5.78522032934873e-18,92.8139980914696
+79,7.9e-13,1.66042409100495e-18,-7.44530837146013e-18,-5.78488428045518e-18,92.9038450001641
+80,8e-13,1.6647134835938e-18,-7.45021118290105e-18,-5.78549769930724e-18,93.1438445679723
+81,8.1e-13,1.67077911330439e-18,-7.45659990105184e-18,-5.78582078774745e-18,93.4832279372657
+82,8.2e-13,1.67744895311606e-18,-7.46298108551396e-18,-5.7855321323979e-18,93.8564179959955
+83,8.3e-13,1.68363886331392e-18,-7.46854861321558e-18,-5.78490974990166e-18,94.2027550918634
+84,8.4e-13,1.6886056495076e-18,-7.47327652659135e-18,-5.78467087708375e-18,94.4806561035303
+85,8.5e-13,1.69204171719358e-18,-7.47659996968837e-18,-5.78455825249479e-18,94.6729105410788
+86,8.6e-13,1.69401364943217e-18,-7.47808414923524e-18,-5.78407049980307e-18,94.7832438517293
+87,8.7e-13,1.69483899609822e-18,-7.47892646892905e-18,-5.78408747283083e-18,94.8294235471154
+88,8.8e-13,1.6949486953557e-18,-7.47855979565366e-18,-5.78361110029796e-18,94.8355614265095
+89,8.9e-13,1.69472100344872e-18,-7.47876353857899e-18,-5.78404253513026e-18,94.822821636869
+90,9e-13,1.69442537753834e-18,-7.47835490946036e-18,-5.78392953192202e-18,94.8062808122054
+91,9.1e-13,1.69419059567169e-18,-7.47806436382232e-18,-5.78387376815064e-18,94.7931443260111
+92,9.2e-13,1.69402683593984e-18,-7.47789746893802e-18,-5.78387063299818e-18,94.7839816615887
+93,9.3e-13,1.6939285024503e-18,-7.47764403876902e-18,-5.78371553631871e-18,94.7784797182479
+94,9.4e-13,1.69394479660581e-18,-7.47770834591809e-18,-5.78376354931229e-18,94.7793914068374
+95,9.5e-13,1.69414354335647e-18,-7.47749908245355e-18,-5.78335553909708e-18,94.7905116606434
+96,9.6e-13,1.69459173731494e-18,-7.47785073190454e-18,-5.78325899458959e-18,94.8155889540131
+97,9.7e-13,1.69527786433768e-18,-7.47915579047344e-18,-5.78387792613576e-18,94.8539790489993
+98,9.8e-13,1.69603745977495e-18,-7.47982699115722e-18,-5.78378953138227e-18,94.8964798397003
+99,9.9e-13,1.69664840466377e-18,-7.4799966425522e-18,-5.78334823788842e-18,94.9306633531548
+100,1e-12,1.69688683932431e-18,-7.48014957868897e-18,-5.78326273936466e-18,94.9440042200242
 ```
 
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
-=== Initial Conditions (Rank 0) ===
-Seed: 42 | FCC lattice | Box-Muller velocities
-Perturbation: 0.0100 sigma | T_initial: 94.400000 K
-===================================
-Startup rescale step 1/50: lambda = 9.999999999999999e-01, T_before = 94.400000 K, target = 94.400000 K
-Startup rescale step 2/50: lambda = 1.000097292737305e+00, T_before = 94.381634 K, target = 94.400000 K
-Startup rescale step 3/50: lambda = 1.001011016385241e+00, T_before = 94.209409 K, target = 94.400000 K
-Startup rescale step 4/50: lambda = 1.001985803587490e+00, T_before = 94.026194 K, target = 94.400000 K
-Startup rescale step 5/50: lambda = 1.003058445169696e+00, T_before = 93.825204 K, target = 94.400000 K
-Startup rescale step 6/50: lambda = 1.004268752957570e+00, T_before = 93.599191 K, target = 94.400000 K
-Startup rescale step 7/50: lambda = 1.005659921324776e+00, T_before = 93.340411 K, target = 94.400000 K
-Startup rescale step 8/50: lambda = 1.007278166467727e+00, T_before = 93.040739 K, target = 94.400000 K
-Startup rescale step 9/50: lambda = 1.009170882757520e+00, T_before = 92.692068 K, target = 94.400000 K
-Startup rescale step 10/50: lambda = 1.011375281881796e+00, T_before = 92.288444 K, target = 94.400000 K
-Startup rescale step 11/50: lambda = 1.013935968234880e+00, T_before = 91.822885 K, target = 94.400000 K
-Startup rescale step 12/50: lambda = 1.016829248312590e+00, T_before = 91.301084 K, target = 94.400000 K
-Startup rescale step 13/50: lambda = 1.019999664834544e+00, T_before = 90.734393 K, target = 94.400000 K
-Startup rescale step 14/50: lambda = 1.023314540748604e+00, T_before = 90.147503 K, target = 94.400000 K
-Startup rescale step 15/50: lambda = 1.026442110084154e+00, T_before = 89.598981 K, target = 94.400000 K
-Startup rescale step 16/50: lambda = 1.028928556239429e+00, T_before = 89.166466 K, target = 94.400000 K
-Startup rescale step 17/50: lambda = 1.030283213707263e+00, T_before = 88.932141 K, target = 94.400000 K
-Startup rescale step 18/50: lambda = 1.030093168033584e+00, T_before = 88.964959 K, target = 94.400000 K
-Startup rescale step 19/50: lambda = 1.028381069024043e+00, T_before = 89.261432 K, target = 94.400000 K
-Startup rescale step 20/50: lambda = 1.025595246283770e+00, T_before = 89.747012 K, target = 94.400000 K
-Startup rescale step 21/50: lambda = 1.022389332616122e+00, T_before = 90.310735 K, target = 94.400000 K
-Startup rescale step 22/50: lambda = 1.019138319950166e+00, T_before = 90.887829 K, target = 94.400000 K
-Startup rescale step 23/50: lambda = 1.015887900197463e+00, T_before = 91.470366 K, target = 94.400000 K
-Startup rescale step 24/50: lambda = 1.012443364100991e+00, T_before = 92.093826 K, target = 94.400000 K
-Startup rescale step 25/50: lambda = 1.008664033055558e+00, T_before = 92.785246 K, target = 94.400000 K
-Startup rescale step 26/50: lambda = 1.004559224869558e+00, T_before = 93.545070 K, target = 94.400000 K
-Startup rescale step 27/50: lambda = 1.000354370355204e+00, T_before = 94.333130 K, target = 94.400000 K
-Startup rescale step 28/50: lambda = 9.963316219394099e-01, T_before = 95.096420 K, target = 94.400000 K
-Startup rescale step 29/50: lambda = 9.927933660346838e-01, T_before = 95.775463 K, target = 94.400000 K
-Startup rescale step 30/50: lambda = 9.899566179085865e-01, T_before = 96.325144 K, target = 94.400000 K
-Startup rescale step 31/50: lambda = 9.879185951103187e-01, T_before = 96.722981 K, target = 94.400000 K
-Startup rescale step 32/50: lambda = 9.866944672582958e-01, T_before = 96.963126 K, target = 94.400000 K
-Startup rescale step 33/50: lambda = 9.862226701999177e-01, T_before = 97.055920 K, target = 94.400000 K
-Startup rescale step 34/50: lambda = 9.864251119066297e-01, T_before = 97.016087 K, target = 94.400000 K
-Startup rescale step 35/50: lambda = 9.872031927960692e-01, T_before = 96.863218 K, target = 94.400000 K
-Startup rescale step 36/50: lambda = 9.884583033297875e-01, T_before = 96.617387 K, target = 94.400000 K
-Startup rescale step 37/50: lambda = 9.900827575253606e-01, T_before = 96.300602 K, target = 94.400000 K
-Startup rescale step 38/50: lambda = 9.920272600726052e-01, T_before = 95.923448 K, target = 94.400000 K
-Startup rescale step 39/50: lambda = 9.942153220547932e-01, T_before = 95.501697 K, target = 94.400000 K
-Startup rescale step 40/50: lambda = 9.965952711012718e-01, T_before = 95.046111 K, target = 94.400000 K
-Startup rescale step 41/50: lambda = 9.990609503718284e-01, T_before = 94.577543 K, target = 94.400000 K
-Startup rescale step 42/50: lambda = 1.001514641845916e+00, T_before = 94.114684 K, target = 94.400000 K
-Startup rescale step 43/50: lambda = 1.003767648996644e+00, T_before = 93.692668 K, target = 94.400000 K
-Startup rescale step 44/50: lambda = 1.005644216307353e+00, T_before = 93.343326 K, target = 94.400000 K
-Startup rescale step 45/50: lambda = 1.006927247486000e+00, T_before = 93.105601 K, target = 94.400000 K
-Startup rescale step 46/50: lambda = 1.007423294570262e+00, T_before = 93.013935 K, target = 94.400000 K
-Startup rescale step 47/50: lambda = 1.006967866521357e+00, T_before = 93.098090 K, target = 94.400000 K
-Startup rescale step 48/50: lambda = 1.005460190724841e+00, T_before = 93.377498 K, target = 94.400000 K
-Startup rescale step 49/50: lambda = 1.002974704620362e+00, T_before = 93.840872 K, target = 94.400000 K
-Startup rescale step 50/50: lambda = 9.999119001761519e-01, T_before = 94.416635 K, target = 94.400000 K
-Startup->production rescale: lambda = 9.969162380664538e-01, T_before = 94.984918 K
-=== MD Solver ===
-Mode: lj | Integrator: euler
-N = 108 | P = 1 | timesteps = 10 | frames = 11 (step 0..10) | dt = 1.000e-14
-LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
-Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
-L = 1.738930e-09 m (5.1145 sigma)
-Target temperature = 94.4 K | seed = 42
-Startup timesteps = 50 | production timesteps = 10 | total executed = 60
-Production simulated time = 1.000e-13 s (= production_steps * dt)
-production_start_step = 0 (production-only output)
-Startup boundary temperature before final rescale: 94.984918 K
-Startup boundary temperature after final rescale: 94.400000 K
-==================
-Wall time: 0.000929 s (max across 1 ranks)
+[dock-sc-r1l.dar.private.cam.ac.uk:99062] [prterun-dock-sc-r1l-99062@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99062] [prterun-dock-sc-r1l-99062@0,0] bind() failed for port 0: Operation not permitted (1)
+[dock-sc-r1l.dar.private.cam.ac.uk:99062] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+[99062] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+No network interfaces were found for out-of-band communications. We require
 ```
 
 **Output:**
@@ -664,144 +644,8 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
-=== Initial Conditions (Rank 0) ===
-Seed: 42 | FCC lattice | Box-Muller velocities
-Perturbation: 0.0100 sigma | T_initial: 94.400000 K
-===================================
-Startup rescale step 1/50: lambda = 9.999999999999999e-01, T_before = 94.400000 K, target = 94.400000 K
-Startup rescale step 2/50: lambda = 1.000554877641383e+00, T_before = 94.295326 K, target = 94.400000 K
-Startup rescale step 3/50: lambda = 1.001498776481246e+00, T_before = 94.117666 K, target = 94.400000 K
-Startup rescale step 4/50: lambda = 1.002521267698682e+00, T_before = 93.925779 K, target = 94.400000 K
-Startup rescale step 5/50: lambda = 1.003660072928603e+00, T_before = 93.712754 K, target = 94.400000 K
-Startup rescale step 6/50: lambda = 1.004955613062417e+00, T_before = 93.471289 K, target = 94.400000 K
-Startup rescale step 7/50: lambda = 1.006450727263260e+00, T_before = 93.193787 K, target = 94.400000 K
-Startup rescale step 8/50: lambda = 1.008189156197059e+00, T_before = 92.872674 K, target = 94.400000 K
-Startup rescale step 9/50: lambda = 1.010208435879377e+00, T_before = 92.501764 K, target = 94.400000 K
-Startup rescale step 10/50: lambda = 1.012542591158752e+00, T_before = 92.075777 K, target = 94.400000 K
-Startup rescale step 11/50: lambda = 1.015193706053781e+00, T_before = 91.595505 K, target = 94.400000 K
-Startup rescale step 12/50: lambda = 1.018115024804627e+00, T_before = 91.070622 K, target = 94.400000 K
-Startup rescale step 13/50: lambda = 1.021216008534779e+00, T_before = 90.518379 K, target = 94.400000 K
-Startup rescale step 14/50: lambda = 1.024295894062565e+00, T_before = 89.974850 K, target = 94.400000 K
-Startup rescale step 15/50: lambda = 1.027049158400991e+00, T_before = 89.493096 K, target = 94.400000 K
-Startup rescale step 16/50: lambda = 1.029150810591021e+00, T_before = 89.127957 K, target = 94.400000 K
-Startup rescale step 17/50: lambda = 1.030332085024976e+00, T_before = 88.923704 K, target = 94.400000 K
-Startup rescale step 18/50: lambda = 1.030473240735531e+00, T_before = 88.899344 K, target = 94.400000 K
-Startup rescale step 19/50: lambda = 1.029678364278692e+00, T_before = 89.036652 K, target = 94.400000 K
-Startup rescale step 20/50: lambda = 1.028193446250227e+00, T_before = 89.294011 K, target = 94.400000 K
-Startup rescale step 21/50: lambda = 1.026204269492264e+00, T_before = 89.640518 K, target = 94.400000 K
-Startup rescale step 22/50: lambda = 1.023804756229235e+00, T_before = 90.061196 K, target = 94.400000 K
-Startup rescale step 23/50: lambda = 1.021033704859721e+00, T_before = 90.550705 K, target = 94.400000 K
-Startup rescale step 24/50: lambda = 1.017892546148408e+00, T_before = 91.110436 K, target = 94.400000 K
-Startup rescale step 25/50: lambda = 1.014433135766224e+00, T_before = 91.732904 K, target = 94.400000 K
-Startup rescale step 26/50: lambda = 1.010803967900348e+00, T_before = 92.392798 K, target = 94.400000 K
-Startup rescale step 27/50: lambda = 1.007180454989398e+00, T_before = 93.058793 K, target = 94.400000 K
-Startup rescale step 28/50: lambda = 1.003763043104544e+00, T_before = 93.693528 K, target = 94.400000 K
-Startup rescale step 29/50: lambda = 1.000752561769121e+00, T_before = 94.258077 K, target = 94.400000 K
-Startup rescale step 30/50: lambda = 9.982756142734640e-01, T_before = 94.726408 K, target = 94.400000 K
-Startup rescale step 31/50: lambda = 9.963969313600508e-01, T_before = 95.083954 K, target = 94.400000 K
-Startup rescale step 32/50: lambda = 9.951401646596638e-01, T_before = 95.324269 K, target = 94.400000 K
-Startup rescale step 33/50: lambda = 9.944783429440419e-01, T_before = 95.451187 K, target = 94.400000 K
-Startup rescale step 34/50: lambda = 9.943646876548935e-01, T_before = 95.473009 K, target = 94.400000 K
-Startup rescale step 35/50: lambda = 9.947272752386551e-01, T_before = 95.403420 K, target = 94.400000 K
-Startup rescale step 36/50: lambda = 9.955008328446894e-01, T_before = 95.255210 K, target = 94.400000 K
-Startup rescale step 37/50: lambda = 9.966354597852637e-01, T_before = 95.038445 K, target = 94.400000 K
-Startup rescale step 38/50: lambda = 9.980729448199758e-01, T_before = 94.764882 K, target = 94.400000 K
-Startup rescale step 39/50: lambda = 9.997465980754853e-01, T_before = 94.447860 K, target = 94.400000 K
-Startup rescale step 40/50: lambda = 1.001561399173793e+00, T_before = 94.105897 K, target = 94.400000 K
-Startup rescale step 41/50: lambda = 1.003421850012588e+00, T_before = 93.757256 K, target = 94.400000 K
-Startup rescale step 42/50: lambda = 1.005228473399085e+00, T_before = 93.420552 K, target = 94.400000 K
-Startup rescale step 43/50: lambda = 1.006889243861888e+00, T_before = 93.112629 K, target = 94.400000 K
-Startup rescale step 44/50: lambda = 1.008325591523771e+00, T_before = 92.847543 K, target = 94.400000 K
-Startup rescale step 45/50: lambda = 1.009521504735243e+00, T_before = 92.627692 K, target = 94.400000 K
-Startup rescale step 46/50: lambda = 1.010497330715534e+00, T_before = 92.448880 K, target = 94.400000 K
-Startup rescale step 47/50: lambda = 1.011257626882456e+00, T_before = 92.309920 K, target = 94.400000 K
-Startup rescale step 48/50: lambda = 1.011751477531147e+00, T_before = 92.219826 K, target = 94.400000 K
-Startup rescale step 49/50: lambda = 1.011823943944249e+00, T_before = 92.206617 K, target = 94.400000 K
-Startup rescale step 50/50: lambda = 1.011208781320699e+00, T_before = 92.318838 K, target = 94.400000 K
-Startup->production rescale: lambda = 1.009614991355338e+00, T_before = 92.610539 K
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 108 | P = 1 | timesteps = 5 | frames = 6 (step 0..5) | dt = 1.000e-14
-LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
-Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
-L = 1.738930e-09 m (5.1145 sigma)
-Target temperature = 94.4 K | seed = 42
-Startup timesteps = 50 | production timesteps = 5 | total executed = 55
-Production simulated time = 5.000e-14 s (= production_steps * dt)
-production_start_step = 0 (production-only output)
-Startup boundary temperature before final rescale: 92.610539 K
-Startup boundary temperature after final rescale: 94.400000 K
-==================
-Wall time: 0.000520 s (max across 1 ranks)
-=== Initial Conditions (Rank 0) ===
-Seed: 42 | FCC lattice | Box-Muller velocities
-Perturbation: 0.0100 sigma | T_initial: 94.400000 K
-===================================
-Startup rescale step 1/50: lambda = 1.000000000000000e+00, T_before = 94.400000 K, target = 94.400000 K
-Startup rescale step 2/50: lambda = 1.000554877641383e+00, T_before = 94.295326 K, target = 94.400000 K
-Startup rescale step 3/50: lambda = 1.001498776481246e+00, T_before = 94.117666 K, target = 94.400000 K
-Startup rescale step 4/50: lambda = 1.002521267698681e+00, T_before = 93.925779 K, target = 94.400000 K
-Startup rescale step 5/50: lambda = 1.003660072928603e+00, T_before = 93.712754 K, target = 94.400000 K
-Startup rescale step 6/50: lambda = 1.004955613062417e+00, T_before = 93.471289 K, target = 94.400000 K
-Startup rescale step 7/50: lambda = 1.006450727263259e+00, T_before = 93.193787 K, target = 94.400000 K
-Startup rescale step 8/50: lambda = 1.008189156197060e+00, T_before = 92.872674 K, target = 94.400000 K
-Startup rescale step 9/50: lambda = 1.010208435879377e+00, T_before = 92.501764 K, target = 94.400000 K
-Startup rescale step 10/50: lambda = 1.012542591158752e+00, T_before = 92.075777 K, target = 94.400000 K
-Startup rescale step 11/50: lambda = 1.015193706053781e+00, T_before = 91.595505 K, target = 94.400000 K
-Startup rescale step 12/50: lambda = 1.018115024804627e+00, T_before = 91.070622 K, target = 94.400000 K
-Startup rescale step 13/50: lambda = 1.021216008534779e+00, T_before = 90.518379 K, target = 94.400000 K
-Startup rescale step 14/50: lambda = 1.024295894062565e+00, T_before = 89.974850 K, target = 94.400000 K
-Startup rescale step 15/50: lambda = 1.027049158400990e+00, T_before = 89.493096 K, target = 94.400000 K
-Startup rescale step 16/50: lambda = 1.029150810591021e+00, T_before = 89.127957 K, target = 94.400000 K
-Startup rescale step 17/50: lambda = 1.030332085024977e+00, T_before = 88.923704 K, target = 94.400000 K
-Startup rescale step 18/50: lambda = 1.030473240735531e+00, T_before = 88.899344 K, target = 94.400000 K
-Startup rescale step 19/50: lambda = 1.029678364278692e+00, T_before = 89.036652 K, target = 94.400000 K
-Startup rescale step 20/50: lambda = 1.028193446250227e+00, T_before = 89.294011 K, target = 94.400000 K
-Startup rescale step 21/50: lambda = 1.026204269492264e+00, T_before = 89.640518 K, target = 94.400000 K
-Startup rescale step 22/50: lambda = 1.023804756229235e+00, T_before = 90.061196 K, target = 94.400000 K
-Startup rescale step 23/50: lambda = 1.021033704859721e+00, T_before = 90.550705 K, target = 94.400000 K
-Startup rescale step 24/50: lambda = 1.017892546148408e+00, T_before = 91.110436 K, target = 94.400000 K
-Startup rescale step 25/50: lambda = 1.014433135766224e+00, T_before = 91.732904 K, target = 94.400000 K
-Startup rescale step 26/50: lambda = 1.010803967900348e+00, T_before = 92.392798 K, target = 94.400000 K
-Startup rescale step 27/50: lambda = 1.007180454989398e+00, T_before = 93.058793 K, target = 94.400000 K
-Startup rescale step 28/50: lambda = 1.003763043104544e+00, T_before = 93.693528 K, target = 94.400000 K
-Startup rescale step 29/50: lambda = 1.000752561769121e+00, T_before = 94.258077 K, target = 94.400000 K
-Startup rescale step 30/50: lambda = 9.982756142734638e-01, T_before = 94.726408 K, target = 94.400000 K
-Startup rescale step 31/50: lambda = 9.963969313600507e-01, T_before = 95.083954 K, target = 94.400000 K
-Startup rescale step 32/50: lambda = 9.951401646596637e-01, T_before = 95.324269 K, target = 94.400000 K
-Startup rescale step 33/50: lambda = 9.944783429440424e-01, T_before = 95.451187 K, target = 94.400000 K
-Startup rescale step 34/50: lambda = 9.943646876548934e-01, T_before = 95.473009 K, target = 94.400000 K
-Startup rescale step 35/50: lambda = 9.947272752386551e-01, T_before = 95.403420 K, target = 94.400000 K
-Startup rescale step 36/50: lambda = 9.955008328446893e-01, T_before = 95.255210 K, target = 94.400000 K
-Startup rescale step 37/50: lambda = 9.966354597852635e-01, T_before = 95.038445 K, target = 94.400000 K
-Startup rescale step 38/50: lambda = 9.980729448199760e-01, T_before = 94.764882 K, target = 94.400000 K
-Startup rescale step 39/50: lambda = 9.997465980754849e-01, T_before = 94.447860 K, target = 94.400000 K
-Startup rescale step 40/50: lambda = 1.001561399173794e+00, T_before = 94.105897 K, target = 94.400000 K
-Startup rescale step 41/50: lambda = 1.003421850012588e+00, T_before = 93.757256 K, target = 94.400000 K
-Startup rescale step 42/50: lambda = 1.005228473399085e+00, T_before = 93.420552 K, target = 94.400000 K
-Startup rescale step 43/50: lambda = 1.006889243861887e+00, T_before = 93.112629 K, target = 94.400000 K
-Startup rescale step 44/50: lambda = 1.008325591523771e+00, T_before = 92.847543 K, target = 94.400000 K
-Startup rescale step 45/50: lambda = 1.009521504735243e+00, T_before = 92.627692 K, target = 94.400000 K
-Startup rescale step 46/50: lambda = 1.010497330715535e+00, T_before = 92.448880 K, target = 94.400000 K
-Startup rescale step 47/50: lambda = 1.011257626882457e+00, T_before = 92.309920 K, target = 94.400000 K
-Startup rescale step 48/50: lambda = 1.011751477531147e+00, T_before = 92.219826 K, target = 94.400000 K
-Startup rescale step 49/50: lambda = 1.011823943944249e+00, T_before = 92.206617 K, target = 94.400000 K
-Startup rescale step 50/50: lambda = 1.011208781320699e+00, T_before = 92.318838 K, target = 94.400000 K
-Startup->production rescale: lambda = 1.009614991355338e+00, T_before = 92.610539 K
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 108 | P = 2 | timesteps = 5 | frames = 6 (step 0..5) | dt = 1.000e-14
-LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
-Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
-L = 1.738930e-09 m (5.1145 sigma)
-Target temperature = 94.4 K | seed = 42
-Startup timesteps = 50 | production timesteps = 5 | total executed = 55
-Production simulated time = 5.000e-14 s (= production_steps * dt)
-production_start_step = 0 (production-only output)
-Startup boundary temperature before final rescale: 92.610539 K
-Startup boundary temperature after final rescale: 94.400000 K
-==================
-Wall time: 0.000290 s (max across 2 ranks)
+[99065] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[99066] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 MATCH
 ```
 
@@ -809,75 +653,7 @@ MATCH
 
 ### CLI help output
 ```
-=== Initial Conditions (Rank 0) ===
-Seed: 42 | FCC lattice | Box-Muller velocities
-Perturbation: 0.0100 sigma | T_initial: 94.400000 K
-===================================
-Startup rescale step 1/50: lambda = 1.000000000000001e+00, T_before = 94.400000 K, target = 94.400000 K
-Startup rescale step 2/50: lambda = 1.000448572582493e+00, T_before = 94.315366 K, target = 94.400000 K
-Startup rescale step 3/50: lambda = 1.001369169679296e+00, T_before = 94.142031 K, target = 94.400000 K
-Startup rescale step 4/50: lambda = 1.002336044518751e+00, T_before = 93.960495 K, target = 94.400000 K
-Startup rescale step 5/50: lambda = 1.003384155020134e+00, T_before = 93.764300 K, target = 94.400000 K
-Startup rescale step 6/50: lambda = 1.004549837667511e+00, T_before = 93.546818 K, target = 94.400000 K
-Startup rescale step 7/50: lambda = 1.005870906430890e+00, T_before = 93.301258 K, target = 94.400000 K
-Startup rescale step 8/50: lambda = 1.007385576261256e+00, T_before = 93.020900 K, target = 94.400000 K
-Startup rescale step 9/50: lambda = 1.009130968491733e+00, T_before = 92.699401 K, target = 94.400000 K
-Startup rescale step 10/50: lambda = 1.011138993969964e+00, T_before = 92.331582 K, target = 94.400000 K
-Startup rescale step 11/50: lambda = 1.013424112782515e+00, T_before = 91.915664 K, target = 94.400000 K
-Startup rescale step 12/50: lambda = 1.015981346761528e+00, T_before = 91.453541 K, target = 94.400000 K
-Startup rescale step 13/50: lambda = 1.018777411119338e+00, T_before = 90.952236 K, target = 94.400000 K
-Startup rescale step 14/50: lambda = 1.021706734978981e+00, T_before = 90.431447 K, target = 94.400000 K
-Startup rescale step 15/50: lambda = 1.024592250547181e+00, T_before = 89.922808 K, target = 94.400000 K
-Startup rescale step 16/50: lambda = 1.027178057038569e+00, T_before = 89.470637 K, target = 94.400000 K
-Startup rescale step 17/50: lambda = 1.029148258584685e+00, T_before = 89.128399 K, target = 94.400000 K
-Startup rescale step 18/50: lambda = 1.030212155968560e+00, T_before = 88.944409 K, target = 94.400000 K
-Startup rescale step 19/50: lambda = 1.030180773287125e+00, T_before = 88.949828 K, target = 94.400000 K
-Startup rescale step 20/50: lambda = 1.029029964043456e+00, T_before = 89.148892 K, target = 94.400000 K
-Startup rescale step 21/50: lambda = 1.026918938210060e+00, T_before = 89.515794 K, target = 94.400000 K
-Startup rescale step 22/50: lambda = 1.024133136928806e+00, T_before = 90.003450 K, target = 94.400000 K
-Startup rescale step 23/50: lambda = 1.020985095096201e+00, T_before = 90.559328 K, target = 94.400000 K
-Startup rescale step 24/50: lambda = 1.017758545243542e+00, T_before = 91.134430 K, target = 94.400000 K
-Startup rescale step 25/50: lambda = 1.014658296458772e+00, T_before = 91.692196 K, target = 94.400000 K
-Startup rescale step 26/50: lambda = 1.011807645251829e+00, T_before = 92.209588 K, target = 94.400000 K
-Startup rescale step 27/50: lambda = 1.009282212173632e+00, T_before = 92.671620 K, target = 94.400000 K
-Startup rescale step 28/50: lambda = 1.007120809277233e+00, T_before = 93.069816 K, target = 94.400000 K
-Startup rescale step 29/50: lambda = 1.005344152117530e+00, T_before = 93.399055 K, target = 94.400000 K
-Startup rescale step 30/50: lambda = 1.003970854887324e+00, T_before = 93.654744 K, target = 94.400000 K
-Startup rescale step 31/50: lambda = 1.003016234605057e+00, T_before = 93.833101 K, target = 94.400000 K
-Startup rescale step 32/50: lambda = 1.002470108835248e+00, T_before = 93.935366 K, target = 94.400000 K
-Startup rescale step 33/50: lambda = 1.002284311902083e+00, T_before = 93.970195 K, target = 94.400000 K
-Startup rescale step 34/50: lambda = 1.002366552426738e+00, T_before = 93.954776 K, target = 94.400000 K
-Startup rescale step 35/50: lambda = 1.002575207279342e+00, T_before = 93.915673 K, target = 94.400000 K
-Startup rescale step 36/50: lambda = 1.002766813194066e+00, T_before = 93.879786 K, target = 94.400000 K
-Startup rescale step 37/50: lambda = 1.002842056728859e+00, T_before = 93.865699 K, target = 94.400000 K
-Startup rescale step 38/50: lambda = 1.002751952365477e+00, T_before = 93.882568 K, target = 94.400000 K
-Startup rescale step 39/50: lambda = 1.002500076720989e+00, T_before = 93.929750 K, target = 94.400000 K
-Startup rescale step 40/50: lambda = 1.002117899590258e+00, T_before = 94.001407 K, target = 94.400000 K
-Startup rescale step 41/50: lambda = 1.001642168471565e+00, T_before = 94.090721 K, target = 94.400000 K
-Startup rescale step 42/50: lambda = 1.001121408517460e+00, T_before = 94.188634 K, target = 94.400000 K
-Startup rescale step 43/50: lambda = 1.000614710973050e+00, T_before = 94.284049 K, target = 94.400000 K
-Startup rescale step 44/50: lambda = 1.000171942547846e+00, T_before = 94.367546 K, target = 94.400000 K
-Startup rescale step 45/50: lambda = 9.998252865723313e-01, T_before = 94.432995 K, target = 94.400000 K
-Startup rescale step 46/50: lambda = 9.995965918750089e-01, T_before = 94.476210 K, target = 94.400000 K
-Startup rescale step 47/50: lambda = 9.994967377519257e-01, T_before = 94.495088 K, target = 94.400000 K
-Startup rescale step 48/50: lambda = 9.995312695558261e-01, T_before = 94.488559 K, target = 94.400000 K
-Startup rescale step 49/50: lambda = 9.996960242118366e-01, T_before = 94.457417 K, target = 94.400000 K
-Startup rescale step 50/50: lambda = 9.999826416110550e-01, T_before = 94.403277 K, target = 94.400000 K
-Startup->production rescale: lambda = 1.000368412753439e+00, T_before = 94.330482 K
-=== MD Solver ===
-Mode: lj | Integrator: verlet
-N = 864 | P = 1 | timesteps = 100 | frames = 101 (step 0..100) | dt = 1.000e-14
-LJ semantics: --equilibration-steps prepares the state, --production-steps controls the reported NVE trajectory.
-Output includes the production initial frame at step 0 (n_frames = production_steps + 1).
-L = 3.477860e-09 m (10.2290 sigma)
-Target temperature = 94.4 K | seed = 42
-Startup timesteps = 50 | production timesteps = 100 | total executed = 150
-Production simulated time = 1.000e-12 s (= production_steps * dt)
-production_start_step = 0 (production-only output)
-Startup boundary temperature before final rescale: 94.330482 K
-Startup boundary temperature after final rescale: 94.400000 K
-==================
-Wall time: 0.190910 s (max across 1 ranks)
+[99068] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 ### Comparison
@@ -1830,7 +1606,7 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (533 lines)
+### `src/main.cpp` (536 lines)
 
 ```cpp
 /**
@@ -2296,29 +2072,32 @@ int main(int argc, char* argv[]) {
     const double elapsed = MPI_Wtime() - tStart;
 
     // Wall time: max across all ranks (the bottleneck determines completion).
-    // Comm time: average Allgatherv time across ranks (cancels per-rank
-    // synchronisation noise inherent to blocking collectives).
+    // Communication bottleneck should be reduced with max across ranks as well;
+    // avg/min are retained as secondary diagnostics.
     // Pattern follows MPI lecture-notes slide 78: independent MPI_Reduce calls.
     double maxTime = 0.0;
     MPI_Reduce(&elapsed, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-    double reportedCommTime = 0.0;
+    double commMax = 0.0;
+    double commAvg = 0.0;
+    double commMin = 0.0;
     if (params.timing) {
         double sumComm = 0.0;
+        MPI_Reduce(&ctx.commTime, &commMax, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&ctx.commTime, &commMin, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
         MPI_Reduce(&ctx.commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         if (ctx.isRoot()) {
-            reportedCommTime = (ctx.size > 1) ? sumComm / ctx.size : 0.0;
+            commAvg = sumComm / ctx.size;
         }
     }
 
     if (ctx.isRoot()) {
         std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, ctx.size);
         if (params.timing) {
-            const double computeTime = maxTime - reportedCommTime;
-            std::printf("  Comm time: %.6f s (%.1f%%)\n", reportedCommTime,
-                        100.0 * reportedCommTime / maxTime);
-            std::printf("  Compute time: %.6f s (%.1f%%)\n", computeTime,
-                        100.0 * computeTime / maxTime);
+            const double commFracPct = (maxTime > 0.0) ? (100.0 * commMax / maxTime) : 0.0;
+            std::printf("  Comm time (max): %.6f s (%.1f%%)\n", commMax, commFracPct);
+            std::printf("  Comm time (avg): %.6f s\n", commAvg);
+            std::printf("  Comm time (min): %.6f s\n", commMin);
         }
     }
 
@@ -3094,7 +2873,7 @@ fi
 bash ai/make_results.sh
 ```
 
-### `scripts/run_all_data.sh` (263 lines)
+### `scripts/run_all_data.sh` (281 lines)
 
 ```sh
 #!/bin/bash
@@ -3102,7 +2881,7 @@ bash ai/make_results.sh
 # run_all_data.sh — Generate ALL production data for the report
 #
 # Designed for shared HPC clusters (cerberus1). Uses median-of-20
-# paired (wall, comm) repetitions for scaling benchmarks to filter contention noise.
+# paired (wall, comm_max) repetitions for scaling benchmarks to filter contention noise.
 # ──────────────────────────────────────────────────────────────────
 
 set -euo pipefail
@@ -3137,8 +2916,8 @@ echo "=========================================="
 echo "  FULL DATA GENERATION — $(date)"
 echo "=========================================="
 
-# Helper: given parallel arrays of wall and comm times, pick the
-# median by wall time and return the paired (wall, comm).
+# Helper: given parallel arrays of wall and comm_max times, pick the
+# median by wall time and return the paired (wall, comm_max).
 pick_median_pair() {
     local walls=($1)
     local comms=($2)
@@ -3153,6 +2932,22 @@ pick_median_pair() {
     line=$(sed -n "$((mid+1))p" "$tmpfile")
     rm -f "$tmpfile"
     echo "$line"
+}
+
+# Extract first numeric token from the first line in OUTPUT that matches PATTERN.
+extract_metric() {
+    local output="$1"
+    local pattern="$2"
+    awk -v pat="$pattern" '
+        $0 ~ pat {
+            for (i = 1; i <= NF; ++i) {
+                if ($i ~ /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/) {
+                    print $i
+                    exit
+                }
+            }
+        }
+    ' <<< "$output"
 }
 
 # ── 0. Parallel Consistency Check ──
@@ -3283,54 +3078,56 @@ if [ "$SKIP_SCALING" = "1" ]; then
 else
 echo ""
 echo "=== RESULTS 3: STRONG SCALING (20 reps, N=2048, ${STRONG_STEPS} steps) ==="
-echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_strong.csv"
+echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_strong.csv"
 python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
 
 REPS=20
 for P in 1 2 4 8 16 24 32; do
     WALLS=""
-    COMMS=""
+    COMMS_MAX=""
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun -np $P $SOLVER --mode lj --integrator verlet --N 2048 --steps $STRONG_STEPS --timing 2>/dev/null)
-        W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
-        C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
-        [ -z "$C" ] && C="0.0"
-        C=$(awk -v w="$W" -v c="$C" 'BEGIN{if (c > w) print w; else print c}')
+        W=$(extract_metric "$OUTPUT" "Wall time")
+        C_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+        [ -z "$C_MAX" ] && C_MAX=$(extract_metric "$OUTPUT" "Comm time")
+        [ -z "$C_MAX" ] && C_MAX="0.0"
+        C_MAX=$(awk -v w="$W" -v c="$C_MAX" 'BEGIN{if (c > w) print w; else print c}')
         WALLS="$WALLS $W"
-        COMMS="$COMMS $C"
-        echo "    P=$P rep=$REP wall=$W comm=$C"
+        COMMS_MAX="$COMMS_MAX $C_MAX"
+        echo "    P=$P rep=$REP wall=$W comm_max=$C_MAX"
     done
-    PAIR=$(pick_median_pair "$WALLS" "$COMMS")
+    PAIR=$(pick_median_pair "$WALLS" "$COMMS_MAX")
     MEDIAN_W=$(echo "$PAIR" | awk '{print $1}')
-    MEDIAN_C=$(echo "$PAIR" | awk '{print $2}')
-    echo "$P,2048,$MEDIAN_W,$MEDIAN_C" >> "$OUTDIR/scaling_strong.csv"
-    echo "  >> P=$P MEDIAN: wall=$MEDIAN_W comm=$MEDIAN_C"
+    MEDIAN_C_MAX=$(echo "$PAIR" | awk '{print $2}')
+    echo "$P,2048,$MEDIAN_W,$MEDIAN_C_MAX" >> "$OUTDIR/scaling_strong.csv"
+    echo "  >> P=$P MEDIAN: wall=$MEDIAN_W comm_max=$MEDIAN_C_MAX"
 done
 
 # ── 5. Size Scaling (median of 20 paired samples) ──
 echo ""
 echo "=== RESULTS 3: SIZE SCALING (20 reps, P=16, ${SIZE_STEPS} steps) ==="
-echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_size.csv"
+echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_size.csv"
 python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
 
 for N in 108 256 500 864 1372 2048; do
     WALLS=""
-    COMMS=""
+    COMMS_MAX=""
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun -np 16 $SOLVER --mode lj --integrator verlet --N $N --steps $SIZE_STEPS --timing 2>/dev/null)
-        W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
-        C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
-        [ -z "$C" ] && C="0.0"
-        C=$(awk -v w="$W" -v c="$C" 'BEGIN{if (c > w) print w; else print c}')
+        W=$(extract_metric "$OUTPUT" "Wall time")
+        C_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+        [ -z "$C_MAX" ] && C_MAX=$(extract_metric "$OUTPUT" "Comm time")
+        [ -z "$C_MAX" ] && C_MAX="0.0"
+        C_MAX=$(awk -v w="$W" -v c="$C_MAX" 'BEGIN{if (c > w) print w; else print c}')
         WALLS="$WALLS $W"
-        COMMS="$COMMS $C"
-        echo "    N=$N rep=$REP wall=$W comm=$C"
+        COMMS_MAX="$COMMS_MAX $C_MAX"
+        echo "    N=$N rep=$REP wall=$W comm_max=$C_MAX"
     done
-    PAIR=$(pick_median_pair "$WALLS" "$COMMS")
+    PAIR=$(pick_median_pair "$WALLS" "$COMMS_MAX")
     MEDIAN_W=$(echo "$PAIR" | awk '{print $1}')
-    MEDIAN_C=$(echo "$PAIR" | awk '{print $2}')
-    echo "16,$N,$MEDIAN_W,$MEDIAN_C" >> "$OUTDIR/scaling_size.csv"
-    echo "  >> N=$N MEDIAN: wall=$MEDIAN_W comm=$MEDIAN_C"
+    MEDIAN_C_MAX=$(echo "$PAIR" | awk '{print $2}')
+    echo "16,$N,$MEDIAN_W,$MEDIAN_C_MAX" >> "$OUTDIR/scaling_size.csv"
+    echo "  >> N=$N MEDIAN: wall=$MEDIAN_W comm_max=$MEDIAN_C_MAX"
 done
 
 fi  # end --skip-scaling check
@@ -3385,23 +3182,23 @@ python3 scripts/plot_lj.py
 python3 scripts/plot_scaling.py
 ```
 
-### `scripts/run_scaling.sh` (208 lines)
+### `scripts/run_scaling.sh` (229 lines)
 
 ```sh
 #!/bin/bash
 # ──────────────────────────────────────────────────────────────────
-# run_scaling.sh — Batch scaling benchmarks with comm breakdown
+# run_scaling.sh — Batch scaling benchmarks with bottleneck comm timing
 #
-# Uses PAIRED observations: for each rep, records (wall, comm) as a pair.
-# The median is selected by wall time, and the comm from THAT SAME rep
+# Uses PAIRED observations: for each rep, records (wall, comm_max) as a pair.
+# The median is selected by wall time, and the comm_max from THAT SAME rep
 # is reported. This guarantees comm <= wall for every data point.
 #
 # Usage:
 #   bash scripts/run_scaling.sh
 #
 # Produces:
-#   out/scaling_strong.csv   (P,N,wall_s,comm_s)
-#   out/scaling_size.csv     (P,N,wall_s,comm_s)
+#   out/scaling_strong.csv   (P,N,wall_s,comm_max_s)
+#   out/scaling_size.csv     (P,N,wall_s,comm_max_s)
 #   out/scaling_strong_raw.csv
 #   out/scaling_size_raw.csv
 #   out/scaling_strong_stats.csv
@@ -3416,7 +3213,7 @@ OUTDIR="out"
 STRONG_STEPS=1000
 SIZE_STEPS=5000
 INTEGRATOR="verlet"
-REPS=31
+REPS=11
 
 mkdir -p "$OUTDIR"
 
@@ -3425,9 +3222,9 @@ if [ $((REPS % 2)) -eq 0 ]; then
     exit 1
 fi
 
-# Helper: from a sorted [rep wall comm] temp file, emit robust wall-time spread stats.
+# Helper: from a sorted [rep wall comm_max] temp file, emit robust wall-time spread stats.
 # Prints CSV fields:
-# reps,median_rep,median_wall_s,median_comm_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s
+# reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s
 summarize_sorted_samples() {
     local sorted_file="$1"
     local n
@@ -3449,23 +3246,39 @@ summarize_sorted_samples() {
     min_line=$(sed -n "1p" "$sorted_file")
     max_line=$(sed -n "${n}p" "$sorted_file")
 
-    local median_rep median_wall median_comm q1_wall q3_wall min_wall max_wall iqr_wall
+    local median_rep median_wall median_comm_max q1_wall q3_wall min_wall max_wall iqr_wall
     median_rep=$(echo "$median_line" | awk '{print $1}')
     median_wall=$(echo "$median_line" | awk '{print $2}')
-    median_comm=$(echo "$median_line" | awk '{print $3}')
+    median_comm_max=$(echo "$median_line" | awk '{print $3}')
     q1_wall=$(echo "$q1_line" | awk '{print $2}')
     q3_wall=$(echo "$q3_line" | awk '{print $2}')
     min_wall=$(echo "$min_line" | awk '{print $2}')
     max_wall=$(echo "$max_line" | awk '{print $2}')
     iqr_wall=$(awk -v q1="$q1_wall" -v q3="$q3_wall" 'BEGIN{printf "%.6f", q3 - q1}')
 
-    echo "$n,$median_rep,$median_wall,$median_comm,$q1_wall,$q3_wall,$iqr_wall,$min_wall,$max_wall"
+    echo "$n,$median_rep,$median_wall,$median_comm_max,$q1_wall,$q3_wall,$iqr_wall,$min_wall,$max_wall"
+}
+
+# Extract first numeric token from the first line in OUTPUT that matches PATTERN.
+extract_metric() {
+    local output="$1"
+    local pattern="$2"
+    awk -v pat="$pattern" '
+        $0 ~ pat {
+            for (i = 1; i <= NF; ++i) {
+                if ($i ~ /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/) {
+                    print $i
+                    exit
+                }
+            }
+        }
+    ' <<< "$output"
 }
 
 # ─── Strong Scaling: N=2048, vary P ──────────────────────────────
-echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_strong.csv"
-echo "kind,P,N,rep,wall_s,comm_s" > "$OUTDIR/scaling_strong_raw.csv"
-echo "P,N,reps,median_rep,median_wall_s,median_comm_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_strong_stats.csv"
+echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_strong.csv"
+echo "kind,P,N,rep,wall_s,comm_max_s" > "$OUTDIR/scaling_strong_raw.csv"
+echo "P,N,reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_strong_stats.csv"
 
 N_STRONG=2048
 for P in 1 2 4 8 16 24 32; do
@@ -3476,21 +3289,23 @@ for P in 1 2 4 8 16 24 32; do
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
 
-        WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
-        COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
+        WALL=$(extract_metric "$OUTPUT" "Wall time")
+        COMM_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+        if [ -z "$COMM_MAX" ]; then
+            COMM_MAX=$(extract_metric "$OUTPUT" "Comm time")
+        fi
         if [ -z "$WALL" ]; then
             echo "ERROR: failed to parse wall time for strong scaling (P=$P, rep=$REP)." >&2
             echo "$OUTPUT" >&2
             rm -f "$TMP_SAMPLES"
             exit 1
         fi
-        # P=1 has no comm line
-        if [ -z "$COMM" ]; then COMM="0.000000"; fi
-        COMM=$(awk -v w="$WALL" -v c="$COMM" 'BEGIN{if (c > w) print w; else print c}')
+        if [ -z "$COMM_MAX" ]; then COMM_MAX="0.000000"; fi
+        COMM_MAX=$(awk -v w="$WALL" -v c="$COMM_MAX" 'BEGIN{if (c > w) print w; else print c}')
 
-        echo "$REP $WALL $COMM" >> "$TMP_SAMPLES"
-        echo "strong,$P,$N_STRONG,$REP,$WALL,$COMM" >> "$OUTDIR/scaling_strong_raw.csv"
-        echo "  P=$P rep=$REP wall=$WALL comm=$COMM"
+        echo "$REP $WALL $COMM_MAX" >> "$TMP_SAMPLES"
+        echo "strong,$P,$N_STRONG,$REP,$WALL,$COMM_MAX" >> "$OUTDIR/scaling_strong_raw.csv"
+        echo "  P=$P rep=$REP wall=$WALL comm_max=$COMM_MAX"
     done
 
     SORTED_SAMPLES=$(mktemp)
@@ -3501,24 +3316,24 @@ for P in 1 2 4 8 16 24 32; do
     REPS_OUT=$(echo "$STATS" | cut -d, -f1)
     MEDIAN_REP=$(echo "$STATS" | cut -d, -f2)
     MED_WALL=$(echo "$STATS" | cut -d, -f3)
-    MED_COMM=$(echo "$STATS" | cut -d, -f4)
+    MED_COMM_MAX=$(echo "$STATS" | cut -d, -f4)
     Q1_WALL=$(echo "$STATS" | cut -d, -f5)
     Q3_WALL=$(echo "$STATS" | cut -d, -f6)
     IQR_WALL=$(echo "$STATS" | cut -d, -f7)
     MIN_WALL=$(echo "$STATS" | cut -d, -f8)
     MAX_WALL=$(echo "$STATS" | cut -d, -f9)
 
-    echo "$P,$N_STRONG,$MED_WALL,$MED_COMM" >> "$OUTDIR/scaling_strong.csv"
-    echo "$P,$N_STRONG,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_strong_stats.csv"
-    echo ">> P=$P MEDIAN: wall=$MED_WALL comm=$MED_COMM"
+    echo "$P,$N_STRONG,$MED_WALL,$MED_COMM_MAX" >> "$OUTDIR/scaling_strong.csv"
+    echo "$P,$N_STRONG,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM_MAX,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_strong_stats.csv"
+    echo ">> P=$P MEDIAN: wall=$MED_WALL comm_max=$MED_COMM_MAX"
 done
 
 echo ""
 
 # ─── Size Scaling: P=16, vary N ──────────────────────────────────
-echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_size.csv"
-echo "kind,P,N,rep,wall_s,comm_s" > "$OUTDIR/scaling_size_raw.csv"
-echo "P,N,reps,median_rep,median_wall_s,median_comm_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_size_stats.csv"
+echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_size.csv"
+echo "kind,P,N,rep,wall_s,comm_max_s" > "$OUTDIR/scaling_size_raw.csv"
+echo "P,N,reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_size_stats.csv"
 
 P_SIZE=16
 for N in 108 256 500 864 1372 2048; do
@@ -3529,20 +3344,23 @@ for N in 108 256 500 864 1372 2048; do
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
 
-        WALL=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
-        COMM=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
+        WALL=$(extract_metric "$OUTPUT" "Wall time")
+        COMM_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+        if [ -z "$COMM_MAX" ]; then
+            COMM_MAX=$(extract_metric "$OUTPUT" "Comm time")
+        fi
         if [ -z "$WALL" ]; then
             echo "ERROR: failed to parse wall time for size scaling (N=$N, rep=$REP)." >&2
             echo "$OUTPUT" >&2
             rm -f "$TMP_SAMPLES"
             exit 1
         fi
-        if [ -z "$COMM" ]; then COMM="0.000000"; fi
-        COMM=$(awk -v w="$WALL" -v c="$COMM" 'BEGIN{if (c > w) print w; else print c}')
+        if [ -z "$COMM_MAX" ]; then COMM_MAX="0.000000"; fi
+        COMM_MAX=$(awk -v w="$WALL" -v c="$COMM_MAX" 'BEGIN{if (c > w) print w; else print c}')
 
-        echo "$REP $WALL $COMM" >> "$TMP_SAMPLES"
-        echo "size,$P_SIZE,$N,$REP,$WALL,$COMM" >> "$OUTDIR/scaling_size_raw.csv"
-        echo "  N=$N rep=$REP wall=$WALL comm=$COMM"
+        echo "$REP $WALL $COMM_MAX" >> "$TMP_SAMPLES"
+        echo "size,$P_SIZE,$N,$REP,$WALL,$COMM_MAX" >> "$OUTDIR/scaling_size_raw.csv"
+        echo "  N=$N rep=$REP wall=$WALL comm_max=$COMM_MAX"
     done
 
     SORTED_SAMPLES=$(mktemp)
@@ -3553,16 +3371,16 @@ for N in 108 256 500 864 1372 2048; do
     REPS_OUT=$(echo "$STATS" | cut -d, -f1)
     MEDIAN_REP=$(echo "$STATS" | cut -d, -f2)
     MED_WALL=$(echo "$STATS" | cut -d, -f3)
-    MED_COMM=$(echo "$STATS" | cut -d, -f4)
+    MED_COMM_MAX=$(echo "$STATS" | cut -d, -f4)
     Q1_WALL=$(echo "$STATS" | cut -d, -f5)
     Q3_WALL=$(echo "$STATS" | cut -d, -f6)
     IQR_WALL=$(echo "$STATS" | cut -d, -f7)
     MIN_WALL=$(echo "$STATS" | cut -d, -f8)
     MAX_WALL=$(echo "$STATS" | cut -d, -f9)
 
-    echo "$P_SIZE,$N,$MED_WALL,$MED_COMM" >> "$OUTDIR/scaling_size.csv"
-    echo "$P_SIZE,$N,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_size_stats.csv"
-    echo ">> N=$N MEDIAN: wall=$MED_WALL comm=$MED_COMM"
+    echo "$P_SIZE,$N,$MED_WALL,$MED_COMM_MAX" >> "$OUTDIR/scaling_size.csv"
+    echo "$P_SIZE,$N,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM_MAX,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_size_stats.csv"
+    echo ">> N=$N MEDIAN: wall=$MED_WALL comm_max=$MED_COMM_MAX"
 done
 
 {
@@ -6821,7 +6639,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### `scripts/plot_scaling.py` (435 lines)
+### `scripts/plot_scaling.py` (461 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -6831,15 +6649,15 @@ plot_scaling.py — Generate scaling analysis plots (Results 3).
 Produces:
   1. Strong scaling: Speedup S(P) with Amdahl's Law fit
   2. Efficiency E(P) = S(P)/P
-  3. Stacked bar chart: Compute vs Communication time
+  3. Stacked bar chart: Critical-path communication vs remaining runtime
   4. Size scaling: Wall time vs N with O(N²) reference
 
 Usage:
   python3 scripts/plot_scaling.py
 
 Prerequisites (from manifest.json):
-  scaling.strong -> out/scaling_strong.csv  (columns: P,N,wall_s,comm_s)
-  scaling.size   -> out/scaling_size.csv    (columns: P,N,wall_s,comm_s)
+  scaling.strong -> out/scaling_strong.csv  (columns: P,N,wall_s,comm_max_s)
+  scaling.size   -> out/scaling_size.csv    (columns: P,N,wall_s,comm_max_s)
 """
 
 import os
@@ -6913,7 +6731,7 @@ def load_scaling_csv(manifest, key):
     if names and "P" in names and "wall_s" in names:
         return data, path, False
 
-    # Fallback: tolerate headerless CSVs ("P,N,wall_s,comm_s" missing).
+    # Fallback: tolerate headerless CSVs ("P,N,wall_s,comm_max_s" missing).
     raw = np.genfromtxt(path, delimiter=',', encoding=None)
     if raw is None:
         return None, path, False
@@ -6921,11 +6739,11 @@ def load_scaling_csv(manifest, key):
         raw = np.array([raw])
     if raw.shape[1] < 4:
         return None, path, False
-    out = np.zeros(raw.shape[0], dtype=[("P", float), ("N", float), ("wall_s", float), ("comm_s", float)])
+    out = np.zeros(raw.shape[0], dtype=[("P", float), ("N", float), ("wall_s", float), ("comm_max_s", float)])
     out["P"] = raw[:, 0]
     out["N"] = raw[:, 1]
     out["wall_s"] = raw[:, 2]
-    out["comm_s"] = raw[:, 3]
+    out["comm_max_s"] = raw[:, 3]
     print(f"Warning: {path} missing header; parsed as 4-column numeric fallback.")
     return out, path, True
 
@@ -6936,7 +6754,7 @@ def amdahl(P, f):
 
 
 def plot_strong_scaling():
-    """Plot speedup, efficiency, and compute/comm breakdown."""
+    """Plot speedup, efficiency, and critical-path comm breakdown."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     manifest = load_manifest()
@@ -6950,8 +6768,9 @@ def plot_strong_scaling():
 
     P = data['P'].astype(int)
     wall = data['wall_s']
-    comm = data['comm_s']
-    compute = np.maximum(wall - comm, 1e-9)  # floor to avoid log(0) at small N
+    comm_col = "comm_max_s" if "comm_max_s" in names else "comm_s"
+    comm_max = data[comm_col]
+    compute_overhead = np.maximum(wall - comm_max, 0.0)
     # Some exported strong-scaling tables omit N; Results 3 strong scaling uses fixed N=2048.
     N_values = data["N"].astype(int) if has_n_column else np.full(len(P), 2048, dtype=int)
 
@@ -7016,18 +6835,25 @@ def plot_strong_scaling():
     apply_major_grid(ax2)
     disable_offset_text(ax2)
 
-    # --- Panel 3: Stacked bar — Compute vs Communication ---
+    # --- Panel 3: Stacked bar — Remaining runtime vs critical-path communication ---
     ax3 = axes[2]
     x_pos = np.arange(len(P))
     bar_width = 0.6
-    compute_display = np.maximum(compute, 0)
-    ax3.bar(x_pos, compute_display, bar_width, label="Compute", color=COLOR_VERLET, alpha=0.85)
+    remaining_display = np.maximum(compute_overhead, 0.0)
     ax3.bar(
         x_pos,
-        comm,
+        remaining_display,
         bar_width,
-        bottom=compute_display,
-        label="Communication",
+        label="Remaining runtime (wall - comm_max)",
+        color=COLOR_VERLET,
+        alpha=0.85,
+    )
+    ax3.bar(
+        x_pos,
+        comm_max,
+        bar_width,
+        bottom=remaining_display,
+        label="Communication (critical-path max)",
         color=COLOR_EULER,
         alpha=0.85,
     )
@@ -7035,7 +6861,7 @@ def plot_strong_scaling():
     ax3.set_xticklabels([str(p) for p in P])
     ax3.set_xlabel("Number of Processes P")
     ax3.set_ylabel("Wall Time [s]")
-    ax3.set_title("Compute vs Communication Time")
+    ax3.set_title("Critical-Path Communication vs Remaining Runtime")
     ax3.legend(loc="best")
     apply_major_grid(ax3, axis="y")
     disable_offset_text(ax3)
@@ -7073,7 +6899,8 @@ def plot_strong_scaling():
                 "P": int(P[i]),
                 "N": int(N_values[i]),
                 "wall_s": float(wall[i]),
-                "comm_s": float(comm[i]),
+                "comm_max_s": float(comm_max[i]),
+                "remaining_runtime_s": float(compute_overhead[i]),
                 "speedup": float(speedup[i]),
                 "efficiency": float(efficiency[i]),
             }
@@ -7083,8 +6910,8 @@ def plot_strong_scaling():
         "results3_strong_scaling_speedup_efficiency_breakdown.png",
         "results3",
         {
-            "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and compute-vs-communication breakdown.",
-            "intended_claim": "The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction.",
+            "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
+            "intended_claim": "The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime.",
             "audience_tier": "brief-facing",
             "source_data_files": unique_preserve_order(source_data_files),
             "source_manifest_keys": ["scaling.strong"],
@@ -7093,7 +6920,11 @@ def plot_strong_scaling():
                 "integrator": "verlet",
                 "fixed_particle_count_N": int(N_values[0]) if len(data) else None,
                 "process_counts_P": [int(p) for p in P.tolist()],
-                "plots_in_figure": ["speedup", "efficiency", "compute_vs_communication"],
+                "plots_in_figure": [
+                    "speedup",
+                    "efficiency",
+                    "critical_path_communication_vs_remaining_runtime",
+                ],
             },
             "fit_or_truncation": {
                 "amdahl_fit_model": "S(P)=1/(f+(1-f)/P)",
@@ -7110,7 +6941,8 @@ def plot_strong_scaling():
             },
             "caveats": [
                 "Strong-scaling data are aggregated medians, not raw replicate traces.",
-                "Communication time is solver-reported timing and may include measurement noise at small runtimes.",
+                "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
+                "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time.",
             ],
             "missing_provenance": missing_provenance,
         },
@@ -7122,7 +6954,7 @@ def plot_strong_scaling():
 
 
 def plot_size_scaling():
-    """Plot wall time and compute time vs N."""
+    """Plot wall time and wall-minus-comm_max runtime vs N."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     manifest = load_manifest()
@@ -7137,17 +6969,18 @@ def plot_size_scaling():
 
     N = data['N']
     wall = data['wall_s']
-    comm = data['comm_s']
-    compute = np.maximum(wall - comm, 1e-9)  # floor to avoid log(0) at small N
+    comm_col = "comm_max_s" if "comm_max_s" in names else "comm_s"
+    comm_max = data[comm_col]
+    remaining_runtime = np.maximum(wall - comm_max, 1e-9)  # floor to avoid log(0)
 
-    # Fit power law to compute time (wall - comm) for N >= 500
+    # Fit power law to wall-minus-comm_max runtime for N >= 500
     mask = N >= 500
-    slope_comp, intercept_comp = None, None
+    slope_remaining, intercept_remaining = None, None
     slope_wall, intercept_wall = None, None
     if np.sum(mask) >= 2:
         log_N = np.log10(N[mask])
-        log_comp = np.log10(np.maximum(compute[mask], 1e-10))
-        slope_comp, intercept_comp = np.polyfit(log_N, log_comp, 1)
+        log_remaining = np.log10(np.maximum(remaining_runtime[mask], 1e-10))
+        slope_remaining, intercept_remaining = np.polyfit(log_N, log_remaining, 1)
         
         log_wall = np.log10(wall[mask])
         slope_wall, intercept_wall = np.polyfit(log_N, log_wall, 1)
@@ -7159,12 +6992,21 @@ def plot_size_scaling():
         wall_label += f' (O(N^{slope_wall:.2f}))'
     ax1.loglog(N, wall, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label=wall_label)
     
-    comp_label = 'Compute time'
-    if slope_comp is not None:
-        comp_label += f' (O(N^{slope_comp:.2f}))'
-    ax1.loglog(N, compute, "^-", color=COLOR_RK4, linewidth=2.0, markersize=6, label=comp_label)
+    rem_label = 'Remaining runtime (wall - comm_max)'
+    if slope_remaining is not None:
+        rem_label += f' (O(N^{slope_remaining:.2f}))'
+    ax1.loglog(N, remaining_runtime, "^-", color=COLOR_RK4, linewidth=2.0, markersize=6, label=rem_label)
 
-    ax1.loglog(N, comm, "s--", color=COLOR_EULER, linewidth=1.5, markersize=5, label="Comm time", alpha=0.9)
+    ax1.loglog(
+        N,
+        comm_max,
+        "s--",
+        color=COLOR_EULER,
+        linewidth=1.5,
+        markersize=5,
+        label="Comm time (max)",
+        alpha=0.9,
+    )
     N_ref = np.array([min(N), max(N)])
     t_ref = wall[-1] * (N_ref / N[-1]) ** 2
     ax1.loglog(N_ref, t_ref, "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label=r"$\sim N^2$ reference")
@@ -7174,7 +7016,7 @@ def plot_size_scaling():
     ax1.legend(loc="best")
     apply_major_grid(ax1)
 
-    comm_frac = comm / wall * 100
+    comm_frac = comm_max / wall * 100
     ax2.plot(N, comm_frac, "o-", color=COLOR_EULER, linewidth=2.0, markersize=6)
     ax2.set_xlabel("Number of Particles N")
     ax2.set_ylabel("Communication Fraction [%]")
@@ -7212,8 +7054,8 @@ def plot_size_scaling():
                 "N": int(N[i]),
                 "P": int(data["P"][i]),
                 "wall_s": float(wall[i]),
-                "comm_s": float(comm[i]),
-                "compute_s": float(compute[i]),
+                "comm_max_s": float(comm_max[i]),
+                "remaining_runtime_s": float(remaining_runtime[i]),
                 "communication_fraction_percent": float(comm_frac[i]),
             }
         )
@@ -7242,13 +7084,15 @@ def plot_size_scaling():
             },
             "key_quantitative_summary": {
                 "wall_time_power_law_exponent": float(slope_wall) if slope_wall is not None else None,
-                "compute_time_power_law_exponent": float(slope_comp) if slope_comp is not None else None,
+                "remaining_runtime_power_law_exponent": (
+                    float(slope_remaining) if slope_remaining is not None else None
+                ),
                 "communication_fraction_percent_range": [comm_frac_min, comm_frac_max],
                 "rows": rows,
             },
             "caveats": [
                 "Power-law exponents depend on the chosen fit domain (here N >= 500).",
-                "Communication fraction uses solver-reported communication timing, not network-level profiling counters.",
+                "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
             ],
             "missing_provenance": missing_provenance,
         },
@@ -7372,9 +7216,9 @@ def check_scaling_header(path, errors):
         first = p.read_text(encoding="utf-8", errors="replace").splitlines()[0].strip()
     except IndexError:
         first = ""
-    if first != "P,N,wall_s,comm_s":
+    if first != "P,N,wall_s,comm_max_s":
         errors.append(
-            f"bad header in {path}: '{first}' (expected 'P,N,wall_s,comm_s')"
+            f"bad header in {path}: '{first}' (expected 'P,N,wall_s,comm_max_s')"
         )
 
 
@@ -7442,7 +7286,7 @@ include/md/partition.hpp                             26 lines
 include/md/potentials.hpp                            60 lines
 include/md/rng.hpp                                  134 lines
 include/md/system.hpp                                63 lines
-src/main.cpp                                        533 lines
+src/main.cpp                                        536 lines
 src/observables.cpp                                  70 lines
 src/potentials/harmonic.cpp                          37 lines
 src/potentials/lennard_jones.cpp                    104 lines
@@ -7453,7 +7297,7 @@ tests/test_partition.cpp                             68 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    2123
+    2126
 ```
 
 **End of audit.**

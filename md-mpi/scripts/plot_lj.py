@@ -12,6 +12,7 @@ import csv
 import json
 import os
 import shutil
+import glob
 from datetime import datetime, timezone
 
 import matplotlib.pyplot as plt
@@ -42,11 +43,12 @@ RESULTS2_REPORT_NOTE = f"{SUMMARY_DIR}/results2_report_note.md"
 RESULTS2_RECOMMENDED_FIGURES = f"{SUMMARY_DIR}/results2_recommended_figure_set.md"
 RESULTS2_RAHMAN_EXTRACTION_NOTE = f"{SUMMARY_DIR}/results2_rahman_extraction_note.md"
 RESULTS2_CHANGE_NOTE = f"{SUMMARY_DIR}/results2_what_changed_and_why.md"
-REMOVED_RESULTS2_FILES = [
-    f"{PLOT_DIR}/results2_lj_extended_energy_stability.png",
-    f"{PLOT_DIR}/results2_lj_extended_temperature_stability.png",
-    f"{PLOT_META_DIR}/results2_lj_extended_energy_stability.json",
-    f"{PLOT_META_DIR}/results2_lj_extended_temperature_stability.json",
+STALE_RESULTS2_PATTERNS = [
+    # Removed extended-results2 outputs:
+    f"{PLOT_DIR}/results2_lj_extended_*.png",
+    f"{PLOT_META_DIR}/results2_lj_extended_*.json",
+    # Legacy pre-results2 naming:
+    f"{PLOT_DIR}/lj_*.png",
 ]
 
 EPSILON_OVER_KB = 120.0
@@ -231,9 +233,9 @@ def update_manifest_with_results2_outputs(manifest_update):
     print(f"Updated {manifest_path} with results2_outputs")
 
 
-def remove_stale_results2_extended_artifacts():
-    for path in REMOVED_RESULTS2_FILES:
-        if os.path.exists(path):
+def remove_stale_results2_artifacts():
+    for pattern in STALE_RESULTS2_PATTERNS:
+        for path in glob.glob(pattern):
             os.remove(path)
             print(f"Removed stale artifact {path}")
 
@@ -1494,7 +1496,7 @@ def main():
     apply_plot_style()
     manifest = load_manifest()
     os.makedirs(SUMMARY_DIR, exist_ok=True)
-    remove_stale_results2_extended_artifacts()
+    remove_stale_results2_artifacts()
     rahman_points = load_rahman_anchor_points(RAHMAN_SOURCE_FILE)
     sync_rahman_anchor_dataset(RAHMAN_SOURCE_FILE, RAHMAN_OUT_FILE)
 

@@ -101,6 +101,37 @@ if isinstance(cur, str):
 PY
 }
 
+resolve_rdf_gr_path() {
+    local path=""
+    path="$(manifest_get "lj_rdf.verlet_long")"
+    [ -n "$path" ] || path="$(manifest_get "lj_rdf.verlet")"
+    [ -n "$path" ] || path="$(manifest_get "results2_outputs.rdf_csv")"
+    [ -n "$path" ] || path="$(manifest_get "results2_outputs.rdf_gr_csv")"
+    if [ -z "$path" ]; then
+        path="$(ls -1t out/runs/lj_rdf_*/gr.csv out/runs/lj_rdf*/gr.csv 2>/dev/null | head -n 1 || true)"
+    fi
+    echo "$path"
+}
+
+resolve_rdf_energy_path() {
+    local gr_path="$1"
+    local path=""
+    path="$(manifest_get "lj_rdf.verlet_long_energy")"
+    [ -n "$path" ] || path="$(manifest_get "lj_rdf.verlet_energy")"
+    [ -n "$path" ] || path="$(manifest_get "results2_outputs.rdf_energy_csv")"
+    if [ -z "$path" ] && [ -n "$gr_path" ]; then
+        local sibling
+        sibling="$(dirname "$gr_path")/lj_verlet.csv"
+        if [ -f "$sibling" ]; then
+            path="$sibling"
+        fi
+    fi
+    if [ -z "$path" ]; then
+        path="$(ls -1t out/runs/lj_rdf_*/lj_verlet.csv out/runs/lj_rdf*/lj_verlet.csv 2>/dev/null | head -n 1 || true)"
+    fi
+    echo "$path"
+}
+
 {
     echo "## Raw Artifact Bundle (Verbatim / Truncated)"
     echo ""
@@ -149,11 +180,11 @@ append_text_file "out/summary/results2/results2_report_note.md" "Results 2 Repor
 append_text_file "out/summary/results2/results2_rahman_extraction_note.md" "Rahman Extraction Note" "markdown"
 
 # Radial distribution function (full)
-GR_PATH="$(manifest_get "lj_rdf.verlet_long")"
+GR_PATH="$(resolve_rdf_gr_path)"
 if [ -n "$GR_PATH" ]; then
     append_full_csv "$GR_PATH" "Radial Distribution Function g(r) (Long RDF production run)"
 else
-    warn "manifest key missing or empty: lj_rdf.verlet_long"
+    warn "RDF g(r) path missing from expected manifest keys (lj_rdf.verlet_long/lj_rdf.verlet/results2_outputs.*) and no run-file fallback found"
 fi
 
 # LJ brief trajectories (truncated)
@@ -226,11 +257,11 @@ echo '```' >> "$TMP_BODY"
 echo "" >> "$TMP_BODY"
 
 # LJ RDF companion trajectory (truncated)
-LJ_RDF_ENERGY="$(manifest_get "lj_rdf.verlet_long_energy")"
+LJ_RDF_ENERGY="$(resolve_rdf_energy_path "$GR_PATH")"
 if [ -n "$LJ_RDF_ENERGY" ]; then
     append_trunc_csv "$LJ_RDF_ENERGY" "LJ RDF long run trajectory (energy/temperature)"
 else
-    warn "manifest key missing or empty: lj_rdf.verlet_long_energy"
+    warn "RDF companion trajectory path missing from expected manifest keys and run-file fallbacks"
 fi
 
 {
@@ -263,7 +294,8 @@ python3 ai/context_report.py preface \
     --doc bundle \
     --generation-status "$GEN_STATUS" \
     --generation-succeeded "$GEN_SUCCEEDED" \
-    --generation-note "$GEN_NOTE" > "$TMP_PREFACE"
+    --generation-note "$GEN_NOTE" \
+    --preface-mode stub > "$TMP_PREFACE"
 
 {
     cat "$TMP_PREFACE"

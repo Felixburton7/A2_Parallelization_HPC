@@ -18,6 +18,7 @@ Prerequisites (from manifest.json):
 
 import os
 import json
+import glob
 from datetime import datetime, timezone
 import numpy as np
 import matplotlib.pyplot as plt
@@ -35,6 +36,10 @@ from plot_style import (
 
 PLOT_DIR = "out/plots"
 PLOT_META_DIR = "out/plots/metadata"
+STALE_RESULTS3_FILES = [
+    # Legacy pre-results3 naming pattern; no longer part of report outputs.
+    f"{PLOT_DIR}/scaling_*.png",
+]
 
 
 def load_manifest():
@@ -76,6 +81,13 @@ def write_plot_metadata(plot_png_name, section, extra):
     with open(sidecar, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, sort_keys=True)
     print(f"Saved {sidecar}")
+
+
+def remove_stale_results3_artifacts():
+    for pattern in STALE_RESULTS3_FILES:
+        for path in glob.glob(pattern):
+            os.remove(path)
+            print(f"Removed stale artifact {path}")
 
 
 def load_scaling_csv(manifest, key):
@@ -457,5 +469,6 @@ def plot_size_scaling():
 
 if __name__ == "__main__":
     apply_plot_style()
+    remove_stale_results3_artifacts()
     plot_strong_scaling()
     plot_size_scaling()

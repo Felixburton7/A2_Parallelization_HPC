@@ -10,6 +10,7 @@ Main figures (brief-facing):
 
 Optional supporting figure:
   5) out/plots/results1_ho_figure5_energy_diagnostic.png
+  6) out/plots/results1_ho_figure6_error_vs_time.png
 
 Generated artifacts:
   - out/summary/results1/results1_ho_small_large_summary.(csv|md)
@@ -64,6 +65,7 @@ DT_STEPS = {
 DT_SMALL = 0.01
 DT_LARGE = 0.5
 TRAJ_DT = DT_SMALL
+ERROR_TIME_DT = 0.1
 
 OMEGA = 1.0
 X0 = 1.0
@@ -81,6 +83,7 @@ FIG2_PNG = "results1_ho_figure2_phase_space_dt0p01.png"
 FIG3_PNG = "results1_ho_figure3_small_vs_large_dt.png"
 FIG4_PNG = "results1_ho_figure4_convergence_combined.png"
 FIG5_PNG = "results1_ho_figure5_energy_diagnostic.png"
+FIG6_PNG = "results1_ho_figure6_error_vs_time.png"
 
 R1_SMALL_LARGE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.csv"
 R1_SMALL_LARGE_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.md"
@@ -1104,6 +1107,90 @@ def plot_figure5_energy_diagnostic(
     plt.close(fig)
 
 
+def plot_figure6_error_vs_time(
+    datasets: Dict[str, Dict[float, Dict[str, object]]],
+) -> None:
+    fig, ax = plt.subplots(figsize=(7.0, 4.5), constrained_layout=False)
+    series_rows: List[Dict[str, object]] = []
+
+    for integ in INTEGRATORS:
+        ds = datasets.get(integ, {}).get(ERROR_TIME_DT)
+        if ds is None:
+            print(f"Warning: {integ} dt={ERROR_TIME_DT:g} missing for Figure 6.")
+            continue
+
+        data = ds["data"]
+        names = set(data.dtype.names or [])
+        if not {"time", "x"}.issubset(names):
+            print(f"Warning: {integ} dt={ERROR_TIME_DT:g} missing time/x columns for Figure 6.")
+            continue
+
+        t = np.asarray(data["time"], dtype=float)
+        x = np.asarray(data["x"], dtype=float)
+        x_exact, _ = exact_solution(t)
+        err = np.abs(x - x_exact)
+        err = np.where(err > 0.0, err, np.nan)  # avoid log(0) in semilogy
+        finite_err = err[np.isfinite(err)]
+        if finite_err.size == 0:
+            print(f"Warning: {integ} dt={ERROR_TIME_DT:g} has no finite errors for Figure 6.")
+            continue
+
+        style = INTEGRATOR_STYLE[integ]
+        ax.semilogy(
+            t,
+            err,
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=style["linewidth"],
+            label=INTEGRATOR_LABELS[integ],
+        )
+
+        series_rows.append(
+            {
+                "integrator": integ,
+                "integrator_label": INTEGRATOR_LABELS[integ],
+                "dt": float(ERROR_TIME_DT),
+                "max_position_error": float(np.nanmax(finite_err)),
+                "min_nonzero_position_error": float(np.nanmin(finite_err)),
+                "n_points": int(len(t)),
+                "source_file": ds["path"],
+            }
+        )
+
+    ax.set_xlim(0.0, T_FINAL)
+    ax.set_xlabel(r"Time $[1/\omega]$")
+    ax.set_ylabel(r"$|x(t)-x_{\mathrm{exact}}(t)|$")
+    ax.set_title(r"Position error growth ($\Delta t=0.1$)")
+    apply_major_grid(ax)
+    disable_offset_text(ax)
+    ax.legend(loc="best", frameon=False)
+    fig.subplots_adjust(top=0.90, bottom=0.14, left=0.14, right=0.98)
+
+    save_plot_pair(
+        fig,
+        FIG6_PNG,
+        {
+            "kind": "supporting_results1_figure",
+            "figure_number": 6,
+            "claim": "At dt=0.1, Forward Euler error grows monotonically while Velocity-Verlet remains bounded and oscillatory; RK4 remains smallest on this horizon.",
+            "purpose": "Qualitative error-character diagnostic over time; complements Figure 4 convergence slopes.",
+            "key_parameters": {
+                "dt": float(ERROR_TIME_DT),
+                "exact_solution": "x_exact(t)=cos(t), v_exact(t)=-sin(t) for omega=1, x0=1, v0=0",
+                "metric": "absolute position error |x_num(t)-x_exact(t)|",
+                "x_axis": "linear time",
+                "y_axis": "log error",
+            },
+            "series": series_rows,
+            "caveats": [
+                "This figure is qualitative; quantitative order evidence is in Figure 4.",
+                "RK4 is non-symplectic; long-time drift behaviour requires longer-horizon diagnostics.",
+            ],
+        },
+    )
+    plt.close(fig)
+
+
 def _write_markdown(path: str, lines: List[str]) -> None:
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
@@ -1334,6 +1421,7 @@ def generate_table_outputs(
         + ".",
         f"Figure 4 (combined convergence): Fitted slopes are Euler {endpoint_fit['euler']['slope']:.2f}/{rms_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}/{rms_fit['verlet']['slope']:.2f}, RK4 {endpoint_fit['rk4']['slope']:.2f}/{rms_fit['rk4']['slope']:.2f} (endpoint/RMS), consistent with orders 1/2/4; filled markers denote fit-included points and open markers denote coarse points shown for context.",
         "Figure 5 (energy diagnostic): At dt=0.01, Euler exhibits strong secular drift, Velocity-Verlet shows bounded oscillatory error, and RK4 drift is tiny on this interval; RK4 remains non-symplectic.",
+        "Figure 6 (error-vs-time diagnostic): At dt=0.1, Euler error grows monotonically, Velocity-Verlet error oscillates with bounded envelope (symplectic behaviour), and RK4 remains smallest on this horizon.",
     ]
     if sanity_warnings:
         notes.append("")
@@ -1443,6 +1531,7 @@ def main():
     plot_figure3_small_vs_large(datasets, m_idx)
     plot_figure4_convergence_combined(metrics, endpoint_fit, rms_fit)
     plot_figure5_energy_diagnostic(datasets, m_idx)
+    plot_figure6_error_vs_time(datasets)
 
     sanity_warnings = run_sanity_checks(endpoint_fit, rms_fit, m_idx)
     generate_table_outputs(metrics, endpoint_fit, rms_fit, sanity_warnings)
