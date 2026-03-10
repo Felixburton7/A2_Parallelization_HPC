@@ -5,15 +5,15 @@ plot_scaling.py — Generate scaling analysis plots (Results 3).
 Produces:
   1. Strong scaling: Speedup S(P) with Amdahl's Law fit
   2. Efficiency E(P) = S(P)/P
-  3. Stacked bar chart: Compute vs Communication time
+  3. Stacked bar chart: Critical-path communication vs remaining runtime
   4. Size scaling: Wall time vs N with O(N²) reference
 
 Usage:
   python3 scripts/plot_scaling.py
 
 Prerequisites (from manifest.json):
-  scaling.strong -> out/scaling_strong.csv  (columns: P,N,wall_s,comm_s)
-  scaling.size   -> out/scaling_size.csv    (columns: P,N,wall_s,comm_s)
+  scaling.strong -> out/scaling_strong.csv  (columns: P,N,wall_s,comm_max_s)
+  scaling.size   -> out/scaling_size.csv    (columns: P,N,wall_s,comm_max_s)
 """
 
 import os
@@ -87,7 +87,7 @@ def load_scaling_csv(manifest, key):
     if names and "P" in names and "wall_s" in names:
         return data, path, False
 
-    # Fallback: tolerate headerless CSVs ("P,N,wall_s,comm_s" missing).
+    # Fallback: tolerate headerless CSVs ("P,N,wall_s,comm_max_s" missing).
     raw = np.genfromtxt(path, delimiter=',', encoding=None)
     if raw is None:
         return None, path, False
@@ -95,11 +95,11 @@ def load_scaling_csv(manifest, key):
         raw = np.array([raw])
     if raw.shape[1] < 4:
         return None, path, False
-    out = np.zeros(raw.shape[0], dtype=[("P", float), ("N", float), ("wall_s", float), ("comm_s", float)])
+    out = np.zeros(raw.shape[0], dtype=[("P", float), ("N", float), ("wall_s", float), ("comm_max_s", float)])
     out["P"] = raw[:, 0]
     out["N"] = raw[:, 1]
     out["wall_s"] = raw[:, 2]
-    out["comm_s"] = raw[:, 3]
+    out["comm_max_s"] = raw[:, 3]
     print(f"Warning: {path} missing header; parsed as 4-column numeric fallback.")
     return out, path, True
 
@@ -110,7 +110,7 @@ def amdahl(P, f):
 
 
 def plot_strong_scaling():
-    """Plot speedup, efficiency, and compute/comm breakdown."""
+    """Plot speedup, efficiency, and critical-path comm breakdown."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     manifest = load_manifest()
@@ -124,8 +124,9 @@ def plot_strong_scaling():
 
     P = data['P'].astype(int)
     wall = data['wall_s']
-    comm = data['comm_s']
-    compute = np.maximum(wall - comm, 1e-9)  # floor to avoid log(0) at small N
+    comm_col = "comm_max_s" if "comm_max_s" in names else "comm_s"
+    comm_max = data[comm_col]
+    compute_overhead = np.maximum(wall - comm_max, 0.0)
     # Some exported strong-scaling tables omit N; Results 3 strong scaling uses fixed N=2048.
     N_values = data["N"].astype(int) if has_n_column else np.full(len(P), 2048, dtype=int)
 
@@ -190,18 +191,25 @@ def plot_strong_scaling():
     apply_major_grid(ax2)
     disable_offset_text(ax2)
 
-    # --- Panel 3: Stacked bar — Compute vs Communication ---
+    # --- Panel 3: Stacked bar — Remaining runtime vs critical-path communication ---
     ax3 = axes[2]
     x_pos = np.arange(len(P))
     bar_width = 0.6
-    compute_display = np.maximum(compute, 0)
-    ax3.bar(x_pos, compute_display, bar_width, label="Compute", color=COLOR_VERLET, alpha=0.85)
+    remaining_display = np.maximum(compute_overhead, 0.0)
     ax3.bar(
         x_pos,
-        comm,
+        remaining_display,
         bar_width,
-        bottom=compute_display,
-        label="Communication",
+        label="Remaining runtime (wall - comm_max)",
+        color=COLOR_VERLET,
+        alpha=0.85,
+    )
+    ax3.bar(
+        x_pos,
+        comm_max,
+        bar_width,
+        bottom=remaining_display,
+        label="Communication (critical-path max)",
         color=COLOR_EULER,
         alpha=0.85,
     )
@@ -209,7 +217,7 @@ def plot_strong_scaling():
     ax3.set_xticklabels([str(p) for p in P])
     ax3.set_xlabel("Number of Processes P")
     ax3.set_ylabel("Wall Time [s]")
-    ax3.set_title("Compute vs Communication Time")
+    ax3.set_title("Critical-Path Communication vs Remaining Runtime")
     ax3.legend(loc="best")
     apply_major_grid(ax3, axis="y")
     disable_offset_text(ax3)
@@ -247,7 +255,8 @@ def plot_strong_scaling():
                 "P": int(P[i]),
                 "N": int(N_values[i]),
                 "wall_s": float(wall[i]),
-                "comm_s": float(comm[i]),
+                "comm_max_s": float(comm_max[i]),
+                "remaining_runtime_s": float(compute_overhead[i]),
                 "speedup": float(speedup[i]),
                 "efficiency": float(efficiency[i]),
             }
@@ -257,8 +266,8 @@ def plot_strong_scaling():
         "results3_strong_scaling_speedup_efficiency_breakdown.png",
         "results3",
         {
-            "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and compute-vs-communication breakdown.",
-            "intended_claim": "The MPI implementation achieves substantial strong-scaling gains with non-zero communication overhead; Amdahl fit quantifies residual serial fraction.",
+            "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
+            "intended_claim": "The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime.",
             "audience_tier": "brief-facing",
             "source_data_files": unique_preserve_order(source_data_files),
             "source_manifest_keys": ["scaling.strong"],
@@ -267,7 +276,11 @@ def plot_strong_scaling():
                 "integrator": "verlet",
                 "fixed_particle_count_N": int(N_values[0]) if len(data) else None,
                 "process_counts_P": [int(p) for p in P.tolist()],
-                "plots_in_figure": ["speedup", "efficiency", "compute_vs_communication"],
+                "plots_in_figure": [
+                    "speedup",
+                    "efficiency",
+                    "critical_path_communication_vs_remaining_runtime",
+                ],
             },
             "fit_or_truncation": {
                 "amdahl_fit_model": "S(P)=1/(f+(1-f)/P)",
@@ -284,7 +297,8 @@ def plot_strong_scaling():
             },
             "caveats": [
                 "Strong-scaling data are aggregated medians, not raw replicate traces.",
-                "Communication time is solver-reported timing and may include measurement noise at small runtimes.",
+                "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
+                "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time.",
             ],
             "missing_provenance": missing_provenance,
         },
@@ -296,7 +310,7 @@ def plot_strong_scaling():
 
 
 def plot_size_scaling():
-    """Plot wall time and compute time vs N."""
+    """Plot wall time and wall-minus-comm_max runtime vs N."""
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     manifest = load_manifest()
@@ -311,17 +325,18 @@ def plot_size_scaling():
 
     N = data['N']
     wall = data['wall_s']
-    comm = data['comm_s']
-    compute = np.maximum(wall - comm, 1e-9)  # floor to avoid log(0) at small N
+    comm_col = "comm_max_s" if "comm_max_s" in names else "comm_s"
+    comm_max = data[comm_col]
+    remaining_runtime = np.maximum(wall - comm_max, 1e-9)  # floor to avoid log(0)
 
-    # Fit power law to compute time (wall - comm) for N >= 500
+    # Fit power law to wall-minus-comm_max runtime for N >= 500
     mask = N >= 500
-    slope_comp, intercept_comp = None, None
+    slope_remaining, intercept_remaining = None, None
     slope_wall, intercept_wall = None, None
     if np.sum(mask) >= 2:
         log_N = np.log10(N[mask])
-        log_comp = np.log10(np.maximum(compute[mask], 1e-10))
-        slope_comp, intercept_comp = np.polyfit(log_N, log_comp, 1)
+        log_remaining = np.log10(np.maximum(remaining_runtime[mask], 1e-10))
+        slope_remaining, intercept_remaining = np.polyfit(log_N, log_remaining, 1)
         
         log_wall = np.log10(wall[mask])
         slope_wall, intercept_wall = np.polyfit(log_N, log_wall, 1)
@@ -333,12 +348,21 @@ def plot_size_scaling():
         wall_label += f' (O(N^{slope_wall:.2f}))'
     ax1.loglog(N, wall, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label=wall_label)
     
-    comp_label = 'Compute time'
-    if slope_comp is not None:
-        comp_label += f' (O(N^{slope_comp:.2f}))'
-    ax1.loglog(N, compute, "^-", color=COLOR_RK4, linewidth=2.0, markersize=6, label=comp_label)
+    rem_label = 'Remaining runtime (wall - comm_max)'
+    if slope_remaining is not None:
+        rem_label += f' (O(N^{slope_remaining:.2f}))'
+    ax1.loglog(N, remaining_runtime, "^-", color=COLOR_RK4, linewidth=2.0, markersize=6, label=rem_label)
 
-    ax1.loglog(N, comm, "s--", color=COLOR_EULER, linewidth=1.5, markersize=5, label="Comm time", alpha=0.9)
+    ax1.loglog(
+        N,
+        comm_max,
+        "s--",
+        color=COLOR_EULER,
+        linewidth=1.5,
+        markersize=5,
+        label="Comm time (max)",
+        alpha=0.9,
+    )
     N_ref = np.array([min(N), max(N)])
     t_ref = wall[-1] * (N_ref / N[-1]) ** 2
     ax1.loglog(N_ref, t_ref, "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label=r"$\sim N^2$ reference")
@@ -348,7 +372,7 @@ def plot_size_scaling():
     ax1.legend(loc="best")
     apply_major_grid(ax1)
 
-    comm_frac = comm / wall * 100
+    comm_frac = comm_max / wall * 100
     ax2.plot(N, comm_frac, "o-", color=COLOR_EULER, linewidth=2.0, markersize=6)
     ax2.set_xlabel("Number of Particles N")
     ax2.set_ylabel("Communication Fraction [%]")
@@ -386,8 +410,8 @@ def plot_size_scaling():
                 "N": int(N[i]),
                 "P": int(data["P"][i]),
                 "wall_s": float(wall[i]),
-                "comm_s": float(comm[i]),
-                "compute_s": float(compute[i]),
+                "comm_max_s": float(comm_max[i]),
+                "remaining_runtime_s": float(remaining_runtime[i]),
                 "communication_fraction_percent": float(comm_frac[i]),
             }
         )
@@ -416,13 +440,15 @@ def plot_size_scaling():
             },
             "key_quantitative_summary": {
                 "wall_time_power_law_exponent": float(slope_wall) if slope_wall is not None else None,
-                "compute_time_power_law_exponent": float(slope_comp) if slope_comp is not None else None,
+                "remaining_runtime_power_law_exponent": (
+                    float(slope_remaining) if slope_remaining is not None else None
+                ),
                 "communication_fraction_percent_range": [comm_frac_min, comm_frac_max],
                 "rows": rows,
             },
             "caveats": [
                 "Power-law exponents depend on the chosen fit domain (here N >= 500).",
-                "Communication fraction uses solver-reported communication timing, not network-level profiling counters.",
+                "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
             ],
             "missing_provenance": missing_provenance,
         },

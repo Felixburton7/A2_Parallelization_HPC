@@ -461,29 +461,32 @@ int main(int argc, char* argv[]) {
     const double elapsed = MPI_Wtime() - tStart;
 
     // Wall time: max across all ranks (the bottleneck determines completion).
-    // Comm time: average Allgatherv time across ranks (cancels per-rank
-    // synchronisation noise inherent to blocking collectives).
+    // Communication bottleneck should be reduced with max across ranks as well;
+    // avg/min are retained as secondary diagnostics.
     // Pattern follows MPI lecture-notes slide 78: independent MPI_Reduce calls.
     double maxTime = 0.0;
     MPI_Reduce(&elapsed, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-    double reportedCommTime = 0.0;
+    double commMax = 0.0;
+    double commAvg = 0.0;
+    double commMin = 0.0;
     if (params.timing) {
         double sumComm = 0.0;
+        MPI_Reduce(&ctx.commTime, &commMax, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&ctx.commTime, &commMin, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
         MPI_Reduce(&ctx.commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
         if (ctx.isRoot()) {
-            reportedCommTime = (ctx.size > 1) ? sumComm / ctx.size : 0.0;
+            commAvg = sumComm / ctx.size;
         }
     }
 
     if (ctx.isRoot()) {
         std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, ctx.size);
         if (params.timing) {
-            const double computeTime = maxTime - reportedCommTime;
-            std::printf("  Comm time: %.6f s (%.1f%%)\n", reportedCommTime,
-                        100.0 * reportedCommTime / maxTime);
-            std::printf("  Compute time: %.6f s (%.1f%%)\n", computeTime,
-                        100.0 * computeTime / maxTime);
+            const double commFracPct = (maxTime > 0.0) ? (100.0 * commMax / maxTime) : 0.0;
+            std::printf("  Comm time (max): %.6f s (%.1f%%)\n", commMax, commFracPct);
+            std::printf("  Comm time (avg): %.6f s\n", commAvg);
+            std::printf("  Comm time (min): %.6f s\n", commMin);
         }
     }
 

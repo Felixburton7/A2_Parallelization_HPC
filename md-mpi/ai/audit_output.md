@@ -5,9 +5,9 @@
 | Field | Value |
 |---|---|
 | Purpose | Executable project-wide audit trace: build/tests/smoke runs and raw code/context evidence. |
-| Generation timestamp (UTC) | 2026-03-09T22:16:32Z |
-| Git commit | 8d7ea5bb758e5be455cb4fca11dc716bb94b4002 |
-| Git working tree | clean |
+| Generation timestamp (UTC) | 2026-03-10T14:59:54Z |
+| Git commit | ad4ae8ee365425cab47d6852a67f471770ad6a8d |
+| Git working tree | dirty (14 changed paths) |
 | Generation succeeded | yes |
 | Generation status label | confirmed |
 | Generation note | Audit generation completed. |
@@ -19,7 +19,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 15.15x; fitted Amdahl serial fraction f=0.0339.
+- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
 
 ## How to Read This File
 
@@ -43,7 +43,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 15.15x; fitted Amdahl serial fraction f=0.0339.
+- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
 
 ## Current Deliverables Map
 
@@ -110,7 +110,7 @@
 | ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
 | Makefile | yes | 2026-03-08T17:02:51Z | confirmed |
 | tests/test_runner.cpp | yes | 2026-03-08T15:24:59Z | confirmed |
-| src/main.cpp | yes | 2026-03-09T20:41:33Z | confirmed |
+| src/main.cpp | yes | 2026-03-09T22:43:00Z | confirmed |
 | out/manifest.json | yes | 2026-03-09T16:34:08Z | confirmed |
 
 ### Expected file checks
@@ -127,9 +127,9 @@
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
 |---|---|---|---|---|
-| ai/audit_output.md | 2026-03-09T22:16:32Z | 2026-03-09T16:53:41Z | confirmed | appears current (in-progress generation timestamp) |
-| ai/results.md | 2026-03-09T13:10:48Z | 2026-03-09T16:53:41Z | potential issue | older than latest source/evidence; consider regeneration |
-| ai/results_bundle.md | 2026-03-09T13:10:49Z | 2026-03-09T16:53:41Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/audit_output.md | 2026-03-10T14:59:54Z | 2026-03-10T14:47:38Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/results.md | 2026-03-09T22:16:33Z | 2026-03-10T14:47:38Z | potential issue | older than latest source/evidence; consider regeneration |
+| ai/results_bundle.md | 2026-03-09T22:16:34Z | 2026-03-10T14:47:38Z | potential issue | older than latest source/evidence; consider regeneration |
 
 ## Diagnostics / Warnings
 
@@ -169,10 +169,10 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-09T22:16:24Z |
-| Git commit | 8d7ea5bb758e5be455cb4fca11dc716bb94b4002 |
-| Hostname | MacBook-Pro-434.local |
-| uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
+| Timestamp (UTC) | 2026-03-10T14:59:45Z |
+| Git commit | ad4ae8ee365425cab47d6852a67f471770ad6a8d |
+| Hostname | dock-sc-r1l.dar.private.cam.ac.uk |
+| uname -a | Darwin dock-sc-r1l.dar.private.cam.ac.uk 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
 | MPI runtime | mpirun (Open MPI) 5.0.8 |
 | Working directory | /Users/felix/A2_MPhil/md-mpi |
@@ -195,8 +195,8 @@
 ./ai/archive/task_overview.md
 ./ai/audit.sh
 ./ai/audit_output.md
-./ai/audit_output.tmp.P628Qe
-./ai/audit_preface.tmp.TKQArO
+./ai/audit_output.tmp.lMAnLm
+./ai/audit_preface.tmp.A2FowJ
 ./ai/context_report.py
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
@@ -246,7 +246,7 @@
 
 ### out/plots/
 ```
-total 7584
+total 7720
 drwx------  22 felix  staff     704 Mar  7 20:33 .
 drwx------  27 felix  staff     864 Mar  9 20:07 ..
 -rw-------   1 felix  staff   77228 Mar  4 17:17 ho_convergence.png
@@ -265,8 +265,8 @@ drwx------  13 felix  staff     416 Mar  9 16:50 metadata
 -rw-------   1 felix  staff  316407 Mar  7 20:33 results2_lj_brief_energy_100step_production.png
 -rw-------   1 felix  staff  153526 Mar  7 20:33 results2_lj_brief_temperature_100step_production.png
 -rw-------   1 felix  staff  267278 Mar  7 20:33 results2_lj_rdf_comparison_rahman1964.png
--rw-------   1 felix  staff  303830 Mar  9 16:53 results3_problem_size_scaling_fixed_p16.png
--rw-------   1 felix  staff  284610 Mar  9 16:53 results3_strong_scaling_speedup_efficiency_breakdown.png
+-rw-------   1 felix  staff  293875 Mar 10 14:47 results3_problem_size_scaling_fixed_p16.png
+-rw-------   1 felix  staff  279742 Mar 10 14:47 results3_strong_scaling_speedup_efficiency_breakdown.png
 -rw-------   1 felix  staff   88489 Mar  4 17:17 scaling_size.png
 -rw-------   1 felix  staff   78766 Mar  4 17:17 scaling_strong.png
 ```
@@ -410,12 +410,12 @@ N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
 Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
 HO mode: periodic box size is not used
 ==================
-Wall time: 0.003253 s (max across 1 ranks)
+Wall time: 0.003525 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3 lines):**
 ```
-# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-09T22:16:31Z
+# mode: ho, integrator: verlet, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-10T14:59:52Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.99995,-0.00999975,3.34504599142826e-30,3.34487873703803e-26,3.34521324163718e-26
@@ -436,12 +436,12 @@ N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
 Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
 HO mode: periodic box size is not used
 ==================
-Wall time: 0.004063 s (max across 1 ranks)
+Wall time: 0.003983 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-09T22:16:31Z
+# mode: ho, integrator: rk4, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-10T14:59:52Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,0.999950000416667,-0.00999983333333333,3.34510174382089e-30,3.34487873982557e-26,3.34521324999995e-26
@@ -462,12 +462,12 @@ N = 1 | P = 1 | timesteps = 1000 | frames = 1001 (step 0..1000) | dt = 1.000e-02
 Step semantics: --steps is the number of integration updates; output includes the initial frame at step 0.
 HO mode: periodic box size is not used
 ==================
-Wall time: 0.003259 s (max across 1 ranks)
+Wall time: 0.003440 s (max across 1 ranks)
 ```
 
 **Output (first 6 + last 3):**
 ```
-# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-09T22:16:31Z
+# mode: ho, integrator: euler, N: 1, P: 1, dt: 0.01, steps: 1000, n_steps: 1000, n_frames: 1001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 1000, seed: 42, L: 10000000000, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 0, production_steps: 1000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: false, production_nve: false, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, timestamp: 2026-03-10T14:59:52Z
 step,time,x,v,E_kin,E_pot,E_total
 0,0,1,0,0,3.34521325e-26,3.34521325e-26
 1,0.01,1,-0.01,3.34521325e-30,3.34521325e-26,3.345547771325e-26
@@ -550,12 +550,12 @@ production_start_step = 0 (production-only output)
 Startup boundary temperature before final rescale: 92.610539 K
 Startup boundary temperature after final rescale: 94.400000 K
 ==================
-Wall time: 0.000733 s (max across 1 ranks)
+Wall time: 0.000713 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 92.6105392665026, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-09T22:16:31Z
+# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 92.6105392665026, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-10T14:59:52Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,2.09184891288e-19,-9.20669527803387e-19,-7.11484636515388e-19,94.3999999999999
 1,1e-14,2.0629946851695e-19,-9.17766278588534e-19,-7.11466810071583e-19,93.0978796226154
@@ -641,12 +641,12 @@ production_start_step = 0 (production-only output)
 Startup boundary temperature before final rescale: 94.984918 K
 Startup boundary temperature after final rescale: 94.400000 K
 ==================
-Wall time: 0.000771 s (max across 1 ranks)
+Wall time: 0.000929 s (max across 1 ranks)
 ```
 
 **Output:**
 ```
-# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.9849184843571, startup_temperature_after_final_rescale: 94.4000000000001, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-09T22:16:31Z
+# mode: lj, integrator: euler, N: 108, P: 1, dt: 1e-14, steps: 10, n_steps: 10, n_frames: 11, step_indexing: 0..steps (includes initial frame), total_steps_executed: 60, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 10, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.9849184843571, startup_temperature_after_final_rescale: 94.4000000000001, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-10T14:59:53Z
 step,time,E_kin,E_pot,E_total,temperature
 0,0,2.09184891288e-19,-9.12916763919551e-19,-7.03731872631551e-19,94.4000000000001
 1,1e-14,2.11525263370756e-19,-9.10632329841394e-19,-6.99107066470638e-19,95.4561523982533
@@ -732,7 +732,7 @@ production_start_step = 0 (production-only output)
 Startup boundary temperature before final rescale: 92.610539 K
 Startup boundary temperature after final rescale: 94.400000 K
 ==================
-Wall time: 0.000361 s (max across 1 ranks)
+Wall time: 0.000520 s (max across 1 ranks)
 === Initial Conditions (Rank 0) ===
 Seed: 42 | FCC lattice | Box-Muller velocities
 Perturbation: 0.0100 sigma | T_initial: 94.400000 K
@@ -801,7 +801,7 @@ production_start_step = 0 (production-only output)
 Startup boundary temperature before final rescale: 92.610539 K
 Startup boundary temperature after final rescale: 94.400000 K
 ==================
-Wall time: 0.000204 s (max across 2 ranks)
+Wall time: 0.000290 s (max across 2 ranks)
 MATCH
 ```
 
@@ -877,7 +877,7 @@ production_start_step = 0 (production-only output)
 Startup boundary temperature before final rescale: 94.330482 K
 Startup boundary temperature after final rescale: 94.400000 K
 ==================
-Wall time: 0.179375 s (max across 1 ranks)
+Wall time: 0.190910 s (max across 1 ranks)
 ```
 
 ### Comparison
@@ -1830,7 +1830,7 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (535 lines)
+### `src/main.cpp` (533 lines)
 
 ```cpp
 /**
@@ -2295,22 +2295,20 @@ int main(int argc, char* argv[]) {
 
     const double elapsed = MPI_Wtime() - tStart;
 
-    struct {
-        double val;
-        int rank;
-    } localData{elapsed, ctx.rank}, globalData{0.0, 0};
-    // Report wall time from the slowest rank; comm time is tracked in MPIContext::allgatherPositions.
-    MPI_Allreduce(&localData, &globalData, 1, MPI_DOUBLE_INT, MPI_MAXLOC, MPI_COMM_WORLD);
-
-    const double maxTime = globalData.val;
-    const int slowestRank = globalData.rank;
+    // Wall time: max across all ranks (the bottleneck determines completion).
+    // Comm time: average Allgatherv time across ranks (cancels per-rank
+    // synchronisation noise inherent to blocking collectives).
+    // Pattern follows MPI lecture-notes slide 78: independent MPI_Reduce calls.
+    double maxTime = 0.0;
+    MPI_Reduce(&elapsed, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
     double reportedCommTime = 0.0;
     if (params.timing) {
-        if (ctx.rank == slowestRank) {
-            reportedCommTime = ctx.commTime;
+        double sumComm = 0.0;
+        MPI_Reduce(&ctx.commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        if (ctx.isRoot()) {
+            reportedCommTime = (ctx.size > 1) ? sumComm / ctx.size : 0.0;
         }
-        MPI_Bcast(&reportedCommTime, 1, MPI_DOUBLE, slowestRank, MPI_COMM_WORLD);
     }
 
     if (ctx.isRoot()) {
@@ -3387,7 +3385,7 @@ python3 scripts/plot_lj.py
 python3 scripts/plot_scaling.py
 ```
 
-### `scripts/run_scaling.sh` (206 lines)
+### `scripts/run_scaling.sh` (208 lines)
 
 ```sh
 #!/bin/bash
@@ -3473,7 +3471,8 @@ N_STRONG=2048
 for P in 1 2 4 8 16 24 32; do
     TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun -np "$P" "$SOLVER" \
+        # OUTPUT=$(mpirun -np "$P" "$SOLVER" \
+        OUTPUT=$(mpirun --bind-to core -np "$P" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
 
@@ -3525,7 +3524,8 @@ P_SIZE=16
 for N in 108 256 500 864 1372 2048; do
     TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun -np "$P_SIZE" "$SOLVER" \
+        # OUTPUT=$(mpirun -np "$P_SIZE" "$SOLVER" \
+        OUTPUT=$(mpirun --bind-to core -np "$P_SIZE" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
 
@@ -7442,7 +7442,7 @@ include/md/partition.hpp                             26 lines
 include/md/potentials.hpp                            60 lines
 include/md/rng.hpp                                  134 lines
 include/md/system.hpp                                63 lines
-src/main.cpp                                        535 lines
+src/main.cpp                                        533 lines
 src/observables.cpp                                  70 lines
 src/potentials/harmonic.cpp                          37 lines
 src/potentials/lennard_jones.cpp                    104 lines
@@ -7453,7 +7453,7 @@ tests/test_partition.cpp                             68 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    2125
+    2123
 ```
 
 **End of audit.**

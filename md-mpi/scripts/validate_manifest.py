@@ -41,9 +41,9 @@ def check_scaling_header(path, errors):
         first = p.read_text(encoding="utf-8", errors="replace").splitlines()[0].strip()
     except IndexError:
         first = ""
-    if first != "P,N,wall_s,comm_s":
+    if first != "P,N,wall_s,comm_max_s":
         errors.append(
-            f"bad header in {path}: '{first}' (expected 'P,N,wall_s,comm_s')"
+            f"bad header in {path}: '{first}' (expected 'P,N,wall_s,comm_max_s')"
         )
 
 

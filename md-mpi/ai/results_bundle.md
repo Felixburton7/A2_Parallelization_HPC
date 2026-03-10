@@ -5,9 +5,9 @@
 | Field | Value |
 |---|---|
 | Purpose | Project-wide raw artifact bundle: manifest-linked CSV/notes with truncation for context-size control. |
-| Generation timestamp (UTC) | 2026-03-09T22:16:34Z |
-| Git commit | 8d7ea5bb758e5be455cb4fca11dc716bb94b4002 |
-| Git working tree | dirty (1 changed paths) |
+| Generation timestamp (UTC) | 2026-03-10T14:59:55Z |
+| Git commit | ad4ae8ee365425cab47d6852a67f471770ad6a8d |
+| Git working tree | dirty (15 changed paths) |
 | Generation succeeded | yes |
 | Generation status label | potential issue |
 | Generation note | Bundle generated with warnings; review missing/empty artifact keys. |
@@ -19,7 +19,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 15.15x; fitted Amdahl serial fraction f=0.0339.
+- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
 
 ## How to Read This File
 
@@ -43,7 +43,7 @@
 - Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
 - Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
 - Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 15.15x; fitted Amdahl serial fraction f=0.0339.
+- Results 3 strong scaling: max measured speedup 24.34x; fitted Amdahl serial fraction f=0.0098.
 
 ## Current Deliverables Map
 
@@ -138,9 +138,9 @@
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
 |---|---|---|---|---|
-| ai/audit_output.md | 2026-03-09T22:16:32Z | 2026-03-09T16:53:41Z | confirmed | appears current |
-| ai/results.md | 2026-03-09T22:16:33Z | 2026-03-09T16:53:41Z | confirmed | appears current |
-| ai/results_bundle.md | 2026-03-09T22:16:34Z | 2026-03-09T16:53:41Z | confirmed | appears current (in-progress generation timestamp) |
+| ai/audit_output.md | 2026-03-10T14:59:54Z | 2026-03-10T14:47:38Z | confirmed | appears current |
+| ai/results.md | 2026-03-10T14:59:54Z | 2026-03-10T14:47:38Z | confirmed | appears current |
+| ai/results_bundle.md | 2026-03-10T14:59:55Z | 2026-03-10T14:47:38Z | confirmed | appears current (in-progress generation timestamp) |
 
 ## Diagnostics / Warnings
 
@@ -401,24 +401,24 @@ step,time,E_kin,E_pot,E_total,temperature
 ## Strong Scaling (median paired timings)
 ```csv
 P,N,wall_s,comm_s
-1,2048,57.056743,0.001845
-2,2048,28.958400,0.132865
-4,2048,18.185397,1.704280
-8,2048,9.586349,1.635382
-16,2048,5.506062,0.668078
-24,2048,3.962455,0.970232
-32,2048,3.766336,0.902635
+1,2048,47.472812,0.000000
+2,2048,23.741062,0.119966
+4,2048,12.324147,0.406551
+8,2048,6.321563,0.286507
+16,2048,3.297202,0.191395
+24,2048,2.409784,0.182140
+32,2048,1.950562,0.163879
 ```
 
 ## Size Scaling (median paired timings)
 ```csv
 P,N,wall_s,comm_s
-16,108,0.173195,0.096357
-16,256,0.706827,0.111586
-16,500,2.397116,0.194787
-16,864,6.078818,0.232015
-16,1372,14.017266,1.027438
-16,2048,29.135018,6.167106
+16,108,0.069119,0.029157
+16,256,0.363684,0.067851
+16,500,1.432264,0.213095
+16,864,3.932334,0.437881
+16,1372,9.430750,0.926384
+16,2048,19.709470,1.586496
 ```
 
 ## HO Convergence Summary (all dt values, final step only)

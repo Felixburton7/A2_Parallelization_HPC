@@ -3,7 +3,7 @@
 # run_all_data.sh — Generate ALL production data for the report
 #
 # Designed for shared HPC clusters (cerberus1). Uses median-of-20
-# paired (wall, comm) repetitions for scaling benchmarks to filter contention noise.
+# paired (wall, comm_max) repetitions for scaling benchmarks to filter contention noise.
 # ──────────────────────────────────────────────────────────────────
 
 set -euo pipefail
@@ -38,8 +38,8 @@ echo "=========================================="
 echo "  FULL DATA GENERATION — $(date)"
 echo "=========================================="
 
-# Helper: given parallel arrays of wall and comm times, pick the
-# median by wall time and return the paired (wall, comm).
+# Helper: given parallel arrays of wall and comm_max times, pick the
+# median by wall time and return the paired (wall, comm_max).
 pick_median_pair() {
     local walls=($1)
     local comms=($2)
@@ -54,6 +54,22 @@ pick_median_pair() {
     line=$(sed -n "$((mid+1))p" "$tmpfile")
     rm -f "$tmpfile"
     echo "$line"
+}
+
+# Extract first numeric token from the first line in OUTPUT that matches PATTERN.
+extract_metric() {
+    local output="$1"
+    local pattern="$2"
+    awk -v pat="$pattern" '
+        $0 ~ pat {
+            for (i = 1; i <= NF; ++i) {
+                if ($i ~ /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/) {
+                    print $i
+                    exit
+                }
+            }
+        }
+    ' <<< "$output"
 }
 
 # ── 0. Parallel Consistency Check ──
@@ -184,54 +200,56 @@ if [ "$SKIP_SCALING" = "1" ]; then
 else
 echo ""
 echo "=== RESULTS 3: STRONG SCALING (20 reps, N=2048, ${STRONG_STEPS} steps) ==="
-echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_strong.csv"
+echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_strong.csv"
 python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
 
 REPS=20
 for P in 1 2 4 8 16 24 32; do
     WALLS=""
-    COMMS=""
+    COMMS_MAX=""
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun -np $P $SOLVER --mode lj --integrator verlet --N 2048 --steps $STRONG_STEPS --timing 2>/dev/null)
-        W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
-        C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
-        [ -z "$C" ] && C="0.0"
-        C=$(awk -v w="$W" -v c="$C" 'BEGIN{if (c > w) print w; else print c}')
+        W=$(extract_metric "$OUTPUT" "Wall time")
+        C_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+        [ -z "$C_MAX" ] && C_MAX=$(extract_metric "$OUTPUT" "Comm time")
+        [ -z "$C_MAX" ] && C_MAX="0.0"
+        C_MAX=$(awk -v w="$W" -v c="$C_MAX" 'BEGIN{if (c > w) print w; else print c}')
         WALLS="$WALLS $W"
-        COMMS="$COMMS $C"
-        echo "    P=$P rep=$REP wall=$W comm=$C"
+        COMMS_MAX="$COMMS_MAX $C_MAX"
+        echo "    P=$P rep=$REP wall=$W comm_max=$C_MAX"
     done
-    PAIR=$(pick_median_pair "$WALLS" "$COMMS")
+    PAIR=$(pick_median_pair "$WALLS" "$COMMS_MAX")
     MEDIAN_W=$(echo "$PAIR" | awk '{print $1}')
-    MEDIAN_C=$(echo "$PAIR" | awk '{print $2}')
-    echo "$P,2048,$MEDIAN_W,$MEDIAN_C" >> "$OUTDIR/scaling_strong.csv"
-    echo "  >> P=$P MEDIAN: wall=$MEDIAN_W comm=$MEDIAN_C"
+    MEDIAN_C_MAX=$(echo "$PAIR" | awk '{print $2}')
+    echo "$P,2048,$MEDIAN_W,$MEDIAN_C_MAX" >> "$OUTDIR/scaling_strong.csv"
+    echo "  >> P=$P MEDIAN: wall=$MEDIAN_W comm_max=$MEDIAN_C_MAX"
 done
 
 # ── 5. Size Scaling (median of 20 paired samples) ──
 echo ""
 echo "=== RESULTS 3: SIZE SCALING (20 reps, P=16, ${SIZE_STEPS} steps) ==="
-echo "P,N,wall_s,comm_s" > "$OUTDIR/scaling_size.csv"
+echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_size.csv"
 python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
 
 for N in 108 256 500 864 1372 2048; do
     WALLS=""
-    COMMS=""
+    COMMS_MAX=""
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun -np 16 $SOLVER --mode lj --integrator verlet --N $N --steps $SIZE_STEPS --timing 2>/dev/null)
-        W=$(awk '/Wall time/ {print $3; exit}' <<< "$OUTPUT")
-        C=$(awk '/Comm time/ {print $3; exit}' <<< "$OUTPUT")
-        [ -z "$C" ] && C="0.0"
-        C=$(awk -v w="$W" -v c="$C" 'BEGIN{if (c > w) print w; else print c}')
+        W=$(extract_metric "$OUTPUT" "Wall time")
+        C_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+        [ -z "$C_MAX" ] && C_MAX=$(extract_metric "$OUTPUT" "Comm time")
+        [ -z "$C_MAX" ] && C_MAX="0.0"
+        C_MAX=$(awk -v w="$W" -v c="$C_MAX" 'BEGIN{if (c > w) print w; else print c}')
         WALLS="$WALLS $W"
-        COMMS="$COMMS $C"
-        echo "    N=$N rep=$REP wall=$W comm=$C"
+        COMMS_MAX="$COMMS_MAX $C_MAX"
+        echo "    N=$N rep=$REP wall=$W comm_max=$C_MAX"
     done
-    PAIR=$(pick_median_pair "$WALLS" "$COMMS")
+    PAIR=$(pick_median_pair "$WALLS" "$COMMS_MAX")
     MEDIAN_W=$(echo "$PAIR" | awk '{print $1}')
-    MEDIAN_C=$(echo "$PAIR" | awk '{print $2}')
-    echo "16,$N,$MEDIAN_W,$MEDIAN_C" >> "$OUTDIR/scaling_size.csv"
-    echo "  >> N=$N MEDIAN: wall=$MEDIAN_W comm=$MEDIAN_C"
+    MEDIAN_C_MAX=$(echo "$PAIR" | awk '{print $2}')
+    echo "16,$N,$MEDIAN_W,$MEDIAN_C_MAX" >> "$OUTDIR/scaling_size.csv"
+    echo "  >> N=$N MEDIAN: wall=$MEDIAN_W comm_max=$MEDIAN_C_MAX"
 done
 
 fi  # end --skip-scaling check
