@@ -1,0 +1,4 @@
+label=results3_pinned_20260310_124952
+job_id=6795
+host=phy-cerberus4
+note=--bind-to core pinning enabled
