@@ -1,167 +1,21 @@
 # Audit Output — WA2 MPI MD Solver
 
-## Executive Summary
+## Context Preface (Stub)
+
+- Shared Executive Summary, Deliverables Map, claims table, and freshness metadata are centralised in `ai/results.md`.
+- This file includes only document-specific sections below.
+- Generation metadata for this document:
 
 | Field | Value |
 |---|---|
-| Purpose | Executable project-wide audit trace: build/tests/smoke runs and raw code/context evidence. |
-| Generation timestamp (UTC) | 2026-03-10T17:33:33Z |
-| Git commit | ccf5f1350359a1bc69a1ba7a6e4a295ae0f6aaad |
-| Git working tree | dirty (15 changed paths) |
+| Generation timestamp (UTC) | 2026-03-11T12:17:17Z |
 | Generation succeeded | yes |
 | Generation status label | confirmed |
 | Generation note | Audit generation completed. |
 
-### Top Important Current Facts
+## Cross-Reference
 
-- Manifest-linked artifacts found: 28/28 paths currently exist.
-- Core final figures present: 9/9 required figure files.
-- Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
-- Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
-- Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
-
-## How to Read This File
-
-- Authoritative for: Build/test execution traces and raw repository state at generation time.
-- Less authoritative for: Narrative interpretation of scientific conclusions across all figures.
-- Companion files to read with this one: `ai/results.md`, `ai/results_bundle.md`.
-
-## Authoritative Facts
-
-| Fact | Status | Evidence |
-|---|---|---|
-| Manifest present | confirmed | `out/manifest.json` |
-| Core required figures present | confirmed | 9/9 required |
-| Core required tables/data present | confirmed | 8/8 required |
-| Plot metadata sidecars available | confirmed | `out/plots/metadata/*.json` |
-
-## Generated Result Summaries (High Value)
-
-- Manifest-linked artifacts found: 28/28 paths currently exist.
-- Core final figures present: 9/9 required figure files.
-- Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
-- Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
-- Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
-
-## Current Deliverables Map
-
-### Current final figures
-- [confirmed] Results 1: `out/plots/results1_ho_figure1_trajectories_dt0p01.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure2_phase_space_dt0p01.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure3_small_vs_large_dt.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure4_convergence_combined.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure5_energy_diagnostic.png` (optional)
-- [confirmed] Results 2: `out/plots/results2_lj_brief_energy_100step_production.png` (required)
-- [confirmed] Results 2: `out/plots/results2_lj_brief_temperature_100step_production.png` (required)
-- [confirmed] Results 2: `out/plots/results2_lj_rdf_comparison_rahman1964.png` (required)
-- [confirmed] Results 3: `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png` (required)
-- [confirmed] Results 3: `out/plots/results3_problem_size_scaling_fixed_p16.png` (required)
-
-### Current tables
-- [confirmed] Manifest: `out/manifest.json` (required)
-- [confirmed] Results 1: `out/summary/results1/results1_ho_convergence_summary.csv` (required)
-- [confirmed] Results 1: `out/summary/results1/results1_ho_small_large_summary.csv` (required)
-- [confirmed] Results 1: `out/summary/results1/results1_ho_endpoint_values.csv` (required)
-- [confirmed] Results 2: `out/summary/results2/results2_quantitative_summary_table.csv` (required)
-- [confirmed] Results 2: `out/summary/results2/results2_quantitative_summary_table.md` (required)
-- [confirmed] Results 3: `out/scaling_strong.csv` (required)
-- [confirmed] Results 3: `out/scaling_size.csv` (required)
-
-### Core deliverables
-- [confirmed] `ai/audit_output.md`
-- [confirmed] `ai/results.md`
-- [confirmed] `ai/results_bundle.md`
-- [confirmed] `out/manifest.json`
-
-### Diagnostics-only artifacts
-- [informational] `out/plots/metadata/*.json` sidecars present: 10.
-- [informational] Raw run CSV trees under `out/runs/` are primary diagnostics and provenance backing.
-
-### Deprecated / legacy artifacts
-- [expected by design] Legacy filename `out/plots/results1_ho_position_velocity_trajectories.png` replaced by `out/plots/results1_ho_figure1_trajectories_dt0p01.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_phase_space_trajectories.png` replaced by `out/plots/results1_ho_figure2_phase_space_dt0p01.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_convergence_endpoint_position_error.png` replaced by `out/plots/results1_ho_figure4_convergence_combined.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_convergence_rms_phase_space_error.png` replaced by `out/plots/results1_ho_figure4_convergence_combined.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_energy_conservation.png` replaced by `out/plots/results1_ho_figure5_energy_diagnostic.png`.
-
-## Report Claims Supported by Current Evidence
-
-| Claim | Supporting artifacts | Confidence | Caveat |
-|---|---|---|---|
-| Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_ho_figure4_convergence_combined.png` | medium | No major caveat recorded in metadata. |
-| Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_ho_figure3_small_vs_large_dt.png` | medium | No major caveat recorded in metadata. |
-| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
-| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
-| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
-| The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
-| Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
-| Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
-| Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences. | `out/plots/results1_ho_figure2_phase_space_dt0p01.png` | medium | No major caveat recorded in metadata. |
-| Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval. | `out/plots/results1_ho_figure5_energy_diagnostic.png` | medium | No major caveat recorded in metadata. |
-
-## Freshness / Staleness Metadata
-
-### Source files used to generate this file
-| Source file | Found | Last modified (UTC) | Status |
-|---|---|---|---|
-| ai/audit.sh | yes | 2026-03-07T17:11:19Z | confirmed |
-| ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
-| Makefile | yes | 2026-03-08T17:02:51Z | confirmed |
-| tests/test_runner.cpp | yes | 2026-03-08T15:24:59Z | confirmed |
-| src/main.cpp | yes | 2026-03-10T15:40:11Z | confirmed |
-| out/manifest.json | yes | 2026-03-09T16:34:08Z | confirmed |
-
-### Expected file checks
-| Path | Expectation | Role | Status |
-|---|---|---|---|
-| out/manifest.json | required | project manifest | confirmed |
-| Makefile | required | build definition | confirmed |
-| src/main.cpp | required | core solver source | confirmed |
-| tests/test_runner.cpp | required | unit-test entry | confirmed |
-| scripts/plot_ho.py | required | results generator | confirmed |
-| scripts/plot_lj.py | required | results generator | confirmed |
-| scripts/plot_scaling.py | required | results generator | confirmed |
-
-### Output currency relative to current repo evidence
-| Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
-|---|---|---|---|---|
-| ai/audit_output.md | 2026-03-10T17:33:33Z | 2026-03-10T16:35:08Z | confirmed | appears current (in-progress generation timestamp) |
-| ai/results.md | 2026-03-10T14:59:54Z | 2026-03-10T16:35:08Z | potential issue | older than latest source/evidence; consider regeneration |
-| ai/results_bundle.md | 2026-03-10T14:59:55Z | 2026-03-10T16:35:08Z | potential issue | older than latest source/evidence; consider regeneration |
-
-## Diagnostics / Warnings
-
-- [confirmed] Required artifacts for this context view were found.
-- [potential issue] Context outputs older than latest repo evidence: `ai/results.md`, `ai/results_bundle.md`
-
-## Known Limitations / Caveats (Project-wide)
-
-- Lennard-Jones uses a hard cutoff (no potential shift), so small energy discontinuities can occur when pairs cross r_cut.
-- LJ force evaluation is direct all-pairs O(N^2) without neighbour lists; scaling trends depend strongly on chosen timestep counts.
-- MPI strategy uses particle decomposition plus Allgatherv-style position exchange each timestep; communication overhead rises with process count.
-- Results 2 reference comparison uses manual Rahman Fig. 2 anchors for part of the curve; treat as qualitative/semi-quantitative.
-- Strong/size scaling CSVs store aggregated timings rather than all replicate traces, limiting deeper uncertainty analysis.
-- Artifact naming conventions evolved (notably Results 1 plot names); legacy filename checks must be interpreted with rename context.
-
-## Potentially Stale or Informational Items
-
-| Status | Item | Interpretation |
-|---|---|---|
-| expected by design | `out/plots/results1_ho_position_velocity_trajectories.png` | Renamed; current artifact is `out/plots/results1_ho_figure1_trajectories_dt0p01.png`. |
-| expected by design | `out/plots/results1_ho_phase_space_trajectories.png` | Renamed; current artifact is `out/plots/results1_ho_figure2_phase_space_dt0p01.png`. |
-| expected by design | `out/plots/results1_ho_convergence_endpoint_position_error.png` | Renamed; current artifact is `out/plots/results1_ho_figure4_convergence_combined.png`. |
-| expected by design | `out/plots/results1_ho_convergence_rms_phase_space_error.png` | Renamed; current artifact is `out/plots/results1_ho_figure4_convergence_combined.png`. |
-| expected by design | `out/plots/results1_ho_energy_conservation.png` | Renamed; current artifact is `out/plots/results1_ho_figure5_energy_diagnostic.png`. |
-| informational | `scripts/__pycache__/` | Generated cache files may create noisy static-scan results unless excluded. |
-| informational | `out/summary/results3/` | Results 3 currently tracked via `out/scaling_*.csv` and metadata JSON sidecars. |
-
-## Cross-References
-
-- `ai/audit_output.md`: executable build/test/smoke audit and raw source/verbatim evidence.
-- `ai/results.md`: interpreted project-wide results summary and compliance-oriented checks.
-- `ai/results_bundle.md`: raw/truncated artifact bundle for direct context ingestion.
+- Read `ai/results.md` first for shared high-level context.
 
 ## Detailed Audit Evidence (Raw and Verbose)
 
@@ -169,10 +23,10 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-10T17:33:26Z |
-| Git commit | ccf5f1350359a1bc69a1ba7a6e4a295ae0f6aaad |
-| Hostname | dock-sc-r1l.dar.private.cam.ac.uk |
-| uname -a | Darwin dock-sc-r1l.dar.private.cam.ac.uk 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
+| Timestamp (UTC) | 2026-03-11T12:17:11Z |
+| Git commit | 47c6b8ab38ed450504057c25a7a77d2ff70c79ff |
+| Hostname | MacBook-Pro-434.local |
+| uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
 | MPI runtime | mpirun (Open MPI) 5.0.8 |
 | Working directory | /Users/felix/A2_MPhil/md-mpi |
@@ -185,8 +39,6 @@
 ./.gitignore
 ./Makefile
 ./README.md
-./ai/__pycache__/analyse_results.cpython-311.pyc
-./ai/__pycache__/analyse_results.cpython-313.pyc
 ./ai/analyse_results.py
 ./ai/archive/claude.md
 ./ai/archive/code.md
@@ -195,8 +47,8 @@
 ./ai/archive/task_overview.md
 ./ai/audit.sh
 ./ai/audit_output.md
-./ai/audit_output.tmp.ReXLiH
-./ai/audit_preface.tmp.MSDD91
+./ai/audit_output.tmp.tZXFat
+./ai/audit_preface.tmp.ZltUIW
 ./ai/context_report.py
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
@@ -207,7 +59,6 @@
 ./include/md/constants.hpp
 ./include/md/integrators.hpp
 ./include/md/mic.hpp
-./include/md/mpi_context.hpp
 ./include/md/observables.hpp
 ./include/md/params.hpp
 ./include/md/partition.hpp
@@ -215,10 +66,7 @@
 ./include/md/rng.hpp
 ./include/md/system.hpp
 ./md_solver
-./scripts/__pycache__/plot_scaling.cpython-313.pyc
 ./scripts/__pycache__/plot_style.cpython-311.pyc
-./scripts/__pycache__/plot_style.cpython-313.pyc
-./scripts/__pycache__/validate_manifest.cpython-313.pyc
 ./scripts/append_manifest.py
 ./scripts/check_gr_tolerance.py
 ./scripts/check_tolerance.py
@@ -243,34 +91,24 @@
 ./tests/test_mic.cpp
 ./tests/test_partition.cpp
 ./tests/test_runner.cpp
-./wa2-results-6381.out
 ```
 
 ### out/plots/
 ```
-total 7720
-drwx------  22 felix  staff     704 Mar  7 20:33 .
-drwx------  28 felix  staff     896 Mar 10 17:33 ..
--rw-------   1 felix  staff   77228 Mar  4 17:17 ho_convergence.png
--rw-------   1 felix  staff   48921 Mar  4 17:17 ho_energy.png
--rw-------   1 felix  staff  118022 Mar  4 17:17 ho_trajectories.png
--rw-------   1 felix  staff  109938 Mar  4 17:17 lj_energy.png
--rw-------   1 felix  staff   72465 Mar  4 17:17 lj_equilibrated_comparison.png
--rw-------   1 felix  staff   37509 Mar  4 17:17 lj_rdf.png
--rw-------   1 felix  staff   50699 Mar  4 17:17 lj_temperature.png
-drwx------  13 felix  staff     416 Mar  9 16:50 metadata
--rw-------   1 felix  staff  352239 Mar  7 20:33 results1_ho_figure1_trajectories_dt0p01.png
--rw-------   1 felix  staff  221195 Mar  7 20:33 results1_ho_figure2_phase_space_dt0p01.png
--rw-------   1 felix  staff  683109 Mar  7 20:33 results1_ho_figure3_small_vs_large_dt.png
--rw-------   1 felix  staff  366065 Mar  7 20:33 results1_ho_figure4_convergence_combined.png
--rw-------   1 felix  staff  216303 Mar  7 20:33 results1_ho_figure5_energy_diagnostic.png
--rw-------   1 felix  staff  316407 Mar  7 20:33 results2_lj_brief_energy_100step_production.png
--rw-------   1 felix  staff  153526 Mar  7 20:33 results2_lj_brief_temperature_100step_production.png
--rw-------   1 felix  staff  267278 Mar  7 20:33 results2_lj_rdf_comparison_rahman1964.png
--rw-------   1 felix  staff  312854 Mar 10 16:35 results3_problem_size_scaling_fixed_p16.png
--rw-------   1 felix  staff  297714 Mar 10 16:35 results3_strong_scaling_speedup_efficiency_breakdown.png
--rw-------   1 felix  staff   88489 Mar  4 17:17 scaling_size.png
--rw-------   1 felix  staff   78766 Mar  4 17:17 scaling_strong.png
+total 6696
+drwx------  13 felix  staff     416 Mar 11 12:01 .
+drwx------  24 felix  staff     768 Mar 11 12:14 ..
+drwx------  13 felix  staff     416 Mar 11 12:01 metadata
+-rw-r--r--   1 felix  staff  353455 Mar 11 12:01 results1_figure1ab_trajectories_dt0p01.png
+-rw-r--r--   1 felix  staff  223338 Mar 11 12:01 results1_figure1c_phase_space_dt0p01.png
+-rw-r--r--   1 felix  staff  696830 Mar 11 12:01 results1_figure2_small_vs_large_dt.png
+-rw-r--r--   1 felix  staff  367029 Mar 11 12:01 results1_figure3_convergence_combined.png
+-rw-r--r--   1 felix  staff  198433 Mar 11 12:01 results1_figure4_energy_diagnostic.png
+-rw-r--r--   1 felix  staff  319969 Mar 11 12:01 results2_figure6_lj_brief_energy_100step_production.png
+-rw-r--r--   1 felix  staff  153527 Mar 11 12:01 results2_figure7_lj_brief_temperature_100step_production.png
+-rw-r--r--   1 felix  staff  246521 Mar 11 12:01 results2_figure8_lj_rdf_comparison_rahman1964.png
+-rw-r--r--   1 felix  staff  308808 Mar 11 12:01 results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png
+-rw-r--r--   1 felix  staff  311049 Mar 11 12:01 results3_figure9ab_problem_size_scaling_fixed_p16.png
 ```
 
 ### out/manifest.json
@@ -309,6 +147,35 @@ drwx------  13 felix  staff     416 Mar  9 16:50 metadata
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
+  },
+  "results2_outputs": {
+    "generated_utc": "2026-03-11T12:01:14Z",
+    "main_report_figures": [
+      "out/plots/results2_figure6_lj_brief_energy_100step_production.png",
+      "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
+      "out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png"
+    ],
+    "main_report_tables": [
+      "out/summary/results2/results2_quantitative_summary_table.md",
+      "out/summary/results2/results2_quantitative_summary_table.csv",
+      "out/summary/results2/results2_quantitative_summary_table.json"
+    ],
+    "rahman_reference_dataset": "out/summary/results2/rahman1964_fig2_manual_anchors.csv",
+    "notes": [
+      "out/summary/results2/results2_report_note.md",
+      "out/summary/results2/results2_recommended_figure_set.md",
+      "out/summary/results2/results2_rahman_extraction_note.md",
+      "out/summary/results2/results2_what_changed_and_why.md"
+    ],
+    "plot_metadata_files": [
+      "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json",
+      "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json",
+      "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json"
+    ]
+  },
+  "lj_rdf": {
+    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv",
+    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv"
   }
 }
 ```
@@ -342,6 +209,8 @@ out/runs/ho_N1_verlet_dt0.5_20260308_182329/
 out/runs/ho_N1_verlet_dt1.0_20260308_182329/
 out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_182329/
 out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_182329/
+out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/
+out/summary/results2/
 ```
 
 ## 3. Build and Warnings
@@ -406,14 +275,16 @@ ALL TESTS PASSED
 ### 5a. HO — Velocity-Verlet (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[dock-sc-r1l.dar.private.cam.ac.uk:99051] [prterun-dock-sc-r1l-99051@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99051] [prterun-dock-sc-r1l-99051@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99051] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[MacBook-Pro-434.local:59683] [prterun-MacBook-Pro-434-59683@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59683] [prterun-MacBook-Pro-434-59683@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59683] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
 --------------------------------------------------------------------------
 No sockets were able to be opened on the available protocols
 (IPv4 and/or IPv6). Please check your network and retry.
 --------------------------------------------------------------------------
-[99051] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[59683] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+--------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
 ```
 
 **Output (first 6 + last 3 lines):**
@@ -433,11 +304,10 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5b. HO — RK4 (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[dock-sc-r1l.dar.private.cam.ac.uk:99054] [prterun-dock-sc-r1l-99054@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99054] [prterun-dock-sc-r1l-99054@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99054] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[99054] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
---------------------------------------------------------------------------
+[MacBook-Pro-434.local:59686] [prterun-MacBook-Pro-434-59686@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59686] [prterun-MacBook-Pro-434-59686@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59686] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[59686] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
@@ -457,18 +327,10 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5c. HO — Euler (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[dock-sc-r1l.dar.private.cam.ac.uk:99057] [prterun-dock-sc-r1l-99057@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99057] [prterun-dock-sc-r1l-99057@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99057] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
---------------------------------------------------------------------------
-No sockets were able to be opened on the available protocols
-(IPv4 and/or IPv6). Please check your network and retry.
---------------------------------------------------------------------------
---------------------------------------------------------------------------
-No network interfaces were found for out-of-band communications. We require
-at least one available network for out-of-band messaging.
---------------------------------------------------------------------------
-[99057] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:59689] [prterun-MacBook-Pro-434-59689@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59689] [prterun-MacBook-Pro-434-59689@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59689] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[59689] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
@@ -488,18 +350,11 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
-[dock-sc-r1l.dar.private.cam.ac.uk:99060] [prterun-dock-sc-r1l-99060@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99060] [prterun-dock-sc-r1l-99060@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99060] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[MacBook-Pro-434.local:59692] [prterun-MacBook-Pro-434-59692@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59692] [prterun-MacBook-Pro-434-59692@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59692] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[59692] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 --------------------------------------------------------------------------
-No sockets were able to be opened on the available protocols
-(IPv4 and/or IPv6). Please check your network and retry.
---------------------------------------------------------------------------
---------------------------------------------------------------------------
-No network interfaces were found for out-of-band communications. We require
-at least one available network for out-of-band messaging.
---------------------------------------------------------------------------
-[99060] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
@@ -612,16 +467,10 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
-[dock-sc-r1l.dar.private.cam.ac.uk:99062] [prterun-dock-sc-r1l-99062@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99062] [prterun-dock-sc-r1l-99062@0,0] bind() failed for port 0: Operation not permitted (1)
-[dock-sc-r1l.dar.private.cam.ac.uk:99062] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
---------------------------------------------------------------------------
-No sockets were able to be opened on the available protocols
-(IPv4 and/or IPv6). Please check your network and retry.
---------------------------------------------------------------------------
---------------------------------------------------------------------------
-[99062] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-No network interfaces were found for out-of-band communications. We require
+[MacBook-Pro-434.local:59706] [prterun-MacBook-Pro-434-59706@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59706] [prterun-MacBook-Pro-434-59706@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:59706] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[59706] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
@@ -644,16 +493,275 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
-[99065] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-[99066] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-MATCH
+[59710] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[59711] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+Error checking tolerance: [Errno 2] No such file or directory: 'out/audit_p1.pfv1GM/lj_verlet.csv'
 ```
 
-## 6. CLI Defaults vs. Brief Requirements
+## 6. Code Quality Audit (Assessor Perspective)
+
+### 6a. AI-generation signal detection
+
+**Doxygen-style tags (`@file/@brief/@param/@return`)**
+```
+count=89
+include/md/params.hpp:2: * @file params.hpp
+include/md/params.hpp:3: * @brief Runtime parameters.
+include/md/params.hpp:15:/// @brief Runtime parameters parsed from command-line arguments.
+include/md/partition.hpp:2: * @file partition.hpp
+include/md/partition.hpp:3: * @brief Pure helper for 1D remainder-safe particle decomposition.
+```
+
+**Step-style numbered comments (`// Step N`, `// N.`)**
+```
+count=2
+src/main.cpp:467:        // Step 0 is the production initial condition; advance after writing/sampling.
+tests/test_mic.cpp:88:        double rcut_sigma = md::constants::rcut_sigma;             // 2.25
+```
+
+**Verbose NOTE/WARNING/IMPORTANT comment markers**
+```
+count=0
+
+```
+
+**Triple-slash comments (`///`)**
+```
+count=51
+include/md/params.hpp:15:/// @brief Runtime parameters parsed from command-line arguments.
+include/md/params.hpp:17:    int N = 864;                        ///< Number of particles
+include/md/params.hpp:18:    int steps = 100;                    ///< Number of timesteps (HO) / legacy alias for LJ production_steps
+include/md/params.hpp:19:    double dt = 1.0e-14;                ///< Timestep [s] (for LJ) or dimensionless (for HO)
+include/md/params.hpp:20:    double T_init = 94.4;               ///< Legacy alias of targetTemperature [K]
+```
+
+### 6b. Style comparison against Blakely reference style
+
+| Feature | Blakely Style | This Codebase | Risk Level |
+|---------|---------------|---------------|------------|
+| Namespaces | None | `md::`, `md::constants::` and modular headers | Medium |
+| Doxygen headers | None | `@file`, `@brief` and API docs across headers | High |
+| MPI wrapping | Raw MPI calls in `main` | `MPIContext` abstraction + helper methods | Medium |
+| Comment style | Sparse inline comments | Mix of concise + structured explanatory comments | High |
+| Brace style | Allman in examples | Mixed/LLVM-like style in project | Low |
+
+### 6c. Comment density analysis (.cpp/.hpp)
+
+```
+file,total,code,comment,blank,comment_to_code,comment_blocks_3plus,flag_over_0.30
+include/md/constants.hpp,84,28,28,28,1.000,1,YES
+include/md/integrators.hpp,141,66,50,25,0.758,4,YES
+include/md/mic.hpp,19,11,3,5,0.273,1,no
+include/md/observables.hpp,82,14,58,10,4.143,5,YES
+include/md/params.hpp,90,78,5,7,0.064,1,no
+include/md/partition.hpp,26,10,10,6,1.000,2,YES
+include/md/potentials.hpp,61,11,42,8,3.818,3,YES
+include/md/rng.hpp,134,76,33,25,0.434,3,YES
+include/md/system.hpp,63,31,22,10,0.710,4,YES
+src/main.cpp,550,465,17,68,0.037,2,no
+src/observables.cpp,70,52,5,13,0.096,1,no
+src/potentials/harmonic.cpp,37,16,14,7,0.875,1,YES
+src/potentials/lennard_jones.cpp,104,60,22,22,0.367,2,YES
+tests/test_force.cpp,288,208,38,42,0.183,2,no
+tests/test_integrators.cpp,95,73,4,18,0.055,1,no
+tests/test_mic.cpp,117,83,20,14,0.241,2,no
+tests/test_partition.cpp,68,50,4,14,0.080,1,no
+tests/test_runner.cpp,33,22,4,7,0.182,1,no
+```
+
+### 6d. MPI call inventory
+
+**MPI symbols used (deduplicated):**
+```
+Binary file src/main.o matches
+MPI_Allgatherv
+MPI_Barrier
+MPI_Bcast
+MPI_COMM_WORLD
+MPI_Comm_rank
+MPI_Comm_size
+MPI_DOUBLE
+MPI_Finalize
+MPI_INT
+MPI_Init
+MPI_MAX
+MPI_MIN
+MPI_Reduce
+MPI_SUM
+MPI_Wtime
+```
+
+**MPI call site references (file:line):**
+```
+Binary file src/main.o matches
+src/potentials/harmonic.cpp:10: * The MPI_Allgatherv collective is bypassed entirely in HO mode.
+src/main.cpp:127:        MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:128:        MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:144:        MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+src/main.cpp:155:    MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:156:    MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:174:        MPI_Bcast(&lambda, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+src/main.cpp:181:        MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:245:    MPI_Init(&argc, &argv);
+src/main.cpp:252:    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+src/main.cpp:253:    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+src/main.cpp:300:        MPI_Bcast(&fccError, 1, MPI_INT, 0, MPI_COMM_WORLD);
+src/main.cpp:302:            MPI_Finalize();
+src/main.cpp:308:    MPI_Bcast(posAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+src/main.cpp:309:    MPI_Bcast(velAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+src/main.cpp:343:        double t0 = params.timing ? MPI_Wtime() : 0.0;
+src/main.cpp:344:        MPI_Allgatherv(sys.pos.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(), recvcounts.data(),
+src/main.cpp:345:                       displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+src/main.cpp:347:            commTime += (MPI_Wtime() - t0);
+src/main.cpp:433:    MPI_Barrier(MPI_COMM_WORLD);
+src/main.cpp:434:    const double tStart = MPI_Wtime();
+src/main.cpp:442:            MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:443:            MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:475:    const double elapsed = MPI_Wtime() - tStart;
+src/main.cpp:480:    // Pattern follows MPI lecture-notes slide 78: independent MPI_Reduce calls.
+src/main.cpp:482:    MPI_Reduce(&elapsed, &maxTime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+src/main.cpp:489:        MPI_Reduce(&commTime, &commMax, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+src/main.cpp:490:        MPI_Reduce(&commTime, &commMin, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
+src/main.cpp:491:        MPI_Reduce(&commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+src/main.cpp:509:        MPI_Reduce(grHistLocal.data(), grHistGlobal.data(), grNBins, MPI_DOUBLE, MPI_SUM, 0,
+src/main.cpp:510:                   MPI_COMM_WORLD);
+src/main.cpp:548:    MPI_Finalize();
+include/md/system.hpp:51:     * the subsequent MPI_Allgatherv / force evaluation.
+include/md/observables.hpp:22: * Must be followed by MPI_Reduce(MPI_SUM) to rank 0 for the global total.
+include/md/observables.hpp:38: * @param eKinTotal Total kinetic energy (from MPI_Reduce) [J]
+include/md/observables.hpp:49: * The result must be reduced via MPI_Reduce(MPI_SUM) across all ranks,
+```
+
+### 6e. Include dependency graph
+
+```
+src/main.cpp -> md/constants.hpp, md/integrators.hpp, md/observables.hpp, md/partition.hpp, md/params.hpp, md/potentials.hpp, md/rng.hpp, md/system.hpp
+  md/constants.hpp -> (no includes)
+  md/integrators.hpp -> vector, md/system.hpp
+  md/observables.hpp -> cmath, vector, md/constants.hpp, md/system.hpp
+  md/partition.hpp -> algorithm
+  md/params.hpp -> cstdio, cstdlib, string
+  md/potentials.hpp -> vector, md/system.hpp
+  md/rng.hpp -> cmath, random, vector, md/constants.hpp
+  md/system.hpp -> cmath, vector
+src/observables.cpp -> md/observables.hpp, md/constants.hpp
+  md/observables.hpp -> cmath, vector, md/constants.hpp, md/system.hpp
+  md/constants.hpp -> (no includes)
+src/potentials/harmonic.cpp -> md/potentials.hpp
+  md/potentials.hpp -> vector, md/system.hpp
+src/potentials/lennard_jones.cpp -> md/constants.hpp, md/mic.hpp, md/potentials.hpp
+  md/constants.hpp -> (no includes)
+  md/mic.hpp -> cmath
+  md/potentials.hpp -> vector, md/system.hpp
+```
+
+### 6f. Submission tarball preview + README quality assessment
+
+**Files that would be submitted (excluding ai/, out/, .git/, .venv/, binaries, tarballs):**
+```
+./.clang-format
+./.gitignore
+./Makefile
+./README.md
+./include/md/constants.hpp
+./include/md/integrators.hpp
+./include/md/mic.hpp
+./include/md/observables.hpp
+./include/md/params.hpp
+./include/md/partition.hpp
+./include/md/potentials.hpp
+./include/md/rng.hpp
+./include/md/system.hpp
+./scripts/__pycache__/plot_style.cpython-311.pyc
+./scripts/append_manifest.py
+./scripts/check_gr_tolerance.py
+./scripts/check_tolerance.py
+./scripts/combine_metadata.sh
+./scripts/data/rahman1964_fig2_manual_anchors.csv
+./scripts/make_results.sh
+./scripts/plot_ho.py
+./scripts/plot_lj.py
+./scripts/plot_scaling.py
+./scripts/plot_style.py
+./scripts/run_all_data.sh
+./scripts/run_results.sh
+./scripts/run_scaling.sh
+./scripts/validate_manifest.py
+./src/main.cpp
+./src/observables.cpp
+./src/potentials/harmonic.cpp
+./src/potentials/lennard_jones.cpp
+./test_runner
+./tests/test_force.cpp
+./tests/test_integrators.cpp
+./tests/test_mic.cpp
+./tests/test_partition.cpp
+./tests/test_runner.cpp
+```
+
+**Submission preview checks:**
+
+- Total files: 38
+- Approx uncompressed payload size: 300539 bytes
+- Makefile BCN line: BCN ?= 4316J
+- Stale/empty directory flag: src/integrators not present
+- ai/ directory excluded in preview: confirmed by filter
+
+**README content:**
+```markdown
+# WA2: MPI Parallelisation of Molecular Dynamics
+
+## Dependencies
+
+- C++17 compiler with MPI (tested with OpenMPI 4.x)
+- Python 3 with `numpy` and `matplotlib` for plotting scripts
+
+## Build and test
+
+```bash
+make
+make test
+```
+
+## Example runs
+
+### Harmonic oscillator
+
+```bash
+mpirun -np 1 ./md_solver --mode ho --integrator verlet --dt 0.01 --steps 1000 --N 1
+```
+
+### Lennard-Jones Argon
+
+```bash
+mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
+  --target-temperature 94.4 --equilibration-steps 50 --production-steps 100 \
+  --final-rescale-before-production
+```
+
+### Scaling / timing
+
+```bash
+mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864 --steps 2000 --timing
+```
+
+## Reproducibility
+
+The report figures are produced from data in `out/manifest.json` using scripts in `scripts/`.
+```
+
+**README checklist (Blakely-oriented):**
+- compile instructions (make: Nothing to be done for `all'.): confirmed
+- MPI run command examples: confirmed
+- CLI flag descriptions/examples: confirmed
+- Reproduce-results guidance: confirmed
+- Output directory structure guidance: confirmed
+
+## 7. CLI Defaults vs. Brief Requirements
 
 ### CLI help output
 ```
-[99068] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[59773] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 ### Comparison
@@ -667,9 +775,9 @@ MATCH
 | integrator| verlet     | verlet             | confirmed          |
 | T_init    | 94.4 K     | 94.4 K            | confirmed          |
 
-## 7. File Dump (Verbatim)
+## 8. File Dump (Curated)
 
-### `Makefile` (56 lines)
+### `Makefile` (61 lines)
 
 ```makefile
 CXX = mpicxx
@@ -694,7 +802,7 @@ TEST_DEPS = src/potentials/lennard_jones.o src/potentials/harmonic.o src/observa
 TARGET = md_solver
 TEST_BIN = test_runner
 
-BCN ?= fb638
+BCN ?= 4316J
 TARBALL = $(BCN)_wa2.tar.gz
 
 all: $(TARGET)
@@ -716,13 +824,18 @@ clean:
 	rm -f src/potentials/*.o tests/*.o
 
 dist: clean
+	@test "$(BCN)" != "4316J_PLACEHOLDER" || (echo "ERROR: Set BCN" && false)
+	find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
+	find . -name '*.pyc' -delete 2>/dev/null || true
+	rm -f test_runner wa2-results-*.out
 	tar -czvf $(TARBALL) \
+		--exclude='__pycache__' --exclude='*.pyc' \
 		include/ src/ tests/ scripts/ \
 		Makefile README.md .clang-format
 	@echo ""
 	@echo "Created $(TARBALL)"
 	@echo "Contents:"
-	@tar -tzvf $(TARBALL) | head -30
+	@tar -tzvf $(TARBALL) | head -40
 
 out:
 	mkdir -p out
@@ -928,7 +1041,7 @@ inline double applyMIC(double dx, double L) {
 #endif
 ```
 
-### `include/md/params.hpp` (87 lines)
+### `include/md/params.hpp` (90 lines)
 
 ```cpp
 /**
@@ -939,6 +1052,7 @@ inline double applyMIC(double dx, double L) {
 #ifndef MD_PARAMS_HPP
 #define MD_PARAMS_HPP
 
+#include <cstdio>
 #include <cstdlib>
 #include <string>
 
@@ -1011,6 +1125,8 @@ struct Params {
                 p.grDiscardSteps = std::atoi(argv[++i]);
             else if ((arg == "--gr-sample-every" || arg == "--gr-interval") && i + 1 < argc)
                 p.grSampleEvery = std::atoi(argv[++i]);
+            else if (!arg.empty() && arg[0] == '-')
+                std::fprintf(stderr, "WARNING: unknown argument '%s' (ignored)\n", argv[i]);
         }
     }
 };
@@ -1020,108 +1136,7 @@ struct Params {
 #endif  // MD_PARAMS_HPP
 ```
 
-### `include/md/mpi_context.hpp` (98 lines)
-
-```cpp
-/**
- * @file mpi_context.hpp
- * @brief MPI rank/size state, decomposition, and Allgatherv helpers.
- */
-
-#ifndef MD_MPI_CONTEXT_HPP
-#define MD_MPI_CONTEXT_HPP
-
-#include <mpi.h>
-
-#include <vector>
-
-#include "md/partition.hpp"
-
-namespace md {
-
-/**
- * @brief MPI context: decomposition and Allgatherv helpers.
- */
-class MPIContext {
-   public:
-    int rank;    ///< This process's rank
-    int size;    ///< Total number of MPI processes
-    int N;       ///< Total number of particles (global)
-    int localN;  ///< Number of particles owned by this rank
-    int offset;  ///< Starting global index for this rank's particles
-
-    std::vector<int> recvcounts;    ///< Number of doubles received from each rank (3 * localN[r])
-    std::vector<int> displs;        ///< Displacement in doubles for each rank (3 * offset[r])
-    std::vector<double> posGlobal;  ///< Permanent global position buffer (size 3*N)
-
-    double commTime = 0.0;    ///< Accumulated MPI_Allgatherv wall time [s] (timing mode only)
-    bool timingMode = false;  ///< When true, measure communication time
-
-    /**
-     * @brief Initialise MPI context with particle decomposition.
-     *
-     * Distributes N particles across P ranks as evenly as possible.
-     * Rank r owns particles [offset_r, offset_r + localN_r).
-     * The first (N % P) ranks each get one extra particle.
-     *
-     * Also pre-computes recvcounts and displs arrays for MPI_Allgatherv,
-     * and allocates the permanent posGlobal buffer.
-     *
-     * @param totalN Total number of particles
-     */
-    void init(int totalN) {
-        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        MPI_Comm_size(MPI_COMM_WORLD, &size);
-        N = totalN;
-
-        computePartition(N, size, rank, localN, offset);
-
-        // Pre-compute Allgatherv parameters (int arrays, values in doubles)
-        recvcounts.resize(size);
-        displs.resize(size);
-        for (int r = 0; r < size; ++r) {
-            int ln = 0;
-            int off = 0;
-            computePartition(N, size, r, ln, off);
-            recvcounts[r] = 3 * ln;
-            displs[r] = 3 * off;
-        }
-
-        // Permanent global position buffer
-        posGlobal.resize(3 * N, 0.0);
-    }
-
-    /**
-     * @brief Gather local positions from all ranks into posGlobal.
-     *
-     * Each rank sends its local positions (3*localN doubles) and receives
-     * the complete global position array (3*N doubles). This is the ONLY
-     * collective communication in the time-stepping loop for LJ mode.
-     *
-     * When timingMode is true, the wall time spent in MPI_Allgatherv is
-     * accumulated in commTime for compute-vs-communication analysis.
-     *
-     * @param posLocal Local position array (3*localN doubles, interleaved)
-     */
-    void allgatherPositions(const std::vector<double>& posLocal) {
-        double t0 = timingMode ? MPI_Wtime() : 0.0;
-        MPI_Allgatherv(posLocal.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(), recvcounts.data(),
-                       displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
-        if (timingMode)
-            commTime += (MPI_Wtime() - t0);
-    }
-
-    /**
-     * @brief Check if this rank is the root (rank 0).
-     * @return true if rank == 0
-     */
-    bool isRoot() const { return rank == 0; }
-};
-
-}  // namespace md
-
-#endif  // MD_MPI_CONTEXT_HPP
-```
+### `include/md/mpi_context.hpp` — NOT FOUND
 
 ### `include/md/system.hpp` (63 lines)
 
@@ -1330,7 +1345,7 @@ inline std::vector<double> generateVelocities(int N, double T, double mass, std:
 #endif  // MD_RNG_HPP
 ```
 
-### `include/md/potentials.hpp` (60 lines)
+### `include/md/potentials.hpp` (61 lines)
 
 ```cpp
 /**
@@ -1353,10 +1368,8 @@ namespace md {
  * a_i = -omega^2 * x_i  (independent, non-interacting particles)
  * V_i = 0.5 * m * omega^2 * x_i^2
  *
- * This kernel operates purely on local data and does NOT require any
- * global position information. The MPI_Allgatherv call should be
- * bypassed entirely in HO mode to eliminate unnecessary O(N)
- * communication overhead.
+ * Non-interacting potential: operates purely on local data.
+ * No communication is required in HO mode.
  *
  * Validation runs should use N=1. The code supports N independent copies.
  *
@@ -1382,6 +1395,9 @@ void computeHOForces(System& sys, const std::vector<double>& posGlobal, double& 
  *   a_i = (24*eps/m) * sum_{j!=i} (x_i - x_j)/r^2_ij
  *         * [2*(sigma/r_ij)^12 - (sigma/r_ij)^6]
  *
+ * Caller must provide up-to-date global positions in posGlobal before
+ * invoking this routine.
+ *
  * @param[in,out] sys       System state (forces written to sys.acc)
  * @param[in]     posGlobal Global positions (3*N doubles, from Allgatherv)
  * @param[out]    localPE   Local PE contribution (pre-halved for this rank's pairs)
@@ -1395,7 +1411,7 @@ void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& 
 #endif  // MD_POTENTIALS_HPP
 ```
 
-### `include/md/integrators.hpp` (115 lines)
+### `include/md/integrators.hpp` (140 lines)
 
 ```cpp
 /**
@@ -1408,53 +1424,72 @@ void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& 
 
 #include <vector>
 
-#include "md/mpi_context.hpp"
 #include "md/system.hpp"
 
 namespace md {
 
-template <typename ForceFunctor>
-inline void stepEuler(System& sys, MPIContext& ctx, double dt, ForceFunctor computeForce,
-                      double& localPE, bool isHO) {
+/**
+ * @brief Advance one time-step with the Forward Euler method.
+ *
+ * For
+ *   dx/dt = v,   dv/dt = a(x),
+ * Euler uses
+ *   x_{n+1} = x_n + dt * v_n,
+ *   v_{n+1} = v_n + dt * a_n.
+ *
+ * This is first-order accurate. It is simple, but for MD it is not
+ * time-reversible or symplectic, so  often shows energy drift.
+ */
+template <typename RefreshForceFn>
+inline void stepEuler(System& sys, double dt, RefreshForceFn refreshForces) {
     const int n3 = 3 * sys.localN;
 
+    // x_{n+1} = x_n + dt * v_n
     for (int i = 0; i < n3; ++i) {
         sys.pos[i] += sys.vel[i] * dt;
     }
 
+    // v_{n+1} = v_n + dt * a_n
     for (int i = 0; i < n3; ++i) {
         sys.vel[i] += sys.acc[i] * dt;
     }
 
-    if (!isHO) {
-        sys.wrapPositions();
-        ctx.allgatherPositions(sys.pos);
-    }
-
-    computeForce(sys, ctx.posGlobal, localPE);
+    // Update forces/accelerations at the new positions.
+    refreshForces();
 }
 
-template <typename ForceFunctor>
-inline void stepRK4(System& sys, MPIContext& ctx, double dt, ForceFunctor computeForce,
-                    double& localPE, bool isHO) {
+/**
+ * @brief Advance one time-step with classical fourth-order Runge-Kutta.
+ *
+ * RK4 combines four stages as
+ *   y_{n+1} = y_n + (k1 + 2k2 + 2k3 + k4)/6,
+ * where y = (x, v) and
+ *   dx/dt = v,   dv/dt = a(x).
+ *
+ * RK4 is fourth-order accurate and works well for short-time trajectory
+ * accuracy, but it is not symplectic, so less suitable for long MD runs
+ * than Velocity-Verlet .
+ */
+template <typename RefreshForceFn>
+inline void stepRK4(System& sys, double dt, RefreshForceFn refreshForces) {
     const int n3 = 3 * sys.localN;
 
+    // Store the initial state.
     std::vector<double> x0(sys.pos);
     std::vector<double> v0(sys.vel);
 
     auto evalStage = [&](std::vector<double>& kx, std::vector<double>& kv, double weight,
                          const std::vector<double>& prevKx, const std::vector<double>& prevKv) {
         if (weight > 0.0) {
+            // Intermediate stage: y_stage = y_n + weight * previous increment
             for (int i = 0; i < n3; ++i) {
                 sys.pos[i] = x0[i] + weight * prevKx[i];
                 sys.vel[i] = v0[i] + weight * prevKv[i];
             }
-            if (!isHO) {
-                sys.wrapPositions();
-                ctx.allgatherPositions(sys.pos);
-            }
-            computeForce(sys, ctx.posGlobal, localPE);
+            refreshForces();
         }
+
+        // For y' = (v, a): kx = dt * v, kv = dt * a
         for (int i = 0; i < n3; ++i) {
             kx[i] = sys.vel[i] * dt;
             kv[i] = sys.acc[i] * dt;
@@ -1473,38 +1508,45 @@ inline void stepRK4(System& sys, MPIContext& ctx, double dt, ForceFunctor comput
     std::vector<double> k4x(n3), k4v(n3);
     evalStage(k4x, k4v, 1.0, k3x, k3v);
 
+    // x_{n+1} and v_{n+1} from the RK4 weighted sum
     for (int i = 0; i < n3; ++i) {
         sys.pos[i] = x0[i] + (k1x[i] + 2.0 * k2x[i] + 2.0 * k3x[i] + k4x[i]) / 6.0;
         sys.vel[i] = v0[i] + (k1v[i] + 2.0 * k2v[i] + 2.0 * k3v[i] + k4v[i]) / 6.0;
     }
 
-    if (!isHO) {
-        sys.wrapPositions();
-        ctx.allgatherPositions(sys.pos);
-    }
-    computeForce(sys, ctx.posGlobal, localPE);
+    // Make stored accelerations consistent with the final state.
+    refreshForces();
 }
 
-template <typename ForceFunctor>
-inline void stepVelocityVerlet(System& sys, MPIContext& ctx, double dt, ForceFunctor computeForce,
-                               double& localPE, bool isHO) {
+/**
+ * @brief Advance one time-step with the Velocity-Verlet method.
+ *
+ * Velocity-Verlet uses
+ *   v_{n+1/2} = v_n + (dt/2) a_n,
+ *   x_{n+1}   = x_n + dt * v_{n+1/2},
+ *   v_{n+1}   = v_{n+1/2} + (dt/2) a_{n+1}.
+ *
+ * It is  second-order accurate, time-reversible, and symplectic .
+ */
+template <typename RefreshForceFn>
+inline void stepVelocityVerlet(System& sys, double dt, RefreshForceFn refreshForces) {
     const int n3 = 3 * sys.localN;
     const double halfDt = 0.5 * dt;
 
+    // First half-step for velocity.
     for (int i = 0; i < n3; ++i) {
         sys.vel[i] += halfDt * sys.acc[i];
     }
+
+    // Position update using the half-step velocity.
     for (int i = 0; i < n3; ++i) {
         sys.pos[i] += dt * sys.vel[i];
     }
 
-    if (!isHO) {
-        sys.wrapPositions();
-        ctx.allgatherPositions(sys.pos);
-    }
+    // Update forces/accelerations at the new positions.
+    refreshForces();
 
-    computeForce(sys, ctx.posGlobal, localPE);
-
+    // Second half-step for velocity.
     for (int i = 0; i < n3; ++i) {
         sys.vel[i] += halfDt * sys.acc[i];
     }
@@ -1512,10 +1554,9 @@ inline void stepVelocityVerlet(System& sys, MPIContext& ctx, double dt, ForceFun
 
 }  // namespace md
 
-#endif  // MD_INTEGRATORS_HPP
-```
+#endif  // MD_INTEGRATORS_HPP```
 
-### `include/md/observables.hpp` (86 lines)
+### `include/md/observables.hpp` (82 lines)
 
 ```cpp
 /**
@@ -1561,10 +1602,6 @@ double computeLocalKineticEnergy(const System& sys, double mass);
  */
 double computeTemperature(double eKinTotal, int N);
 
-// NOTE: Velocity rescaling is performed directly in main.cpp using
-// computeTemperature() + MPI_Bcast(lambda) for MPI-correct thermostatting.
-// No standalone rescaleVelocities() helper — avoids duplication.
-
 /**
  * @brief Accumulate pair distances into a g(r) histogram.
  *
@@ -1606,7 +1643,7 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 #endif  // MD_OBSERVABLES_HPP
 ```
 
-### `src/main.cpp` (536 lines)
+### `src/main.cpp` (550 lines)
 
 ```cpp
 /**
@@ -1630,8 +1667,8 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 
 #include "md/constants.hpp"
 #include "md/integrators.hpp"
-#include "md/mpi_context.hpp"
 #include "md/observables.hpp"
+#include "md/partition.hpp"
 #include "md/params.hpp"
 #include "md/potentials.hpp"
 #include "md/rng.hpp"
@@ -1727,7 +1764,7 @@ void writeCSVMetadataLine(std::ostream& out, const md::Params& params, int N, in
 }
 
 template <typename AdvanceFn>
-void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& params, int N,
+void runStartupPhaseLJ(md::System& sys, int rank, const md::Params& params, int N,
                        int equilibrationSteps, double& localPE, AdvanceFn&& advanceOneStep,
                        bool& finalRescaleApplied, double& startupTempBeforeFinal,
                        double& startupTempAfterFinal) {
@@ -1739,7 +1776,7 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
         MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
         double lambda = 1.0;
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             const double tMeasured = md::computeTemperature(totalKE, N);
             if (tMeasured > md::constants::rescaleGuard) {
                 lambda = std::sqrt(params.targetTemperature / tMeasured);
@@ -1766,13 +1803,13 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
     MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-    if (ctx.isRoot()) {
+    if (rank == 0) {
         startupTempBeforeFinal = md::computeTemperature(totalKE, N);
     }
 
     if (params.finalRescaleBeforeProduction) {
         double lambda = 1.0;
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             if (startupTempBeforeFinal > md::constants::rescaleGuard) {
                 lambda = std::sqrt(params.targetTemperature / startupTempBeforeFinal);
             }
@@ -1790,7 +1827,7 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
         localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
         totalKE = 0.0;
         MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             startupTempAfterFinal = md::computeTemperature(totalKE, N);
         }
     } else {
@@ -1798,19 +1835,19 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
     }
 }
 
-void printSimulationInfo(const md::Params& params, const md::MPIContext& ctx, bool isHO, int N,
+void printSimulationInfo(const md::Params& params, int rank, int nprocs, bool isHO, int N,
                          int nSteps, int nFrames, int totalStepsExecuted, int equilibrationSteps,
                          double L, int productionStartStep, int grStart, int grDiscardSteps,
                          int grSampleEvery, double startupTempBeforeFinal,
                          double startupTempAfterFinal) {
-    if (!ctx.isRoot() || params.timing) {
+    if (rank != 0 || params.timing) {
         return;
     }
 
     std::printf("=== MD Solver ===\n");
     std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
     std::printf("N = %d | P = %d | timesteps = %d | frames = %d (step 0..%d) | dt = %.3e\n", N,
-                ctx.size, nSteps, nFrames, nSteps, params.dt);
+                nprocs, nSteps, nFrames, nSteps, params.dt);
     if (!isHO) {
         std::printf(
             "LJ semantics: --equilibration-steps prepares the state, --production-steps "
@@ -1858,12 +1895,29 @@ int main(int argc, char* argv[]) {
     md::Params params;
     md::Params::parse(argc, argv, params);
 
-    md::MPIContext ctx;
-    ctx.init(params.N);
-    ctx.timingMode = params.timing;
+    int rank = 0;
+    int nprocs = 1;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
+    int localN = 0;
+    int offset = 0;
+    md::computePartition(N, nprocs, rank, localN, offset);
+
+    std::vector<int> recvcounts(nprocs, 0);
+    std::vector<int> displs(nprocs, 0);
+    for (int r = 0; r < nprocs; ++r) {
+        int ln = 0;
+        int off = 0;
+        md::computePartition(N, nprocs, r, ln, off);
+        recvcounts[r] = 3 * ln;
+        displs[r] = 3 * off;
+    }
+    std::vector<double> posGlobal(3 * N, 0.0);
+    double commTime = 0.0;
+
     const int equilibrationSteps = isHO ? 0 : std::max(0, params.equilibrationSteps);
     const int nSteps = isHO ? params.steps : std::max(0, params.productionSteps);
     const int nFrames = nSteps + 1;
@@ -1886,7 +1940,7 @@ int main(int argc, char* argv[]) {
     std::vector<double> velAll(3 * N, 0.0);
     int fccError = 0;
 
-    if (ctx.isRoot()) {
+    if (rank == 0) {
         fccError = buildInitialConditions(params, isHO, N, L, posAll, velAll);
     }
 
@@ -1903,20 +1957,16 @@ int main(int argc, char* argv[]) {
     MPI_Bcast(velAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     md::System sys;
-    sys.init(ctx.localN, ctx.offset, N, L);
+    sys.init(localN, offset, N, L);
 
-    for (int i = 0; i < ctx.localN; ++i) {
+    for (int i = 0; i < localN; ++i) {
         for (int d = 0; d < 3; ++d) {
-            sys.pos[3 * i + d] = posAll[3 * (ctx.offset + i) + d];
-            sys.vel[3 * i + d] = velAll[3 * (ctx.offset + i) + d];
+            sys.pos[3 * i + d] = posAll[3 * (offset + i) + d];
+            sys.vel[3 * i + d] = velAll[3 * (offset + i) + d];
         }
     }
 
-    ctx.posGlobal = posAll;
-    if (!isHO) {
-        sys.wrapPositions();
-        ctx.allgatherPositions(sys.pos);
-    }
+    posGlobal = posAll;
 
     const double omega = params.omega;
     const double mass = md::constants::mass;
@@ -1937,45 +1987,47 @@ int main(int argc, char* argv[]) {
     };
 
     double localPE = 0.0;
-    auto advanceOneStep = [&]() {
-        if (intType == IntegratorType::Euler) {
-            if (isHO) {
-                md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
-            } else {
-                md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
-            }
-        } else if (intType == IntegratorType::RK4) {
-            if (isHO) {
-                md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
-            } else {
-                md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
-            }
+    auto allgatherPositions = [&]() {
+        double t0 = params.timing ? MPI_Wtime() : 0.0;
+        MPI_Allgatherv(sys.pos.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(), recvcounts.data(),
+                       displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+        if (params.timing) {
+            commTime += (MPI_Wtime() - t0);
+        }
+    };
+    auto refreshForces = [&]() {
+        if (isHO) {
+            evalHO(sys, posGlobal, localPE);
         } else {
-            if (isHO) {
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
-            } else {
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
-            }
+            sys.wrapPositions();
+            allgatherPositions();
+            evalLJ(sys, posGlobal, localPE);
         }
     };
 
-    if (isHO) {
-        evalHO(sys, ctx.posGlobal, localPE);
-    } else {
-        evalLJ(sys, ctx.posGlobal, localPE);
-    }
+    auto advanceOneStep = [&]() {
+        if (intType == IntegratorType::Euler) {
+            md::stepEuler(sys, params.dt, refreshForces);
+        } else if (intType == IntegratorType::RK4) {
+            md::stepRK4(sys, params.dt, refreshForces);
+        } else {
+            md::stepVelocityVerlet(sys, params.dt, refreshForces);
+        }
+    };
+
+    refreshForces();
 
     bool finalRescaleApplied = false;
     double startupTempBeforeFinal = std::numeric_limits<double>::quiet_NaN();
     double startupTempAfterFinal = std::numeric_limits<double>::quiet_NaN();
 
     if (!isHO) {
-        runStartupPhaseLJ(sys, ctx, params, N, equilibrationSteps, localPE, advanceOneStep,
+        runStartupPhaseLJ(sys, rank, params, N, equilibrationSteps, localPE, advanceOneStep,
                           finalRescaleApplied, startupTempBeforeFinal, startupTempAfterFinal);
     }
 
     std::ofstream outFile;
-    if (params.output && ctx.isRoot()) {
+    if (params.output && rank == 0) {
         std::string fname;
         if (!params.outdir.empty()) {
             fname = params.outdir + "/" + params.mode + "_" + params.integrator + ".csv";
@@ -1987,7 +2039,7 @@ int main(int argc, char* argv[]) {
         outFile.open(fname);
         if (outFile.is_open()) {
             outFile << std::setprecision(15);
-            writeCSVMetadataLine(outFile, params, N, ctx.size, nSteps, nFrames,
+            writeCSVMetadataLine(outFile, params, N, nprocs, nSteps, nFrames,
                                  totalStepsExecuted, equilibrationSteps, finalRescaleApplied,
                                  productionStartStep, grDiscardSteps, grSampleEvery, grStart,
                                  startupTempBeforeFinal, startupTempAfterFinal, L, !isHO, !isHO);
@@ -1999,11 +2051,11 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    printSimulationInfo(params, ctx, isHO, N, nSteps, nFrames, totalStepsExecuted,
+    printSimulationInfo(params, rank, nprocs, isHO, N, nSteps, nFrames, totalStepsExecuted,
                         equilibrationSteps, L, productionStartStep, grStart, grDiscardSteps,
                         grSampleEvery, startupTempBeforeFinal, startupTempAfterFinal);
 
-    if (params.gr && !isHO && maxGRFrames <= 0 && ctx.isRoot()) {
+    if (params.gr && !isHO && maxGRFrames <= 0 && rank == 0) {
         if (grStart > nSteps) {
             std::fprintf(stderr,
                          "WARNING: g(r) requested but gr_start=%d is beyond final step=%d. "
@@ -2025,7 +2077,7 @@ int main(int argc, char* argv[]) {
 
     // Synchronise clocks before timed production loop (exclude startup/output setup).
     // Reset accumulated comm timer so reported communication matches this timing window.
-    ctx.commTime = 0.0;
+    commTime = 0.0;
     MPI_Barrier(MPI_COMM_WORLD);
     const double tStart = MPI_Wtime();
 
@@ -2038,7 +2090,7 @@ int main(int argc, char* argv[]) {
             MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
             MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-            if (params.output && ctx.isRoot() && outFile.is_open()) {
+            if (params.output && rank == 0 && outFile.is_open()) {
                 const double totalE = totalKE + totalPE;
                 const double time = step * params.dt;
                 if (isHO) {
@@ -2056,8 +2108,7 @@ int main(int argc, char* argv[]) {
 
         // Sample RDF only on production frames that pass discard/stride filters.
         if (params.gr && !isHO && step >= grStart && ((step - grStart) % grSampleEvery == 0)) {
-            md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
-                             grHistLocal);
+            md::accumulateGR(posGlobal, N, L, offset, localN, grDr, grRMax, grHistLocal);
             ++grFrames;
         }
 
@@ -2083,16 +2134,16 @@ int main(int argc, char* argv[]) {
     double commMin = 0.0;
     if (params.timing) {
         double sumComm = 0.0;
-        MPI_Reduce(&ctx.commTime, &commMax, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-        MPI_Reduce(&ctx.commTime, &commMin, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
-        MPI_Reduce(&ctx.commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-        if (ctx.isRoot()) {
-            commAvg = sumComm / ctx.size;
+        MPI_Reduce(&commTime, &commMax, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&commTime, &commMin, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        if (rank == 0) {
+            commAvg = sumComm / nprocs;
         }
     }
 
-    if (ctx.isRoot()) {
-        std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, ctx.size);
+    if (rank == 0) {
+        std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, nprocs);
         if (params.timing) {
             const double commFracPct = (maxTime > 0.0) ? (100.0 * commMax / maxTime) : 0.0;
             std::printf("  Comm time (max): %.6f s (%.1f%%)\n", commMax, commFracPct);
@@ -2106,7 +2157,7 @@ int main(int argc, char* argv[]) {
         MPI_Reduce(grHistLocal.data(), grHistGlobal.data(), grNBins, MPI_DOUBLE, MPI_SUM, 0,
                    MPI_COMM_WORLD);
 
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             // RDF is sampled per frame, then normalised after summing histograms across ranks.
             md::normaliseGR(grHistGlobal, grDr, N, L, grFrames);
 
@@ -2114,7 +2165,7 @@ int main(int argc, char* argv[]) {
                 params.outdir.empty() ? "out/gr.csv" : params.outdir + "/gr.csv";
             std::ofstream grFile(grFname);
             if (grFile.is_open()) {
-                writeCSVMetadataLine(grFile, params, N, ctx.size, nSteps, nFrames,
+                writeCSVMetadataLine(grFile, params, N, nprocs, nSteps, nFrames,
                                      totalStepsExecuted, equilibrationSteps, finalRescaleApplied,
                                      productionStartStep, grDiscardSteps, grSampleEvery, grStart,
                                      startupTempBeforeFinal, startupTempAfterFinal, L, true,
@@ -2131,7 +2182,7 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-    } else if (params.gr && !isHO && ctx.isRoot() && !params.timing) {
+    } else if (params.gr && !isHO && rank == 0 && !params.timing) {
         std::fprintf(stderr,
                      "WARNING: g(r) skipped because no frames were sampled. "
                      "Adjust --production-steps, --equilibration-steps, --gr-discard-steps, or "
@@ -2873,7 +2924,7 @@ fi
 bash ai/make_results.sh
 ```
 
-### `scripts/run_all_data.sh` (281 lines)
+### `scripts/run_all_data.sh` (282 lines)
 
 ```sh
 #!/bin/bash
@@ -2953,6 +3004,7 @@ extract_metric() {
 # ── 0. Parallel Consistency Check ──
 echo ""
 echo "=== PARALLEL CONSISTENCY CHECK ==="
+# Uses zero equilibration for a fast MPI consistency smoke test (not a physical-accuracy run).
 D1="$OUTDIR/runs/lj_N108_P1_test_${TIMESTAMP}"
 D2="$OUTDIR/runs/lj_N108_P2_test_${TIMESTAMP}"
 mkdir -p "$D1" "$D2"
@@ -3182,10 +3234,11 @@ python3 scripts/plot_lj.py
 python3 scripts/plot_scaling.py
 ```
 
-### `scripts/run_scaling.sh` (229 lines)
+### `scripts/run_scaling.sh` (230 lines)
 
 ```sh
 #!/bin/bash
+# DEPRECATED — production data generated by scripts/run_all_data.sh. Retained for reference only.
 # ──────────────────────────────────────────────────────────────────
 # run_scaling.sh — Batch scaling benchmarks with bottleneck comm timing
 #
@@ -3610,21 +3663,22 @@ if __name__ == '__main__':
     check_csv(sys.argv[1], sys.argv[2])
 ```
 
-### `scripts/plot_ho.py` (1459 lines)
+### `scripts/plot_ho.py` (1482 lines, summarized)
 
-```py
+Plot script content truncated for token efficiency. Full file remains in repository.
+
+**First 20 lines:**
+```python
 #!/usr/bin/env python3
 """
 plot_ho.py — Results 1 harmonic oscillator plotting package.
 
 Main figures (brief-facing):
-  1) out/plots/results1_ho_figure1_trajectories_dt0p01.png
-  2) out/plots/results1_ho_figure2_phase_space_dt0p01.png
-  3) out/plots/results1_ho_figure3_small_vs_large_dt.png
-  4) out/plots/results1_ho_figure4_convergence_combined.png
-
-Optional supporting figure:
-  5) out/plots/results1_ho_figure5_energy_diagnostic.png
+  Figure 1(a,b): out/plots/results1_figure1ab_trajectories_dt0p01.png
+  Figure 1(c):   out/plots/results1_figure1c_phase_space_dt0p01.png
+  Figure 2(a-f): out/plots/results1_figure2_small_vs_large_dt.png
+  Figure 3(a,b): out/plots/results1_figure3_convergence_combined.png
+  Figure 4(a):   out/plots/results1_figure4_energy_diagnostic.png
 
 Generated artifacts:
   - out/summary/results1/results1_ho_small_large_summary.(csv|md)
@@ -3635,3013 +3689,131 @@ Generated artifacts:
 Each figure gets a JSON metadata sidecar in:
   out/plots/metadata/<figure_name>.json
 """
-
-from __future__ import annotations
-
-import csv
-import json
-import os
-import subprocess
-import sys
-from datetime import datetime, timezone
-from typing import Dict, List, Tuple
-
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.lines import Line2D
-from matplotlib.ticker import FuncFormatter
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-
-from plot_style import (
-    INTEGRATOR_STYLE,
-    apply_major_grid,
-    apply_plot_style,
-    disable_offset_text,
-    save_figure,
-)
-
-# Configuration
-INTEGRATORS = ["euler", "verlet", "rk4"]
-INTEGRATOR_LABELS = {"euler": "Forward Euler", "verlet": "Velocity-Verlet", "rk4": "RK4"}
-INTEGRATOR_ORDERS = {"euler": 1, "verlet": 2, "rk4": 4}
-
-DT_VALUES = [1.0, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0005]
-DT_STEPS = {
-    1.0: 10,
-    0.5: 20,
-    0.1: 100,
-    0.05: 200,
-    0.01: 1000,
-    0.005: 2000,
-    0.001: 10000,
-    0.0005: 20000,
-}
-DT_SMALL = 0.01
-DT_LARGE = 0.5
-TRAJ_DT = DT_SMALL
-
-OMEGA = 1.0
-X0 = 1.0
-V0 = 0.0
-T_FINAL = 10.0
-
-OUT_DIR = "out"
-PLOT_DIR = "out/plots"
-PLOT_META_DIR = "out/plots/metadata"
-SUMMARY_DIR = "out/summary"
-SUMMARY_RESULTS1_DIR = "out/summary/results1"
-
-FIG1_PNG = "results1_ho_figure1_trajectories_dt0p01.png"
-FIG2_PNG = "results1_ho_figure2_phase_space_dt0p01.png"
-FIG3_PNG = "results1_ho_figure3_small_vs_large_dt.png"
-FIG4_PNG = "results1_ho_figure4_convergence_combined.png"
-FIG5_PNG = "results1_ho_figure5_energy_diagnostic.png"
-
-R1_SMALL_LARGE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.csv"
-R1_SMALL_LARGE_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.md"
-R1_CONVERGENCE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_convergence_summary.csv"
-R1_CONVERGENCE_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_convergence_summary.md"
-R1_ENDPOINT_VALUES_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_endpoint_values.csv"
-R1_ENDPOINT_VALUES_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_endpoint_values.md"
-R1_CAPTION_NOTES_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_caption_notes.md"
-R1_SECTION_NOTES_MD = f"{SUMMARY_RESULTS1_DIR}/results1_results_section_notes.md"
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def dt_key(dt: float) -> str:
-    return str(dt).replace(".", "_")
-
-
-def format_dt(dt: float) -> str:
-    return f"{dt:g}"
-
-
-def exact_solution(t: np.ndarray | float, omega: float = OMEGA, x0: float = X0, v0: float = V0):
-    """
-    Authoritative exact HO solution used throughout.
-    x(t) = x0 cos(omega t) + (v0/omega) sin(omega t)
-    v(t) = -x0 omega sin(omega t) + v0 cos(omega t)
-    """
-    t_arr = np.asarray(t, dtype=float)
-    if abs(omega) < 1e-15:
-        x = x0 + v0 * t_arr
-        v = np.full_like(t_arr, v0, dtype=float)
-        return x, v
-
-    wt = omega * t_arr
-    x = x0 * np.cos(wt) + (v0 / omega) * np.sin(wt)
-    v = -x0 * omega * np.sin(wt) + v0 * np.cos(wt)
-    return x, v
-
-
-def exact_phase_curve(num_points: int = 1200, t_final: float = T_FINAL):
-    t = np.linspace(0.0, t_final, num_points, dtype=float)
-    return exact_solution(t)
-
-
-def load_manifest():
-    manifest_path = f"{OUT_DIR}/manifest.json"
-    with open(manifest_path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def load_csv(filepath: str):
-    """Load CSV with header, skipping comment lines."""
-
-    def non_comment_lines(handle):
-        for line in handle:
-            if line.strip() and not line.startswith("#"):
-                yield line
-
-    with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
-        lines = list(non_comment_lines(f))
-    if not lines:
-        return None
-
-    data = np.genfromtxt(lines, delimiter=",", names=True)
-    if data is None:
-        return None
-    if getattr(data, "shape", ()) == ():
-        data = np.array([data], dtype=data.dtype)
-    return data
-
-
-def write_csv(path: str, fieldnames: List[str], rows: List[Dict[str, object]]) -> None:
-    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for row in rows:
-            writer.writerow(row)
-    print(f"Saved {path}")
-
-
-def markdown_table(headers: List[str], rows: List[List[str]]) -> str:
-    out = []
-    out.append("| " + " | ".join(headers) + " |")
-    out.append("|" + "|".join(["---"] * len(headers)) + "|")
-    for row in rows:
-        out.append("| " + " | ".join(row) + " |")
-    return "\n".join(out)
-
-
-def fmt_sci(x: float, digits: int = 3) -> str:
-    if not np.isfinite(x):
-        return "nan"
-    return f"{x:.{digits}e}"
-
-
-def fmt_pct_from_ratio(x: float, digits: int = 4) -> str:
-    if not np.isfinite(x):
-        return "nan"
-    pct = 100.0 * x
-    if abs(pct) < 10 ** (-digits):
-        return f"{pct:.2e}%"
-    return f"{pct:.{digits}f}%"
-
-
-def write_plot_metadata(plot_png_name: str, extra: Dict[str, object]) -> None:
-    os.makedirs(PLOT_META_DIR, exist_ok=True)
-    payload = {
-        "generated_utc": utc_now(),
-        "plot_file_png": f"{PLOT_DIR}/{plot_png_name}",
-        "parameters": {
-            "omega": OMEGA,
-            "x0": X0,
-            "v0": V0,
-            "t_final": T_FINAL,
-            "dt_small": DT_SMALL,
-            "dt_large": DT_LARGE,
-            "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
-        },
-    }
-    payload.update(extra)
-    sidecar_name = f"{os.path.splitext(plot_png_name)[0]}.json"
-    sidecar = f"{PLOT_META_DIR}/{sidecar_name}"
-    with open(sidecar, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, sort_keys=True)
-    print(f"Saved {sidecar}")
-
-
-def save_plot_pair(fig, png_name: str, metadata: Dict[str, object]) -> None:
-    os.makedirs(PLOT_DIR, exist_ok=True)
-    png_path = f"{PLOT_DIR}/{png_name}"
-    save_figure(fig, png_path)
-    print(f"Saved {png_path}")
-    write_plot_metadata(png_name, metadata)
-
-
-def run_ho_simulations():
-    """Optional helper: rerun HO sweep and refresh manifest entries."""
-    os.makedirs(f"{OUT_DIR}/runs", exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    for integ in INTEGRATORS:
-        for dt in DT_VALUES:
-            steps = DT_STEPS[dt]
-            run_dir = f"{OUT_DIR}/runs/ho_N1_{integ}_dt{dt}_{timestamp}"
-            os.makedirs(run_dir, exist_ok=True)
-            cmd = [
-                "mpirun",
-                "-np",
-                "1",
-                "./md_solver",
-                "--mode",
-                "ho",
-                "--integrator",
-                integ,
-                "--dt",
-                str(dt),
-                "--steps",
-                str(steps),
-                "--N",
-                "1",
-                "--outdir",
-                run_dir,
-            ]
-            print(f"Running: {integ} dt={dt} steps={steps}")
-            subprocess.run(cmd, check=True)
-            dst = f"{run_dir}/ho_{integ}.csv"
-            if os.path.exists(dst):
-                subprocess.run(
-                    [sys.executable, "scripts/append_manifest.py", f"ho_convergence.{integ}_dt{dt_key(dt)}", dst],
-                    check=True,
-                )
-    print("All HO simulations complete and manifest updated.")
-
-
-def collect_ho_data(manifest) -> Tuple[Dict[str, Dict[float, Dict[str, object]]], List[str]]:
-    datasets: Dict[str, Dict[float, Dict[str, object]]] = {integ: {} for integ in INTEGRATORS}
-    warnings: List[str] = []
-    ho_map = manifest.get("ho_convergence", {})
-    for integ in INTEGRATORS:
-        for dt in DT_VALUES:
-            key = f"{integ}_dt{dt_key(dt)}"
-            path = ho_map.get(key, "")
-            if not path or not os.path.exists(path):
-                warnings.append(f"missing data file for {key}: {path or '(empty manifest path)'}")
-                continue
-            data = load_csv(path)
-            if data is None or len(data) == 0:
-                warnings.append(f"empty or unreadable CSV for {key}: {path}")
-                continue
-            datasets[integ][dt] = {"path": path, "data": data}
-    return datasets, warnings
-
-
-def compute_metrics_for_dataset(integ: str, dt: float, dataset: Dict[str, object]) -> Dict[str, object]:
-    data = dataset["data"]
-    path = dataset["path"]
-    names = set(data.dtype.names or [])
-    required = {"time", "x", "v"}
-    if not required.issubset(names):
-        raise ValueError(f"{path} missing required columns {sorted(required - names)}")
-
-    t = np.asarray(data["time"], dtype=float)
-    x = np.asarray(data["x"], dtype=float)
-    v = np.asarray(data["v"], dtype=float)
-    if len(t) == 0:
-        raise ValueError(f"{path} has no trajectory rows")
-
-    x_exact, v_exact = exact_solution(t)
-    endpoint_x_error = float(abs(x[-1] - x_exact[-1]))
-    endpoint_v_error = float(abs(v[-1] - v_exact[-1]))
-
-    phase_dist = np.sqrt((x - x_exact) ** 2 + (v - v_exact) ** 2)
-    finite_phase = np.isfinite(phase_dist)
-    rms_phase_error = float(np.sqrt(np.mean(phase_dist[finite_phase] ** 2))) if np.any(finite_phase) else float("nan")
-
-    max_relative_energy_drift = float("nan")
-    if "E_total" in names:
-        E = np.asarray(data["E_total"], dtype=float)
-        finite_E = np.isfinite(E)
-        if np.any(finite_E):
-            E = E[finite_E]
-            E0 = E[0]
-            if abs(E0) > 1e-30:
-                max_relative_energy_drift = float(np.max(np.abs((E - E0) / abs(E0))))
-            else:
-                max_relative_energy_drift = float(np.max(np.abs(E - E0)))
-
-    return {
-        "integrator": integ,
-        "integrator_label": INTEGRATOR_LABELS[integ],
-        "dt": float(dt),
-        "path": path,
-        "final_time": float(t[-1]),
-        "x_num_final": float(x[-1]),
-        "v_num_final": float(v[-1]),
-        "x_exact_final": float(x_exact[-1]),
-        "v_exact_final": float(v_exact[-1]),
-        "endpoint_position_error": endpoint_x_error,
-        "endpoint_velocity_error": endpoint_v_error,
-        "rms_phase_space_error": rms_phase_error,
-        "max_relative_energy_drift": max_relative_energy_drift,
-    }
-
-
-def compute_metrics(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> List[Dict[str, object]]:
-    rows: List[Dict[str, object]] = []
-    for integ in INTEGRATORS:
-        for dt in DT_VALUES:
-            ds = datasets.get(integ, {}).get(dt)
-            if ds is None:
-                continue
-            rows.append(compute_metrics_for_dataset(integ, dt, ds))
-    return rows
-
-
-def integrator_rank(name: str) -> int:
-    try:
-        return INTEGRATORS.index(name)
-    except ValueError:
-        return len(INTEGRATORS)
-
-
-def sorted_metrics(metrics: List[Dict[str, object]]) -> List[Dict[str, object]]:
-    return sorted(metrics, key=lambda r: (integrator_rank(str(r["integrator"])), -float(r["dt"])))
-
-
-def metrics_index(metrics: List[Dict[str, object]]) -> Dict[Tuple[str, float], Dict[str, object]]:
-    return {(str(r["integrator"]), float(r["dt"])): r for r in metrics}
-
-
-def select_fit_points(points: List[Tuple[float, float]]) -> List[Tuple[float, float]]:
-    fit_pts = [(dt, err) for dt, err in points if dt <= 0.1]
-    if len(fit_pts) < 3:
-        fit_pts = sorted(points)[: max(3, len(points) // 2)]
-    return sorted(fit_pts)
-
-
-def fit_loglog(points: List[Tuple[float, float]]) -> Tuple[float, float]:
-    x = np.log10(np.asarray([p[0] for p in points], dtype=float))
-    y = np.log10(np.asarray([p[1] for p in points], dtype=float))
-    slope, intercept = np.polyfit(x, y, 1)
-    return float(slope), float(intercept)
-
-
-def build_fit_summary(
-    metrics: List[Dict[str, object]],
-    metric_key: str,
-    epsilon: float,
-    metric_name: str,
-) -> Dict[str, Dict[str, object]]:
-    out: Dict[str, Dict[str, object]] = {}
-    for integ in INTEGRATORS:
-        raw = []
-        for row in metrics:
-            if row["integrator"] != integ:
-                continue
-            err = float(row[metric_key])
-            if np.isfinite(err) and err > epsilon:
-                raw.append((float(row["dt"]), err))
-        raw = sorted(raw)
-        if len(raw) < 2:
-            continue
-        fit_pts = select_fit_points(raw)
-        if len(fit_pts) < 2:
-            continue
-        slope, intercept = fit_loglog(fit_pts)
-        fit_dts = [float(dt) for dt, _ in fit_pts]
-        excluded = [float(dt) for dt, _ in raw if not any(abs(dt - fdt) < 1e-15 for fdt in fit_dts)]
-        out[integ] = {
-            "metric": metric_name,
-            "integrator": integ,
-            "integrator_label": INTEGRATOR_LABELS[integ],
-            "expected_order": INTEGRATOR_ORDERS[integ],
-            "slope": slope,
-            "intercept": intercept,
-            "fit_dts": fit_dts,
-            "excluded_dts": excluded,
-            "n_points": len(raw),
-        }
-    return out
-
-
-def row_for(metrics_idx: Dict[Tuple[str, float], Dict[str, object]], integ: str, dt: float):
-    return metrics_idx.get((integ, dt))
-
-
-def merge_fit_info(endpoint_fit: Dict[str, Dict[str, object]], rms_fit: Dict[str, Dict[str, object]]):
-    merged = {}
-    for integ in INTEGRATORS:
-        ep = endpoint_fit.get(integ)
-        rm = rms_fit.get(integ)
-        if ep is None or rm is None:
-            continue
-        excluded_union = sorted(set([float(x) for x in ep["excluded_dts"]] + [float(x) for x in rm["excluded_dts"]]))
-        merged[integ] = {
-            "integrator_label": INTEGRATOR_LABELS[integ],
-            "endpoint_slope": float(ep["slope"]),
-            "rms_slope": float(rm["slope"]),
-            "expected_order": INTEGRATOR_ORDERS[integ],
-            "endpoint_fit_dt_values": [float(v) for v in ep["fit_dts"]],
-            "rms_fit_dt_values": [float(v) for v in rm["fit_dts"]],
-            "excluded_coarse_dt_values": excluded_union,
-        }
-    return merged
-
-
-def add_reference_slope(ax, dts: np.ndarray, errs: np.ndarray, expected: int, color: str) -> None:
-    anchor_idx = len(dts) // 2
-    dt_anchor = dts[anchor_idx]
-    err_anchor = errs[anchor_idx]
-    dt_ref = np.array([np.min(dts), np.max(dts)], dtype=float)
-    err_ref = err_anchor * (dt_ref / dt_anchor) ** expected
-    ax.loglog(dt_ref, err_ref, "--", color=color, alpha=0.45, linewidth=1.2)
-
-
-def _window_yrange(series: List[Tuple[np.ndarray, np.ndarray]], t0: float, t1: float, pad_frac: float = 0.20) -> Tuple[float, float]:
-    vals: List[np.ndarray] = []
-    for t, y in series:
-        tt = np.asarray(t, dtype=float)
-        yy = np.asarray(y, dtype=float)
-        mask = (tt >= t0) & (tt <= t1)
-        if np.any(mask):
-            vals.append(yy[mask])
-    if not vals:
-        y0 = np.asarray(series[0][1], dtype=float)
-        return float(np.min(y0)), float(np.max(y0))
-    stacked = np.concatenate(vals)
-    ymin = float(np.nanmin(stacked))
-    ymax = float(np.nanmax(stacked))
-    span = ymax - ymin
-    if span <= 1e-14:
-        span = max(abs(ymax) * 0.1, 1e-3)
-    return ymin - pad_frac * span, ymax + pad_frac * span
-
-
-def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> None:
-    fig, axes = plt.subplots(2, 1, figsize=(9.2, 7.6), sharex=True, constrained_layout=False)
-    t_exact = np.linspace(0.0, T_FINAL, 2000, dtype=float)
-    x_exact, v_exact = exact_solution(t_exact)
-    exact_style = INTEGRATOR_STYLE["exact"]
-    zoom_t0, zoom_t1 = 9.0, 10.0
-    plot_series = {
-        "x": [("exact", t_exact, x_exact)],
-        "v": [("exact", t_exact, v_exact)],
-    }
-
-    for integ in INTEGRATORS:
-        ds = datasets.get(integ, {}).get(TRAJ_DT)
-        if ds is None:
-            print(f"Warning: {integ} dt={TRAJ_DT:g} missing for Figure 1.")
-            continue
-        data = ds["data"]
-        style = INTEGRATOR_STYLE[integ]
-        lw = float(style["linewidth"])
-        alpha = 0.95
-        if integ == "euler":
-            lw = 2.3
-            alpha = 0.98
-        elif integ in ("verlet", "rk4"):
-            lw = 2.0
-            alpha = 0.93
-        axes[0].plot(
-            data["time"],
-            data["x"],
-            color=style["color"],
-            linestyle=style["linestyle"],
-            linewidth=lw,
-            alpha=alpha,
-            zorder=3,
-            label=INTEGRATOR_LABELS[integ],
-        )
-        axes[1].plot(
-            data["time"],
-            data["v"],
-            color=style["color"],
-            linestyle=style["linestyle"],
-            linewidth=lw,
-            alpha=alpha,
-            zorder=3,
-            label=INTEGRATOR_LABELS[integ],
-        )
-        t_num = np.asarray(data["time"], dtype=float)
-        plot_series["x"].append((integ, t_num, np.asarray(data["x"], dtype=float)))
-        plot_series["v"].append((integ, t_num, np.asarray(data["v"], dtype=float)))
-
-    axes[0].plot(
-        t_exact,
-        x_exact,
-        color=exact_style["color"],
-        linestyle=exact_style["linestyle"],
-        linewidth=2.0,
-        alpha=0.90,
-        zorder=6,
-        label="Exact",
-    )
-    axes[1].plot(
-        t_exact,
-        v_exact,
-        color=exact_style["color"],
-        linestyle=exact_style["linestyle"],
-        linewidth=2.0,
-        alpha=0.90,
-        zorder=6,
-        label="Exact",
-    )
-
-    # Keep full context and stable axis limits across reruns.
-    axes[1].set_xlim(0.0, T_FINAL)
-    # Subtle source-window highlight for the endpoint zoom.
-    for ax in axes:
-        ax.axvspan(zoom_t0, zoom_t1, color="#9a9a9a", alpha=0.08, zorder=0)
-
-    inset_meta: Dict[str, object] = {}
-    panel_specs = [("x", axes[0], "x"), ("v", axes[1], "v")]
-    for panel_key, ax, ykey in panel_specs:
-        series = [(t, y) for _, t, y in plot_series[ykey]]
-        axins = inset_axes(ax, width="20%", height="24%", loc="upper right", borderpad=0.95)
-        inset_meta[panel_key] = {"used": True, "placement": "inside-upper right", "time_window": [zoom_t0, zoom_t1]}
-
-        for integ, t, y in plot_series[ykey]:
-            if integ == "exact":
-                st = exact_style
-                lw = 1.8
-                alpha = 0.88
-            else:
-                st = INTEGRATOR_STYLE[str(integ)]
-                lw = 2.1 if integ == "euler" else 1.8
-                alpha = 0.96 if integ == "euler" else 0.92
-            axins.plot(t, y, color=st["color"], linestyle=st["linestyle"], linewidth=lw, alpha=alpha, zorder=3)
-
-        yz0, yz1 = _window_yrange(series, zoom_t0, zoom_t1, pad_frac=0.22)
-        axins.set_xlim(zoom_t0, zoom_t1)
-        axins.set_ylim(yz0, yz1)
-        apply_major_grid(axins)
-        disable_offset_text(axins)
-        axins.tick_params(axis="both", which="major", labelsize=7)
-
-    axes[0].set_title("(a) Position x(t)", loc="left")
-    axes[1].set_title("(b) Velocity v(t)", loc="left")
-    axes[0].set_ylabel("Position x [reduced units]")
-    axes[1].set_ylabel("Velocity v [reduced units]")
-    axes[1].set_xlabel(r"Time $[1/\omega]$")
-    for ax in axes:
-        apply_major_grid(ax)
-        disable_offset_text(ax)
-        # Add top headroom so inset bottoms clear nearby curves.
-        ymin, ymax = ax.get_ylim()
-        span = ymax - ymin
-        if span > 0:
-            ax.set_ylim(ymin, ymax + 0.10 * span)
-
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", ncol=4, frameon=False, bbox_to_anchor=(0.5, 0.965))
-    fig.suptitle(r"Harmonic oscillator trajectories ($\Delta t=0.01$)", fontsize=13, y=0.995)
-    fig.subplots_adjust(top=0.88, bottom=0.10, left=0.10, right=0.98, hspace=0.24)
-
-    save_plot_pair(
-        fig,
-        FIG1_PNG,
-        {
-            "kind": "main_results1_figure",
-            "figure_number": 1,
-            "claim": "Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact.",
-            "panels": ["(a) x(t)", "(b) v(t)"],
-            "insets": inset_meta,
-            "zoom_window": [zoom_t0, zoom_t1],
-            "endpoint_note": "Near-overlap is expected at small Δt; endpoint errors still rank Euler > Velocity-Verlet > RK4.",
-            "shared_legend": True,
-        },
-    )
-    plt.close(fig)
-
-
-def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> None:
-    fig, ax = plt.subplots(figsize=(6.7, 6.5), constrained_layout=False)
-    exact_style = INTEGRATOR_STYLE["exact"]
-    series = {}
-
-    for integ in INTEGRATORS:
-        ds = datasets.get(integ, {}).get(TRAJ_DT)
-        if ds is None:
-            print(f"Warning: {integ} dt={TRAJ_DT:g} missing for Figure 2.")
-            continue
-        data = ds["data"]
-        series[integ] = data
-        style = INTEGRATOR_STYLE[integ]
-        ax.plot(
-            data["x"],
-            data["v"],
-            color=style["color"],
-            linestyle=style["linestyle"],
-            linewidth=style["linewidth"],
-            alpha=0.96,
-            zorder=3,
-            label=INTEGRATOR_LABELS[integ],
-        )
-
-    x_exact, v_exact = exact_phase_curve(num_points=2200, t_final=T_FINAL)
-    ax.plot(
-        x_exact,
-        v_exact,
-        color=exact_style["color"],
-        linestyle=exact_style["linestyle"],
-        linewidth=2.4,
-        alpha=0.98,
-        zorder=6,
-        label="Exact",
-    )
-
-    ax.set_title(r"Phase-space trajectories ($\Delta t=0.01$)")
-    ax.set_xlabel("Position x [reduced units]")
-    ax.set_ylabel("Velocity v [reduced units]")
-    ax.set_aspect("equal", "box")
-    apply_major_grid(ax)
-    disable_offset_text(ax)
-    handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, labels, loc="upper left", bbox_to_anchor=(1.02, 1.0), frameon=False, borderaxespad=0.0)
-
-    # Place zoom outside the main axes, under the external legend.
-    axins = inset_axes(
-        ax,
-        width="24%",
-        height="24%",
-        bbox_to_anchor=(1.10, 0.07, 0.98, 0.98),
-        bbox_transform=ax.transAxes,
-        loc="lower left",
-        borderpad=0.0,
-    )
-    # Inset: local final-time sector with all methods; endpoint markers reveal near-coincidence.
-    zoom_t_start = 8.8
-    zx_all: List[float] = []
-    zv_all: List[float] = []
-    marker_map = {"euler": "o", "verlet": "s", "rk4": "^"}
-    for integ in INTEGRATORS:
-        data = series.get(integ)
-        if data is None:
-            continue
-        style = INTEGRATOR_STYLE[integ]
-        tt = np.asarray(data["time"], dtype=float)
-        xx = np.asarray(data["x"], dtype=float)
-        vv = np.asarray(data["v"], dtype=float)
-        mask = tt >= zoom_t_start
-        if np.any(mask):
-            xloc = xx[mask]
-            vloc = vv[mask]
-            axins.plot(
-                xloc,
-                vloc,
-                color=style["color"],
-                linestyle=style["linestyle"],
-                linewidth=style["linewidth"],
-                alpha=0.98,
-                zorder=3,
-            )
-            axins.plot(xloc[-1], vloc[-1], marker=marker_map.get(integ, "o"), markersize=4.0, color=style["color"], zorder=4)
-            zx_all.extend(xloc.tolist())
-            zv_all.extend(vloc.tolist())
-    tz = np.linspace(zoom_t_start, T_FINAL, 400, dtype=float)
-    xz, vz = exact_solution(tz)
-    axins.plot(xz, vz, color=exact_style["color"], linestyle=":", linewidth=1.6, alpha=0.85, zorder=2)
-    axins.plot(xz[-1], vz[-1], marker="D", markersize=4.0, color=exact_style["color"], zorder=4)
-    zx_all.extend(xz.tolist())
-    zv_all.extend(vz.tolist())
-    if zx_all and zv_all:
-        xmin, xmax = min(zx_all), max(zx_all)
-        ymin, ymax = min(zv_all), max(zv_all)
-        xpad = max(0.01, 0.22 * (xmax - xmin))
-        ypad = max(0.01, 0.22 * (ymax - ymin))
-        axins.set_xlim(xmin - xpad, xmax + xpad)
-        axins.set_ylim(ymin - ypad, ymax + ypad)
-    axins.set_title(r"Zoom near $t\approx T$", fontsize=7.8, pad=2)
-    axins.tick_params(axis="both", which="major", labelsize=7)
-    apply_major_grid(axins)
-    disable_offset_text(axins)
-    fig.subplots_adjust(left=0.12, right=0.74, top=0.91, bottom=0.11)
-
-    save_plot_pair(
-        fig,
-        FIG2_PNG,
-        {
-            "kind": "main_results1_figure",
-            "figure_number": 2,
-            "claim": "Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences.",
-            "panel": "v_vs_x",
-            "shared_legend": True,
-        },
-    )
-    plt.close(fig)
-
-
-def _plot_small_large_series(
-    ax,
-    x_data,
-    y_data,
-    exact_x,
-    exact_y,
-    method_color,
-    include_coarse: bool = True,
-    exact_color: str | None = None,
-):
-    # Keep exact clearly distinct from coarse/fine numerical styles in this comparison panel.
-    exact_style = INTEGRATOR_STYLE["exact"]
-    ax.plot(
-        exact_x,
-        exact_y,
-        color=exact_style["color"] if exact_color is None else exact_color,
-        linestyle=":",
-        linewidth=max(2.0, float(exact_style["linewidth"])),
-        alpha=0.95,
-    )
-    if include_coarse:
-        ax.plot(
-            x_data["coarse"],
-            y_data["coarse"],
-            color=method_color,
-            linestyle="-.",
-            linewidth=1.9,
-            alpha=0.92,
-        )
-    ax.plot(x_data["fine"], y_data["fine"], color=method_color, linestyle="-", linewidth=2.2, alpha=0.92)
-
-
-def plot_figure3_small_vs_large(
-    datasets: Dict[str, Dict[float, Dict[str, object]]],
-    metrics_idx: Dict[Tuple[str, float], Dict[str, object]],
-) -> None:
-    fig, axes = plt.subplots(len(INTEGRATORS), 2, figsize=(12.8, 11.1), constrained_layout=False)
-    t_exact = np.linspace(0.0, T_FINAL, 2400, dtype=float)
-    x_exact, v_exact = exact_solution(t_exact)
-    exact_color = "black"
-
-    for row_idx, integ in enumerate(INTEGRATORS):
-        ax_traj = axes[row_idx, 0]
-        ax_phase = axes[row_idx, 1]
-        color = INTEGRATOR_STYLE[integ]["color"]
-
-        ds_large = datasets.get(integ, {}).get(DT_LARGE)
-        ds_small = datasets.get(integ, {}).get(DT_SMALL)
-        if ds_large is None or ds_small is None:
-            print(f"Warning: missing dt={DT_LARGE:g} or dt={DT_SMALL:g} for {integ} in Figure 3.")
-            continue
-        d_large = ds_large["data"]
-        d_small = ds_small["data"]
-
-        _plot_small_large_series(
-            ax_traj,
-            {"coarse": d_large["time"], "fine": d_small["time"]},
-            {"coarse": d_large["x"], "fine": d_small["x"]},
-            t_exact,
-            x_exact,
-            color,
-            exact_color=exact_color,
-        )
-        _plot_small_large_series(
-            ax_phase,
-            {"coarse": d_large["x"], "fine": d_small["x"]},
-            {"coarse": d_large["v"], "fine": d_small["v"]},
-            x_exact,
-            v_exact,
-            color,
-            exact_color=exact_color,
-        )
-
-        ax_traj.set_xlim(0.0, T_FINAL)
-        ax_phase.set_aspect("equal", "box")
-        ax_traj.set_ylabel(f"{INTEGRATOR_LABELS[integ]}\nPosition x")
-        ax_phase.set_ylabel("Velocity v")
-        if row_idx == len(INTEGRATORS) - 1:
-            ax_traj.set_xlabel(r"Time $[1/\omega]$")
-            ax_phase.set_xlabel("Position x")
-        apply_major_grid(ax_traj)
-        apply_major_grid(ax_phase)
-        disable_offset_text(ax_traj)
-        disable_offset_text(ax_phase)
-
-    axes[0, 0].set_title("x(t) vs time", loc="left")
-    axes[0, 1].set_title("phase space v(x)", loc="left")
-
-    legend_handles = [
-        Line2D(
-            [0],
-            [0],
-            color=exact_color,
-            linestyle=":",
-            linewidth=max(2.0, float(INTEGRATOR_STYLE["exact"]["linewidth"])),
-            label="Exact",
-        ),
-        Line2D([0], [0], color="black", linestyle="-.", linewidth=2.0, label=f"Coarse dt={DT_LARGE:g}"),
-        Line2D([0], [0], color="black", linestyle="-", linewidth=2.2, label=f"Fine dt={DT_SMALL:g}"),
-    ]
-    fig.legend(legend_handles, [h.get_label() for h in legend_handles], loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.972))
-    fig.suptitle("Small vs Large Timestep Comparison", fontsize=13, y=0.995)
-    fig.subplots_adjust(top=0.92, bottom=0.07, left=0.09, right=0.98, hspace=0.18, wspace=0.08)
-
-    per_integrator = {}
-    for integ in INTEGRATORS:
-        m_large = row_for(metrics_idx, integ, DT_LARGE)
-        m_small = row_for(metrics_idx, integ, DT_SMALL)
-        if m_large is None or m_small is None:
-            continue
-        per_integrator[integ] = {
-            "coarse": {
-                "dt": DT_LARGE,
-                "endpoint_position_error": float(m_large["endpoint_position_error"]),
-                "endpoint_velocity_error": float(m_large["endpoint_velocity_error"]),
-            },
-            "fine": {
-                "dt": DT_SMALL,
-                "endpoint_position_error": float(m_small["endpoint_position_error"]),
-                "endpoint_velocity_error": float(m_small["endpoint_velocity_error"]),
-            },
-        }
-
-    save_plot_pair(
-        fig,
-        FIG3_PNG,
-        {
-            "kind": "main_results1_figure",
-            "figure_number": 3,
-            "claim": "Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables.",
-            "layout": {"rows": INTEGRATORS, "columns": ["x(t)", "v(x)"]},
-            "shared_legend": True,
-            "error_annotations": per_integrator,
-            "insets": {"euler_trajectory_zoom": False, "euler_phase_zoom": False},
-        },
-    )
-    plt.close(fig)
-
-
-def _plot_convergence_panel(
-    ax,
-    metrics: List[Dict[str, object]],
-    fit_summary: Dict[str, Dict[str, object]],
-    metric_key: str,
-    epsilon: float,
-    ylabel: str,
-    panel_title: str,
-):
-    method_handles: List[Line2D] = []
-    for integ in INTEGRATORS:
-        rows = [
-            (float(r["dt"]), float(r[metric_key]))
-            for r in metrics
-            if r["integrator"] == integ and np.isfinite(float(r[metric_key])) and float(r[metric_key]) > epsilon
-        ]
-        rows = sorted(rows)
-        if len(rows) < 2:
-            continue
-        dts = np.asarray([p[0] for p in rows], dtype=float)
-        errs = np.asarray([p[1] for p in rows], dtype=float)
-        style = INTEGRATOR_STYLE[integ]
-        expected = INTEGRATOR_ORDERS[integ]
-        fit_info = fit_summary.get(integ, {})
-        slope = fit_info.get("slope", float("nan"))
-        label = f"{INTEGRATOR_LABELS[integ]} (s={float(slope):.2f}, exp {expected})"
-        line = ax.loglog(
-            dts,
-            errs,
-            linestyle=style["linestyle"],
-            color=style["color"],
-            linewidth=style["linewidth"],
-            alpha=0.95,
-            label=label,
-        )[0]
-        method_handles.append(line)
-
-        fit_dts = [float(v) for v in fit_info.get("fit_dts", [])]
-        if fit_dts:
-            inc_mask = np.array([any(abs(dt - fd) <= 1e-12 * max(1.0, abs(dt), abs(fd)) for fd in fit_dts) for dt in dts], dtype=bool)
-        else:
-            inc_mask = np.ones_like(dts, dtype=bool)
-        exc_mask = ~inc_mask
-
-        ax.scatter(dts[inc_mask], errs[inc_mask], marker="o", s=40, facecolors=style["color"], edgecolors=style["color"], linewidths=0.8, zorder=4)
-        if np.any(exc_mask):
-            ax.scatter(dts[exc_mask], errs[exc_mask], marker="o", s=40, facecolors="white", edgecolors=style["color"], linewidths=1.3, zorder=4)
-
-        if fit_dts and np.isfinite(float(fit_info.get("intercept", float("nan")))):
-            dt_fit = np.asarray(sorted(fit_dts), dtype=float)
-            dt_fit_line = np.array([np.min(dt_fit), np.max(dt_fit)], dtype=float)
-            err_fit_line = (10.0 ** float(fit_info["intercept"])) * (dt_fit_line ** float(fit_info["slope"]))
-            ax.loglog(dt_fit_line, err_fit_line, ":", color=style["color"], alpha=0.85, linewidth=1.7)
-
-    ax.set_xlabel(r"$\Delta t\ [1/\omega]$")
-    ax.set_ylabel(ylabel)
-    ax.set_title(panel_title, loc="left")
-    apply_major_grid(ax)
-    disable_offset_text(ax)
-    ax.legend(handles=method_handles, loc="best", frameon=False)
-
-
-def plot_figure4_convergence_combined(
-    metrics: List[Dict[str, object]],
-    endpoint_fit: Dict[str, Dict[str, object]],
-    rms_fit: Dict[str, Dict[str, object]],
-) -> None:
-    fig, axes = plt.subplots(1, 2, figsize=(12.4, 5.0), constrained_layout=False)
-
-    _plot_convergence_panel(
-        axes[0],
-        metrics=metrics,
-        fit_summary=endpoint_fit,
-        metric_key="endpoint_position_error",
-        epsilon=1e-14,
-        ylabel=r"$|x_{\mathrm{num}}(T)-x_{\mathrm{exact}}(T)|$",
-        panel_title=r"(a) Endpoint position error at $T=10$",
-    )
-    _plot_convergence_panel(
-        axes[1],
-        metrics=metrics,
-        fit_summary=rms_fit,
-        metric_key="rms_phase_space_error",
-        epsilon=1e-16,
-        ylabel=r"$\mathrm{RMS}_t \sqrt{(x-x_{ex})^2 + (v-v_{ex})^2}$",
-        panel_title=r"(b) RMS phase-space error over $0\leq t\leq 10$",
-    )
-
-    fig.suptitle(
-        r"Convergence to the exact solution (expected orders: Euler 1, Velocity-Verlet 2, RK4 4)",
-        fontsize=12.8,
-        y=0.995,
-    )
-    fig.subplots_adjust(top=0.84, bottom=0.17, left=0.08, right=0.98, wspace=0.27)
-    fig.text(
-        0.5,
-        0.040,
-        r"Filled markers: used in slope fit ($\Delta t \leq 0.1$). Open markers: coarse points shown for context.",
-        ha="center",
-        va="center",
-        fontsize=9,
-    )
-
-    meta_fits = {
-        "endpoint_position_error": {
-            integ: {
-                "fitted_slope": float(info["slope"]),
-                "expected_order": int(info["expected_order"]),
-                "fit_dt_values": [float(v) for v in info["fit_dts"]],
-                "excluded_dt_values": [float(v) for v in info["excluded_dts"]],
-            }
-            for integ, info in endpoint_fit.items()
-        },
-        "rms_phase_space_error": {
-            integ: {
-                "fitted_slope": float(info["slope"]),
-                "expected_order": int(info["expected_order"]),
-                "fit_dt_values": [float(v) for v in info["fit_dts"]],
-                "excluded_dt_values": [float(v) for v in info["excluded_dts"]],
-            }
-            for integ, info in rms_fit.items()
-        },
-    }
-
-    save_plot_pair(
-        fig,
-        FIG4_PNG,
-        {
-            "kind": "main_results1_figure",
-            "figure_number": 4,
-            "claim": "Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics.",
-            "panels": ["(a) endpoint_position_error", "(b) rms_phase_space_error"],
-            "fit_rule": "dt <= 0.1; fallback to smallest half if fewer than 3 points",
-            "fits": meta_fits,
-            "coarse_points_retained_on_plot": True,
-        },
-    )
-    plt.close(fig)
-
-
-def plot_figure5_energy_diagnostic(
-    datasets: Dict[str, Dict[float, Dict[str, object]]],
-    metrics_idx: Dict[Tuple[str, float], Dict[str, object]],
-) -> None:
-    fig, ax = plt.subplots(figsize=(8.6, 5.3), constrained_layout=False)
-
-    for integ in INTEGRATORS:
-        ds = datasets.get(integ, {}).get(TRAJ_DT)
-        if ds is None:
-            continue
-        data = ds["data"]
-        if "E_total" not in set(data.dtype.names or []):
-            continue
-        t = np.asarray(data["time"], dtype=float)
-        E = np.asarray(data["E_total"], dtype=float)
-        finite = np.isfinite(E)
-        if not np.any(finite):
-            continue
-        t = t[finite]
-        E = E[finite]
-        E0 = E[0]
-        rel = (E - E0) / abs(E0) if abs(E0) > 1e-30 else (E - E0)
-        style = INTEGRATOR_STYLE[integ]
-        ax.plot(
-            t,
-            rel,
-            color=style["color"],
-            linestyle=style["linestyle"],
-            linewidth=style["linewidth"],
-            label=INTEGRATOR_LABELS[integ],
-        )
-
-    ax.set_xlabel(r"Time $[1/\omega]$")
-    ax.set_ylabel(r"$(E-E_0)/|E_0|$ (dimensionless)")
-    ax.set_title(r"Energy drift at $\Delta t=0.01$")
-    apply_major_grid(ax)
-    disable_offset_text(ax)
-    ax.legend(loc="upper left", bbox_to_anchor=(0.02, 0.985), frameon=False, borderaxespad=0.0)
-
-    summary_label_map = {"euler": "Euler", "verlet": "Verlet", "rk4": "RK4"}
-    summary_lines = []
-    for integ in INTEGRATORS:
-        row = row_for(metrics_idx, integ, TRAJ_DT)
-        if row is None:
-            continue
-        summary_lines.append((summary_label_map[integ], fmt_pct_from_ratio(float(row["max_relative_energy_drift"]), 3)))
-    if summary_lines:
-        summary_text = "Max relative energy drift\n" + "\n".join(
-            f"{label}: {drift_text}" for label, drift_text in summary_lines
-        )
-        ax.text(
-            0.02,
-            0.76,
-            summary_text,
-            transform=ax.transAxes,
-            va="top",
-            ha="left",
-            fontsize=8.2,
-            color="#222222",
-            linespacing=1.35,
-            bbox={"facecolor": "white", "alpha": 0.92, "edgecolor": "#d9d9d9", "boxstyle": "round,pad=0.3"},
-        )
-
-    axins = inset_axes(
-        ax,
-        width="31%",
-        height="27%",
-        bbox_to_anchor=(0.0, 0.05, 1.0, 1.0),
-        bbox_transform=ax.transAxes,
-        loc="lower right",
-        borderpad=2.0,
-    )
-    for integ in ("verlet", "rk4"):
-        ds = datasets.get(integ, {}).get(TRAJ_DT)
-        if ds is None:
-            continue
-        data = ds["data"]
-        if "E_total" not in set(data.dtype.names or []):
-            continue
-        t = np.asarray(data["time"], dtype=float)
-        E = np.asarray(data["E_total"], dtype=float)
-        finite = np.isfinite(E)
-        if not np.any(finite):
-            continue
-        t = t[finite]
-        E = E[finite]
-        E0 = E[0]
-        rel = (E - E0) / abs(E0) if abs(E0) > 1e-30 else (E - E0)
-        style = INTEGRATOR_STYLE[integ]
-        axins.plot(t, rel, color=style["color"], linestyle=style["linestyle"], linewidth=style["linewidth"])
-    axins.set_title("Zoom: VV vs RK4", fontsize=8.5, pad=2)
-    axins.tick_params(axis="both", which="major", labelsize=7)
-    axins.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1e}"))
-    apply_major_grid(axins)
-    disable_offset_text(axins)
-
-    # Keep lower area clean for publication readability; no extra sentence below inset.
-    fig.subplots_adjust(top=0.90, bottom=0.12, left=0.10, right=0.98)
-
-    save_plot_pair(
-        fig,
-        FIG5_PNG,
-        {
-            "kind": "supporting_results1_figure",
-            "figure_number": 5,
-            "claim": "Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval.",
-            "note": "RK4 is not symplectic.",
-        },
-    )
-    plt.close(fig)
-
-
-def _write_markdown(path: str, lines: List[str]) -> None:
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines) + "\n")
-    print(f"Saved {path}")
-
-
-def generate_table_outputs(
-    metrics: List[Dict[str, object]],
-    endpoint_fit: Dict[str, Dict[str, object]],
-    rms_fit: Dict[str, Dict[str, object]],
-    sanity_warnings: List[str],
-) -> None:
-    os.makedirs(OUT_DIR, exist_ok=True)
-    os.makedirs(SUMMARY_RESULTS1_DIR, exist_ok=True)
-    ordered = sorted_metrics(metrics)
-    idx = metrics_index(metrics)
-
-    # 1) Small-vs-large summary
-    small_large_rows = []
-    for integ in INTEGRATORS:
-        for dt in [DT_LARGE, DT_SMALL]:
-            row = row_for(idx, integ, dt)
-            if row is None:
-                continue
-            small_large_rows.append(
-                {
-                    "integrator": integ,
-                    "integrator_label": INTEGRATOR_LABELS[integ],
-                    "dt": float(dt),
-                    "endpoint_position_error": float(row["endpoint_position_error"]),
-                    "endpoint_velocity_error": float(row["endpoint_velocity_error"]),
-                    "rms_phase_space_error": float(row["rms_phase_space_error"]),
-                    "max_relative_energy_drift": float(row["max_relative_energy_drift"]),
-                }
-            )
-    write_csv(
-        R1_SMALL_LARGE_CSV,
-        [
-            "integrator",
-            "integrator_label",
-            "dt",
-            "endpoint_position_error",
-            "endpoint_velocity_error",
-            "rms_phase_space_error",
-            "max_relative_energy_drift",
-        ],
-        small_large_rows,
-    )
-    small_large_md = [
-        "# Results 1 HO Small-vs-Large Timestep Summary",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        markdown_table(
-            [
-                "Integrator",
-                "dt",
-                "abs(x(T)-x_exact(T))",
-                "abs(v(T)-v_exact(T))",
-                "RMS phase-space error",
-                "max abs(E-E0)/abs(E0)",
-            ],
-            [
-                [
-                    INTEGRATOR_LABELS[str(r["integrator"])],
-                    format_dt(float(r["dt"])),
-                    fmt_sci(float(r["endpoint_position_error"]), 3),
-                    fmt_sci(float(r["endpoint_velocity_error"]), 3),
-                    fmt_sci(float(r["rms_phase_space_error"]), 3),
-                    fmt_sci(float(r["max_relative_energy_drift"]), 3),
-                ]
-                for r in small_large_rows
-            ],
-        ),
-    ]
-    _write_markdown(R1_SMALL_LARGE_MD, small_large_md)
-
-    # 2) Convergence summary
-    merged_fit = merge_fit_info(endpoint_fit, rms_fit)
-    convergence_rows = []
-    for integ in INTEGRATORS:
-        info = merged_fit.get(integ)
-        if info is None:
-            continue
-        convergence_rows.append(
-            {
-                "integrator": integ,
-                "integrator_label": info["integrator_label"],
-                "endpoint_position_slope": info["endpoint_slope"],
-                "rms_phase_space_slope": info["rms_slope"],
-                "endpoint_fit_dt_values": ";".join(format_dt(float(v)) for v in info["endpoint_fit_dt_values"]),
-                "rms_fit_dt_values": ";".join(format_dt(float(v)) for v in info["rms_fit_dt_values"]),
-                "excluded_coarse_dt_values": ";".join(format_dt(float(v)) for v in info["excluded_coarse_dt_values"]),
-            }
-        )
-    write_csv(
-        R1_CONVERGENCE_CSV,
-        [
-            "integrator",
-            "integrator_label",
-            "endpoint_position_slope",
-            "rms_phase_space_slope",
-            "endpoint_fit_dt_values",
-            "rms_fit_dt_values",
-            "excluded_coarse_dt_values",
-        ],
-        convergence_rows,
-    )
-    conv_md = [
-        "# Results 1 HO Convergence Summary",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        markdown_table(
-            [
-                "Integrator",
-                "Endpoint slope",
-                "RMS slope",
-                "Endpoint fit dt values",
-                "RMS fit dt values",
-                "Excluded coarse dt values",
-            ],
-            [
-                [
-                    str(r["integrator_label"]),
-                    f"{float(r['endpoint_position_slope']):.2f}",
-                    f"{float(r['rms_phase_space_slope']):.2f}",
-                    str(r["endpoint_fit_dt_values"]),
-                    str(r["rms_fit_dt_values"]),
-                    str(r["excluded_coarse_dt_values"]) if str(r["excluded_coarse_dt_values"]) else "-",
-                ]
-                for r in convergence_rows
-            ],
-        ),
-    ]
-    _write_markdown(R1_CONVERGENCE_MD, conv_md)
-
-    # 3) Endpoint values table (selected dt)
-    selected_dts = [0.5, 0.1, 0.01]
-    endpoint_rows = []
-    for integ in INTEGRATORS:
-        for dt in selected_dts:
-            row = row_for(idx, integ, dt)
-            if row is None:
-                continue
-            endpoint_rows.append(
-                {
-                    "integrator": integ,
-                    "integrator_label": INTEGRATOR_LABELS[integ],
-                    "dt": dt,
-                    "x_num_final": float(row["x_num_final"]),
-                    "x_exact_final": float(row["x_exact_final"]),
-                    "endpoint_position_error": float(row["endpoint_position_error"]),
-                    "v_num_final": float(row["v_num_final"]),
-                    "v_exact_final": float(row["v_exact_final"]),
-                    "endpoint_velocity_error": float(row["endpoint_velocity_error"]),
-                }
-            )
-    write_csv(
-        R1_ENDPOINT_VALUES_CSV,
-        [
-            "integrator",
-            "integrator_label",
-            "dt",
-            "x_num_final",
-            "x_exact_final",
-            "endpoint_position_error",
-            "v_num_final",
-            "v_exact_final",
-            "endpoint_velocity_error",
-        ],
-        endpoint_rows,
-    )
-    endpoint_md = [
-        "# Results 1 HO Endpoint Values (Selected dt)",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        markdown_table(
-            [
-                "Integrator",
-                "dt",
-                "x_num(T)",
-                "x_exact(T)",
-                "abs(Δx(T))",
-                "v_num(T)",
-                "v_exact(T)",
-                "abs(Δv(T))",
-            ],
-            [
-                [
-                    str(r["integrator_label"]),
-                    format_dt(float(r["dt"])),
-                    fmt_sci(float(r["x_num_final"]), 6),
-                    fmt_sci(float(r["x_exact_final"]), 6),
-                    fmt_sci(float(r["endpoint_position_error"]), 3),
-                    fmt_sci(float(r["v_num_final"]), 6),
-                    fmt_sci(float(r["v_exact_final"]), 6),
-                    fmt_sci(float(r["endpoint_velocity_error"]), 3),
-                ]
-                for r in endpoint_rows
-            ],
-        ),
-    ]
-    _write_markdown(R1_ENDPOINT_VALUES_MD, endpoint_md)
-
-    # 4) Caption/helper notes
-    fig3_bits = []
-    for integ in INTEGRATORS:
-        coarse = row_for(idx, integ, DT_LARGE)
-        fine = row_for(idx, integ, DT_SMALL)
-        if coarse is None or fine is None:
-            continue
-        fig3_bits.append(
-            f"{INTEGRATOR_LABELS[integ]} coarse/fine endpoint x-error ratio = "
-            f"{float(coarse['endpoint_position_error']) / max(float(fine['endpoint_position_error']), 1e-300):.2f}"
-        )
-
-    notes = [
-        "# Results 1 Figure Caption Notes (Auto-Generated)",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        f"Figure 1 (trajectories): Verifies x(t) and v(t) behaviour for all three methods against the exact solution at dt={format_dt(TRAJ_DT)}; Euler remains the visibly largest deviation while RK4 is nearly exact on this horizon.",
-        "Figure 2 (phase space): Shows geometric orbit quality at dt=0.01, with Euler clearly outside the closed exact orbit and a dedicated final-sector zoom showing all methods with endpoint markers.",
-        "Figure 3 (small vs large dt): Directly demonstrates timestep sensitivity with dt=0.5 and dt=0.01 for each method, retaining full coarse-range behaviour without dense in-panel text; quantitative values are provided in the summary tables; "
-        + "; ".join(fig3_bits)
-        + ".",
-        f"Figure 4 (combined convergence): Fitted slopes are Euler {endpoint_fit['euler']['slope']:.2f}/{rms_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}/{rms_fit['verlet']['slope']:.2f}, RK4 {endpoint_fit['rk4']['slope']:.2f}/{rms_fit['rk4']['slope']:.2f} (endpoint/RMS), consistent with orders 1/2/4; filled markers denote fit-included points and open markers denote coarse points shown for context.",
-        "Figure 5 (energy diagnostic): At dt=0.01, Euler exhibits strong secular drift, Velocity-Verlet shows bounded oscillatory error, and RK4 drift is tiny on this interval; RK4 remains non-symplectic.",
-    ]
-    if sanity_warnings:
-        notes.append("")
-        notes.append("Sanity warnings:")
-        for warning in sanity_warnings:
-            notes.append(f"- WARNING: {warning}")
-    _write_markdown(R1_CAPTION_NOTES_MD, notes)
-
-    # Keep one compact machine summary for compatibility with downstream note workflows.
-    legacy_notes = [
-        "# Results 1 Auto-Summary Notes",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        f"Endpoint slopes: Euler {endpoint_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}, RK4 {endpoint_fit['rk4']['slope']:.2f}.",
-        f"RMS slopes: Euler {rms_fit['euler']['slope']:.2f}, Velocity-Verlet {rms_fit['verlet']['slope']:.2f}, RK4 {rms_fit['rk4']['slope']:.2f}.",
-    ]
-    _write_markdown(R1_SECTION_NOTES_MD, legacy_notes)
-
-
-def run_sanity_checks(
-    endpoint_fit: Dict[str, Dict[str, object]],
-    rms_fit: Dict[str, Dict[str, object]],
-    metrics_idx: Dict[Tuple[str, float], Dict[str, object]],
-) -> List[str]:
-    warnings: List[str] = []
-
-    for integ in INTEGRATORS:
-        expected = INTEGRATOR_ORDERS[integ]
-        efit = endpoint_fit.get(integ)
-        if efit is None:
-            warnings.append(f"missing endpoint-position fit for {integ}")
-        else:
-            slope = float(efit["slope"])
-            if abs(slope - expected) > 0.35:
-                warnings.append(f"endpoint-position slope for {integ} is {slope:.2f}, far from expected {expected}")
-
-        rfit = rms_fit.get(integ)
-        if rfit is None:
-            warnings.append(f"missing RMS phase-space fit for {integ}")
-        else:
-            slope = float(rfit["slope"])
-            if abs(slope - expected) > 0.35:
-                warnings.append(f"RMS phase-space slope for {integ} is {slope:.2f}, far from expected {expected}")
-
-    for integ in INTEGRATORS:
-        coarse = row_for(metrics_idx, integ, DT_LARGE)
-        fine = row_for(metrics_idx, integ, DT_SMALL)
-        if coarse is None or fine is None:
-            warnings.append(f"cannot compare coarse vs fine dt for {integ}")
-            continue
-        if float(coarse["endpoint_position_error"]) <= float(fine["endpoint_position_error"]):
-            warnings.append(f"coarse dt position error is not larger than fine dt for {integ} ({DT_LARGE:g} vs {DT_SMALL:g})")
-        if float(coarse["endpoint_velocity_error"]) <= float(fine["endpoint_velocity_error"]):
-            warnings.append(f"coarse dt velocity error is not larger than fine dt for {integ} ({DT_LARGE:g} vs {DT_SMALL:g})")
-
-    euler = row_for(metrics_idx, "euler", DT_SMALL)
-    verlet = row_for(metrics_idx, "verlet", DT_SMALL)
-    if euler is not None and verlet is not None:
-        if float(euler["max_relative_energy_drift"]) <= float(verlet["max_relative_energy_drift"]):
-            warnings.append("Euler energy drift is not larger than Velocity-Verlet at dt=0.01")
-    else:
-        warnings.append("missing dt=0.01 energy-drift rows for Euler and/or Velocity-Verlet")
-
-    return warnings
-
-
-def main():
-    apply_plot_style()
-
-    if "--run" in sys.argv:
-        run_ho_simulations()
-
-    manifest = load_manifest()
-    datasets, data_warnings = collect_ho_data(manifest)
-    for warning in data_warnings:
-        print(f"Warning: {warning}")
-
-    required_missing = []
-    for integ in INTEGRATORS:
-        for dt in [DT_SMALL, DT_LARGE]:
-            if dt not in datasets.get(integ, {}):
-                required_missing.append(f"{integ} dt={dt:g}")
-    if required_missing:
-        raise RuntimeError("Missing required HO datasets for small-vs-large comparison: " + ", ".join(required_missing))
-
-    metrics = compute_metrics(datasets)
-    if not metrics:
-        raise RuntimeError("No HO metrics could be computed from manifest datasets.")
-    m_idx = metrics_index(metrics)
-
-    endpoint_fit = build_fit_summary(
-        metrics=metrics,
-        metric_key="endpoint_position_error",
-        epsilon=1e-14,
-        metric_name="endpoint_position_error",
-    )
-    rms_fit = build_fit_summary(
-        metrics=metrics,
-        metric_key="rms_phase_space_error",
-        epsilon=1e-16,
-        metric_name="rms_phase_space_error",
-    )
-
-    plot_figure1_trajectories(datasets)
-    plot_figure2_phase_space(datasets)
-    plot_figure3_small_vs_large(datasets, m_idx)
-    plot_figure4_convergence_combined(metrics, endpoint_fit, rms_fit)
-    plot_figure5_energy_diagnostic(datasets, m_idx)
-
-    sanity_warnings = run_sanity_checks(endpoint_fit, rms_fit, m_idx)
-    generate_table_outputs(metrics, endpoint_fit, rms_fit, sanity_warnings)
-
-    if sanity_warnings:
-        print("=== SANITY CHECK WARNINGS ===")
-        for warning in sanity_warnings:
-            print(f"WARNING: {warning}")
-    else:
-        print("All numerical sanity checks passed.")
-
-
-if __name__ == "__main__":
-    main()
 ```
 
-### `scripts/plot_lj.py` (1560 lines)
+**Function/class signatures:**
+```text
+93:def utc_now() -> str:
+97:def dt_key(dt: float) -> str:
+101:def format_dt(dt: float) -> str:
+105:def exact_solution(t: np.ndarray | float, omega: float = OMEGA, x0: float = X0, v0: float = V0):
+123:def exact_phase_curve(num_points: int = 1200, t_final: float = T_FINAL):
+128:def load_manifest():
+134:def load_csv(filepath: str):
+137:    def non_comment_lines(handle):
+155:def write_csv(path: str, fieldnames: List[str], rows: List[Dict[str, object]]) -> None:
+165:def markdown_table(headers: List[str], rows: List[List[str]]) -> str:
+174:def fmt_sci(x: float, digits: int = 3) -> str:
+180:def fmt_pct_from_ratio(x: float, digits: int = 4) -> str:
+191:def write_plot_metadata(plot_png_name: str, extra: Dict[str, object]) -> None:
+214:def save_plot_pair(fig, png_name: str, metadata: Dict[str, object]) -> None:
+222:def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05) -> None:
+236:def run_ho_simulations():
+274:def collect_ho_data(manifest) -> Tuple[Dict[str, Dict[float, Dict[str, object]]], List[str]]:
+293:def compute_metrics_for_dataset(integ: str, dt: float, dataset: Dict[str, object]) -> Dict[str, object]:
+344:def compute_metrics(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> List[Dict[str, object]]:
+355:def integrator_rank(name: str) -> int:
+362:def sorted_metrics(metrics: List[Dict[str, object]]) -> List[Dict[str, object]]:
+366:def metrics_index(metrics: List[Dict[str, object]]) -> Dict[Tuple[str, float], Dict[str, object]]:
+370:def select_fit_points(points: List[Tuple[float, float]]) -> List[Tuple[float, float]]:
+377:def fit_loglog(points: List[Tuple[float, float]]) -> Tuple[float, float]:
+384:def build_fit_summary(
+422:def row_for(metrics_idx: Dict[Tuple[str, float], Dict[str, object]], integ: str, dt: float):
+426:def merge_fit_info(endpoint_fit: Dict[str, Dict[str, object]], rms_fit: Dict[str, Dict[str, object]]):
+446:def add_reference_slope(ax, dts: np.ndarray, errs: np.ndarray, expected: int, color: str) -> None:
+455:def _window_yrange(series: List[Tuple[np.ndarray, np.ndarray]], t0: float, t1: float, pad_frac: float = 0.20) -> Tuple[float, float]:
+475:def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> None:
+615:def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> None:
+733:def _plot_small_large_series(
+765:def plot_figure3_small_vs_large(
+876:def _plot_convergence_panel(
+938:def plot_figure4_convergence_combined(
+1018:def plot_figure5_energy_diagnostic(
+1130:def _write_markdown(path: str, lines: List[str]) -> None:
+1136:def generate_table_outputs(
+1380:def run_sanity_checks(
+1427:def main():
+```
 
-```py
+### `scripts/plot_lj.py` (1592 lines, summarized)
+
+Plot script content truncated for token efficiency. Full file remains in repository.
+
+**First 20 lines:**
+```python
 #!/usr/bin/env python3
 """
 plot_lj.py — Generate Lennard-Jones / Argon validation plots (Results 2).
 
 Produces:
-  - out/plots/results2_lj_brief_energy_100step_production.png
-  - out/plots/results2_lj_brief_temperature_100step_production.png
-  - out/plots/results2_lj_rdf_comparison_rahman1964.png
+  - out/plots/results2_figure6_lj_brief_energy_100step_production.png
+  - out/plots/results2_figure7_lj_brief_temperature_100step_production.png
+  - out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png
 """
 
 import csv
 import json
 import os
 import shutil
+import glob
 from datetime import datetime, timezone
 
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-
-from plot_style import (
-    COLOR_EULER,
-    COLOR_REFERENCE,
-    COLOR_VERLET,
-    INTEGRATOR_STYLE,
-    apply_major_grid,
-    apply_plot_style,
-    disable_offset_text,
-    save_figure,
-)
-
-OUT_DIR = "out"
-PLOT_DIR = "out/plots"
-PLOT_META_DIR = "out/plots/metadata"
-SUMMARY_DIR = "out/summary/results2"
-RAHMAN_SOURCE_FILE = "scripts/data/rahman1964_fig2_manual_anchors.csv"
-RAHMAN_OUT_FILE = f"{SUMMARY_DIR}/rahman1964_fig2_manual_anchors.csv"
-RESULTS2_TABLE_MD = f"{SUMMARY_DIR}/results2_quantitative_summary_table.md"
-RESULTS2_TABLE_CSV = f"{SUMMARY_DIR}/results2_quantitative_summary_table.csv"
-RESULTS2_TABLE_JSON = f"{SUMMARY_DIR}/results2_quantitative_summary_table.json"
-RESULTS2_REPORT_NOTE = f"{SUMMARY_DIR}/results2_report_note.md"
-RESULTS2_RECOMMENDED_FIGURES = f"{SUMMARY_DIR}/results2_recommended_figure_set.md"
-RESULTS2_RAHMAN_EXTRACTION_NOTE = f"{SUMMARY_DIR}/results2_rahman_extraction_note.md"
-RESULTS2_CHANGE_NOTE = f"{SUMMARY_DIR}/results2_what_changed_and_why.md"
-REMOVED_RESULTS2_FILES = [
-    f"{PLOT_DIR}/results2_lj_extended_energy_stability.png",
-    f"{PLOT_DIR}/results2_lj_extended_temperature_stability.png",
-    f"{PLOT_META_DIR}/results2_lj_extended_energy_stability.json",
-    f"{PLOT_META_DIR}/results2_lj_extended_temperature_stability.json",
-]
-
-EPSILON_OVER_KB = 120.0
-KB = 1.380649e-23
-EPSILON = KB * EPSILON_OVER_KB
-SIGMA_ANGSTROM = 3.4
-TEMP_DIVERGENCE_K = 1.0e4
-
-
-def utc_now():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def unique_preserve_order(items):
-    out = []
-    seen = set()
-    for item in items:
-        if item in seen:
-            continue
-        seen.add(item)
-        out.append(item)
-    return out
-
-
-def parse_scalar(raw):
-    if isinstance(raw, (int, float, bool)):
-        return raw
-    s = str(raw).strip()
-    lower = s.lower()
-    if lower == "true":
-        return True
-    if lower == "false":
-        return False
-    try:
-        if any(c in s for c in [".", "e", "E"]):
-            return float(s)
-        return int(s)
-    except ValueError:
-        return s
-
-
-def typed_meta(meta):
-    return {k: parse_scalar(v) for k, v in meta.items()}
-
-
-def run_identifier_from_path(path):
-    if not path:
-        return ""
-    parent = os.path.basename(os.path.dirname(path))
-    return parent or ""
-
-
-def extract_series_parameters(meta_typed):
-    keys = [
-        "mode",
-        "integrator",
-        "N",
-        "P",
-        "dt",
-        "target_temperature",
-        "equilibration_steps",
-        "production_steps",
-        "production_start_step",
-        "n_steps",
-        "n_frames",
-        "total_steps_executed",
-        "L",
-        "rcut",
-        "production_nve",
-        "final_rescale_before_production",
-        "final_rescale_applied",
-        "startup_temperature_before_final_rescale",
-        "startup_temperature_after_final_rescale",
-        "gr_discard_steps",
-        "gr_sample_every",
-        "gr_start",
-        "timestamp",
-    ]
-    out = {}
-    for key in keys:
-        if key in meta_typed:
-            out[key] = meta_typed[key]
-    return out
-
-
-def write_plot_metadata(plot_png_name, section, extra):
-    os.makedirs(PLOT_META_DIR, exist_ok=True)
-    payload = {
-        "generated_utc": utc_now(),
-        "figure_filename": plot_png_name,
-        "plot_file_png": f"{PLOT_DIR}/{plot_png_name}",
-        "section": section,
-        "missing_provenance": [],
-    }
-    payload.update(extra)
-    payload["missing_provenance"] = unique_preserve_order(payload.get("missing_provenance", []))
-    sidecar = f"{PLOT_META_DIR}/{os.path.splitext(plot_png_name)[0]}.json"
-    with open(sidecar, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, sort_keys=True)
-    print(f"Saved {sidecar}")
-
-
-def write_text_file(path, content):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as handle:
-        handle.write(content.rstrip() + "\n")
-    print(f"Saved {path}")
-
-
-def write_json_file(path, payload):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as handle:
-        json.dump(payload, handle, indent=2, sort_keys=True)
-        handle.write("\n")
-    print(f"Saved {path}")
-
-
-def load_rahman_anchor_points(path):
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Rahman anchor dataset not found: {path}")
-
-    points = []
-    with open(path, "r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle)
-        required = {
-            "point_id",
-            "r_angstrom",
-            "r_over_sigma",
-            "g_value",
-            "point_type",
-            "source_note",
-            "uncertainty_note",
-        }
-        missing = required - set(reader.fieldnames or [])
-        if missing:
-            raise ValueError(f"Rahman anchor dataset missing columns: {sorted(missing)}")
-
-        for row in reader:
-            if not row:
-                continue
-            point = {
-                "point_id": int(row["point_id"]),
-                "r_angstrom": float(row["r_angstrom"]),
-                "r_over_sigma": float(row["r_over_sigma"]),
-                "g_value": float(row["g_value"]),
-                "point_type": row["point_type"].strip(),
-                "source_note": row["source_note"].strip(),
-                "uncertainty_note": row["uncertainty_note"].strip(),
-            }
-            points.append(point)
-
-    points.sort(key=lambda item: item["point_id"])
-    if not points:
-        raise ValueError("Rahman anchor dataset is empty")
-    return points
-
-
-def sync_rahman_anchor_dataset(source_path, out_path):
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    shutil.copy2(source_path, out_path)
-    print(f"Copied {source_path} -> {out_path}")
-
-
-def update_manifest_with_results2_outputs(manifest_update):
-    manifest_path = f"{OUT_DIR}/manifest.json"
-    if not os.path.exists(manifest_path):
-        return
-    try:
-        with open(manifest_path, "r", encoding="utf-8") as handle:
-            manifest = json.load(handle)
-    except json.JSONDecodeError:
-        print("Warning: manifest JSON invalid; skipping results2_outputs manifest update")
-        return
-
-    # Extended Results 2 run keys are intentionally removed from the active
-    # report-facing manifest package.
-    manifest.pop("lj_extended", None)
-    manifest["results2_outputs"] = manifest_update
-    with open(manifest_path, "w", encoding="utf-8") as handle:
-        json.dump(manifest, handle, indent=2, sort_keys=False)
-        handle.write("\n")
-    print(f"Updated {manifest_path} with results2_outputs")
-
-
-def remove_stale_results2_extended_artifacts():
-    for path in REMOVED_RESULTS2_FILES:
-        if os.path.exists(path):
-            os.remove(path)
-            print(f"Removed stale artifact {path}")
-
-
-def load_manifest():
-    manifest_path = f"{OUT_DIR}/manifest.json"
-    if not os.path.exists(manifest_path):
-        print(f"Warning: manifest not found at {manifest_path}")
-        return {}
-    try:
-        with open(manifest_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except json.JSONDecodeError as exc:
-        print(f"Warning: failed to parse manifest JSON: {exc}")
-        return {}
-
-
-def nested_get(obj, dotted, default=""):
-    cur = obj
-    for key in dotted.split("."):
-        if not isinstance(cur, dict) or key not in cur:
-            return default
-        cur = cur[key]
-    return cur
-
-
-def load_csv(filepath):
-    """Load CSV with headers, skipping comment lines."""
-
-    def filter_comments(handle):
-        for line in handle:
-            if line.strip() and not line.startswith("#"):
-                yield line
-
-    with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
-        lines = list(filter_comments(f))
-    if not lines:
-        return None
-    data = np.genfromtxt(lines, delimiter=",", names=True)
-    if data is None:
-        return None
-    if getattr(data, "shape", ()) == ():
-        data = np.array([data], dtype=data.dtype)
-    return data
-
-
-def parse_csv_metadata(filepath):
-    """Parse first metadata comment line '# key: value, ...'."""
-    if not os.path.exists(filepath):
-        return {}
-    with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
-        for line in f:
-            if not line.startswith("#"):
-                break
-            s = line.lstrip("#").strip()
-            parts = [p.strip() for p in s.split(",")]
-            meta = {}
-            for part in parts:
-                if ":" not in part:
-                    continue
-                k, v = part.split(":", 1)
-                meta[k.strip()] = v.strip()
-            if meta:
-                return meta
-    return {}
-
-
-def parse_int_meta(meta, key, default):
-    if key not in meta:
-        return default
-    try:
-        return int(float(meta[key]))
-    except ValueError:
-        return default
-
-
-def parse_float_meta(meta, key, default):
-    if key not in meta:
-        return default
-    try:
-        return float(meta[key])
-    except ValueError:
-        return default
-
-
-def get_meta_value(meta, preferred_key, fallback_key, default):
-    if preferred_key in meta:
-        return parse_int_meta(meta, preferred_key, default)
-    if fallback_key in meta:
-        return parse_int_meta(meta, fallback_key, default)
-    return default
-
-
-def finite_or_nan(arr):
-    arr = np.asarray(arr, dtype=float)
-    return np.where(np.isfinite(arr), arr, np.nan)
-
-
-def first_nonfinite_index(*arrays):
-    if not arrays:
-        return None
-    invalid = np.zeros(len(arrays[0]), dtype=bool)
-    for arr in arrays:
-        invalid |= ~np.isfinite(arr)
-    idx = np.where(invalid)[0]
-    return int(idx[0]) if idx.size > 0 else None
-
-
-def first_exceed_index(arr, threshold):
-    idx = np.where(np.abs(arr) > threshold)[0]
-    return int(idx[0]) if idx.size > 0 else None
-
-
-def first_finite_prod_index(steps, etot, production_start):
-    for i in range(len(steps)):
-        if steps[i] >= production_start and np.isfinite(etot[i]):
-            return i
-    for i in range(len(steps)):
-        if np.isfinite(etot[i]):
-            return i
-    return None
-
-
-def divergence_crop_limit(div_time_ps, max_time_ps):
-    if div_time_ps is None or not np.isfinite(div_time_ps):
-        return None
-    pad = max(0.15, 0.1 * div_time_ps)
-    return float(min(max_time_ps, div_time_ps + pad))
-
-
-def load_series(filepath):
-    data = load_csv(filepath)
-    if data is None or len(data) == 0:
-        return None
-    names = set(data.dtype.names or [])
-    required = {"time", "E_kin", "E_pot", "E_total", "temperature"}
-    if not required.issubset(names):
-        print(f"Warning: missing required columns in {filepath}; skipping")
-        return None
-
-    meta = parse_csv_metadata(filepath)
-    meta_typed = typed_meta(meta)
-    production_start = get_meta_value(meta, "production_start_step", "production_start", 0)
-    steps = np.asarray(data["step"], dtype=float) if "step" in names else np.arange(len(data), dtype=float)
-    time_ps = np.asarray(data["time"], dtype=float) * 1e12
-
-    ekin_raw = np.asarray(data["E_kin"], dtype=float) / EPSILON
-    epot_raw = np.asarray(data["E_pot"], dtype=float) / EPSILON
-    etot_raw = np.asarray(data["E_total"], dtype=float) / EPSILON
-    temp_raw = np.asarray(data["temperature"], dtype=float)
-
-    divergence_idx_nonfinite = first_nonfinite_index(ekin_raw, epot_raw, etot_raw, temp_raw)
-    divergence_idx_temp = first_exceed_index(temp_raw, TEMP_DIVERGENCE_K)
-
-    divergence_candidates = [idx for idx in [divergence_idx_nonfinite, divergence_idx_temp] if idx is not None]
-    divergence_idx = min(divergence_candidates) if divergence_candidates else None
-    divergence_reason = None
-    if divergence_idx is not None:
-        if divergence_idx_nonfinite is not None and divergence_idx == divergence_idx_nonfinite:
-            divergence_reason = "non-finite values"
-        else:
-            divergence_reason = f"|T| > {TEMP_DIVERGENCE_K:.0e} K"
-
-    # Equivalent to DataFrame.replace([np.inf, -np.inf], np.nan) without pandas.
-    ekin = finite_or_nan(ekin_raw)
-    epot = finite_or_nan(epot_raw)
-    etot = finite_or_nan(etot_raw)
-    temp = finite_or_nan(temp_raw)
-
-    # If divergence starts, keep only the finite prefix for plotting clarity.
-    if divergence_idx is not None:
-        ekin[divergence_idx:] = np.nan
-        epot[divergence_idx:] = np.nan
-        etot[divergence_idx:] = np.nan
-        temp[divergence_idx:] = np.nan
-
-    divergence_step = int(steps[divergence_idx]) if divergence_idx is not None else None
-    divergence_time_ps = float(time_ps[divergence_idx]) if divergence_idx is not None else None
-
-    return {
-        "meta": meta,
-        "meta_typed": meta_typed,
-        "filepath": filepath,
-        "run_identifier": run_identifier_from_path(filepath),
-        "steps": steps,
-        "time_ps": finite_or_nan(time_ps),
-        "ekin_eps": ekin,
-        "epot_eps": epot,
-        "etot_eps": etot,
-        "temperature": temp,
-        "has_nonfinite": divergence_idx is not None,
-        "divergence_step": divergence_step,
-        "divergence_time_ps": divergence_time_ps,
-        "divergence_reason": divergence_reason,
-        "production_start_step": production_start,
-    }
-
-
-def plot_energy_for_run(manifest, run_key, config, out_name):
-    os.makedirs(PLOT_DIR, exist_ok=True)
-    fig, axes = plt.subplots(
-        2,
-        1,
-        figsize=(9.4, 7.2),
-        sharex=True,
-        constrained_layout=True,
-    )
-    any_data = False
-    euler_divergence_time_ps = None
-    max_time_ps = 0.0
-    x_max = None
-    source_data_files = []
-    source_manifest_keys = []
-    simulation_run_identifiers = []
-    per_integrator_summary = []
-    series_parameters = {}
-    missing_provenance = []
-
-    for row, integrator in enumerate(config["integrators"]):
-        series_key = integrator["series_key"]
-        label = integrator["label"]
-        style_key = integrator["style_key"]
-        manifest_key = f"{run_key}.{series_key}"
-        style = INTEGRATOR_STYLE[integrator["style_key"]]
-        color = style["color"]
-        linestyle = style["linestyle"]
-        linewidth = style["linewidth"]
-
-        fpath = nested_get(manifest, manifest_key)
-        if not fpath or not os.path.exists(fpath):
-            print(f"Warning: missing {manifest_key}; skipping")
-            missing_provenance.append(f"manifest/data file missing for {manifest_key}")
-            continue
-
-        series = load_series(fpath)
-        if series is None:
-            missing_provenance.append(f"series unreadable or missing required columns for {manifest_key}")
-            continue
-        any_data = True
-
-        steps = series["steps"]
-        t = series["time_ps"]
-        if np.any(np.isfinite(t)):
-            max_time_ps = max(max_time_ps, float(np.nanmax(t)))
-        etot = series["etot_eps"]
-        meta_typed = series["meta_typed"]
-        source_data_files.append(fpath)
-        source_manifest_keys.append(manifest_key)
-        simulation_run_identifiers.append(series["run_identifier"])
-        series_parameters[style_key] = extract_series_parameters(meta_typed)
-
-        production_start = series["production_start_step"]
-        ref_idx = first_finite_prod_index(steps, etot, production_start)
-        if ref_idx is None:
-            rel_dev_pct = np.full_like(etot, np.nan)
-            rel_dev_ref_step = None
-            e0 = np.nan
-        else:
-            e0 = etot[ref_idx]
-            if np.isfinite(e0) and abs(e0) > 1e-30:
-                rel_dev_pct = 100.0 * (etot - e0) / abs(e0)
-            else:
-                rel_dev_pct = np.full_like(etot, np.nan)
-            rel_dev_ref_step = int(steps[ref_idx])
-
-        finite_etot = etot[np.isfinite(etot)]
-        ax_d = axes[row]
-        ax_d.plot(t, rel_dev_pct, color=color, linestyle=linestyle, linewidth=max(2.2, linewidth))
-        ax_d.set_ylabel(r"$\Delta E / E_0$ [%]")
-        ax_d.axhline(0.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.0, alpha=0.6)
-        apply_major_grid(ax_d)
-        disable_offset_text(ax_d)
-
-        row_label = label
-        ax_d.text(
-            0.02,
-            0.96,
-            row_label,
-            transform=ax_d.transAxes,
-            fontsize=9,
-            ha="left",
-            va="top",
-            bbox={"facecolor": "white", "alpha": 0.86, "edgecolor": "none"},
-        )
-
-        if row == 0:
-            ax_d.set_title(r"Signed relative drift $\Delta E/E_0$ [%]")
-
-        divergence_step = series.get("divergence_step")
-        divergence_time_ps = series.get("divergence_time_ps")
-        divergence_reason = series.get("divergence_reason")
-        finite_rel_pct = rel_dev_pct[np.isfinite(rel_dev_pct)]
-        max_abs_rel_pct = float(np.nanmax(np.abs(finite_rel_pct))) if finite_rel_pct.size else None
-        mean_abs_rel_pct = float(np.nanmean(np.abs(finite_rel_pct))) if finite_rel_pct.size else None
-        final_rel_pct = float(finite_rel_pct[-1]) if finite_rel_pct.size else None
-        per_integrator_summary.append(
-            {
-                "integrator": style_key,
-                "label": label,
-                "manifest_key": manifest_key,
-                "source_file": fpath,
-                "run_identifier": series["run_identifier"],
-                "points_plotted": int(np.count_nonzero(np.isfinite(etot))),
-                "reference_step_for_relative_deviation": rel_dev_ref_step,
-                "max_abs_relative_energy_deviation_percent": max_abs_rel_pct,
-                "mean_abs_relative_energy_deviation_percent": mean_abs_rel_pct,
-                "final_relative_energy_deviation_percent": final_rel_pct,
-                "mean_total_energy_eps": float(np.nanmean(finite_etot)) if finite_etot.size else None,
-                "divergent_tail_omitted": bool(series["has_nonfinite"]),
-                "divergence_step": divergence_step,
-                "divergence_time_ps": divergence_time_ps,
-                "divergence_reason": divergence_reason,
-            }
-        )
-        if max_abs_rel_pct is not None and final_rel_pct is not None:
-            ann_lines = [
-                f"max |ΔE/E0| = {max_abs_rel_pct:.3f}%",
-                f"final ΔE/E0 = {final_rel_pct:.3f}%",
-            ]
-            if mean_abs_rel_pct is not None:
-                ann_lines.append(f"mean |ΔE/E0| = {mean_abs_rel_pct:.3f}%")
-            ax_d.text(
-                0.98,
-                0.06,
-                "\n".join(ann_lines),
-                transform=ax_d.transAxes,
-                ha="right",
-                va="bottom",
-                fontsize=8.5,
-                bbox={"facecolor": "white", "alpha": 0.82, "edgecolor": "none"},
-            )
-        if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
-            if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
-                euler_divergence_time_ps = divergence_time_ps
-
-    if not any_data:
-        plt.close(fig)
-        print(f"Warning: no usable data for {run_key}; skipped {out_name}")
-        return None
-
-    if config.get("crop_to_euler_divergence", False):
-        x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
-    if x_max is None and np.isfinite(max_time_ps) and max_time_ps > 0:
-        x_max = float(max_time_ps)
-    if x_max is not None:
-        for row in range(2):
-            axes[row].set_xlim(0.0, x_max)
-
-    axes[1].set_xlabel("Time [ps]")
-    fig.suptitle(config["energy_title"], fontsize=13)
-    if config.get("include_required_run_note", False):
-        fig.set_constrained_layout_pads(h_pad=0.12, w_pad=0.03, hspace=0.08, wspace=0.08)
-        fig.text(
-            0.5,
-            0.003,
-            "Required production run: 100 steps (1 ps), after startup/equilibration. "
-            "CSV step 0 is the production initial frame; final startup->production rescale applied.",
-            ha="center",
-            fontsize=9,
-        )
-
-    out_path = f"{PLOT_DIR}/{out_name}"
-    save_figure(fig, out_path)
-    plt.close(fig)
-    print(f"Saved {out_path}")
-
-    any_tail_omitted = any(row.get("divergent_tail_omitted") for row in per_integrator_summary)
-    energy_caveats = [
-        "Relative drift is computed from total energy with E0 taken at the first finite production frame.",
-        "LJ uses a hard cutoff without potential shifting; small energy discontinuities can occur when pairs cross r_cut.",
-        "For required-run interpretation, startup/equilibration is completed before this production trajectory.",
-    ]
-    if any_tail_omitted:
-        energy_caveats.append("Divergent non-finite tails are omitted only where the raw series becomes non-finite.")
-
-    write_plot_metadata(
-        out_name,
-        "results2",
-        {
-            "purpose": config["energy_purpose"],
-            "intended_claim": config["energy_claim"],
-            "audience_tier": config["audience_tier"],
-            "source_data_files": unique_preserve_order(source_data_files),
-            "source_manifest_keys": unique_preserve_order(source_manifest_keys),
-            "simulation_run_identifiers": unique_preserve_order([r for r in simulation_run_identifiers if r]),
-            "key_parameters": {
-                "integrators_compared": [integrator["style_key"] for integrator in config["integrators"]],
-                "energy_units": "epsilon",
-                "temperature_divergence_threshold_k": TEMP_DIVERGENCE_K,
-                "figure_layout": {
-                    "rows": ["Velocity-Verlet", "Forward Euler"],
-                    "columns": ["signed relative total-energy deviation ΔE/E0 [%] vs time [ps]"],
-                },
-                "drift_only_figure": True,
-                "panel_content": "signed relative total-energy deviation only (ΔE/E0 [%])",
-                "series_parameters": series_parameters,
-                "run_semantics": {
-                    "required_production_steps": 100 if run_key == "lj_brief" else None,
-                    "required_production_time_ps": 1.0 if run_key == "lj_brief" else None,
-                    "startup_precedes_production": True,
-                    "final_rescale_before_production_expected": True,
-                    "step_0_semantics": "step 0 in CSV is the production initial frame",
-                },
-            },
-            "fit_or_truncation": {
-                "relative_deviation_reference": "first finite E_total point at or after production_start_step",
-                "divergent_tail_handling": (
-                    "non-finite values or |T| > threshold are omitted from plotted tail"
-                    if any_tail_omitted
-                    else "no tail omitted; full available production window is plotted"
-                ),
-                "crop_to_euler_divergence": bool(config.get("crop_to_euler_divergence", False)),
-                "applied_xlim_ps": [0.0, float(x_max)] if x_max is not None else None,
-                "drift_only": True,
-            },
-            "key_quantitative_summary": {
-                "max_time_ps_in_source": float(max_time_ps),
-                "euler_divergence_time_ps": euler_divergence_time_ps,
-                "per_integrator": per_integrator_summary,
-            },
-            "caveats": energy_caveats,
-            "missing_provenance": missing_provenance,
-        },
-    )
-    return {
-        "plot_file": out_path,
-        "metadata_file": f"{PLOT_META_DIR}/{os.path.splitext(out_name)[0]}.json",
-        "per_integrator": per_integrator_summary,
-        "series_parameters": series_parameters,
-        "xlim_ps": [0.0, float(x_max)] if x_max is not None else None,
-    }
-
-
-def plot_temperature_for_run(manifest, run_key, config, out_name):
-    os.makedirs(PLOT_DIR, exist_ok=True)
-
-    fig, ax = plt.subplots(figsize=config.get("figsize", (10, 5)), constrained_layout=True)
-    any_data = False
-    plotted_series = []
-    euler_divergence_time_ps = None
-    max_time_ps = 0.0
-    x_max = None
-    target_temp_k = config.get("target_temperature_k")
-    source_data_files = []
-    source_manifest_keys = []
-    simulation_run_identifiers = []
-    per_integrator_summary = []
-    series_parameters = {}
-    missing_provenance = []
-    production_start_line_ps = None
-    divergence_marker_labeled = False
-
-    for integrator in config["integrators"]:
-        series_key = integrator["series_key"]
-        label = integrator["label"]
-        style_key = integrator["style_key"]
-        manifest_key = f"{run_key}.{series_key}"
-        style = INTEGRATOR_STYLE[integrator["style_key"]]
-        color = style["color"]
-        linestyle = style["linestyle"]
-        linewidth = max(2.0, style["linewidth"])
-
-        fpath = nested_get(manifest, manifest_key)
-        if not fpath or not os.path.exists(fpath):
-            missing_provenance.append(f"manifest/data file missing for {manifest_key}")
-            continue
-        series = load_series(fpath)
-        if series is None:
-            missing_provenance.append(f"series unreadable or missing required columns for {manifest_key}")
-            continue
-
-        any_data = True
-        t = series["time_ps"]
-        if np.any(np.isfinite(t)):
-            max_time_ps = max(max_time_ps, float(np.nanmax(t)))
-        temp = series["temperature"]
-        meta = series["meta"]
-        meta_typed = series["meta_typed"]
-        source_data_files.append(fpath)
-        source_manifest_keys.append(manifest_key)
-        simulation_run_identifiers.append(series["run_identifier"])
-        series_parameters[style_key] = extract_series_parameters(meta_typed)
-        ax.plot(t, temp, label=label, color=color, linestyle=linestyle, linewidth=linewidth)
-        plotted_series.append(
-            {
-                "t": t,
-                "temp": temp,
-                "color": color,
-                "linestyle": linestyle,
-                "linewidth": linewidth,
-                "style_key": integrator.get("style_key", ""),
-            }
-        )
-        finite_temp = temp[np.isfinite(temp)]
-        per_integrator_summary.append(
-            {
-                "integrator": style_key,
-                "label": label,
-                "manifest_key": manifest_key,
-                "source_file": fpath,
-                "run_identifier": series["run_identifier"],
-                "points_plotted": int(np.count_nonzero(np.isfinite(temp))),
-                "mean_temperature_k": float(np.nanmean(finite_temp)) if finite_temp.size else None,
-                "std_temperature_k": float(np.nanstd(finite_temp)) if finite_temp.size else None,
-                "min_temperature_k": float(np.nanmin(finite_temp)) if finite_temp.size else None,
-                "max_temperature_k": float(np.nanmax(finite_temp)) if finite_temp.size else None,
-                "divergent_tail_omitted": bool(series["has_nonfinite"]),
-                "divergence_step": series.get("divergence_step"),
-                "divergence_time_ps": series.get("divergence_time_ps"),
-                "divergence_reason": series.get("divergence_reason"),
-            }
-        )
-        divergence_step = series.get("divergence_step")
-        divergence_time_ps = series.get("divergence_time_ps")
-        divergence_reason = series.get("divergence_reason")
-        if divergence_step is not None and "Euler" in label and divergence_time_ps is not None:
-            if euler_divergence_time_ps is None or divergence_time_ps < euler_divergence_time_ps:
-                euler_divergence_time_ps = divergence_time_ps
-            vline_label = None
-            if not divergence_marker_labeled:
-                vline_label = "Euler divergence point"
-                divergence_marker_labeled = True
-            ax.axvline(
-                divergence_time_ps,
-                color=color,
-                linestyle="--",
-                linewidth=1.2,
-                alpha=0.8,
-                label=vline_label,
-            )
-
-        production_start = get_meta_value(meta, "production_start_step", "production_start", 0)
-        dt = parse_float_meta(meta, "dt", float("nan"))
-        if target_temp_k is None:
-            target_temp_candidate = parse_float_meta(meta, "target_temperature", float("nan"))
-            if np.isfinite(target_temp_candidate):
-                target_temp_k = float(target_temp_candidate)
-        if production_start > 0 and np.isfinite(dt) and production_start_line_ps is None:
-            production_start_line_ps = float(production_start * dt * 1e12)
-            ax.axvline(
-                x=production_start_line_ps,
-                color="gray",
-                linestyle=":",
-                linewidth=1.5,
-                alpha=0.8,
-                label="production starts",
-            )
-
-    if not any_data:
-        plt.close(fig)
-        print(f"Warning: no usable data for {run_key}; skipped {out_name}")
-        return None
-
-    ax.set_xlabel("Time [ps]")
-    ax.set_ylabel("Temperature [K]")
-    ax.set_title(config["temperature_title"])
-    apply_major_grid(ax)
-    disable_offset_text(ax)
-    if target_temp_k is None:
-        target_temp_k = 94.4
-    if np.isfinite(target_temp_k):
-        ax.axhline(
-            y=target_temp_k,
-            color="#7a7a7a",
-            linestyle="--",
-            linewidth=1.4,
-            alpha=0.55,
-            zorder=0,
-            label=f"Target temperature ({target_temp_k:.1f} K)",
-        )
-
-    legend_kwargs = {
-        "loc": config.get("legend_loc", "upper left"),
-        "frameon": True,
-        "facecolor": "white",
-        "framealpha": 0.94,
-        "edgecolor": "#BDBDBD",
-        "borderpad": 0.45,
-        "labelspacing": 0.35,
-    }
-    if "legend_bbox_to_anchor" in config:
-        legend_kwargs["bbox_to_anchor"] = config["legend_bbox_to_anchor"]
-    ax.legend(**legend_kwargs)
-
-    zoom_cfg = config.get("zoom_inset")
-    if zoom_cfg and plotted_series:
-        inset_kwargs = {
-            "width": zoom_cfg.get("width", "30%"),
-            "height": zoom_cfg.get("height", "34%"),
-            "loc": zoom_cfg.get("loc", "lower right"),
-            "borderpad": zoom_cfg.get("borderpad", 0.8),
-        }
-        if "bbox_to_anchor" in zoom_cfg:
-            inset_kwargs["bbox_to_anchor"] = zoom_cfg["bbox_to_anchor"]
-            inset_kwargs["bbox_transform"] = ax.transAxes
-
-        axins = inset_axes(ax, **inset_kwargs)
-        for series_plot in plotted_series:
-            plot_kwargs = {
-                "color": series_plot["color"],
-                "linestyle": series_plot["linestyle"],
-                "linewidth": max(1.2, 0.9 * series_plot["linewidth"]),
-            }
-            # Show discrete samples for Verlet in the inset so short-time variation
-            # reads less like an over-smoothed curve.
-            if series_plot["style_key"] == "verlet":
-                plot_kwargs.update(
-                    {
-                        "linewidth": 1.0,
-                        "marker": "o",
-                        "markersize": 2.0,
-                        "markevery": 1,
-                        "markeredgewidth": 0.0,
-                        "antialiased": False,
-                    }
-                )
-            axins.plot(series_plot["t"], series_plot["temp"], **plot_kwargs)
-        if "xlim" in zoom_cfg:
-            axins.set_xlim(*zoom_cfg["xlim"])
-        if "ylim" in zoom_cfg:
-            axins.set_ylim(*zoom_cfg["ylim"])
-        if np.isfinite(target_temp_k):
-            axins.axhline(
-                y=target_temp_k,
-                color="#7a7a7a",
-                linestyle="--",
-                linewidth=1.0,
-                alpha=0.5,
-                zorder=0,
-            )
-        axins.set_title(zoom_cfg.get("title", "Zoom"), fontsize=9, pad=4)
-        axins.patch.set_facecolor(zoom_cfg.get("facecolor", "white"))
-        axins.patch.set_alpha(zoom_cfg.get("alpha", 0.96))
-        spine_color = zoom_cfg.get("spine_color", "#333333")
-        spine_width = zoom_cfg.get("spine_width", 1.0)
-        for spine in axins.spines.values():
-            spine.set_color(spine_color)
-            spine.set_linewidth(spine_width)
-        apply_major_grid(axins)
-        disable_offset_text(axins)
-        axins.tick_params(axis="both", which="major", labelsize=8)
-
-    if config.get("crop_to_euler_divergence", False):
-        x_max = divergence_crop_limit(euler_divergence_time_ps, max_time_ps)
-        if x_max is not None:
-            ax.set_xlim(0.0, x_max)
-
-    if config.get("include_required_run_note", False):
-        fig.text(
-            0.5,
-            0.01,
-            "Required production run: 100 steps (1 ps), after startup/equilibration. "
-            "Temperature evidence complements the energy-stability and RDF comparison results.",
-            ha="center",
-            fontsize=9,
-        )
-
-    out_path = f"{PLOT_DIR}/{out_name}"
-    save_figure(fig, out_path)
-    plt.close(fig)
-    print(f"Saved {out_path}")
-
-    write_plot_metadata(
-        out_name,
-        "results2",
-        {
-            "purpose": config["temperature_purpose"],
-            "intended_claim": config["temperature_claim"],
-            "audience_tier": config["audience_tier"],
-            "source_data_files": unique_preserve_order(source_data_files),
-            "source_manifest_keys": unique_preserve_order(source_manifest_keys),
-            "simulation_run_identifiers": unique_preserve_order([r for r in simulation_run_identifiers if r]),
-            "key_parameters": {
-                "integrators_compared": [integrator["style_key"] for integrator in config["integrators"]],
-                "target_temperature_k": float(target_temp_k) if target_temp_k is not None and np.isfinite(target_temp_k) else None,
-                "temperature_divergence_threshold_k": TEMP_DIVERGENCE_K,
-                "series_parameters": series_parameters,
-                "run_semantics": {
-                    "required_production_steps": 100 if run_key == "lj_brief" else None,
-                    "required_production_time_ps": 1.0 if run_key == "lj_brief" else None,
-                    "startup_precedes_production": True,
-                    "final_rescale_before_production_expected": True,
-                    "step_0_semantics": "step 0 in CSV is the production initial frame",
-                },
-            },
-            "fit_or_truncation": {
-                "divergent_tail_handling": "non-finite values or |T| > threshold are omitted from plotted tail",
-                "crop_to_euler_divergence": bool(config.get("crop_to_euler_divergence", False)),
-                "applied_xlim_ps": [0.0, float(x_max)] if x_max is not None else None,
-                "production_start_line_ps": production_start_line_ps,
-                "zoom_inset": config.get("zoom_inset", None),
-            },
-            "key_quantitative_summary": {
-                "max_time_ps_in_source": float(max_time_ps),
-                "euler_divergence_time_ps": euler_divergence_time_ps,
-                "per_integrator": per_integrator_summary,
-            },
-            "caveats": [
-                "Temperature is shown only for finite values; divergent tails are omitted.",
-                "Target temperature line is a reference, not a fitted value.",
-                "Temperature evidence is complementary and should be interpreted with the energy and RDF results.",
-            ],
-            "missing_provenance": missing_provenance,
-        },
-    )
-    return {
-        "plot_file": out_path,
-        "metadata_file": f"{PLOT_META_DIR}/{os.path.splitext(out_name)[0]}.json",
-        "per_integrator": per_integrator_summary,
-        "series_parameters": series_parameters,
-        "xlim_ps": [0.0, float(x_max)] if x_max is not None else None,
-    }
-
-
-def extract_rdf_feature(r_vals, g_vals, rmin, rmax, mode):
-    mask = np.isfinite(r_vals) & np.isfinite(g_vals) & (r_vals >= rmin) & (r_vals <= rmax)
-    if not np.any(mask):
-        return None, None
-    rr = r_vals[mask]
-    gg = g_vals[mask]
-    idx = int(np.argmax(gg)) if mode == "max" else int(np.argmin(gg))
-    return float(rr[idx]), float(gg[idx])
-
-
-def smooth_curve_pchip(x_vals, y_vals, samples_per_segment=40):
-    x = np.asarray(x_vals, dtype=float)
-    y = np.asarray(y_vals, dtype=float)
-    valid = np.isfinite(x) & np.isfinite(y)
-    x = x[valid]
-    y = y[valid]
-    if x.size < 2:
-        return x, y
-
-    order = np.argsort(x)
-    x = x[order]
-    y = y[order]
-    x, unique_idx = np.unique(x, return_index=True)
-    y = y[unique_idx]
-
-    n = x.size
-    if n == 2:
-        xx = np.linspace(x[0], x[1], samples_per_segment + 1)
-        yy = np.interp(xx, x, y)
-        return xx, yy
-
-    h = np.diff(x)
-    delta = np.diff(y) / h
-    d = np.zeros(n, dtype=float)
-
-    def endpoint_slope(h0, h1, delta0, delta1):
-        slope = ((2.0 * h0 + h1) * delta0 - h0 * delta1) / (h0 + h1)
-        if np.sign(slope) != np.sign(delta0):
-            return 0.0
-        if np.sign(delta0) != np.sign(delta1) and abs(slope) > abs(3.0 * delta0):
-            return 3.0 * delta0
-        return slope
-
-    d[0] = endpoint_slope(h[0], h[1], delta[0], delta[1])
-    d[-1] = endpoint_slope(h[-1], h[-2], delta[-1], delta[-2])
-
-    for k in range(1, n - 1):
-        if delta[k - 1] == 0.0 or delta[k] == 0.0 or np.sign(delta[k - 1]) != np.sign(delta[k]):
-            d[k] = 0.0
-        else:
-            w1 = 2.0 * h[k] + h[k - 1]
-            w2 = h[k] + 2.0 * h[k - 1]
-            d[k] = (w1 + w2) / (w1 / delta[k - 1] + w2 / delta[k])
-
-    x_dense_parts = []
-    y_dense_parts = []
-    for i in range(n - 1):
-        t = np.linspace(0.0, 1.0, samples_per_segment, endpoint=False)
-        hi = h[i]
-        x_seg = x[i] + t * hi
-        h00 = 2.0 * t**3 - 3.0 * t**2 + 1.0
-        h10 = t**3 - 2.0 * t**2 + t
-        h01 = -2.0 * t**3 + 3.0 * t**2
-        h11 = t**3 - t**2
-        y_seg = h00 * y[i] + h10 * hi * d[i] + h01 * y[i + 1] + h11 * hi * d[i + 1]
-        x_dense_parts.append(x_seg)
-        y_dense_parts.append(y_seg)
-
-    x_dense_parts.append(np.array([x[-1]]))
-    y_dense_parts.append(np.array([y[-1]]))
-    return np.concatenate(x_dense_parts), np.concatenate(y_dense_parts)
-
-
-def plot_rdf(manifest, rahman_points):
-    os.makedirs(PLOT_DIR, exist_ok=True)
-
-    gr_path = nested_get(manifest, "lj_rdf.verlet_long")
-    if not gr_path or not os.path.exists(gr_path):
-        print("No RDF data found at manifest key lj_rdf.verlet_long. Skipping RDF plot.")
-        return None
-
-    data = load_csv(gr_path)
-    if data is None or len(data) == 0:
-        print("RDF CSV is empty. Skipping RDF plot.")
-        return None
-
-    names = set(data.dtype.names or [])
-    if "r_sigma" not in names or "gr" not in names:
-        print("RDF CSV missing r_sigma/gr columns. Skipping RDF plot.")
-        return None
-    gr_meta_typed = typed_meta(parse_csv_metadata(gr_path))
-    run_identifier = run_identifier_from_path(gr_path)
-
-    r_sigma = finite_or_nan(np.asarray(data["r_sigma"], dtype=float))
-    gr = finite_or_nan(np.asarray(data["gr"], dtype=float))
-
-    rahman_r_sigma = np.array([p["r_over_sigma"] for p in rahman_points], dtype=float)
-    rahman_r_angstrom = np.array([p["r_angstrom"] for p in rahman_points], dtype=float)
-    rahman_g = np.array([p["g_value"] for p in rahman_points], dtype=float)
-    rahman_types = [p["point_type"] for p in rahman_points]
-    paper_mask = np.array([pt == "paper_anchored" for pt in rahman_types], dtype=bool)
-    shape_mask = ~paper_mask
-    paper_points = [p for p in rahman_points if p["point_type"] == "paper_anchored"]
-    rahman_guide_r, rahman_guide_g = smooth_curve_pchip(rahman_r_sigma, rahman_g, samples_per_segment=40)
-
-    fig, ax = plt.subplots(figsize=(8.4, 5.1), constrained_layout=True)
-    ax.plot(r_sigma, gr, color="k", linewidth=2.2, zorder=4, label="Present work (Velocity-Verlet, NVE)")
-    ax.plot(
-        rahman_guide_r,
-        rahman_guide_g,
-        color=COLOR_EULER,
-        linestyle=(0, (4, 3)),
-        linewidth=1.6,
-        alpha=0.72,
-        zorder=5,
-        label="Rahman guide (smoothed manual anchors)",
-    )
-    ax.scatter(
-        rahman_r_sigma[paper_mask],
-        rahman_g[paper_mask],
-        s=42,
-        marker="X",
-        color=COLOR_EULER,
-        edgecolors="white",
-        linewidths=0.9,
-        zorder=7,
-        label="Rahman paper-anchored X points",
-    )
-    paper_annotation_offsets = [(22, -4), (22, 0), (18, 2)]
-    annotation_fontsize = plt.rcParams.get("legend.fontsize", 10)
-    for idx, point in enumerate(paper_points):
-        dx, dy = paper_annotation_offsets[idx] if idx < len(paper_annotation_offsets) else (24, 8)
-        anchor_x = float(point["r_over_sigma"])
-        anchor_y = float(point["g_value"])
-        label = (
-            f"r={point['r_angstrom']:.1f} Å (r/σ={anchor_x:.3f})\n"
-            f"g(r)≈{anchor_y:.2f}"
-        )
-        ax.annotate(
-            label,
-            xy=(anchor_x, anchor_y),
-            xytext=(dx, dy),
-            textcoords="offset points",
-            fontsize=annotation_fontsize,
-            color="black",
-            ha="left",
-            va="bottom",
-            arrowprops={
-                "arrowstyle": "->",
-                "color": "black",
-                "lw": 0.9,
-                "shrinkA": 2,
-                "shrinkB": 9,
-                "alpha": 0.9,
-            },
-            bbox={"facecolor": "white", "alpha": 0.78, "edgecolor": "none", "pad": 1.3},
-            zorder=5,
-        )
-    ax.axhline(y=1.0, color=COLOR_REFERENCE, linestyle=(0, (3, 3)), linewidth=1.0, alpha=0.65, label="g(r) = 1")
-
-    ax.set_title("Argon RDF Comparison: Present Work vs Rahman (1964)")
-    ax.set_xlabel(r"Distance $r/\sigma$")
-    ax.set_ylabel("g(r)")
-    finite_r = r_sigma[np.isfinite(r_sigma)]
-    xmax = np.nanmax(np.concatenate([finite_r, rahman_r_sigma])) if finite_r.size else np.max(rahman_r_sigma)
-    ax.set_xlim(0.0, max(3.6, 1.03 * float(xmax)))
-    ax.set_ylim(bottom=0.0)
-    secax = ax.secondary_xaxis(
-        "top",
-        functions=(lambda x: x * SIGMA_ANGSTROM, lambda x: x / SIGMA_ANGSTROM),
-    )
-    secax.set_xlabel("Distance r (Å)")
-    apply_major_grid(ax)
-    disable_offset_text(ax)
-    ax.legend(loc="upper right")
-
-    out_name = "results2_lj_rdf_comparison_rahman1964.png"
-    out_path = f"{PLOT_DIR}/{out_name}"
-    save_figure(fig, out_path)
-    plt.close(fig)
-    print(f"Saved {out_path}")
-
-    finite_mask = np.isfinite(r_sigma) & np.isfinite(gr)
-    r_plot = r_sigma[finite_mask]
-    g_plot = gr[finite_mask]
-
-    first_peak_r, first_peak_g = extract_rdf_feature(r_plot, g_plot, 0.95, 1.30, mode="max")
-    first_min_r, first_min_g = extract_rdf_feature(r_plot, g_plot, 1.30, 1.80, mode="min")
-    second_peak_r, second_peak_g = extract_rdf_feature(r_plot, g_plot, 1.80, 2.40, mode="max")
-    tail_mask = r_plot >= 4.0
-    tail_mean = float(np.nanmean(g_plot[tail_mask])) if np.any(tail_mask) else None
-
-    write_plot_metadata(
-        out_name,
-        "results2",
-        {
-            "purpose": (
-                "Core brief-facing structural evidence: compare present-work Argon RDF against "
-                "a transparent manually extracted Rahman (1964) Fig. 2 anchor guide."
-            ),
-            "intended_claim": (
-                "The present Velocity-Verlet RDF reproduces liquid-argon shell structure "
-                "(first peak, first minimum, second shell, long-range trend) with qualitative/"
-                "semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced."
-            ),
-            "audience_tier": "main-report-core",
-            "source_data_files": unique_preserve_order(
-                [
-                    gr_path,
-                    nested_get(manifest, "lj_rdf.verlet_long_energy", ""),
-                    RAHMAN_OUT_FILE if os.path.exists(RAHMAN_OUT_FILE) else RAHMAN_SOURCE_FILE,
-                ]
-            ),
-            "source_manifest_keys": ["lj_rdf.verlet_long", "lj_rdf.verlet_long_energy"],
-            "simulation_run_identifiers": [run_identifier] if run_identifier else [],
-            "key_parameters": {
-                "present_work_series": extract_series_parameters(gr_meta_typed),
-                "distance_units": {
-                    "main_axis": "r/sigma",
-                    "secondary_axis": "angstrom",
-                    "sigma_angstrom": SIGMA_ANGSTROM,
-                },
-                "reference_dataset": {
-                    "source_file": RAHMAN_OUT_FILE if os.path.exists(RAHMAN_OUT_FILE) else RAHMAN_SOURCE_FILE,
-                    "model": "two-tier manual anchor set (paper_anchored + shape_anchor)",
-                    "paper_anchored_x_angstrom": [3.7, 7.0, 10.4],
-                    "paper_sigma_angstrom": SIGMA_ANGSTROM,
-                    "n_points_total": len(rahman_points),
-                    "n_points_paper_anchored": int(np.count_nonzero(paper_mask)),
-                    "n_points_shape_anchor": int(np.count_nonzero(shape_mask)),
-                },
-            },
-            "fit_or_truncation": {
-                "reference_guide": "shape-preserving cubic dashed guide through manual anchor points",
-                "present_work_truncation": "none",
-            },
-            "key_quantitative_summary": {
-                "present_work_first_peak_r_over_sigma": first_peak_r,
-                "present_work_first_peak_g": first_peak_g,
-                "present_work_first_minimum_r_over_sigma": first_min_r,
-                "present_work_first_minimum_g": first_min_g,
-                "present_work_second_peak_r_over_sigma": second_peak_r,
-                "present_work_second_peak_g": second_peak_g,
-                "present_work_long_range_mean_g_for_r_over_sigma_ge_4": tail_mean,
-                "rahman_anchor_points": rahman_points,
-            },
-            "caveats": [
-                "Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2.",
-                "Sigma = 3.4 Å is paper-supported; x-positions 3.7 Å, 7.0 Å, and 10.4 Å are paper-anchored figure annotations.",
-                "All Rahman g(r) values and all non-anchored x-values are approximate manual reads from the printed plot.",
-                "No error bars are shown; comparison is qualitative/semi-quantitative rather than exact.",
-            ],
-            "missing_provenance": [],
-        },
-    )
-
-    rahman_feature_map = {
-        "first_peak": next((p for p in rahman_points if p["point_id"] == 2), None),
-        "first_minimum": next((p for p in rahman_points if p["point_id"] == 4), None),
-        "second_peak": next((p for p in rahman_points if p["point_id"] == 5), None),
-        "tail": next((p for p in rahman_points if p["point_id"] == 9), None),
-    }
-
-    return {
-        "plot_file": out_path,
-        "metadata_file": f"{PLOT_META_DIR}/{os.path.splitext(out_name)[0]}.json",
-        "present_features": {
-            "first_peak": {"r_over_sigma": first_peak_r, "g_value": first_peak_g},
-            "first_minimum": {"r_over_sigma": first_min_r, "g_value": first_min_g},
-            "second_peak": {"r_over_sigma": second_peak_r, "g_value": second_peak_g},
-            "tail": {"r_over_sigma": ">=4.0 (mean)", "g_value": tail_mean},
-        },
-        "rahman_features": rahman_feature_map,
-        "rahman_points": rahman_points,
-    }
-
-
-def safe_plot(name, fn, *args):
-    try:
-        return fn(*args)
-    except Exception as exc:
-        print(f"Warning: {name} failed: {exc}")
-        return None
-
-
-def format_float(value, digits=3):
-    if value is None:
-        return "n/a"
-    if isinstance(value, str):
-        return value
-    if not np.isfinite(value):
-        return "n/a"
-    return f"{value:.{digits}f}"
-
-
-def integrator_map(summary_dict):
-    out = {}
-    if not summary_dict:
-        return out
-    for row in summary_dict.get("per_integrator", []):
-        out[row.get("integrator")] = row
-    return out
-
-
-def write_results2_quantitative_summary(energy_brief_summary, temp_brief_summary, rdf_summary):
-    os.makedirs(SUMMARY_DIR, exist_ok=True)
-
-    energy_by_int = integrator_map(energy_brief_summary or {})
-    temp_by_int = integrator_map(temp_brief_summary or {})
-
-    rows_a = []
-    for integrator, label in [("verlet", "Velocity-Verlet"), ("euler", "Euler")]:
-        e_row = energy_by_int.get(integrator, {})
-        t_row = temp_by_int.get(integrator, {})
-        prod_steps = (
-            (temp_brief_summary or {}).get("series_parameters", {}).get(integrator, {}).get("production_steps")
-        )
-        rows_a.append(
-            {
-                "Integrator": label,
-                "Production steps": prod_steps if prod_steps is not None else "n/a",
-                "Mean T [K]": format_float(t_row.get("mean_temperature_k"), 2),
-                "Std T [K]": format_float(t_row.get("std_temperature_k"), 2),
-                "Max |ΔE/E0| [%]": format_float(e_row.get("max_abs_relative_energy_deviation_percent"), 3),
-                "Mean |ΔE/E0| [%]": format_float(e_row.get("mean_abs_relative_energy_deviation_percent"), 3),
-                "Comment": (
-                    "Bounded drift; near target state."
-                    if integrator == "verlet"
-                    else "Strong drift/heating over required run; not a stable NVE trajectory."
-                ),
-            }
-        )
-
-    present_features = (rdf_summary or {}).get("present_features", {})
-    rahman_features = (rdf_summary or {}).get("rahman_features", {})
-    rows_b = []
-    feature_rows = [
-        ("first_peak", "First peak", "Broadly correct location; present peak height is lower."),
-        ("first_minimum", "First minimum", "Minimum position and depth are broadly consistent."),
-        ("second_peak", "Second peak", "Second-shell position is consistent; present peak is lower."),
-        ("tail", "Tail", "Long-range trend returns toward g(r)=1."),
-    ]
-    for key, label, comment in feature_rows:
-        present = present_features.get(key, {})
-        rahman = rahman_features.get(key, None)
-        if rahman:
-            provenance = (
-                "paper_anchored x (y approx.)"
-                if rahman.get("point_type") == "paper_anchored"
-                else "shape_anchor (manual approx.)"
-            )
-            rahman_r = format_float(rahman.get("r_over_sigma"), 3)
-            rahman_g = format_float(rahman.get("g_value"), 3)
-        else:
-            provenance = "n/a"
-            rahman_r = "n/a"
-            rahman_g = "n/a"
-
-        rows_b.append(
-            {
-                "Feature": label,
-                "Present work r/sigma": format_float(present.get("r_over_sigma"), 3),
-                "Present work g(r)": format_float(present.get("g_value"), 3),
-                "Rahman reference r/sigma": rahman_r,
-                "Rahman reference g(r)": rahman_g,
-                "Reference provenance": provenance,
-                "Comment": comment,
-            }
-        )
-
-    md_lines = [
-        "# Results 2 Quantitative Summary Table",
-        "",
-        "## Section A: Required 100-step production run",
-        "",
-        "| Integrator | Production steps | Mean T [K] | Std T [K] | Max |ΔE/E0| [%] | Mean |ΔE/E0| [%] | Comment |",
-        "|---|---:|---:|---:|---:|---:|---|",
-    ]
-    for row in rows_a:
-        md_lines.append(
-            f"| {row['Integrator']} | {row['Production steps']} | {row['Mean T [K]']} | "
-            f"{row['Std T [K]']} | {row['Max |ΔE/E0| [%]']} | {row['Mean |ΔE/E0| [%]']} | {row['Comment']} |"
-        )
-
-    md_lines.extend(
-        [
-            "",
-            "## Section B: RDF structural comparison",
-            "",
-            "| Feature | Present work r/sigma | Present work g(r) | Rahman reference r/sigma | Rahman reference g(r) | Reference provenance | Comment |",
-            "|---|---:|---:|---:|---:|---|---|",
-        ]
-    )
-    for row in rows_b:
-        md_lines.append(
-            f"| {row['Feature']} | {row['Present work r/sigma']} | {row['Present work g(r)']} | "
-            f"{row['Rahman reference r/sigma']} | {row['Rahman reference g(r)']} | "
-            f"{row['Reference provenance']} | {row['Comment']} |"
-        )
-
-    md_lines.extend(
-        [
-            "",
-            "Notes:",
-            "- Required run metrics are derived from manifest-linked `lj_brief` production CSV files (100 steps, 101 frames).",
-            "- RDF values are from manifest-linked long Verlet RDF run; Rahman values are manual figure anchors (not tabulated exact data).",
-        ]
-    )
-
-    write_text_file(RESULTS2_TABLE_MD, "\n".join(md_lines))
-
-    csv_lines = [
-        "section,Integrator/Feature,Production steps,Mean T [K],Std T [K],Max |ΔE/E0| [%],Mean |ΔE/E0| [%],Present work r/sigma,Present work g(r),Rahman reference r/sigma,Rahman reference g(r),Reference provenance,Comment"
-    ]
-    for row in rows_a:
-        csv_lines.append(
-            f"A,{row['Integrator']},{row['Production steps']},{row['Mean T [K]']},{row['Std T [K]']},"
-            f"{row['Max |ΔE/E0| [%]']},{row['Mean |ΔE/E0| [%]']},,,,,,{row['Comment']}"
-        )
-    for row in rows_b:
-        csv_lines.append(
-            f"B,{row['Feature']},,,,,,{row['Present work r/sigma']},{row['Present work g(r)']},"
-            f"{row['Rahman reference r/sigma']},{row['Rahman reference g(r)']},"
-            f"{row['Reference provenance']},{row['Comment']}"
-        )
-    write_text_file(RESULTS2_TABLE_CSV, "\n".join(csv_lines))
-
-    write_json_file(
-        RESULTS2_TABLE_JSON,
-        {
-            "generated_utc": utc_now(),
-            "section_a_required_run": rows_a,
-            "section_b_rdf_comparison": rows_b,
-            "sources": {
-                "energy_temperature_summary": "out/plots/metadata/results2_lj_brief_energy_100step_production.json + out/plots/metadata/results2_lj_brief_temperature_100step_production.json",
-                "rdf_summary": "out/plots/metadata/results2_lj_rdf_comparison_rahman1964.json",
-            },
-        },
-    )
-
-    return {
-        "markdown": RESULTS2_TABLE_MD,
-        "csv": RESULTS2_TABLE_CSV,
-        "json": RESULTS2_TABLE_JSON,
-        "rows_a": rows_a,
-        "rows_b": rows_b,
-    }
-
-
-def write_results2_notes():
-    write_text_file(
-        RESULTS2_REPORT_NOTE,
-        """# Results 2 Report Note
-
-The Lennard-Jones Argon test case follows the Rahman-style state point at 94.4 K with N=864 atoms in a periodic box, using dt = 1e-14 s.
-
-For the brief-required production run (100 steps, 1 ps), startup/equilibration is performed first, then a final startup->production temperature rescale is applied before production. In the saved production CSV, step 0 is the production initial frame (n_frames = 101).
-
-Across this required production window, Velocity-Verlet remains near the target state and shows small bounded energy drift. Forward Euler shows strong energy drift and substantial temperature growth over the same window, so it is not suitable for a stable NVE Argon trajectory here.
-
-For structure, the Velocity-Verlet RDF from a longer production run reproduces the expected liquid-argon shell pattern (first peak, first minimum, second shell, and long-range return toward g(r)=1), with broad agreement to Rahman (1964).
-
-The Rahman comparison is based on a manually extracted approximate guide from Rahman Fig. 2. Sigma = 3.4 Å is paper-supported; the x-positions 3.7 Å, 7.0 Å, and 10.4 Å are directly anchored to annotated figure positions; remaining points are approximate shape anchors read from the printed curve.
-
-This comparison should be stated as qualitative / semi-quantitative rather than exact, especially for peak heights (present-work peaks are somewhat reduced).
-""",
-    )
-
-    write_text_file(
-        RESULTS2_RECOMMENDED_FIGURES,
-        """# Recommended Final Results 2 Figure Set
-
-Main report figures (core evidence, in order):
-1. `out/plots/results2_lj_brief_energy_100step_production.png`
-2. `out/plots/results2_lj_brief_temperature_100step_production.png`
-3. `out/plots/results2_lj_rdf_comparison_rahman1964.png`
-4. `out/summary/results2/results2_quantitative_summary_table.md` (compact quantitative table)
-Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler comparison and Rahman structural comparison with no extra non-deliverable figures.
-""",
-    )
-
-    write_text_file(
-        RESULTS2_RAHMAN_EXTRACTION_NOTE,
-        """# Rahman Data Extraction Note (Fig. 2)
-
-Reference file: `scripts/data/rahman1964_fig2_manual_anchors.csv` (copied to `out/summary/results2/rahman1964_fig2_manual_anchors.csv` during plotting).
-
-Exactly paper-supported elements used:
-- sigma = 3.4 Å (used for the top-axis conversion and r/sigma conversion)
-- Fig. 2 annotated x-positions at 3.7 Å, 7.0 Å, and 10.4 Å
-
-Approximate elements (manual extraction from printed curve):
-- all Rahman g(r) values
-- all non-annotated x positions used as shape anchors
-
-Interpretation rule:
-- this anchor set is a transparent visual guide only; it is not exact tabulated truth and should not be over-interpreted.
-""",
-    )
-
-    write_text_file(
-        RESULTS2_CHANGE_NOTE,
-        """# Results 2: What Changed and Why
-
-1. Removed extended 600-step Results 2 figures from the active workflow and report package.
-2. Kept only the three brief-facing Results 2 figures plus a compact quantitative table.
-3. Replaced old sparse hard-coded Rahman points with a transparent 9-point two-tier anchor dataset (paper_anchored + shape_anchor) stored in machine-readable CSV.
-4. Updated RDF figure and metadata to make provenance explicit and to avoid implying exact Rahman tabulated data.
-5. Tightened required-run energy/temperature metadata to explicitly state startup/equilibration and step-0 production semantics.
-6. Added automatic Results 2 quantitative summary table generation (Markdown + CSV + JSON).
-7. Added report-ready claim-safe notes and explicit final Results 2 figure ordering.
-""",
-    )
-
-
-def summarize_results2_outputs(energy_brief, temp_brief, rdf_summary, table_files):
-    main_figures = [
-        f"{PLOT_DIR}/results2_lj_brief_energy_100step_production.png",
-        f"{PLOT_DIR}/results2_lj_brief_temperature_100step_production.png",
-        f"{PLOT_DIR}/results2_lj_rdf_comparison_rahman1964.png",
-    ]
-    update_manifest_with_results2_outputs(
-        {
-            "generated_utc": utc_now(),
-            "main_report_figures": main_figures,
-            "main_report_tables": [table_files["markdown"], table_files["csv"], table_files["json"]],
-            "rahman_reference_dataset": RAHMAN_OUT_FILE if os.path.exists(RAHMAN_OUT_FILE) else RAHMAN_SOURCE_FILE,
-            "notes": [
-                RESULTS2_REPORT_NOTE,
-                RESULTS2_RECOMMENDED_FIGURES,
-                RESULTS2_RAHMAN_EXTRACTION_NOTE,
-                RESULTS2_CHANGE_NOTE,
-            ],
-            "plot_metadata_files": [
-                energy_brief.get("metadata_file") if energy_brief else None,
-                temp_brief.get("metadata_file") if temp_brief else None,
-                rdf_summary.get("metadata_file") if rdf_summary else None,
-            ],
-        }
-    )
-
-
-def main():
-    apply_plot_style()
-    manifest = load_manifest()
-    os.makedirs(SUMMARY_DIR, exist_ok=True)
-    remove_stale_results2_extended_artifacts()
-    rahman_points = load_rahman_anchor_points(RAHMAN_SOURCE_FILE)
-    sync_rahman_anchor_dataset(RAHMAN_SOURCE_FILE, RAHMAN_OUT_FILE)
-
-    brief_cfg = {
-        "integrators": [
-            {"series_key": "verlet", "label": "Velocity-Verlet", "style_key": "verlet"},
-            {"series_key": "euler", "label": "Forward Euler", "style_key": "euler"},
-        ],
-        "energy_title": "Argon LJ required production run (1 ps, 100 steps): signed total-energy drift",
-        "temperature_title": "Argon LJ Required Run (100 Steps, 1 ps): Temperature",
-        "energy_purpose": (
-            "Core brief-facing evidence for the required 100-step production run using signed total-energy drift only: "
-            "Velocity-Verlet remains bounded while Forward Euler drifts strongly."
-        ),
-        "energy_claim": (
-            "At the required run length, Velocity-Verlet gives a physically meaningful bounded "
-            "NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable."
-        ),
-        "temperature_purpose": (
-            "Core brief-facing evidence for the required 100-step production run temperature response."
-        ),
-        "temperature_claim": (
-            "Velocity-Verlet remains close to the target state while Forward Euler heats strongly "
-            "over the same required window."
-        ),
-        "audience_tier": "main-report-core",
-        "include_required_run_note": False,
-        "energy_per_row_autoscale": True,
-        "legend_loc": "upper left",
-        "figsize": (9.8, 4.8),
-    }
-
-    brief_energy = safe_plot(
-        "brief energy",
-        plot_energy_for_run,
-        manifest,
-        "lj_brief",
-        brief_cfg,
-        "results2_lj_brief_energy_100step_production.png",
-    )
-    brief_temperature = safe_plot(
-        "brief temperature",
-        plot_temperature_for_run,
-        manifest,
-        "lj_brief",
-        brief_cfg,
-        "results2_lj_brief_temperature_100step_production.png",
-    )
-
-    rdf_summary = safe_plot("rdf", plot_rdf, manifest, rahman_points)
-
-    table_files = write_results2_quantitative_summary(brief_energy, brief_temperature, rdf_summary)
-    write_results2_notes()
-    summarize_results2_outputs(
-        brief_energy,
-        brief_temperature,
-        rdf_summary,
-        table_files,
-    )
-
-
-if __name__ == "__main__":
-    main()
 ```
 
-### `scripts/plot_scaling.py` (461 lines)
+**Function/class signatures:**
+```text
+65:def utc_now():
+69:def unique_preserve_order(items):
+80:def parse_scalar(raw):
+97:def typed_meta(meta):
+101:def run_identifier_from_path(path):
+108:def extract_series_parameters(meta_typed):
+141:def write_plot_metadata(plot_png_name, section, extra):
+158:def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05):
+172:def write_text_file(path, content):
+179:def write_json_file(path, payload):
+187:def load_rahman_anchor_points(path):
+227:def sync_rahman_anchor_dataset(source_path, out_path):
+233:def update_manifest_with_results2_outputs(manifest_update):
+254:def remove_stale_results2_artifacts():
+261:def load_manifest():
+274:def nested_get(obj, dotted, default=""):
+283:def load_csv(filepath):
+286:    def filter_comments(handle):
+303:def parse_csv_metadata(filepath):
+324:def parse_int_meta(meta, key, default):
+333:def parse_float_meta(meta, key, default):
+342:def get_meta_value(meta, preferred_key, fallback_key, default):
+350:def finite_or_nan(arr):
+355:def first_nonfinite_index(*arrays):
+365:def first_exceed_index(arr, threshold):
+370:def first_finite_prod_index(steps, etot, production_start):
+380:def divergence_crop_limit(div_time_ps, max_time_ps):
+387:def load_series(filepath):
+455:def plot_energy_for_run(manifest, run_key, config, out_name):
+692:def plot_temperature_for_run(manifest, run_key, config, out_name):
+975:def extract_rdf_feature(r_vals, g_vals, rmin, rmax, mode):
+985:def smooth_curve_pchip(x_vals, y_vals, samples_per_segment=40):
+1010:    def endpoint_slope(h0, h1, delta0, delta1):
+1048:def plot_rdf(manifest, rahman_points, out_name=FIG8_RDF_PNG):
+1253:def safe_plot(name, fn, *args):
+1261:def format_float(value, digits=3):
+1271:def integrator_map(summary_dict):
+1280:def write_results2_quantitative_summary(energy_brief_summary, temp_brief_summary, rdf_summary):
+1428:def write_results2_notes():
+1494:def summarize_results2_outputs(energy_brief, temp_brief, rdf_summary, table_files):
+1521:def main():
+```
 
-```py
+### `scripts/plot_scaling.py` (500 lines, summarized)
+
+Plot script content truncated for token efficiency. Full file remains in repository.
+
+**First 20 lines:**
+```python
 #!/usr/bin/env python3
 """
 plot_scaling.py — Generate scaling analysis plots (Results 3).
@@ -6662,447 +3834,21 @@ Prerequisites (from manifest.json):
 
 import os
 import json
-from datetime import datetime, timezone
-import numpy as np
-import matplotlib.pyplot as plt
+```
 
-from plot_style import (
-    COLOR_EULER,
-    COLOR_REFERENCE,
-    COLOR_RK4,
-    COLOR_VERLET,
-    apply_major_grid,
-    apply_plot_style,
-    disable_offset_text,
-    save_figure,
-)
-
-PLOT_DIR = "out/plots"
-PLOT_META_DIR = "out/plots/metadata"
-
-
-def load_manifest():
-    manifest_path = "out/manifest.json"
-    if not os.path.exists(manifest_path):
-        print(f"Warning: manifest not found at {manifest_path}")
-        return {}
-    with open(manifest_path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def utc_now():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def unique_preserve_order(items):
-    out = []
-    seen = set()
-    for item in items:
-        if item in seen:
-            continue
-        seen.add(item)
-        out.append(item)
-    return out
-
-
-def write_plot_metadata(plot_png_name, section, extra):
-    os.makedirs(PLOT_META_DIR, exist_ok=True)
-    payload = {
-        "generated_utc": utc_now(),
-        "figure_filename": plot_png_name,
-        "plot_file_png": f"{PLOT_DIR}/{plot_png_name}",
-        "section": section,
-        "missing_provenance": [],
-    }
-    payload.update(extra)
-    payload["missing_provenance"] = unique_preserve_order(payload.get("missing_provenance", []))
-    sidecar = f"{PLOT_META_DIR}/{os.path.splitext(plot_png_name)[0]}.json"
-    with open(sidecar, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, sort_keys=True)
-    print(f"Saved {sidecar}")
-
-
-def load_scaling_csv(manifest, key):
-    path = manifest.get("scaling", {}).get(key, "")
-    if not os.path.exists(path):
-        return None, path, False
-    data = np.genfromtxt(path, delimiter=',', names=True, encoding=None)
-    names = getattr(getattr(data, "dtype", None), "names", None)
-    if names and "P" in names and "wall_s" in names:
-        return data, path, False
-
-    # Fallback: tolerate headerless CSVs ("P,N,wall_s,comm_max_s" missing).
-    raw = np.genfromtxt(path, delimiter=',', encoding=None)
-    if raw is None:
-        return None, path, False
-    if raw.ndim == 1:
-        raw = np.array([raw])
-    if raw.shape[1] < 4:
-        return None, path, False
-    out = np.zeros(raw.shape[0], dtype=[("P", float), ("N", float), ("wall_s", float), ("comm_max_s", float)])
-    out["P"] = raw[:, 0]
-    out["N"] = raw[:, 1]
-    out["wall_s"] = raw[:, 2]
-    out["comm_max_s"] = raw[:, 3]
-    print(f"Warning: {path} missing header; parsed as 4-column numeric fallback.")
-    return out, path, True
-
-
-def amdahl(P, f):
-    """Amdahl's Law: S(P) = 1 / (f + (1-f)/P)."""
-    return 1.0 / (f + (1.0 - f) / P)
-
-
-def plot_strong_scaling():
-    """Plot speedup, efficiency, and critical-path comm breakdown."""
-    os.makedirs(PLOT_DIR, exist_ok=True)
-
-    manifest = load_manifest()
-    data, strong_path, used_fallback = load_scaling_csv(manifest, "strong")
-    if data is None:
-        print("Warning: scaling/strong not found in manifest. Skipping strong scaling.")
-        return
-
-    names = getattr(getattr(data, "dtype", None), "names", ()) or ()
-    has_n_column = "N" in names
-
-    P = data['P'].astype(int)
-    wall = data['wall_s']
-    comm_col = "comm_max_s" if "comm_max_s" in names else "comm_s"
-    comm_max = data[comm_col]
-    compute_overhead = np.maximum(wall - comm_max, 0.0)
-    # Some exported strong-scaling tables omit N; Results 3 strong scaling uses fixed N=2048.
-    N_values = data["N"].astype(int) if has_n_column else np.full(len(P), 2048, dtype=int)
-
-    t1 = wall[0]
-    speedup = t1 / wall
-    efficiency = speedup / P
-
-    # Fit Amdahl's Law using pure NumPy two-pass grid search
-    def fit_amdahl(P_arr, S_obs):
-        """Fit Amdahl serial fraction f by minimising SSE in S-space.
-        Two-pass grid search: coarse (1e-3 resolution) then refined (1e-5).
-        Uses pure NumPy — no SciPy dependency, for cluster portability."""
-        best_f, best_sse = 0.0, 1e30
-        # Coarse pass
-        for f_trial in np.linspace(0.001, 0.999, 1000):
-            S_model = 1.0 / (f_trial + (1.0 - f_trial) / P_arr)
-            sse = np.sum((S_obs - S_model) ** 2)
-            if sse < best_sse:
-                best_f, best_sse = f_trial, sse
-        # Refined pass around coarse optimum
-        lo = max(0.0001, best_f - 0.002)
-        hi = min(0.9999, best_f + 0.002)
-        for f_trial in np.linspace(lo, hi, 10000):
-            S_model = 1.0 / (f_trial + (1.0 - f_trial) / P_arr)
-            sse = np.sum((S_obs - S_model) ** 2)
-            if sse < best_sse:
-                best_f, best_sse = f_trial, sse
-        return best_f
-
-    P_data = P[P > 1].astype(float)
-    S_data = speedup[P > 1]
-    f_fit = fit_amdahl(P_data, S_data) if len(P_data) > 0 else None
-
-    if f_fit is not None:
-        P_fit = np.linspace(1, max(P) * 1.1, 100)
-        S_fit = amdahl(P_fit, f_fit)
-    
-    fig, axes = plt.subplots(1, 3, figsize=(15.5, 4.8), constrained_layout=True)
-
-    # --- Panel 1: Speedup ---
-    ax1 = axes[0]
-    ax1.plot(P, speedup, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label="Measured")
-    ax1.plot(P, P.astype(float), "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label="Ideal (S=P)")
-    if f_fit is not None:
-        ax1.plot(P_fit, S_fit, "-", color=COLOR_EULER, linewidth=1.6, label=f"Amdahl fit (f={f_fit:.4f})")
-    ax1.set_xlabel("Number of Processes P")
-    ax1.set_ylabel("Speedup S(P)")
-    ax1.set_title("Strong Scaling: Speedup")
-    ax1.legend(loc="best")
-    apply_major_grid(ax1)
-    disable_offset_text(ax1)
-
-    # --- Panel 2: Efficiency ---
-    ax2 = axes[1]
-    ax2.plot(P, efficiency, "o-", color=COLOR_RK4, linewidth=2.0, markersize=6, label="Measured efficiency")
-    ax2.axhline(y=1.0, color=COLOR_REFERENCE, linestyle="--", alpha=0.9, linewidth=1.3, label="Ideal (E=1)")
-    ax2.set_xlabel("Number of Processes P")
-    ax2.set_ylabel("Efficiency E(P) = S(P)/P")
-    ax2.set_title("Strong Scaling: Efficiency")
-    ax2.set_ylim(0, 1.15)
-    ax2.legend(loc="best")
-    apply_major_grid(ax2)
-    disable_offset_text(ax2)
-
-    # --- Panel 3: Stacked bar — Remaining runtime vs critical-path communication ---
-    ax3 = axes[2]
-    x_pos = np.arange(len(P))
-    bar_width = 0.6
-    remaining_display = np.maximum(compute_overhead, 0.0)
-    ax3.bar(
-        x_pos,
-        remaining_display,
-        bar_width,
-        label="Remaining runtime (wall - comm_max)",
-        color=COLOR_VERLET,
-        alpha=0.85,
-    )
-    ax3.bar(
-        x_pos,
-        comm_max,
-        bar_width,
-        bottom=remaining_display,
-        label="Communication (critical-path max)",
-        color=COLOR_EULER,
-        alpha=0.85,
-    )
-    ax3.set_xticks(x_pos)
-    ax3.set_xticklabels([str(p) for p in P])
-    ax3.set_xlabel("Number of Processes P")
-    ax3.set_ylabel("Wall Time [s]")
-    ax3.set_title("Critical-Path Communication vs Remaining Runtime")
-    ax3.legend(loc="best")
-    apply_major_grid(ax3, axis="y")
-    disable_offset_text(ax3)
-
-    save_figure(fig, f"{PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
-    plt.close()
-    print(f"Saved {PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
-
-    scaling_meta_path = "out/scaling_meta.txt"
-    source_data_files = [strong_path]
-    if os.path.exists(scaling_meta_path):
-        source_data_files.append(scaling_meta_path)
-
-    missing_provenance = [
-        "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_strong.csv.",
-        "Timing step count and replication count are configured in scripts/run_all_data.sh but not encoded in scaling_strong.csv.",
-    ]
-    if used_fallback:
-        missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
-    if not has_n_column:
-        missing_provenance.append("Strong-scaling CSV omitted N column; metadata assumes fixed N=2048.")
-    if not os.path.exists(scaling_meta_path):
-        missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
-
-    f_fit_value = float(f_fit) if f_fit is not None else None
-    max_theoretical_speedup = float(1.0 / f_fit) if f_fit is not None and f_fit > 0 else None
-    max_measured_speedup = float(np.nanmax(speedup)) if speedup.size else None
-    min_efficiency = float(np.nanmin(efficiency)) if efficiency.size else None
-    max_efficiency = float(np.nanmax(efficiency)) if efficiency.size else None
-
-    rows = []
-    for i in range(len(P)):
-        rows.append(
-            {
-                "P": int(P[i]),
-                "N": int(N_values[i]),
-                "wall_s": float(wall[i]),
-                "comm_max_s": float(comm_max[i]),
-                "remaining_runtime_s": float(compute_overhead[i]),
-                "speedup": float(speedup[i]),
-                "efficiency": float(efficiency[i]),
-            }
-        )
-
-    write_plot_metadata(
-        "results3_strong_scaling_speedup_efficiency_breakdown.png",
-        "results3",
-        {
-            "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
-            "intended_claim": "The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime.",
-            "audience_tier": "brief-facing",
-            "source_data_files": unique_preserve_order(source_data_files),
-            "source_manifest_keys": ["scaling.strong"],
-            "simulation_run_identifiers": [],
-            "key_parameters": {
-                "integrator": "verlet",
-                "fixed_particle_count_N": int(N_values[0]) if len(data) else None,
-                "process_counts_P": [int(p) for p in P.tolist()],
-                "plots_in_figure": [
-                    "speedup",
-                    "efficiency",
-                    "critical_path_communication_vs_remaining_runtime",
-                ],
-            },
-            "fit_or_truncation": {
-                "amdahl_fit_model": "S(P)=1/(f+(1-f)/P)",
-                "amdahl_fit_domain": "P > 1",
-                "excluded_points_from_amdahl_fit": [1] if np.any(P == 1) else [],
-                "fit_method": "two-pass grid search in f (coarse 1e-3 then refined 1e-5 step over local window)",
-            },
-            "key_quantitative_summary": {
-                "amdahl_serial_fraction_f": f_fit_value,
-                "maximum_theoretical_speedup_from_fit": max_theoretical_speedup,
-                "max_measured_speedup": max_measured_speedup,
-                "efficiency_range": [min_efficiency, max_efficiency],
-                "rows": rows,
-            },
-            "caveats": [
-                "Strong-scaling data are aggregated medians, not raw replicate traces.",
-                "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
-                "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time.",
-            ],
-            "missing_provenance": missing_provenance,
-        },
-    )
-
-    if f_fit is not None:
-        print(f"  Amdahl serial fraction f = {f_fit:.6f}")
-        print(f"  Maximum theoretical speedup = {1.0/f_fit:.1f}x")
-
-
-def plot_size_scaling():
-    """Plot wall time and wall-minus-comm_max runtime vs N."""
-    os.makedirs(PLOT_DIR, exist_ok=True)
-
-    manifest = load_manifest()
-    data, size_path, used_fallback = load_scaling_csv(manifest, "size")
-    if data is None:
-        print("Warning: scaling/size not found in manifest. Skipping size scaling.")
-        return
-    names = getattr(getattr(data, "dtype", None), "names", ()) or ()
-    if "N" not in names:
-        print("Warning: scaling/size is missing N column. Skipping size scaling plot.")
-        return
-
-    N = data['N']
-    wall = data['wall_s']
-    comm_col = "comm_max_s" if "comm_max_s" in names else "comm_s"
-    comm_max = data[comm_col]
-    remaining_runtime = np.maximum(wall - comm_max, 1e-9)  # floor to avoid log(0)
-
-    # Fit power law to wall-minus-comm_max runtime for N >= 500
-    mask = N >= 500
-    slope_remaining, intercept_remaining = None, None
-    slope_wall, intercept_wall = None, None
-    if np.sum(mask) >= 2:
-        log_N = np.log10(N[mask])
-        log_remaining = np.log10(np.maximum(remaining_runtime[mask], 1e-10))
-        slope_remaining, intercept_remaining = np.polyfit(log_N, log_remaining, 1)
-        
-        log_wall = np.log10(wall[mask])
-        slope_wall, intercept_wall = np.polyfit(log_N, log_wall, 1)
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.5, 4.8), constrained_layout=True)
-
-    wall_label = 'Wall time'
-    if slope_wall is not None:
-        wall_label += f' (O(N^{slope_wall:.2f}))'
-    ax1.loglog(N, wall, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label=wall_label)
-    
-    rem_label = 'Remaining runtime (wall - comm_max)'
-    if slope_remaining is not None:
-        rem_label += f' (O(N^{slope_remaining:.2f}))'
-    ax1.loglog(N, remaining_runtime, "^-", color=COLOR_RK4, linewidth=2.0, markersize=6, label=rem_label)
-
-    ax1.loglog(
-        N,
-        comm_max,
-        "s--",
-        color=COLOR_EULER,
-        linewidth=1.5,
-        markersize=5,
-        label="Comm time (max)",
-        alpha=0.9,
-    )
-    N_ref = np.array([min(N), max(N)])
-    t_ref = wall[-1] * (N_ref / N[-1]) ** 2
-    ax1.loglog(N_ref, t_ref, "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label=r"$\sim N^2$ reference")
-    ax1.set_xlabel("Number of Particles N")
-    ax1.set_ylabel("Time [s]")
-    ax1.set_title("Size Scaling (P=16)")
-    ax1.legend(loc="best")
-    apply_major_grid(ax1)
-
-    comm_frac = comm_max / wall * 100
-    ax2.plot(N, comm_frac, "o-", color=COLOR_EULER, linewidth=2.0, markersize=6)
-    ax2.set_xlabel("Number of Particles N")
-    ax2.set_ylabel("Communication Fraction [%]")
-    ax2.set_title("Communication Overhead vs Problem Size")
-    ax2.set_ylim(0, 100)
-    apply_major_grid(ax2)
-    ax2.axhline(y=50, color=COLOR_REFERENCE, linestyle="--", linewidth=1.2, label="50% reference")
-    ax2.legend(loc="best")
-    disable_offset_text(ax2)
-
-    save_figure(fig, f"{PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
-    plt.close()
-    print(f"Saved {PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
-
-    scaling_meta_path = "out/scaling_meta.txt"
-    source_data_files = [size_path]
-    if os.path.exists(scaling_meta_path):
-        source_data_files.append(scaling_meta_path)
-
-    missing_provenance = [
-        "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_size.csv.",
-        "Timing step count and replication count are configured in scripts/run_all_data.sh but not encoded in scaling_size.csv.",
-    ]
-    if used_fallback:
-        missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
-    if not os.path.exists(scaling_meta_path):
-        missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
-
-    comm_frac_min = float(np.nanmin(comm_frac)) if comm_frac.size else None
-    comm_frac_max = float(np.nanmax(comm_frac)) if comm_frac.size else None
-    rows = []
-    for i in range(len(N)):
-        rows.append(
-            {
-                "N": int(N[i]),
-                "P": int(data["P"][i]),
-                "wall_s": float(wall[i]),
-                "comm_max_s": float(comm_max[i]),
-                "remaining_runtime_s": float(remaining_runtime[i]),
-                "communication_fraction_percent": float(comm_frac[i]),
-            }
-        )
-
-    write_plot_metadata(
-        "results3_problem_size_scaling_fixed_p16.png",
-        "results3",
-        {
-            "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
-            "intended_claim": "Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16.",
-            "audience_tier": "brief-facing",
-            "source_data_files": unique_preserve_order(source_data_files),
-            "source_manifest_keys": ["scaling.size"],
-            "simulation_run_identifiers": [],
-            "key_parameters": {
-                "integrator": "verlet",
-                "fixed_process_count_P": int(data["P"][0]) if len(data) else None,
-                "particle_counts_N": [int(n) for n in N.tolist()],
-                "fit_mask_for_power_law": "N >= 500",
-                "reference_curve": "~N^2 anchored to largest-N wall time",
-            },
-            "fit_or_truncation": {
-                "power_law_fit_domain": [int(n) for n in N[mask].tolist()],
-                "excluded_from_power_law_fit": [int(n) for n in N[~mask].tolist()],
-                "fit_method": "linear regression in log10-space on selected N values",
-            },
-            "key_quantitative_summary": {
-                "wall_time_power_law_exponent": float(slope_wall) if slope_wall is not None else None,
-                "remaining_runtime_power_law_exponent": (
-                    float(slope_remaining) if slope_remaining is not None else None
-                ),
-                "communication_fraction_percent_range": [comm_frac_min, comm_frac_max],
-                "rows": rows,
-            },
-            "caveats": [
-                "Power-law exponents depend on the chosen fit domain (here N >= 500).",
-                "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
-            ],
-            "missing_provenance": missing_provenance,
-        },
-    )
-
-
-if __name__ == "__main__":
-    apply_plot_style()
-    plot_strong_scaling()
-    plot_size_scaling()
+**Function/class signatures:**
+```text
+47:def load_manifest():
+56:def utc_now():
+60:def unique_preserve_order(items):
+71:def write_plot_metadata(plot_png_name, section, extra):
+88:def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05):
+102:def remove_stale_results3_artifacts():
+109:def load_scaling_csv(manifest, key):
+135:def amdahl(P, f):
+140:def plot_strong_scaling():
+166:    def fit_amdahl(P_arr, S_obs):
+345:def plot_size_scaling():
 ```
 
 ### `scripts/plot_style.py` (60 lines)
@@ -7170,7 +3916,7 @@ def save_figure(fig, path):
     fig.savefig(path, bbox_inches="tight")
 ```
 
-### `scripts/validate_manifest.py` (98 lines)
+### `scripts/validate_manifest.py` (96 lines)
 
 ```py
 #!/usr/bin/env python3
@@ -7247,8 +3993,6 @@ def main():
 
     require_file(manifest, "lj_brief.verlet", errors)
     require_file(manifest, "lj_brief.euler", errors)
-    require_file(manifest, "lj_rdf.verlet_long", errors)
-    require_file(manifest, "lj_rdf.verlet_long_energy", errors)
 
     if not args.skip_scaling:
         require_file(manifest, "scaling.strong", errors)
@@ -7273,31 +4017,30 @@ if __name__ == "__main__":
     main()
 ```
 
-## 8. File Sizes
+## 9. File Sizes
 
 ```
 include/md/constants.hpp                             84 lines
-include/md/integrators.hpp                          115 lines
+include/md/integrators.hpp                          140 lines
 include/md/mic.hpp                                   19 lines
-include/md/mpi_context.hpp                           98 lines
-include/md/observables.hpp                           86 lines
-include/md/params.hpp                                87 lines
+include/md/observables.hpp                           82 lines
+include/md/params.hpp                                90 lines
 include/md/partition.hpp                             26 lines
-include/md/potentials.hpp                            60 lines
+include/md/potentials.hpp                            61 lines
 include/md/rng.hpp                                  134 lines
 include/md/system.hpp                                63 lines
-src/main.cpp                                        536 lines
+src/main.cpp                                        550 lines
 src/observables.cpp                                  70 lines
 src/potentials/harmonic.cpp                          37 lines
 src/potentials/lennard_jones.cpp                    104 lines
 tests/test_force.cpp                                288 lines
-tests/test_integrators.cpp                          101 lines
+tests/test_integrators.cpp                           95 lines
 tests/test_mic.cpp                                  117 lines
 tests/test_partition.cpp                             68 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    2126
+    2061
 ```
 
 **End of audit.**

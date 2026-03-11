@@ -3,14 +3,11 @@
 plot_ho.py — Results 1 harmonic oscillator plotting package.
 
 Main figures (brief-facing):
-  1) out/plots/results1_ho_figure1_trajectories_dt0p01.png
-  2) out/plots/results1_ho_figure2_phase_space_dt0p01.png
-  3) out/plots/results1_ho_figure3_small_vs_large_dt.png
-  4) out/plots/results1_ho_figure4_convergence_combined.png
-
-Optional supporting figure:
-  5) out/plots/results1_ho_figure5_energy_diagnostic.png
-  6) out/plots/results1_ho_figure6_error_vs_time.png
+  Figure 1(a,b): out/plots/results1_figure1ab_trajectories_dt0p01.png
+  Figure 1(c):   out/plots/results1_figure1c_phase_space_dt0p01.png
+  Figure 2(a-f): out/plots/results1_figure2_small_vs_large_dt.png
+  Figure 3(a,b): out/plots/results1_figure3_convergence_combined.png
+  Figure 4(a):   out/plots/results1_figure4_energy_diagnostic.png
 
 Generated artifacts:
   - out/summary/results1/results1_ho_small_large_summary.(csv|md)
@@ -65,7 +62,6 @@ DT_STEPS = {
 DT_SMALL = 0.01
 DT_LARGE = 0.5
 TRAJ_DT = DT_SMALL
-ERROR_TIME_DT = 0.1
 
 OMEGA = 1.0
 X0 = 1.0
@@ -78,12 +74,11 @@ PLOT_META_DIR = "out/plots/metadata"
 SUMMARY_DIR = "out/summary"
 SUMMARY_RESULTS1_DIR = "out/summary/results1"
 
-FIG1_PNG = "results1_ho_figure1_trajectories_dt0p01.png"
-FIG2_PNG = "results1_ho_figure2_phase_space_dt0p01.png"
-FIG3_PNG = "results1_ho_figure3_small_vs_large_dt.png"
-FIG4_PNG = "results1_ho_figure4_convergence_combined.png"
-FIG5_PNG = "results1_ho_figure5_energy_diagnostic.png"
-FIG6_PNG = "results1_ho_figure6_error_vs_time.png"
+FIG1_PNG = "results1_figure1ab_trajectories_dt0p01.png"
+FIG2_PNG = "results1_figure1c_phase_space_dt0p01.png"
+FIG3_PNG = "results1_figure2_small_vs_large_dt.png"
+FIG4_PNG = "results1_figure3_convergence_combined.png"
+FIG5_PNG = "results1_figure4_energy_diagnostic.png"
 
 R1_SMALL_LARGE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.csv"
 R1_SMALL_LARGE_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.md"
@@ -187,7 +182,9 @@ def fmt_pct_from_ratio(x: float, digits: int = 4) -> str:
         return "nan"
     pct = 100.0 * x
     if abs(pct) < 10 ** (-digits):
-        return f"{pct:.2e}%"
+        s = f"{pct:.2e}"
+        base, exp = s.split('e')
+        return rf"${base} \times 10^{{{int(exp)}}}$%"
     return f"{pct:.{digits}f}%"
 
 
@@ -220,6 +217,20 @@ def save_plot_pair(fig, png_name: str, metadata: Dict[str, object]) -> None:
     save_figure(fig, png_path)
     print(f"Saved {png_path}")
     write_plot_metadata(png_name, metadata)
+
+
+def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05) -> None:
+    ax.text(
+        x,
+        y,
+        f"{label})",
+        transform=ax.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=11,
+        fontweight="bold",
+        color="black",
+    )
 
 
 def run_ho_simulations():
@@ -563,8 +574,10 @@ def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]
         disable_offset_text(axins)
         axins.tick_params(axis="both", which="major", labelsize=7)
 
-    axes[0].set_title("(a) Position x(t)", loc="left")
-    axes[1].set_title("(b) Velocity v(t)", loc="left")
+    axes[0].set_title("Position x(t)", loc="left")
+    axes[1].set_title("Velocity v(t)", loc="left")
+    add_panel_label(axes[0], "a")
+    add_panel_label(axes[1], "b")
     axes[0].set_ylabel("Position x [reduced units]")
     axes[1].set_ylabel("Velocity v [reduced units]")
     axes[1].set_xlabel(r"Time $[1/\omega]$")
@@ -589,7 +602,7 @@ def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]
             "kind": "main_results1_figure",
             "figure_number": 1,
             "claim": "Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact.",
-            "panels": ["(a) x(t)", "(b) v(t)"],
+            "panels": ["a) x(t)", "b) v(t)"],
             "insets": inset_meta,
             "zoom_window": [zoom_t0, zoom_t1],
             "endpoint_note": "Near-overlap is expected at small Δt; endpoint errors still rank Euler > Velocity-Verlet > RK4.",
@@ -636,6 +649,7 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
     )
 
     ax.set_title(r"Phase-space trajectories ($\Delta t=0.01$)")
+    add_panel_label(ax, "c")
     ax.set_xlabel("Position x [reduced units]")
     ax.set_ylabel("Velocity v [reduced units]")
     ax.set_aspect("equal", "box")
@@ -707,9 +721,9 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
         FIG2_PNG,
         {
             "kind": "main_results1_figure",
-            "figure_number": 2,
+            "figure_number": 1,
             "claim": "Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences.",
-            "panel": "v_vs_x",
+            "panel": "c) v_vs_x",
             "shared_legend": True,
         },
     )
@@ -803,6 +817,9 @@ def plot_figure3_small_vs_large(
 
     axes[0, 0].set_title("x(t) vs time", loc="left")
     axes[0, 1].set_title("phase space v(x)", loc="left")
+    panel_labels = ["a", "b", "c", "d", "e", "f"]
+    for idx, ax in enumerate(axes.flat):
+        add_panel_label(ax, panel_labels[idx])
 
     legend_handles = [
         Line2D(
@@ -844,9 +861,10 @@ def plot_figure3_small_vs_large(
         FIG3_PNG,
         {
             "kind": "main_results1_figure",
-            "figure_number": 3,
+            "figure_number": 2,
             "claim": "Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables.",
             "layout": {"rows": INTEGRATORS, "columns": ["x(t)", "v(x)"]},
+            "panels": ["a)", "b)", "c)", "d)", "e)", "f)"],
             "shared_legend": True,
             "error_annotations": per_integrator,
             "insets": {"euler_trajectory_zoom": False, "euler_phase_zoom": False},
@@ -931,7 +949,7 @@ def plot_figure4_convergence_combined(
         metric_key="endpoint_position_error",
         epsilon=1e-14,
         ylabel=r"$|x_{\mathrm{num}}(T)-x_{\mathrm{exact}}(T)|$",
-        panel_title=r"(a) Endpoint position error at $T=10$",
+        panel_title=r"Endpoint position error at $T=10$",
     )
     _plot_convergence_panel(
         axes[1],
@@ -940,8 +958,10 @@ def plot_figure4_convergence_combined(
         metric_key="rms_phase_space_error",
         epsilon=1e-16,
         ylabel=r"$\mathrm{RMS}_t \sqrt{(x-x_{ex})^2 + (v-v_{ex})^2}$",
-        panel_title=r"(b) RMS phase-space error over $0\leq t\leq 10$",
+        panel_title=r"RMS phase-space error over $0\leq t\leq 10$",
     )
+    add_panel_label(axes[0], "a")
+    add_panel_label(axes[1], "b")
 
     fig.suptitle(
         r"Convergence to the exact solution (expected orders: Euler 1, Velocity-Verlet 2, RK4 4)",
@@ -984,9 +1004,9 @@ def plot_figure4_convergence_combined(
         FIG4_PNG,
         {
             "kind": "main_results1_figure",
-            "figure_number": 4,
+            "figure_number": 3,
             "claim": "Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics.",
-            "panels": ["(a) endpoint_position_error", "(b) rms_phase_space_error"],
+            "panels": ["a) endpoint_position_error", "b) rms_phase_space_error"],
             "fit_rule": "dt <= 0.1; fallback to smallest half if fewer than 3 points",
             "fits": meta_fits,
             "coarse_points_retained_on_plot": True,
@@ -1062,7 +1082,7 @@ def plot_figure5_energy_diagnostic(
         ax,
         width="31%",
         height="27%",
-        bbox_to_anchor=(0.0, 0.05, 1.0, 1.0),
+        bbox_to_anchor=(0.0, 0.15, 1.0, 1.0),
         bbox_transform=ax.transAxes,
         loc="lower right",
         borderpad=2.0,
@@ -1099,93 +1119,9 @@ def plot_figure5_energy_diagnostic(
         FIG5_PNG,
         {
             "kind": "supporting_results1_figure",
-            "figure_number": 5,
+            "figure_number": 4,
             "claim": "Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval.",
             "note": "RK4 is not symplectic.",
-        },
-    )
-    plt.close(fig)
-
-
-def plot_figure6_error_vs_time(
-    datasets: Dict[str, Dict[float, Dict[str, object]]],
-) -> None:
-    fig, ax = plt.subplots(figsize=(7.0, 4.5), constrained_layout=False)
-    series_rows: List[Dict[str, object]] = []
-
-    for integ in INTEGRATORS:
-        ds = datasets.get(integ, {}).get(ERROR_TIME_DT)
-        if ds is None:
-            print(f"Warning: {integ} dt={ERROR_TIME_DT:g} missing for Figure 6.")
-            continue
-
-        data = ds["data"]
-        names = set(data.dtype.names or [])
-        if not {"time", "x"}.issubset(names):
-            print(f"Warning: {integ} dt={ERROR_TIME_DT:g} missing time/x columns for Figure 6.")
-            continue
-
-        t = np.asarray(data["time"], dtype=float)
-        x = np.asarray(data["x"], dtype=float)
-        x_exact, _ = exact_solution(t)
-        err = np.abs(x - x_exact)
-        err = np.where(err > 0.0, err, np.nan)  # avoid log(0) in semilogy
-        finite_err = err[np.isfinite(err)]
-        if finite_err.size == 0:
-            print(f"Warning: {integ} dt={ERROR_TIME_DT:g} has no finite errors for Figure 6.")
-            continue
-
-        style = INTEGRATOR_STYLE[integ]
-        ax.semilogy(
-            t,
-            err,
-            color=style["color"],
-            linestyle=style["linestyle"],
-            linewidth=style["linewidth"],
-            label=INTEGRATOR_LABELS[integ],
-        )
-
-        series_rows.append(
-            {
-                "integrator": integ,
-                "integrator_label": INTEGRATOR_LABELS[integ],
-                "dt": float(ERROR_TIME_DT),
-                "max_position_error": float(np.nanmax(finite_err)),
-                "min_nonzero_position_error": float(np.nanmin(finite_err)),
-                "n_points": int(len(t)),
-                "source_file": ds["path"],
-            }
-        )
-
-    ax.set_xlim(0.0, T_FINAL)
-    ax.set_xlabel(r"Time $[1/\omega]$")
-    ax.set_ylabel(r"$|x(t)-x_{\mathrm{exact}}(t)|$")
-    ax.set_title(r"Position error growth ($\Delta t=0.1$)")
-    apply_major_grid(ax)
-    disable_offset_text(ax)
-    ax.legend(loc="best", frameon=False)
-    fig.subplots_adjust(top=0.90, bottom=0.14, left=0.14, right=0.98)
-
-    save_plot_pair(
-        fig,
-        FIG6_PNG,
-        {
-            "kind": "supporting_results1_figure",
-            "figure_number": 6,
-            "claim": "At dt=0.1, Forward Euler error grows monotonically while Velocity-Verlet remains bounded and oscillatory; RK4 remains smallest on this horizon.",
-            "purpose": "Qualitative error-character diagnostic over time; complements Figure 4 convergence slopes.",
-            "key_parameters": {
-                "dt": float(ERROR_TIME_DT),
-                "exact_solution": "x_exact(t)=cos(t), v_exact(t)=-sin(t) for omega=1, x0=1, v0=0",
-                "metric": "absolute position error |x_num(t)-x_exact(t)|",
-                "x_axis": "linear time",
-                "y_axis": "log error",
-            },
-            "series": series_rows,
-            "caveats": [
-                "This figure is qualitative; quantitative order evidence is in Figure 4.",
-                "RK4 is non-symplectic; long-time drift behaviour requires longer-horizon diagnostics.",
-            ],
         },
     )
     plt.close(fig)
@@ -1414,14 +1350,13 @@ def generate_table_outputs(
         "",
         f"Generated: {utc_now()}",
         "",
-        f"Figure 1 (trajectories): Verifies x(t) and v(t) behaviour for all three methods against the exact solution at dt={format_dt(TRAJ_DT)}; Euler remains the visibly largest deviation while RK4 is nearly exact on this horizon.",
-        "Figure 2 (phase space): Shows geometric orbit quality at dt=0.01, with Euler clearly outside the closed exact orbit and a dedicated final-sector zoom showing all methods with endpoint markers.",
-        "Figure 3 (small vs large dt): Directly demonstrates timestep sensitivity with dt=0.5 and dt=0.01 for each method, retaining full coarse-range behaviour without dense in-panel text; quantitative values are provided in the summary tables; "
+        f"Figure 1(a,b) (trajectories): Verifies x(t) and v(t) behaviour for all three methods against the exact solution at dt={format_dt(TRAJ_DT)}; Euler remains the visibly largest deviation while RK4 is nearly exact on this horizon.",
+        "Figure 1(c) (phase space): Shows geometric orbit quality at dt=0.01, with Euler clearly outside the closed exact orbit and a dedicated final-sector zoom showing all methods with endpoint markers.",
+        "Figure 2(a-f) (small vs large dt): Directly demonstrates timestep sensitivity with dt=0.5 and dt=0.01 for each method, retaining full coarse-range behaviour without dense in-panel text; quantitative values are provided in the summary tables; "
         + "; ".join(fig3_bits)
         + ".",
-        f"Figure 4 (combined convergence): Fitted slopes are Euler {endpoint_fit['euler']['slope']:.2f}/{rms_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}/{rms_fit['verlet']['slope']:.2f}, RK4 {endpoint_fit['rk4']['slope']:.2f}/{rms_fit['rk4']['slope']:.2f} (endpoint/RMS), consistent with orders 1/2/4; filled markers denote fit-included points and open markers denote coarse points shown for context.",
-        "Figure 5 (energy diagnostic): At dt=0.01, Euler exhibits strong secular drift, Velocity-Verlet shows bounded oscillatory error, and RK4 drift is tiny on this interval; RK4 remains non-symplectic.",
-        "Figure 6 (error-vs-time diagnostic): At dt=0.1, Euler error grows monotonically, Velocity-Verlet error oscillates with bounded envelope (symplectic behaviour), and RK4 remains smallest on this horizon.",
+        f"Figure 3(a,b) (combined convergence): Fitted slopes are Euler {endpoint_fit['euler']['slope']:.2f}/{rms_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}/{rms_fit['verlet']['slope']:.2f}, RK4 {endpoint_fit['rk4']['slope']:.2f}/{rms_fit['rk4']['slope']:.2f} (endpoint/RMS), consistent with orders 1/2/4; filled markers denote fit-included points and open markers denote coarse points shown for context.",
+        "Figure 4(a) (energy diagnostic): At dt=0.01, Euler exhibits strong secular drift, Velocity-Verlet shows bounded oscillatory error, and RK4 drift is tiny on this interval; RK4 remains non-symplectic.",
     ]
     if sanity_warnings:
         notes.append("")
@@ -1531,7 +1466,6 @@ def main():
     plot_figure3_small_vs_large(datasets, m_idx)
     plot_figure4_convergence_combined(metrics, endpoint_fit, rms_fit)
     plot_figure5_energy_diagnostic(datasets, m_idx)
-    plot_figure6_error_vs_time(datasets)
 
     sanity_warnings = run_sanity_checks(endpoint_fit, rms_fit, m_idx)
     generate_table_outputs(metrics, endpoint_fit, rms_fit, sanity_warnings)

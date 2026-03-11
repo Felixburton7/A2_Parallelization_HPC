@@ -10,7 +10,6 @@
 
 #include "md/constants.hpp"
 #include "md/integrators.hpp"
-#include "md/mpi_context.hpp"
 #include "md/potentials.hpp"
 #include "md/system.hpp"
 
@@ -28,13 +27,7 @@ double runHOAndGetError(IntegratorKind kind, double dt, int steps) {
     sys.vel[1] = 0.0;
     sys.vel[2] = 0.0;
 
-    md::MPIContext ctx;
-    ctx.rank = 0;
-    ctx.size = 1;
-    ctx.N = 1;
-    ctx.localN = 1;
-    ctx.offset = 0;
-    ctx.posGlobal.assign(3, 0.0);
+    std::vector<double> posGlobal(3, 0.0);
 
     const double omega = 1.0;
     const double mass = md::constants::mass;
@@ -43,15 +36,16 @@ double runHOAndGetError(IntegratorKind kind, double dt, int steps) {
     };
 
     double localPE = 0.0;
-    evalHO(sys, ctx.posGlobal, localPE);
+    auto refreshForces = [&]() { evalHO(sys, posGlobal, localPE); };
+    refreshForces();
 
     for (int step = 0; step < steps; ++step) {
         if (kind == IntegratorKind::Euler) {
-            md::stepEuler(sys, ctx, dt, evalHO, localPE, true);
+            md::stepEuler(sys, dt, refreshForces);
         } else if (kind == IntegratorKind::Verlet) {
-            md::stepVelocityVerlet(sys, ctx, dt, evalHO, localPE, true);
+            md::stepVelocityVerlet(sys, dt, refreshForces);
         } else {
-            md::stepRK4(sys, ctx, dt, evalHO, localPE, true);
+            md::stepRK4(sys, dt, refreshForces);
         }
     }
 

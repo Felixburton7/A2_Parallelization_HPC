@@ -41,10 +41,6 @@ double computeLocalKineticEnergy(const System& sys, double mass);
  */
 double computeTemperature(double eKinTotal, int N);
 
-// NOTE: Velocity rescaling is performed directly in main.cpp using
-// computeTemperature() + MPI_Bcast(lambda) for MPI-correct thermostatting.
-// No standalone rescaleVelocities() helper — avoids duplication.
-
 /**
  * @brief Accumulate pair distances into a g(r) histogram.
  *

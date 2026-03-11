@@ -3,9 +3,9 @@
 plot_lj.py — Generate Lennard-Jones / Argon validation plots (Results 2).
 
 Produces:
-  - out/plots/results2_lj_brief_energy_100step_production.png
-  - out/plots/results2_lj_brief_temperature_100step_production.png
-  - out/plots/results2_lj_rdf_comparison_rahman1964.png
+  - out/plots/results2_figure6_lj_brief_energy_100step_production.png
+  - out/plots/results2_figure7_lj_brief_temperature_100step_production.png
+  - out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png
 """
 
 import csv
@@ -56,6 +56,10 @@ KB = 1.380649e-23
 EPSILON = KB * EPSILON_OVER_KB
 SIGMA_ANGSTROM = 3.4
 TEMP_DIVERGENCE_K = 1.0e4
+
+FIG6_ENERGY_PNG = "results2_figure6_lj_brief_energy_100step_production.png"
+FIG7_TEMPERATURE_PNG = "results2_figure7_lj_brief_temperature_100step_production.png"
+FIG8_RDF_PNG = "results2_figure8_lj_rdf_comparison_rahman1964.png"
 
 
 def utc_now():
@@ -149,6 +153,20 @@ def write_plot_metadata(plot_png_name, section, extra):
     with open(sidecar, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, sort_keys=True)
     print(f"Saved {sidecar}")
+
+
+def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05):
+    ax.text(
+        x,
+        y,
+        f"{label})",
+        transform=ax.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=11,
+        fontweight="bold",
+        color="black",
+    )
 
 
 def write_text_file(path, content):
@@ -503,22 +521,22 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
 
         finite_etot = etot[np.isfinite(etot)]
         ax_d = axes[row]
-        ax_d.plot(t, rel_dev_pct, color=color, linestyle=linestyle, linewidth=max(2.2, linewidth))
+        row_label = label
+        ax_d.plot(t, rel_dev_pct, color=color, linestyle=linestyle, linewidth=max(2.2, linewidth), label=row_label)
         ax_d.set_ylabel(r"$\Delta E / E_0$ [%]")
         ax_d.axhline(0.0, color=COLOR_REFERENCE, linestyle="--", linewidth=1.0, alpha=0.6)
         apply_major_grid(ax_d)
         disable_offset_text(ax_d)
 
-        row_label = label
-        ax_d.text(
-            0.02,
-            0.96,
-            row_label,
-            transform=ax_d.transAxes,
+        add_panel_label(ax_d, chr(ord("a") + row))
+        ax_d.legend(
+            loc="upper left",
+            bbox_to_anchor=(0.02, 0.95),
             fontsize=9,
-            ha="left",
-            va="top",
-            bbox={"facecolor": "white", "alpha": 0.86, "edgecolor": "none"},
+            frameon=True,
+            facecolor="white",
+            edgecolor="none",
+            framealpha=0.86,
         )
 
         if row == 0:
@@ -615,6 +633,8 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
         out_name,
         "results2",
         {
+            "figure_number": config.get("figure_number_energy"),
+            "panels": config.get("panels_energy", ["a)", "b)"]),
             "purpose": config["energy_purpose"],
             "intended_claim": config["energy_claim"],
             "audience_tier": config["audience_tier"],
@@ -902,6 +922,8 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
         out_name,
         "results2",
         {
+            "figure_number": config.get("figure_number_temperature"),
+            "panels": config.get("panels_temperature", ["a)"]),
             "purpose": config["temperature_purpose"],
             "intended_claim": config["temperature_claim"],
             "audience_tier": config["audience_tier"],
@@ -1023,7 +1045,7 @@ def smooth_curve_pchip(x_vals, y_vals, samples_per_segment=40):
     return np.concatenate(x_dense_parts), np.concatenate(y_dense_parts)
 
 
-def plot_rdf(manifest, rahman_points):
+def plot_rdf(manifest, rahman_points, out_name=FIG8_RDF_PNG):
     os.makedirs(PLOT_DIR, exist_ok=True)
 
     gr_path = nested_get(manifest, "lj_rdf.verlet_long")
@@ -1065,7 +1087,7 @@ def plot_rdf(manifest, rahman_points):
         linewidth=1.6,
         alpha=0.72,
         zorder=5,
-        label="Rahman guide (smoothed manual anchors)",
+        label="Rahman guide (derived manual anchors)",
     )
     ax.scatter(
         rahman_r_sigma[paper_mask],
@@ -1126,7 +1148,6 @@ def plot_rdf(manifest, rahman_points):
     disable_offset_text(ax)
     ax.legend(loc="upper right")
 
-    out_name = "results2_lj_rdf_comparison_rahman1964.png"
     out_path = f"{PLOT_DIR}/{out_name}"
     save_figure(fig, out_path)
     plt.close(fig)
@@ -1146,6 +1167,8 @@ def plot_rdf(manifest, rahman_points):
         out_name,
         "results2",
         {
+            "figure_number": 8,
+            "panels": ["a)"],
             "purpose": (
                 "Core brief-facing structural evidence: compare present-work Argon RDF against "
                 "a transparent manually extracted Rahman (1964) Fig. 2 anchor guide."
@@ -1384,8 +1407,11 @@ def write_results2_quantitative_summary(energy_brief_summary, temp_brief_summary
             "section_a_required_run": rows_a,
             "section_b_rdf_comparison": rows_b,
             "sources": {
-                "energy_temperature_summary": "out/plots/metadata/results2_lj_brief_energy_100step_production.json + out/plots/metadata/results2_lj_brief_temperature_100step_production.json",
-                "rdf_summary": "out/plots/metadata/results2_lj_rdf_comparison_rahman1964.json",
+                "energy_temperature_summary": (
+                    "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json + "
+                    "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json"
+                ),
+                "rdf_summary": "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json",
             },
         },
     )
@@ -1423,10 +1449,10 @@ This comparison should be stated as qualitative / semi-quantitative rather than 
         """# Recommended Final Results 2 Figure Set
 
 Main report figures (core evidence, in order):
-1. `out/plots/results2_lj_brief_energy_100step_production.png`
-2. `out/plots/results2_lj_brief_temperature_100step_production.png`
-3. `out/plots/results2_lj_rdf_comparison_rahman1964.png`
-4. `out/summary/results2/results2_quantitative_summary_table.md` (compact quantitative table)
+6. `out/plots/results2_figure6_lj_brief_energy_100step_production.png` (panels: a, b)
+7. `out/plots/results2_figure7_lj_brief_temperature_100step_production.png` (panel: a)
+8. `out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png` (panel: a)
+Table: `out/summary/results2/results2_quantitative_summary_table.md` (compact quantitative table)
 Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler comparison and Rahman structural comparison with no extra non-deliverable figures.
 """,
     )
@@ -1467,9 +1493,9 @@ Interpretation rule:
 
 def summarize_results2_outputs(energy_brief, temp_brief, rdf_summary, table_files):
     main_figures = [
-        f"{PLOT_DIR}/results2_lj_brief_energy_100step_production.png",
-        f"{PLOT_DIR}/results2_lj_brief_temperature_100step_production.png",
-        f"{PLOT_DIR}/results2_lj_rdf_comparison_rahman1964.png",
+        f"{PLOT_DIR}/{FIG6_ENERGY_PNG}",
+        f"{PLOT_DIR}/{FIG7_TEMPERATURE_PNG}",
+        f"{PLOT_DIR}/{FIG8_RDF_PNG}",
     ]
     update_manifest_with_results2_outputs(
         {
@@ -1523,6 +1549,10 @@ def main():
             "over the same required window."
         ),
         "audience_tier": "main-report-core",
+        "figure_number_energy": 6,
+        "figure_number_temperature": 7,
+        "panels_energy": ["a)", "b)"],
+        "panels_temperature": ["a)"],
         "include_required_run_note": False,
         "energy_per_row_autoscale": True,
         "legend_loc": "upper left",
@@ -1535,7 +1565,7 @@ def main():
         manifest,
         "lj_brief",
         brief_cfg,
-        "results2_lj_brief_energy_100step_production.png",
+        FIG6_ENERGY_PNG,
     )
     brief_temperature = safe_plot(
         "brief temperature",
@@ -1543,10 +1573,10 @@ def main():
         manifest,
         "lj_brief",
         brief_cfg,
-        "results2_lj_brief_temperature_100step_production.png",
+        FIG7_TEMPERATURE_PNG,
     )
 
-    rdf_summary = safe_plot("rdf", plot_rdf, manifest, rahman_points)
+    rdf_summary = safe_plot("rdf", plot_rdf, manifest, rahman_points, FIG8_RDF_PNG)
 
     table_files = write_results2_quantitative_summary(brief_energy, brief_temperature, rdf_summary)
     write_results2_notes()

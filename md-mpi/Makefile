@@ -20,7 +20,7 @@ TEST_DEPS = src/potentials/lennard_jones.o src/potentials/harmonic.o src/observa
 TARGET = md_solver
 TEST_BIN = test_runner
 
-BCN ?= fb638
+BCN ?= 4316J
 TARBALL = $(BCN)_wa2.tar.gz
 
 all: $(TARGET)
@@ -42,13 +42,18 @@ clean:
 	rm -f src/potentials/*.o tests/*.o
 
 dist: clean
+	@test "$(BCN)" != "4316J_PLACEHOLDER" || (echo "ERROR: Set BCN" && false)
+	find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
+	find . -name '*.pyc' -delete 2>/dev/null || true
+	rm -f test_runner wa2-results-*.out
 	tar -czvf $(TARBALL) \
+		--exclude='__pycache__' --exclude='*.pyc' \
 		include/ src/ tests/ scripts/ \
 		Makefile README.md .clang-format
 	@echo ""
 	@echo "Created $(TARBALL)"
 	@echo "Contents:"
-	@tar -tzvf $(TARBALL) | head -30
+	@tar -tzvf $(TARBALL) | head -40
 
 out:
 	mkdir -p out

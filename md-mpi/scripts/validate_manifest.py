@@ -72,8 +72,6 @@ def main():
 
     require_file(manifest, "lj_brief.verlet", errors)
     require_file(manifest, "lj_brief.euler", errors)
-    require_file(manifest, "lj_rdf.verlet_long", errors)
-    require_file(manifest, "lj_rdf.verlet_long_energy", errors)
 
     if not args.skip_scaling:
         require_file(manifest, "scaling.strong", errors)

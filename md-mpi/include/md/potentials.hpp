@@ -18,10 +18,8 @@ namespace md {
  * a_i = -omega^2 * x_i  (independent, non-interacting particles)
  * V_i = 0.5 * m * omega^2 * x_i^2
  *
- * This kernel operates purely on local data and does NOT require any
- * global position information. The MPI_Allgatherv call should be
- * bypassed entirely in HO mode to eliminate unnecessary O(N)
- * communication overhead.
+ * Non-interacting potential: operates purely on local data.
+ * No communication is required in HO mode.
  *
  * Validation runs should use N=1. The code supports N independent copies.
  *
@@ -46,6 +44,9 @@ void computeHOForces(System& sys, const std::vector<double>& posGlobal, double& 
  * Force formula (Rahman Appendix, brief Eqn 3):
  *   a_i = (24*eps/m) * sum_{j!=i} (x_i - x_j)/r^2_ij
  *         * [2*(sigma/r_ij)^12 - (sigma/r_ij)^6]
+ *
+ * Caller must provide up-to-date global positions in posGlobal before
+ * invoking this routine.
  *
  * @param[in,out] sys       System state (forces written to sys.acc)
  * @param[in]     posGlobal Global positions (3*N doubles, from Allgatherv)

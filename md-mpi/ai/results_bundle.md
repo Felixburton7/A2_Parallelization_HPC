@@ -1,178 +1,21 @@
 # MD Solver Production Data Bundle
 
-## Executive Summary
+## Context Preface (Stub)
+
+- Shared Executive Summary, Deliverables Map, claims table, and freshness metadata are centralised in `ai/results.md`.
+- This file includes only document-specific sections below.
+- Generation metadata for this document:
 
 | Field | Value |
 |---|---|
-| Purpose | Project-wide raw artifact bundle: manifest-linked CSV/notes with truncation for context-size control. |
-| Generation timestamp (UTC) | 2026-03-10T17:33:34Z |
-| Git commit | ccf5f1350359a1bc69a1ba7a6e4a295ae0f6aaad |
-| Git working tree | dirty (16 changed paths) |
+| Generation timestamp (UTC) | 2026-03-11T12:17:18Z |
 | Generation succeeded | yes |
-| Generation status label | potential issue |
-| Generation note | Bundle generated with warnings; review missing/empty artifact keys. |
+| Generation status label | confirmed |
+| Generation note | Raw bundle assembled from current manifest-linked project artifacts. |
 
-### Top Important Current Facts
+## Cross-Reference
 
-- Manifest-linked artifacts found: 28/28 paths currently exist.
-- Core final figures present: 9/9 required figure files.
-- Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
-- Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
-- Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
-
-## How to Read This File
-
-- Authoritative for: Raw artifact payloads and exact file contents included for downstream LLM context.
-- Less authoritative for: Interpretive judgment, confidence scoring, and compliance decisions.
-- Companion files to read with this one: `ai/results.md`, `ai/audit_output.md`.
-
-## Authoritative Facts
-
-| Fact | Status | Evidence |
-|---|---|---|
-| Manifest present | confirmed | `out/manifest.json` |
-| Core required figures present | confirmed | 9/9 required |
-| Core required tables/data present | confirmed | 8/8 required |
-| Plot metadata sidecars available | confirmed | `out/plots/metadata/*.json` |
-
-## Generated Result Summaries (High Value)
-
-- Manifest-linked artifacts found: 28/28 paths currently exist.
-- Core final figures present: 9/9 required figure files.
-- Results 2 brief temperature single-number contrast: Verlet mean T=94.42 K (Δ=+0.02 K), Euler mean T=185.27 K (Δ=+90.87 K).
-- Results 2 brief energy drift single-number contrast: Verlet max |ΔE/E0|=0.082%, Euler max |ΔE/E0|=127.587%.
-- Results 1 endpoint convergence slopes: Euler 1.05, Verlet 2.00, RK4 3.94.
-- Results 3 strong scaling: max measured speedup 24.12x; fitted Amdahl serial fraction f=0.0103.
-
-## Current Deliverables Map
-
-### Current final figures
-- [confirmed] Results 1: `out/plots/results1_ho_figure1_trajectories_dt0p01.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure2_phase_space_dt0p01.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure3_small_vs_large_dt.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure4_convergence_combined.png` (required)
-- [confirmed] Results 1: `out/plots/results1_ho_figure5_energy_diagnostic.png` (optional)
-- [confirmed] Results 2: `out/plots/results2_lj_brief_energy_100step_production.png` (required)
-- [confirmed] Results 2: `out/plots/results2_lj_brief_temperature_100step_production.png` (required)
-- [confirmed] Results 2: `out/plots/results2_lj_rdf_comparison_rahman1964.png` (required)
-- [confirmed] Results 3: `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png` (required)
-- [confirmed] Results 3: `out/plots/results3_problem_size_scaling_fixed_p16.png` (required)
-
-### Current tables
-- [confirmed] Manifest: `out/manifest.json` (required)
-- [confirmed] Results 1: `out/summary/results1/results1_ho_convergence_summary.csv` (required)
-- [confirmed] Results 1: `out/summary/results1/results1_ho_small_large_summary.csv` (required)
-- [confirmed] Results 1: `out/summary/results1/results1_ho_endpoint_values.csv` (required)
-- [confirmed] Results 2: `out/summary/results2/results2_quantitative_summary_table.csv` (required)
-- [confirmed] Results 2: `out/summary/results2/results2_quantitative_summary_table.md` (required)
-- [confirmed] Results 3: `out/scaling_strong.csv` (required)
-- [confirmed] Results 3: `out/scaling_size.csv` (required)
-
-### Core deliverables
-- [confirmed] `ai/audit_output.md`
-- [confirmed] `ai/results.md`
-- [confirmed] `ai/results_bundle.md`
-- [confirmed] `out/manifest.json`
-
-### Diagnostics-only artifacts
-- [informational] `out/plots/metadata/*.json` sidecars present: 10.
-- [informational] Raw run CSV trees under `out/runs/` are primary diagnostics and provenance backing.
-
-### Deprecated / legacy artifacts
-- [expected by design] Legacy filename `out/plots/results1_ho_position_velocity_trajectories.png` replaced by `out/plots/results1_ho_figure1_trajectories_dt0p01.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_phase_space_trajectories.png` replaced by `out/plots/results1_ho_figure2_phase_space_dt0p01.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_convergence_endpoint_position_error.png` replaced by `out/plots/results1_ho_figure4_convergence_combined.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_convergence_rms_phase_space_error.png` replaced by `out/plots/results1_ho_figure4_convergence_combined.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_energy_conservation.png` replaced by `out/plots/results1_ho_figure5_energy_diagnostic.png`.
-
-## Report Claims Supported by Current Evidence
-
-| Claim | Supporting artifacts | Confidence | Caveat |
-|---|---|---|---|
-| Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_ho_figure4_convergence_combined.png` | medium | No major caveat recorded in metadata. |
-| Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_ho_figure3_small_vs_large_dt.png` | medium | No major caveat recorded in metadata. |
-| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
-| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260307_201536/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
-| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
-| The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime. | `out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
-| Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
-| Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_ho_figure1_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
-| Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences. | `out/plots/results1_ho_figure2_phase_space_dt0p01.png` | medium | No major caveat recorded in metadata. |
-| Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval. | `out/plots/results1_ho_figure5_energy_diagnostic.png` | medium | No major caveat recorded in metadata. |
-
-## Freshness / Staleness Metadata
-
-### Source files used to generate this file
-| Source file | Found | Last modified (UTC) | Status |
-|---|---|---|---|
-| ai/pack_results.sh | yes | 2026-03-07T17:14:25Z | confirmed |
-| ai/context_report.py | yes | 2026-03-07T17:15:25Z | confirmed |
-| out/manifest.json | yes | 2026-03-09T16:34:08Z | confirmed |
-| out/summary/results2/results2_quantitative_summary_table.csv | yes | 2026-03-07T20:33:31Z | confirmed |
-
-### Expected file checks
-| Path | Expectation | Role | Status |
-|---|---|---|---|
-| out/manifest.json | required | project manifest | confirmed |
-| out/plots/results1_ho_figure1_trajectories_dt0p01.png | required | core final figure | confirmed |
-| out/plots/results1_ho_figure2_phase_space_dt0p01.png | required | core final figure | confirmed |
-| out/plots/results1_ho_figure3_small_vs_large_dt.png | required | core final figure | confirmed |
-| out/plots/results1_ho_figure4_convergence_combined.png | required | core final figure | confirmed |
-| out/plots/results2_lj_brief_energy_100step_production.png | required | core final figure | confirmed |
-| out/plots/results2_lj_brief_temperature_100step_production.png | required | core final figure | confirmed |
-| out/plots/results2_lj_rdf_comparison_rahman1964.png | required | core final figure | confirmed |
-| out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png | required | core final figure | confirmed |
-| out/plots/results3_problem_size_scaling_fixed_p16.png | required | core final figure | confirmed |
-| out/manifest.json | required | core summary/table | confirmed |
-| out/summary/results1/results1_ho_convergence_summary.csv | required | core summary/table | confirmed |
-| out/summary/results1/results1_ho_small_large_summary.csv | required | core summary/table | confirmed |
-| out/summary/results1/results1_ho_endpoint_values.csv | required | core summary/table | confirmed |
-| out/summary/results2/results2_quantitative_summary_table.csv | required | core summary/table | confirmed |
-| out/summary/results2/results2_quantitative_summary_table.md | required | core summary/table | confirmed |
-| out/scaling_strong.csv | required | core summary/table | confirmed |
-| out/scaling_size.csv | required | core summary/table | confirmed |
-| out/plots/metadata/results2_lj_brief_temperature_100step_production.json | required | metadata sidecar | confirmed |
-| out/plots/metadata/results3_strong_scaling_speedup_efficiency_breakdown.json | required | metadata sidecar | confirmed |
-
-### Output currency relative to current repo evidence
-| Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
-|---|---|---|---|---|
-| ai/audit_output.md | 2026-03-10T17:33:33Z | 2026-03-10T16:35:08Z | confirmed | appears current |
-| ai/results.md | 2026-03-10T17:33:34Z | 2026-03-10T16:35:08Z | confirmed | appears current |
-| ai/results_bundle.md | 2026-03-10T17:33:34Z | 2026-03-10T16:35:08Z | confirmed | appears current (in-progress generation timestamp) |
-
-## Diagnostics / Warnings
-
-- [confirmed] Required artifacts for this context view were found.
-- [confirmed] Context outputs appear current relative to latest tracked evidence.
-
-## Known Limitations / Caveats (Project-wide)
-
-- Lennard-Jones uses a hard cutoff (no potential shift), so small energy discontinuities can occur when pairs cross r_cut.
-- LJ force evaluation is direct all-pairs O(N^2) without neighbour lists; scaling trends depend strongly on chosen timestep counts.
-- MPI strategy uses particle decomposition plus Allgatherv-style position exchange each timestep; communication overhead rises with process count.
-- Results 2 reference comparison uses manual Rahman Fig. 2 anchors for part of the curve; treat as qualitative/semi-quantitative.
-- Strong/size scaling CSVs store aggregated timings rather than all replicate traces, limiting deeper uncertainty analysis.
-- Artifact naming conventions evolved (notably Results 1 plot names); legacy filename checks must be interpreted with rename context.
-
-## Potentially Stale or Informational Items
-
-| Status | Item | Interpretation |
-|---|---|---|
-| expected by design | `out/plots/results1_ho_position_velocity_trajectories.png` | Renamed; current artifact is `out/plots/results1_ho_figure1_trajectories_dt0p01.png`. |
-| expected by design | `out/plots/results1_ho_phase_space_trajectories.png` | Renamed; current artifact is `out/plots/results1_ho_figure2_phase_space_dt0p01.png`. |
-| expected by design | `out/plots/results1_ho_convergence_endpoint_position_error.png` | Renamed; current artifact is `out/plots/results1_ho_figure4_convergence_combined.png`. |
-| expected by design | `out/plots/results1_ho_convergence_rms_phase_space_error.png` | Renamed; current artifact is `out/plots/results1_ho_figure4_convergence_combined.png`. |
-| expected by design | `out/plots/results1_ho_energy_conservation.png` | Renamed; current artifact is `out/plots/results1_ho_figure5_energy_diagnostic.png`. |
-| informational | `scripts/__pycache__/` | Generated cache files may create noisy static-scan results unless excluded. |
-| informational | `out/summary/results3/` | Results 3 currently tracked via `out/scaling_*.csv` and metadata JSON sidecars. |
-
-## Cross-References
-
-- `ai/audit_output.md`: executable build/test/smoke audit and raw source/verbatim evidence.
-- `ai/results.md`: interpreted project-wide results summary and compliance-oriented checks.
-- `ai/results_bundle.md`: raw/truncated artifact bundle for direct context ingestion.
+- Read `ai/results.md` first for shared high-level context.
 
 ## Raw Artifact Bundle (Verbatim / Truncated)
 
@@ -214,6 +57,35 @@ This section preserves raw artifact payloads (with explicit truncation for long 
   "scaling": {
     "strong": "out/scaling_strong.csv",
     "size": "out/scaling_size.csv"
+  },
+  "results2_outputs": {
+    "generated_utc": "2026-03-11T12:01:14Z",
+    "main_report_figures": [
+      "out/plots/results2_figure6_lj_brief_energy_100step_production.png",
+      "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
+      "out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png"
+    ],
+    "main_report_tables": [
+      "out/summary/results2/results2_quantitative_summary_table.md",
+      "out/summary/results2/results2_quantitative_summary_table.csv",
+      "out/summary/results2/results2_quantitative_summary_table.json"
+    ],
+    "rahman_reference_dataset": "out/summary/results2/rahman1964_fig2_manual_anchors.csv",
+    "notes": [
+      "out/summary/results2/results2_report_note.md",
+      "out/summary/results2/results2_recommended_figure_set.md",
+      "out/summary/results2/results2_rahman_extraction_note.md",
+      "out/summary/results2/results2_what_changed_and_why.md"
+    ],
+    "plot_metadata_files": [
+      "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json",
+      "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json",
+      "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json"
+    ]
+  },
+  "lj_rdf": {
+    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv",
+    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv"
   }
 }
 ```
@@ -223,17 +95,19 @@ This section preserves raw artifact payloads (with explicit truncation for long 
 1. out/manifest.json
 2. out/summary/results1/results1_ho_convergence_summary.csv
 3. out/summary/results2/results2_quantitative_summary_table.md
-4. out/plots/results2_lj_brief_energy_100step_production.png
-5. out/plots/results2_lj_brief_temperature_100step_production.png
-6. out/plots/results2_lj_rdf_comparison_rahman1964.png
-7. out/scaling_strong.csv
-8. out/scaling_size.csv
+4. out/plots/results2_figure6_lj_brief_energy_100step_production.png
+5. out/plots/results2_figure7_lj_brief_temperature_100step_production.png
+6. out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png
+7. out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png
+8. out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png
+9. out/scaling_strong.csv
+10. out/scaling_size.csv
 
 ## Results 1 HO Convergence Summary (Markdown)
 ```markdown
 # Results 1 HO Convergence Summary
 
-Generated: 2026-03-07T20:33:29Z
+Generated: 2026-03-11T12:01:15Z
 
 | Integrator | Endpoint slope | RMS slope | Endpoint fit dt values | RMS fit dt values | Excluded coarse dt values |
 |---|---|---|---|---|---|
@@ -245,9 +119,9 @@ Generated: 2026-03-07T20:33:29Z
 ## Results 1 HO Convergence Summary (CSV)
 ```csv
 integrator,integrator_label,endpoint_position_slope,rms_phase_space_slope,endpoint_fit_dt_values,rms_fit_dt_values,excluded_coarse_dt_values
-euler,Forward Euler,1.0501683187830355,1.0321586375426215,0.0005;0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
-verlet,Velocity-Verlet,2.000620867369963,2.0000840953365064,0.0005;0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
-rk4,RK4,3.9442304587115373,3.9961192997018524,0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
+euler,Forward Euler,1.0501683187830357,1.0321586375426217,0.0005;0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
+verlet,Velocity-Verlet,2.000620867369962,2.0000840953366517,0.0005;0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
+rk4,RK4,3.9442304587115364,3.996152298168813,0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
 ```
 
 ## Results 1 Small-vs-Large Timestep Summary (CSV)
@@ -256,9 +130,9 @@ integrator,integrator_label,dt,endpoint_position_error,endpoint_velocity_error,r
 euler,Forward Euler,0.5,8.367020351721887,1.9525828174323399,3.863189505580034,85.73617379884048
 euler,Forward Euler,0.01,0.043208489127591565,0.02759708518306525,0.02942320535893793,0.10516539260323106
 verlet,Velocity-Verlet,0.5,0.06303048743925244,0.0666345063276792,0.06543639736680687,0.062313079833983626
-verlet,Velocity-Verlet,0.01,2.266852967147681e-05,2.816049136322718e-05,2.574297005879334e-05,2.4999984407430367e-05
-rk4,RK4,0.5,0.0008075801512805736,0.005127035265358737,0.003034557426149899,0.004196257140171827
-rk4,RK4,0.01,4.4750858574360564e-10,7.029797854940512e-10,4.812453619614678e-10,1.3888375429078477e-11
+verlet,Velocity-Verlet,0.01,2.266852967147681e-05,2.816049136322718e-05,2.5742970058794124e-05,2.4999984407430367e-05
+rk4,RK4,0.5,0.0008075801512805736,0.005127035265358737,0.0030345574261499034,0.004196257140171827
+rk4,RK4,0.01,4.4750858574360564e-10,7.029797854940512e-10,4.81245362046023e-10,1.3888375429078477e-11
 ```
 
 ## Results 1 Endpoint Values (CSV)
@@ -358,6 +232,267 @@ Interpretation rule:
 - this anchor set is a transparent visual guide only; it is not exact tabulated truth and should not be over-interpreted.
 ```
 
+## Radial Distribution Function g(r) (Long RDF production run)
+```csv
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 20000, n_steps: 20000, n_frames: 20001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 20050, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 20000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-07T20:17:21Z
+r_sigma,gr
+0.01,0
+0.03,0
+0.05,0
+0.07,0
+0.09,0
+0.11,0
+0.13,0
+0.15,0
+0.17,0
+0.19,0
+0.21,0
+0.23,0
+0.25,0
+0.27,0
+0.29,0
+0.31,0
+0.33,0
+0.35,0
+0.37,0
+0.39,0
+0.41,0
+0.43,0
+0.45,0
+0.47,0
+0.49,0
+0.51,0
+0.53,0
+0.55,0
+0.57,0
+0.59,0
+0.61,0
+0.63,0
+0.65,0
+0.67,0
+0.69,0
+0.71,0
+0.73,0
+0.75,0
+0.77,0
+0.79,0
+0.81,0
+0.83,0
+0.85,0
+0.87,3.8098e-06
+0.89,0.000101934
+0.91,0.0026883
+0.93,0.0258626
+0.95,0.13254
+0.97,0.415982
+0.99,0.909593
+1.01,1.52879
+1.03,2.12271
+1.05,2.55824
+1.07,2.79342
+1.09,2.83818
+1.11,2.74759
+1.13,2.5743
+1.15,2.35791
+1.17,2.13456
+1.19,1.92518
+1.21,1.72541
+1.23,1.549
+1.25,1.39402
+1.27,1.25852
+1.29,1.14503
+1.31,1.04926
+1.33,0.964017
+1.35,0.897164
+1.37,0.836888
+1.39,0.785884
+1.41,0.745955
+1.43,0.710637
+1.45,0.683179
+1.47,0.660071
+1.49,0.643386
+1.51,0.633484
+1.53,0.627207
+1.55,0.622883
+1.57,0.62378
+1.59,0.625782
+1.61,0.633595
+1.63,0.642956
+1.65,0.658775
+1.67,0.678359
+1.69,0.701352
+1.71,0.727159
+1.73,0.757657
+1.75,0.791516
+1.77,0.826932
+1.79,0.865815
+1.81,0.904164
+1.83,0.944967
+1.85,0.981598
+1.87,1.02022
+1.89,1.05282
+1.91,1.08999
+1.93,1.1195
+1.95,1.14849
+1.97,1.17294
+1.99,1.19701
+2.01,1.2176
+2.03,1.23404
+2.05,1.2466
+2.07,1.2526
+2.09,1.25252
+2.11,1.24885
+2.13,1.2401
+2.15,1.22373
+2.17,1.2013
+2.19,1.17938
+2.21,1.15189
+2.23,1.12323
+2.25,1.09326
+2.27,1.06476
+2.29,1.03898
+2.31,1.01213
+2.33,0.98853
+2.35,0.965112
+2.37,0.943586
+2.39,0.924586
+2.41,0.908281
+2.43,0.892499
+2.45,0.882044
+2.47,0.872744
+2.49,0.86742
+2.51,0.863286
+2.53,0.861892
+2.55,0.861865
+2.57,0.865552
+2.59,0.871718
+2.61,0.877089
+2.63,0.886204
+2.65,0.897838
+2.67,0.909019
+2.69,0.923674
+2.71,0.937226
+2.73,0.951815
+2.75,0.968815
+2.77,0.983933
+2.79,0.996281
+2.81,1.01095
+2.83,1.02361
+2.85,1.03622
+2.87,1.04783
+2.89,1.05734
+2.91,1.06592
+2.93,1.07225
+2.95,1.07681
+2.97,1.08191
+2.99,1.08315
+3.01,1.08323
+3.03,1.08206
+3.05,1.07944
+3.07,1.07468
+3.09,1.07248
+3.11,1.06628
+3.13,1.06023
+3.15,1.05337
+3.17,1.04516
+3.19,1.03709
+3.21,1.02859
+3.23,1.01881
+3.25,1.01092
+3.27,1.00279
+3.29,0.994356
+3.31,0.986455
+3.33,0.980317
+3.35,0.973186
+3.37,0.967382
+3.39,0.963043
+3.41,0.958407
+3.43,0.955429
+3.45,0.952798
+3.47,0.952467
+3.49,0.949905
+3.51,0.950979
+3.53,0.95229
+3.55,0.953391
+3.57,0.956281
+3.59,0.960488
+3.61,0.963854
+3.63,0.969534
+3.65,0.974281
+3.67,0.978263
+3.69,0.985022
+3.71,0.989991
+3.73,0.995813
+3.75,1.00217
+3.77,1.0078
+3.79,1.01197
+3.81,1.01722
+3.83,1.01972
+3.85,1.0244
+3.87,1.02711
+3.89,1.02969
+3.91,1.03245
+3.93,1.03333
+3.95,1.03214
+3.97,1.03275
+3.99,1.0322
+4.01,1.03069
+4.03,1.02851
+4.05,1.02701
+4.07,1.02378
+4.09,1.02274
+4.11,1.01889
+4.13,1.0162
+4.15,1.01261
+4.17,1.00974
+4.19,1.00719
+4.21,1.00284
+4.23,1.00014
+4.25,0.997787
+4.27,0.994053
+4.29,0.991889
+4.31,0.988648
+4.33,0.986441
+4.35,0.984858
+4.37,0.98405
+4.39,0.98237
+4.41,0.982991
+4.43,0.981283
+4.45,0.981724
+4.47,0.981088
+4.49,0.982287
+4.51,0.982634
+4.53,0.98447
+4.55,0.985861
+4.57,0.987678
+4.59,0.990277
+4.61,0.991404
+4.63,0.993918
+4.65,0.995969
+4.67,0.998167
+4.69,1.00041
+4.71,1.00289
+4.73,1.00444
+4.75,1.00641
+4.77,1.00874
+4.79,1.00953
+4.81,1.01134
+4.83,1.01165
+4.85,1.01287
+4.87,1.0123
+4.89,1.01234
+4.91,1.01306
+4.93,1.01338
+4.95,1.01275
+4.97,1.01183
+4.99,1.01206
+5.01,1.01128
+5.03,1.00998
+5.05,1.00888
+5.07,1.00813
+5.09,1.00683
+```
+
 ## LJ Brief (required) — Velocity-Verlet (100 steps) (Truncated)
 ```csv
 # mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 100, n_steps: 100, n_frames: 101, step_indexing: 0..steps (includes initial frame), total_steps_executed: 150, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 100, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914355, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-08T18:23:51Z
@@ -450,14 +585,30 @@ verlet,0.5,-0.7760410416372,0.610655617217049,3.26205118552794e-26
 verlet,1.0,-0.5,0.75,2.717985765625e-26
 ```
 
+## LJ RDF long run trajectory (energy/temperature) (Truncated)
+```csv
+# mode: lj, integrator: verlet, N: 864, P: 4, dt: 1e-14, steps: 20000, n_steps: 20000, n_frames: 20001, step_indexing: 0..steps (includes initial frame), total_steps_executed: 20050, seed: 42, L: 3.47786e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 20000, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 94.3304820914355, startup_temperature_after_final_rescale: 94.4, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-07T20:15:59Z
+step,time,E_kin,E_pot,E_total,temperature
+0,0,1.687164123192e-18,-7.47194927673327e-18,-5.78478515354127e-18,94.4
+1,1e-14,1.68447578135403e-18,-7.46869101577964e-18,-5.78421523442562e-18,94.2495822273505
+2,2e-14,1.68047549629074e-18,-7.46552676001374e-18,-5.78505126372299e-18,94.0257587683384
+3,3e-14,1.675573444974e-18,-7.46109573619852e-18,-5.78552229122452e-18,93.7514797945627
+4,4e-14,1.67031939809282e-18,-7.45631122530418e-18,-5.78599182721136e-18,93.4575060081561
+5,5e-14,1.66525309392627e-18,-7.4517277580709e-18,-5.78647466414463e-18,93.1740367790827
+6,6e-14,1.66078214268927e-18,-7.44785276849725e-18,-5.78707062580798e-18,92.923878664071
+7,7e-14,1.65716146413624e-18,-7.44493273747192e-18,-5.78777127333568e-18,92.7212949019415
+...
+19996,1.9996e-10,1.65858283722758e-18,-7.44452466037812e-18,-5.78594182315054e-18,92.8008233947411
+19997,1.9997e-10,1.65317504285859e-18,-7.43975732746471e-18,-5.78658228460612e-18,92.498247147762
+19998,1.9998e-10,1.65044538580607e-18,-7.43623420515029e-18,-5.78578881934422e-18,92.3455177112978
+19999,1.9999e-10,1.65090291538904e-18,-7.4368571594683e-18,-5.78595424407926e-18,92.3711173503838
+20000,2e-10,1.65432864996233e-18,-7.44032634879736e-18,-5.78599769883503e-18,92.5627936308788
+```
+
 ## Diagnostics / Warnings (Bundle Generator)
 
-- Status: potential issue
-- Generator warnings captured below:
-```
-manifest key missing or empty: lj_rdf.verlet_long
-manifest key missing or empty: lj_rdf.verlet_long_energy
-```
+- Status: confirmed
+- No bundle-generation warnings were emitted.
 
 ## Potentially Stale or Informational Items (Bundle View)
 

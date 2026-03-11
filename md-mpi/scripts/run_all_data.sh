@@ -75,6 +75,7 @@ extract_metric() {
 # ── 0. Parallel Consistency Check ──
 echo ""
 echo "=== PARALLEL CONSISTENCY CHECK ==="
+# Uses zero equilibration for a fast MPI consistency smoke test (not a physical-accuracy run).
 D1="$OUTDIR/runs/lj_N108_P1_test_${TIMESTAMP}"
 D2="$OUTDIR/runs/lj_N108_P2_test_${TIMESTAMP}"
 mkdir -p "$D1" "$D2"

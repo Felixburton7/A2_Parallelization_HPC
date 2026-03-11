@@ -36,7 +36,9 @@ from plot_style import (
 
 PLOT_DIR = "out/plots"
 PLOT_META_DIR = "out/plots/metadata"
-STALE_RESULTS3_FILES = [
+FIG9_AB_PNG = "results3_figure9ab_problem_size_scaling_fixed_p16.png"
+FIG10_ABC_PNG = "results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png"
+STALE_RESULTS3_PATTERNS = [
     # Legacy pre-results3 naming pattern; no longer part of report outputs.
     f"{PLOT_DIR}/scaling_*.png",
 ]
@@ -83,8 +85,22 @@ def write_plot_metadata(plot_png_name, section, extra):
     print(f"Saved {sidecar}")
 
 
+def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05):
+    ax.text(
+        x,
+        y,
+        f"{label})",
+        transform=ax.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=11,
+        fontweight="bold",
+        color="black",
+    )
+
+
 def remove_stale_results3_artifacts():
-    for pattern in STALE_RESULTS3_FILES:
+    for pattern in STALE_RESULTS3_PATTERNS:
         for path in glob.glob(pattern):
             os.remove(path)
             print(f"Removed stale artifact {path}")
@@ -187,6 +203,7 @@ def plot_strong_scaling():
     ax1.set_xlabel("Number of Processes P")
     ax1.set_ylabel("Speedup S(P)")
     ax1.set_title("Strong Scaling: Speedup")
+    add_panel_label(ax1, "a")
     ax1.legend(loc="best")
     apply_major_grid(ax1)
     disable_offset_text(ax1)
@@ -198,6 +215,7 @@ def plot_strong_scaling():
     ax2.set_xlabel("Number of Processes P")
     ax2.set_ylabel("Efficiency E(P) = S(P)/P")
     ax2.set_title("Strong Scaling: Efficiency")
+    add_panel_label(ax2, "b")
     ax2.set_ylim(0, 1.15)
     ax2.legend(loc="best")
     apply_major_grid(ax2)
@@ -230,13 +248,14 @@ def plot_strong_scaling():
     ax3.set_xlabel("Number of Processes P")
     ax3.set_ylabel("Wall Time [s]")
     ax3.set_title("Critical-Path Communication vs Remaining Runtime")
+    add_panel_label(ax3, "c")
     ax3.legend(loc="best")
     apply_major_grid(ax3, axis="y")
     disable_offset_text(ax3)
 
-    save_figure(fig, f"{PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
+    save_figure(fig, f"{PLOT_DIR}/{FIG10_ABC_PNG}")
     plt.close()
-    print(f"Saved {PLOT_DIR}/results3_strong_scaling_speedup_efficiency_breakdown.png")
+    print(f"Saved {PLOT_DIR}/{FIG10_ABC_PNG}")
 
     scaling_meta_path = "out/scaling_meta.txt"
     source_data_files = [strong_path]
@@ -275,9 +294,11 @@ def plot_strong_scaling():
         )
 
     write_plot_metadata(
-        "results3_strong_scaling_speedup_efficiency_breakdown.png",
+        FIG10_ABC_PNG,
         "results3",
         {
+            "figure_number": 10,
+            "panels": ["a)", "b)", "c)"],
             "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
             "intended_claim": "The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime.",
             "audience_tier": "brief-facing",
@@ -381,6 +402,7 @@ def plot_size_scaling():
     ax1.set_xlabel("Number of Particles N")
     ax1.set_ylabel("Time [s]")
     ax1.set_title("Size Scaling (P=16)")
+    add_panel_label(ax1, "a")
     ax1.legend(loc="best")
     apply_major_grid(ax1)
 
@@ -389,15 +411,16 @@ def plot_size_scaling():
     ax2.set_xlabel("Number of Particles N")
     ax2.set_ylabel("Communication Fraction [%]")
     ax2.set_title("Communication Overhead vs Problem Size")
+    add_panel_label(ax2, "b")
     ax2.set_ylim(0, 100)
     apply_major_grid(ax2)
     ax2.axhline(y=50, color=COLOR_REFERENCE, linestyle="--", linewidth=1.2, label="50% reference")
     ax2.legend(loc="best")
     disable_offset_text(ax2)
 
-    save_figure(fig, f"{PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
+    save_figure(fig, f"{PLOT_DIR}/{FIG9_AB_PNG}")
     plt.close()
-    print(f"Saved {PLOT_DIR}/results3_problem_size_scaling_fixed_p16.png")
+    print(f"Saved {PLOT_DIR}/{FIG9_AB_PNG}")
 
     scaling_meta_path = "out/scaling_meta.txt"
     source_data_files = [size_path]
@@ -429,9 +452,11 @@ def plot_size_scaling():
         )
 
     write_plot_metadata(
-        "results3_problem_size_scaling_fixed_p16.png",
+        FIG9_AB_PNG,
         "results3",
         {
+            "figure_number": 9,
+            "panels": ["a)", "b)"],
             "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
             "intended_claim": "Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16.",
             "audience_tier": "brief-facing",
@@ -461,6 +486,7 @@ def plot_size_scaling():
             "caveats": [
                 "Power-law exponents depend on the chosen fit domain (here N >= 500).",
                 "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
+                "O(...) expressions in the legend are empirical power-law fits over the tested range, not rigorous statements of asymptotic complexity.",
             ],
             "missing_provenance": missing_provenance,
         },

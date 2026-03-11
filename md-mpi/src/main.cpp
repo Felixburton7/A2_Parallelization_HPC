@@ -19,8 +19,8 @@
 
 #include "md/constants.hpp"
 #include "md/integrators.hpp"
-#include "md/mpi_context.hpp"
 #include "md/observables.hpp"
+#include "md/partition.hpp"
 #include "md/params.hpp"
 #include "md/potentials.hpp"
 #include "md/rng.hpp"
@@ -116,7 +116,7 @@ void writeCSVMetadataLine(std::ostream& out, const md::Params& params, int N, in
 }
 
 template <typename AdvanceFn>
-void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& params, int N,
+void runStartupPhaseLJ(md::System& sys, int rank, const md::Params& params, int N,
                        int equilibrationSteps, double& localPE, AdvanceFn&& advanceOneStep,
                        bool& finalRescaleApplied, double& startupTempBeforeFinal,
                        double& startupTempAfterFinal) {
@@ -128,7 +128,7 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
         MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
         double lambda = 1.0;
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             const double tMeasured = md::computeTemperature(totalKE, N);
             if (tMeasured > md::constants::rescaleGuard) {
                 lambda = std::sqrt(params.targetTemperature / tMeasured);
@@ -155,13 +155,13 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
     MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-    if (ctx.isRoot()) {
+    if (rank == 0) {
         startupTempBeforeFinal = md::computeTemperature(totalKE, N);
     }
 
     if (params.finalRescaleBeforeProduction) {
         double lambda = 1.0;
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             if (startupTempBeforeFinal > md::constants::rescaleGuard) {
                 lambda = std::sqrt(params.targetTemperature / startupTempBeforeFinal);
             }
@@ -179,7 +179,7 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
         localKE = md::computeLocalKineticEnergy(sys, md::constants::mass);
         totalKE = 0.0;
         MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             startupTempAfterFinal = md::computeTemperature(totalKE, N);
         }
     } else {
@@ -187,19 +187,19 @@ void runStartupPhaseLJ(md::System& sys, md::MPIContext& ctx, const md::Params& p
     }
 }
 
-void printSimulationInfo(const md::Params& params, const md::MPIContext& ctx, bool isHO, int N,
+void printSimulationInfo(const md::Params& params, int rank, int nprocs, bool isHO, int N,
                          int nSteps, int nFrames, int totalStepsExecuted, int equilibrationSteps,
                          double L, int productionStartStep, int grStart, int grDiscardSteps,
                          int grSampleEvery, double startupTempBeforeFinal,
                          double startupTempAfterFinal) {
-    if (!ctx.isRoot() || params.timing) {
+    if (rank != 0 || params.timing) {
         return;
     }
 
     std::printf("=== MD Solver ===\n");
     std::printf("Mode: %s | Integrator: %s\n", params.mode.c_str(), params.integrator.c_str());
     std::printf("N = %d | P = %d | timesteps = %d | frames = %d (step 0..%d) | dt = %.3e\n", N,
-                ctx.size, nSteps, nFrames, nSteps, params.dt);
+                nprocs, nSteps, nFrames, nSteps, params.dt);
     if (!isHO) {
         std::printf(
             "LJ semantics: --equilibration-steps prepares the state, --production-steps "
@@ -247,12 +247,29 @@ int main(int argc, char* argv[]) {
     md::Params params;
     md::Params::parse(argc, argv, params);
 
-    md::MPIContext ctx;
-    ctx.init(params.N);
-    ctx.timingMode = params.timing;
+    int rank = 0;
+    int nprocs = 1;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
 
     const bool isHO = (params.mode == "ho");
     const int N = params.N;
+    int localN = 0;
+    int offset = 0;
+    md::computePartition(N, nprocs, rank, localN, offset);
+
+    std::vector<int> recvcounts(nprocs, 0);
+    std::vector<int> displs(nprocs, 0);
+    for (int r = 0; r < nprocs; ++r) {
+        int ln = 0;
+        int off = 0;
+        md::computePartition(N, nprocs, r, ln, off);
+        recvcounts[r] = 3 * ln;
+        displs[r] = 3 * off;
+    }
+    std::vector<double> posGlobal(3 * N, 0.0);
+    double commTime = 0.0;
+
     const int equilibrationSteps = isHO ? 0 : std::max(0, params.equilibrationSteps);
     const int nSteps = isHO ? params.steps : std::max(0, params.productionSteps);
     const int nFrames = nSteps + 1;
@@ -275,7 +292,7 @@ int main(int argc, char* argv[]) {
     std::vector<double> velAll(3 * N, 0.0);
     int fccError = 0;
 
-    if (ctx.isRoot()) {
+    if (rank == 0) {
         fccError = buildInitialConditions(params, isHO, N, L, posAll, velAll);
     }
 
@@ -292,20 +309,16 @@ int main(int argc, char* argv[]) {
     MPI_Bcast(velAll.data(), 3 * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     md::System sys;
-    sys.init(ctx.localN, ctx.offset, N, L);
+    sys.init(localN, offset, N, L);
 
-    for (int i = 0; i < ctx.localN; ++i) {
+    for (int i = 0; i < localN; ++i) {
         for (int d = 0; d < 3; ++d) {
-            sys.pos[3 * i + d] = posAll[3 * (ctx.offset + i) + d];
-            sys.vel[3 * i + d] = velAll[3 * (ctx.offset + i) + d];
+            sys.pos[3 * i + d] = posAll[3 * (offset + i) + d];
+            sys.vel[3 * i + d] = velAll[3 * (offset + i) + d];
         }
     }
 
-    ctx.posGlobal = posAll;
-    if (!isHO) {
-        sys.wrapPositions();
-        ctx.allgatherPositions(sys.pos);
-    }
+    posGlobal = posAll;
 
     const double omega = params.omega;
     const double mass = md::constants::mass;
@@ -326,45 +339,47 @@ int main(int argc, char* argv[]) {
     };
 
     double localPE = 0.0;
-    auto advanceOneStep = [&]() {
-        if (intType == IntegratorType::Euler) {
-            if (isHO) {
-                md::stepEuler(sys, ctx, params.dt, evalHO, localPE, isHO);
-            } else {
-                md::stepEuler(sys, ctx, params.dt, evalLJ, localPE, isHO);
-            }
-        } else if (intType == IntegratorType::RK4) {
-            if (isHO) {
-                md::stepRK4(sys, ctx, params.dt, evalHO, localPE, isHO);
-            } else {
-                md::stepRK4(sys, ctx, params.dt, evalLJ, localPE, isHO);
-            }
+    auto allgatherPositions = [&]() {
+        double t0 = params.timing ? MPI_Wtime() : 0.0;
+        MPI_Allgatherv(sys.pos.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(), recvcounts.data(),
+                       displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+        if (params.timing) {
+            commTime += (MPI_Wtime() - t0);
+        }
+    };
+    auto refreshForces = [&]() {
+        if (isHO) {
+            evalHO(sys, posGlobal, localPE);
         } else {
-            if (isHO) {
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalHO, localPE, isHO);
-            } else {
-                md::stepVelocityVerlet(sys, ctx, params.dt, evalLJ, localPE, isHO);
-            }
+            sys.wrapPositions();
+            allgatherPositions();
+            evalLJ(sys, posGlobal, localPE);
         }
     };
 
-    if (isHO) {
-        evalHO(sys, ctx.posGlobal, localPE);
-    } else {
-        evalLJ(sys, ctx.posGlobal, localPE);
-    }
+    auto advanceOneStep = [&]() {
+        if (intType == IntegratorType::Euler) {
+            md::stepEuler(sys, params.dt, refreshForces);
+        } else if (intType == IntegratorType::RK4) {
+            md::stepRK4(sys, params.dt, refreshForces);
+        } else {
+            md::stepVelocityVerlet(sys, params.dt, refreshForces);
+        }
+    };
+
+    refreshForces();
 
     bool finalRescaleApplied = false;
     double startupTempBeforeFinal = std::numeric_limits<double>::quiet_NaN();
     double startupTempAfterFinal = std::numeric_limits<double>::quiet_NaN();
 
     if (!isHO) {
-        runStartupPhaseLJ(sys, ctx, params, N, equilibrationSteps, localPE, advanceOneStep,
+        runStartupPhaseLJ(sys, rank, params, N, equilibrationSteps, localPE, advanceOneStep,
                           finalRescaleApplied, startupTempBeforeFinal, startupTempAfterFinal);
     }
 
     std::ofstream outFile;
-    if (params.output && ctx.isRoot()) {
+    if (params.output && rank == 0) {
         std::string fname;
         if (!params.outdir.empty()) {
             fname = params.outdir + "/" + params.mode + "_" + params.integrator + ".csv";
@@ -376,7 +391,7 @@ int main(int argc, char* argv[]) {
         outFile.open(fname);
         if (outFile.is_open()) {
             outFile << std::setprecision(15);
-            writeCSVMetadataLine(outFile, params, N, ctx.size, nSteps, nFrames,
+            writeCSVMetadataLine(outFile, params, N, nprocs, nSteps, nFrames,
                                  totalStepsExecuted, equilibrationSteps, finalRescaleApplied,
                                  productionStartStep, grDiscardSteps, grSampleEvery, grStart,
                                  startupTempBeforeFinal, startupTempAfterFinal, L, !isHO, !isHO);
@@ -388,11 +403,11 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    printSimulationInfo(params, ctx, isHO, N, nSteps, nFrames, totalStepsExecuted,
+    printSimulationInfo(params, rank, nprocs, isHO, N, nSteps, nFrames, totalStepsExecuted,
                         equilibrationSteps, L, productionStartStep, grStart, grDiscardSteps,
                         grSampleEvery, startupTempBeforeFinal, startupTempAfterFinal);
 
-    if (params.gr && !isHO && maxGRFrames <= 0 && ctx.isRoot()) {
+    if (params.gr && !isHO && maxGRFrames <= 0 && rank == 0) {
         if (grStart > nSteps) {
             std::fprintf(stderr,
                          "WARNING: g(r) requested but gr_start=%d is beyond final step=%d. "
@@ -414,7 +429,7 @@ int main(int argc, char* argv[]) {
 
     // Synchronise clocks before timed production loop (exclude startup/output setup).
     // Reset accumulated comm timer so reported communication matches this timing window.
-    ctx.commTime = 0.0;
+    commTime = 0.0;
     MPI_Barrier(MPI_COMM_WORLD);
     const double tStart = MPI_Wtime();
 
@@ -427,7 +442,7 @@ int main(int argc, char* argv[]) {
             MPI_Reduce(&localKE, &totalKE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
             MPI_Reduce(&localPE, &totalPE, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-            if (params.output && ctx.isRoot() && outFile.is_open()) {
+            if (params.output && rank == 0 && outFile.is_open()) {
                 const double totalE = totalKE + totalPE;
                 const double time = step * params.dt;
                 if (isHO) {
@@ -445,8 +460,7 @@ int main(int argc, char* argv[]) {
 
         // Sample RDF only on production frames that pass discard/stride filters.
         if (params.gr && !isHO && step >= grStart && ((step - grStart) % grSampleEvery == 0)) {
-            md::accumulateGR(ctx.posGlobal, N, L, ctx.offset, ctx.localN, grDr, grRMax,
-                             grHistLocal);
+            md::accumulateGR(posGlobal, N, L, offset, localN, grDr, grRMax, grHistLocal);
             ++grFrames;
         }
 
@@ -472,16 +486,16 @@ int main(int argc, char* argv[]) {
     double commMin = 0.0;
     if (params.timing) {
         double sumComm = 0.0;
-        MPI_Reduce(&ctx.commTime, &commMax, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-        MPI_Reduce(&ctx.commTime, &commMin, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
-        MPI_Reduce(&ctx.commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-        if (ctx.isRoot()) {
-            commAvg = sumComm / ctx.size;
+        MPI_Reduce(&commTime, &commMax, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&commTime, &commMin, 1, MPI_DOUBLE, MPI_MIN, 0, MPI_COMM_WORLD);
+        MPI_Reduce(&commTime, &sumComm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+        if (rank == 0) {
+            commAvg = sumComm / nprocs;
         }
     }
 
-    if (ctx.isRoot()) {
-        std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, ctx.size);
+    if (rank == 0) {
+        std::printf("Wall time: %.6f s (max across %d ranks)\n", maxTime, nprocs);
         if (params.timing) {
             const double commFracPct = (maxTime > 0.0) ? (100.0 * commMax / maxTime) : 0.0;
             std::printf("  Comm time (max): %.6f s (%.1f%%)\n", commMax, commFracPct);
@@ -495,7 +509,7 @@ int main(int argc, char* argv[]) {
         MPI_Reduce(grHistLocal.data(), grHistGlobal.data(), grNBins, MPI_DOUBLE, MPI_SUM, 0,
                    MPI_COMM_WORLD);
 
-        if (ctx.isRoot()) {
+        if (rank == 0) {
             // RDF is sampled per frame, then normalised after summing histograms across ranks.
             md::normaliseGR(grHistGlobal, grDr, N, L, grFrames);
 
@@ -503,7 +517,7 @@ int main(int argc, char* argv[]) {
                 params.outdir.empty() ? "out/gr.csv" : params.outdir + "/gr.csv";
             std::ofstream grFile(grFname);
             if (grFile.is_open()) {
-                writeCSVMetadataLine(grFile, params, N, ctx.size, nSteps, nFrames,
+                writeCSVMetadataLine(grFile, params, N, nprocs, nSteps, nFrames,
                                      totalStepsExecuted, equilibrationSteps, finalRescaleApplied,
                                      productionStartStep, grDiscardSteps, grSampleEvery, grStart,
                                      startupTempBeforeFinal, startupTempAfterFinal, L, true,
@@ -520,7 +534,7 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-    } else if (params.gr && !isHO && ctx.isRoot() && !params.timing) {
+    } else if (params.gr && !isHO && rank == 0 && !params.timing) {
         std::fprintf(stderr,
                      "WARNING: g(r) skipped because no frames were sampled. "
                      "Adjust --production-steps, --equilibration-steps, --gr-discard-steps, or "
