@@ -190,7 +190,7 @@ This section is tuned for drafting the Results section itself: what to say first
    - Keep the required 100-step production run (energy and temperature) separate from the 20,000-step RDF validation run.
    - Say explicitly that step 0 in the CSV is the production initial frame after startup/equilibration.
 3. Results 3 - scaling.
-   - State the actual timing configuration used for the current dataset: strong scaling uses 500 timed steps and size scaling uses 2000 timed steps, using 20 repetitions per point.
+   - State the actual timing configuration used for the current dataset: strong scaling uses 1000 timed steps and size scaling uses 1000 timed steps, using 20 repetitions per point.
    - That configuration comes from `scripts/run_all_data.sh`; it is not encoded in the scaling CSV headers.
 
 ### Report-Ready Quantitative Anchors
@@ -208,7 +208,7 @@ This section is tuned for drafting the Results section itself: what to say first
 - RDF anchors from the long Validation run: first peak r/sigma=1.090, g=2.838; first minimum r/sigma=1.550, g=0.623; second peak r/sigma=2.070, g=1.253; tail mean g(r>4sigma)=1.0024.
 
 #### Results 3 - scaling
-- Current timing dataset configuration from `scripts/run_all_data.sh`: strong scaling uses 500 steps, size scaling uses 2000 steps, 20 repetitions per point.
+- Current timing dataset configuration from `scripts/run_all_data.sh`: strong scaling uses 1000 steps, size scaling uses 1000 steps, 20 repetitions per point.
 - Strong scaling anchors: P=8 gives speedup 7.55 and efficiency 0.944; P=32 gives speedup 24.12 and efficiency 0.754. The fitted Amdahl parameter is f=0.0103.
 - Strong-scaling communication fraction rises from 1.1% at P=2 to 15.2% at P=32.
 - Size-scaling anchors: wall time scales approximately as N^1.85 and wall-minus-comm scales as N^1.93 over the fit domain [500, 864, 1372, 2048].
@@ -230,7 +230,7 @@ This section is tuned for drafting the Results section itself: what to say first
 ### Stronger Presentation Opportunities
 
 - Tighten the Lennard-Jones temperature wording to the exact measured maximum (`396.05 K`) if you want a more precise claim than `~400 K`.
-- Fix the scaling-methods/results wording if it still says `100 steps`: the current dataset comes from 500 strong-scaling steps and 2000 size-scaling steps.
+- Fix the scaling-methods/results wording if it still says `100 steps`: the current dataset comes from 1000 strong-scaling steps and 1000 size-scaling steps.
 - If you want stronger Results 3 uncertainty reporting, cite `out/scaling_strong_stats.csv` and `out/scaling_size_stats.csv` or add IQR/error bars; the headline plots use median timings.
 - Keep the RDF paragraph explicitly separate from the required 100-step run; otherwise the reader can incorrectly infer that g(r) came from the brief-mandated 1 ps trajectory.
 - If space is tight, Fig. 4 can be shortened to a supporting sentence because Fig. 3 already carries the formal-order argument.
@@ -565,4 +565,3 @@ The section below is the detailed verbatim analyzer output from `ai/analyse_resu
 - informational: This file summarizes existing outputs and does not regenerate simulation data.
 - informational: For raw artifact payloads and longer CSV context, also read `ai/results_bundle.md`.
 - informational: For executable build/test traces and source snapshots, also read `ai/audit_output.md`.
-
