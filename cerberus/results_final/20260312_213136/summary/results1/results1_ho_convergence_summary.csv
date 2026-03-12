@@ -1,0 +1,4 @@
+integrator,integrator_label,endpoint_position_slope,rms_phase_space_slope,endpoint_fit_dt_values,rms_fit_dt_values,excluded_coarse_dt_values
+euler,Forward Euler,1.0501683187829562,1.0321586375425549,0.0005;0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
+verlet,Velocity-Verlet,2.0006208677631636,2.000084095237239,0.0005;0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1
+rk4,RK4,3.9442304587115373,3.9961192997018524,0.001;0.005;0.01;0.05;0.1,0.0005;0.001;0.005;0.01;0.05;0.1,0.5;1

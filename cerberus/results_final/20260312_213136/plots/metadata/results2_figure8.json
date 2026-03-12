@@ -1,0 +1,173 @@
+{
+  "audience_tier": "main-report-core",
+  "caveats": [
+    "Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2.",
+    "Sigma = 3.4 \u00c5 is paper-supported; x-positions 3.7 \u00c5, 7.0 \u00c5, and 10.4 \u00c5 are paper-anchored figure annotations.",
+    "All Rahman g(r) values and all non-anchored x-values are approximate manual reads from the printed plot.",
+    "No error bars are shown; comparison is qualitative/semi-quantitative rather than exact."
+  ],
+  "figure_filename": "results2_figure8.png",
+  "figure_number": 8,
+  "fit_or_truncation": {
+    "present_work_truncation": "none",
+    "reference_guide": "shape-preserving cubic dashed guide through manual anchor points"
+  },
+  "generated_utc": "2026-03-12T21:20:50Z",
+  "intended_claim": "The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced.",
+  "key_parameters": {
+    "distance_units": {
+      "main_axis": "r/sigma",
+      "secondary_axis": "angstrom",
+      "sigma_angstrom": 3.4
+    },
+    "present_work_series": {
+      "L": 3.47786e-09,
+      "N": 864,
+      "P": 4,
+      "dt": 1e-14,
+      "equilibration_steps": 50,
+      "final_rescale_applied": true,
+      "final_rescale_before_production": true,
+      "gr_discard_steps": 200,
+      "gr_sample_every": 5,
+      "gr_start": 200,
+      "integrator": "verlet",
+      "mode": "lj",
+      "n_frames": 20001,
+      "n_steps": 20000,
+      "production_nve": true,
+      "production_start_step": 0,
+      "production_steps": 20000,
+      "rcut": 7.65e-10,
+      "startup_temperature_after_final_rescale": 94.4,
+      "startup_temperature_before_final_rescale": 94.3305,
+      "target_temperature": 94.4,
+      "timestamp": "2026-03-12T20:55:07Z",
+      "total_steps_executed": 20050
+    },
+    "reference_dataset": {
+      "model": "two-tier manual anchor set (paper_anchored + shape_anchor)",
+      "n_points_paper_anchored": 3,
+      "n_points_shape_anchor": 6,
+      "n_points_total": 9,
+      "paper_anchored_x_angstrom": [
+        3.7,
+        7.0,
+        10.4
+      ],
+      "paper_sigma_angstrom": 3.4,
+      "source_file": "out/summary/results2/rahman1964_fig2_manual_anchors.csv"
+    }
+  },
+  "key_quantitative_summary": {
+    "present_work_first_minimum_g": 0.621882,
+    "present_work_first_minimum_r_over_sigma": 1.55,
+    "present_work_first_peak_g": 2.84093,
+    "present_work_first_peak_r_over_sigma": 1.09,
+    "present_work_long_range_mean_g_for_r_over_sigma_ge_4": 1.002472490909091,
+    "present_work_second_peak_g": 1.25313,
+    "present_work_second_peak_r_over_sigma": 2.09,
+    "rahman_anchor_points": [
+      {
+        "g_value": 0.0,
+        "point_id": 1,
+        "point_type": "shape_anchor",
+        "r_angstrom": 3.0,
+        "r_over_sigma": 0.882353,
+        "source_note": "approximate onset / exclusion-region anchor from printed figure",
+        "uncertainty_note": "manual visual extraction from printed curve; approximate y and x"
+      },
+      {
+        "g_value": 2.7,
+        "point_id": 2,
+        "point_type": "paper_anchored",
+        "r_angstrom": 3.7,
+        "r_over_sigma": 1.088235,
+        "source_note": "x-position from Rahman Fig. 2 annotation; y estimated from plotted peak",
+        "uncertainty_note": "x anchored to annotated figure value; y manually estimated from printed curve"
+      },
+      {
+        "g_value": 1.35,
+        "point_id": 3,
+        "point_type": "shape_anchor",
+        "r_angstrom": 4.5,
+        "r_over_sigma": 1.323529,
+        "source_note": "approximate descending shoulder after first peak",
+        "uncertainty_note": "manual visual extraction from printed curve; approximate y and x"
+      },
+      {
+        "g_value": 0.62,
+        "point_id": 4,
+        "point_type": "shape_anchor",
+        "r_angstrom": 5.3,
+        "r_over_sigma": 1.558824,
+        "source_note": "approximate first minimum from printed figure",
+        "uncertainty_note": "manual visual extraction from printed curve; approximate y and x"
+      },
+      {
+        "g_value": 1.25,
+        "point_id": 5,
+        "point_type": "paper_anchored",
+        "r_angstrom": 7.0,
+        "r_over_sigma": 2.058824,
+        "source_note": "x-position from Rahman Fig. 2 annotation; y estimated from plotted second-shell peak",
+        "uncertainty_note": "x anchored to annotated figure value; y manually estimated from printed curve"
+      },
+      {
+        "g_value": 0.95,
+        "point_id": 6,
+        "point_type": "shape_anchor",
+        "r_angstrom": 8.0,
+        "r_over_sigma": 2.352941,
+        "source_note": "approximate post-second-peak descent",
+        "uncertainty_note": "manual visual extraction from printed curve; approximate y and x"
+      },
+      {
+        "g_value": 0.82,
+        "point_id": 7,
+        "point_type": "shape_anchor",
+        "r_angstrom": 8.8,
+        "r_over_sigma": 2.588235,
+        "source_note": "approximate second minimum / oscillatory trough",
+        "uncertainty_note": "manual visual extraction from printed curve; approximate y and x"
+      },
+      {
+        "g_value": 1.05,
+        "point_id": 8,
+        "point_type": "paper_anchored",
+        "r_angstrom": 10.4,
+        "r_over_sigma": 3.058824,
+        "source_note": "x-position from Rahman Fig. 2 annotation; y estimated from printed curve near third-shell region",
+        "uncertainty_note": "x anchored to annotated figure value; y manually estimated from printed curve"
+      },
+      {
+        "g_value": 1.0,
+        "point_id": 9,
+        "point_type": "shape_anchor",
+        "r_angstrom": 11.6,
+        "r_over_sigma": 3.411765,
+        "source_note": "approximate long-range return toward unity",
+        "uncertainty_note": "manual visual extraction from printed curve; approximate y and x"
+      }
+    ]
+  },
+  "missing_provenance": [],
+  "panels": [
+    "a)"
+  ],
+  "plot_file_png": "out/plots/results2_figure8.png",
+  "purpose": "Core brief-facing structural evidence: compare present-work Argon RDF against a transparent manually extracted Rahman (1964) Fig. 2 anchor guide.",
+  "section": "results2",
+  "simulation_run_identifiers": [
+    "lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260312_205309"
+  ],
+  "source_data_files": [
+    "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260312_205309/gr.csv",
+    "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260312_205309/lj_verlet.csv",
+    "out/summary/results2/rahman1964_fig2_manual_anchors.csv"
+  ],
+  "source_manifest_keys": [
+    "lj_rdf.verlet_long",
+    "lj_rdf.verlet_long_energy"
+  ]
+}

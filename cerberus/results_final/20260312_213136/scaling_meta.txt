@@ -1,0 +1,5 @@
+hostname: cerberus1
+cpu: Intel(R) Xeon(R) Silver 4314 CPU @ 2.40GHz
+compiler: g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+mpi: mpirun (Open MPI) 4.1.6
+date: 2026-03-12T21:20:41+00:00

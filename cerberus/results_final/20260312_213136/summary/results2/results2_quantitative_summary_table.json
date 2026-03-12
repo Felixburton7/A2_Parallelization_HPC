@@ -1,0 +1,65 @@
+{
+  "generated_utc": "2026-03-12T21:20:50Z",
+  "section_a_required_run": [
+    {
+      "Comment": "Bounded drift; near target state.",
+      "Integrator": "Velocity-Verlet",
+      "Max |\u0394E/E0| [%]": "0.082",
+      "Mean T [K]": "94.42",
+      "Mean |\u0394E/E0| [%]": "0.033",
+      "Production steps": 100,
+      "Std T [K]": "1.43"
+    },
+    {
+      "Comment": "Strong drift/heating over required run; not a stable NVE trajectory.",
+      "Integrator": "Euler",
+      "Max |\u0394E/E0| [%]": "127.587",
+      "Mean T [K]": "185.27",
+      "Mean |\u0394E/E0| [%]": "39.788",
+      "Production steps": 100,
+      "Std T [K]": "74.57"
+    }
+  ],
+  "section_b_rdf_comparison": [
+    {
+      "Comment": "Broadly correct location; present peak height is lower.",
+      "Feature": "First peak",
+      "Present work g(r)": "2.841",
+      "Present work r/sigma": "1.090",
+      "Rahman reference g(r)": "2.700",
+      "Rahman reference r/sigma": "1.088",
+      "Reference provenance": "paper_anchored x (y approx.)"
+    },
+    {
+      "Comment": "Minimum position and depth are broadly consistent.",
+      "Feature": "First minimum",
+      "Present work g(r)": "0.622",
+      "Present work r/sigma": "1.550",
+      "Rahman reference g(r)": "0.620",
+      "Rahman reference r/sigma": "1.559",
+      "Reference provenance": "shape_anchor (manual approx.)"
+    },
+    {
+      "Comment": "Second-shell position is consistent; present peak is lower.",
+      "Feature": "Second peak",
+      "Present work g(r)": "1.253",
+      "Present work r/sigma": "2.090",
+      "Rahman reference g(r)": "1.250",
+      "Rahman reference r/sigma": "2.059",
+      "Reference provenance": "paper_anchored x (y approx.)"
+    },
+    {
+      "Comment": "Long-range trend returns toward g(r)=1.",
+      "Feature": "Tail",
+      "Present work g(r)": "1.002",
+      "Present work r/sigma": ">=4.0 (mean)",
+      "Rahman reference g(r)": "1.000",
+      "Rahman reference r/sigma": "3.412",
+      "Reference provenance": "shape_anchor (manual approx.)"
+    }
+  ],
+  "sources": {
+    "energy_temperature_summary": "out/plots/metadata/results2_figure6.json + out/plots/metadata/results2_figure7.json",
+    "rdf_summary": "out/plots/metadata/results2_figure8.json"
+  }
+}

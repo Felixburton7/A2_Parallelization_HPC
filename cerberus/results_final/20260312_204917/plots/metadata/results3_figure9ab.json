@@ -1,0 +1,134 @@
+{
+  "audience_tier": "brief-facing",
+  "benchmark_protocol": {
+    "aggregation": "median paired (wall_s, comm_max_s) sample",
+    "benchmark_type": "size_scaling",
+    "design_rationale": "Use a longer timing window at small N so fixed overhead and timer granularity contaminate the size-scaling trend less strongly.",
+    "fixed_process_count_P": 16,
+    "integrator": "verlet",
+    "output_mode": "timing mode with file output disabled",
+    "protocol_source": "scripts/run_all_data.sh",
+    "repetitions_per_configuration": 11,
+    "reporting_convention": "Reported times are raw measured wall-clock seconds from the benchmark windows; no per-100-step normalization is applied.",
+    "seed": 42,
+    "separation_from_results2": "Results 3 timing benchmarks are separate from the Results 2 brief-mandated 100-step argon validation run.",
+    "timed_steps": 1000,
+    "timestep_s": 1e-14
+  },
+  "caveats": [
+    "Power-law exponents depend on the chosen fit domain (here N >= 500).",
+    "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
+    "O(...) expressions in the legend are empirical power-law fits over the tested range, not rigorous statements of asymptotic complexity."
+  ],
+  "figure_filename": "results3_figure9ab.png",
+  "figure_number": 9,
+  "fit_or_truncation": {
+    "excluded_from_power_law_fit": [
+      108,
+      256
+    ],
+    "fit_method": "linear regression in log10-space on selected N values",
+    "power_law_fit_domain": [
+      500,
+      864,
+      1372,
+      2048
+    ]
+  },
+  "generated_utc": "2026-03-12T20:27:39Z",
+  "intended_claim": "Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16.",
+  "key_parameters": {
+    "fit_mask_for_power_law": "N >= 500",
+    "fixed_process_count_P": 16,
+    "integrator": "verlet",
+    "particle_counts_N": [
+      108,
+      256,
+      500,
+      864,
+      1372,
+      2048
+    ],
+    "reference_curve": "~N^2 anchored to largest-N wall time",
+    "repetitions_per_configuration": 11,
+    "seed": 42,
+    "timed_steps": 1000,
+    "timestep_s": 1e-14
+  },
+  "key_quantitative_summary": {
+    "communication_fraction_percent_range": [
+      13.062408502492046,
+      50.830138623675346
+    ],
+    "remaining_runtime_power_law_exponent": 1.928924774986787,
+    "rows": [
+      {
+        "N": 108,
+        "P": 16,
+        "comm_max_s": 0.034871,
+        "communication_fraction_percent": 50.830138623675346,
+        "remaining_runtime_s": 0.033732,
+        "wall_s": 0.068603
+      },
+      {
+        "N": 256,
+        "P": 16,
+        "comm_max_s": 0.098397,
+        "communication_fraction_percent": 27.19268428165184,
+        "remaining_runtime_s": 0.26345399999999997,
+        "wall_s": 0.361851
+      },
+      {
+        "N": 500,
+        "P": 16,
+        "comm_max_s": 0.323552,
+        "communication_fraction_percent": 22.800043690124273,
+        "remaining_runtime_s": 1.0955329999999999,
+        "wall_s": 1.419085
+      },
+      {
+        "N": 864,
+        "P": 16,
+        "comm_max_s": 0.711096,
+        "communication_fraction_percent": 18.478915052123774,
+        "remaining_runtime_s": 3.137052,
+        "wall_s": 3.848148
+      },
+      {
+        "N": 1372,
+        "P": 16,
+        "comm_max_s": 1.511462,
+        "communication_fraction_percent": 16.60471919851515,
+        "remaining_runtime_s": 7.591143000000001,
+        "wall_s": 9.102605
+      },
+      {
+        "N": 2048,
+        "P": 16,
+        "comm_max_s": 2.507444,
+        "communication_fraction_percent": 13.062408502492046,
+        "remaining_runtime_s": 16.688434,
+        "wall_s": 19.195878
+      }
+    ],
+    "wall_time_power_law_exponent": 1.8480506797033234
+  },
+  "missing_provenance": [
+    "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_size.csv."
+  ],
+  "panels": [
+    "a)",
+    "b)"
+  ],
+  "plot_file_png": "out/plots/results3_figure9ab.png",
+  "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
+  "section": "results3",
+  "simulation_run_identifiers": [],
+  "source_data_files": [
+    "out/scaling_size.csv",
+    "out/scaling_meta.txt"
+  ],
+  "source_manifest_keys": [
+    "scaling.size"
+  ]
+}

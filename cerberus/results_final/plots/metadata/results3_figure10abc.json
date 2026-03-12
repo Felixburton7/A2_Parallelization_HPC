@@ -1,0 +1,150 @@
+{
+  "audience_tier": "brief-facing",
+  "benchmark_protocol": {
+    "aggregation": "median paired (wall_s, comm_max_s) sample",
+    "benchmark_type": "strong_scaling",
+    "design_rationale": "Use a longer timing window at fixed N=2048 to reduce measurement noise while keeping the single-rank baseline tractable.",
+    "fixed_particle_count_N": 2048,
+    "integrator": "verlet",
+    "output_mode": "timing mode with file output disabled",
+    "protocol_source": "scripts/run_all_data.sh",
+    "repetitions_per_configuration": 11,
+    "reporting_convention": "Reported times are raw measured wall-clock seconds from the benchmark windows; no per-100-step normalization is applied.",
+    "seed": 42,
+    "separation_from_results2": "Results 3 timing benchmarks are separate from the Results 2 brief-mandated 100-step argon validation run.",
+    "timed_steps": 1000,
+    "timestep_s": 1e-14
+  },
+  "caveats": [
+    "Strong-scaling data are aggregated medians, not raw replicate traces.",
+    "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
+    "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time."
+  ],
+  "figure_filename": "results3_figure10abc.png",
+  "figure_number": 10,
+  "fit_or_truncation": {
+    "amdahl_fit_domain": "P > 1",
+    "amdahl_fit_model": "S(P)=1/(f+(1-f)/P)",
+    "excluded_points_from_amdahl_fit": [
+      1
+    ],
+    "fit_method": "two-pass grid search in f (coarse 1e-3 then refined 1e-5 step over local window)"
+  },
+  "generated_utc": "2026-03-12T20:27:38Z",
+  "intended_claim": "The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime.",
+  "key_parameters": {
+    "fixed_particle_count_N": 2048,
+    "integrator": "verlet",
+    "plots_in_figure": [
+      "speedup",
+      "efficiency",
+      "critical_path_communication_vs_remaining_runtime"
+    ],
+    "process_counts_P": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      24,
+      32
+    ],
+    "repetitions_per_configuration": 11,
+    "seed": 42,
+    "timed_steps": 1000,
+    "timestep_s": 1e-14
+  },
+  "key_quantitative_summary": {
+    "amdahl_serial_fraction_f": 0.010273219213813274,
+    "efficiency_range": [
+      0.7537504939262162,
+      1.0
+    ],
+    "max_measured_speedup": 24.120015805638918,
+    "maximum_theoretical_speedup_from_fit": 97.34047129602855,
+    "rows": [
+      {
+        "N": 2048,
+        "P": 1,
+        "comm_max_s": 0.001237,
+        "efficiency": 1.0,
+        "remaining_runtime_s": 45.963046999999996,
+        "speedup": 1.0,
+        "wall_s": 45.964284
+      },
+      {
+        "N": 2048,
+        "P": 2,
+        "comm_max_s": 0.244091,
+        "efficiency": 0.9928322722149385,
+        "remaining_runtime_s": 22.903969999999997,
+        "speedup": 1.985664544429877,
+        "wall_s": 23.148061
+      },
+      {
+        "N": 2048,
+        "P": 4,
+        "comm_max_s": 0.660859,
+        "efficiency": 0.9574118096779397,
+        "remaining_runtime_s": 11.341365,
+        "speedup": 3.829647238711759,
+        "wall_s": 12.002224
+      },
+      {
+        "N": 2048,
+        "P": 8,
+        "comm_max_s": 0.554423,
+        "efficiency": 0.9435239807647431,
+        "remaining_runtime_s": 5.53502,
+        "speedup": 7.548191846117945,
+        "wall_s": 6.089443
+      },
+      {
+        "N": 2048,
+        "P": 16,
+        "comm_max_s": 0.367247,
+        "efficiency": 0.8939103540488575,
+        "remaining_runtime_s": 2.8464620000000003,
+        "speedup": 14.30256566478172,
+        "wall_s": 3.213709
+      },
+      {
+        "N": 2048,
+        "P": 24,
+        "comm_max_s": 0.318543,
+        "efficiency": 0.8092445993767496,
+        "remaining_runtime_s": 2.048082,
+        "speedup": 19.42187038504199,
+        "wall_s": 2.366625
+      },
+      {
+        "N": 2048,
+        "P": 32,
+        "comm_max_s": 0.289675,
+        "efficiency": 0.7537504939262162,
+        "remaining_runtime_s": 1.615974,
+        "speedup": 24.120015805638918,
+        "wall_s": 1.905649
+      }
+    ]
+  },
+  "missing_provenance": [
+    "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_strong.csv."
+  ],
+  "panels": [
+    "a)",
+    "b)",
+    "c)"
+  ],
+  "plot_file_png": "out/plots/results3_figure10abc.png",
+  "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
+  "section": "results3",
+  "simulation_run_identifiers": [],
+  "source_data_files": [
+    "out/scaling_strong.csv",
+    "out/scaling_meta.txt"
+  ],
+  "source_manifest_keys": [
+    "scaling.strong"
+  ]
+}
