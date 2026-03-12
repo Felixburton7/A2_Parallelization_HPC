@@ -15,6 +15,5 @@ make clean
 make
 make test
 bash scripts/run_results.sh
-bash ai/generate_all_context.sh
 make dist BCN=<your_candidate_number>
 ```

@@ -38,29 +38,17 @@ ls out/summary/results2
 ls out/scaling_strong.csv out/scaling_size.csv
 ```
 
-## 4. Generate Context Files
-
-```bash
-bash ai/generate_all_context.sh
-```
-
-Check that these exist afterward:
-
-```bash
-ls ai/audit_output.md ai/results.md ai/results_bundle.md ai/context_bundle.tar.gz
-```
-
-## 5. Sanity-Check The Report Facts
+## 4. Sanity-Check The Report Facts
 
 Before finalising the write-up, confirm these are still true for the generated dataset:
 
 - required LJ production run: `100` steps / `1 ps`
 - RDF: separate long Verlet run (`20000` production steps)
-- strong scaling: `500` timed steps
-- size scaling: `2000` timed steps
+- strong scaling: `1000` timed steps
+- size scaling: `1000` timed steps
 - timing data are medians over `20` repetitions per point
 
-## 6. Create Submission Tarball
+## 5. Create Submission Tarball
 
 ```bash
 make dist BCN=<your_candidate_number>
@@ -72,9 +60,9 @@ Inspect the tarball contents:
 tar -tzvf <your_candidate_number>_wa2.tar.gz | head -40
 ```
 
-## 7. Final Manual Check
+## 6. Final Manual Check
 
 - README matches what you actually ran.
 - The report text matches the generated data.
-- Scaling section does not claim `100` steps unless you regenerated the timings that way.
-- The tarball does not include `out/`, `ai/`, or binaries.
+- Scaling section and script settings agree on the configured timed-step counts.
+- The tarball does not include `out/` or binaries.

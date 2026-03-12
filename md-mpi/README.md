@@ -11,7 +11,6 @@ make clean
 make
 make test
 bash scripts/run_results.sh
-bash ai/generate_all_context.sh
 make dist BCN=<your_candidate_number>
 ```
 
@@ -22,7 +21,6 @@ Use the rest of this README for checks, file locations, and what each step is ex
 - `include/`, `src/`: solver implementation
 - `tests/`: unit tests
 - `scripts/`: data-generation, plotting, and validation scripts
-- `ai/`: generated context files for report-writing and audit support
 - `out/`: generated run data, plots, summaries, and metadata
 
 ## Dependencies
@@ -80,7 +78,7 @@ mpirun -np 4 ./md_solver --mode lj --integrator verlet --N 864 --dt 1e-14 \
 Timing-only scaling-style command:
 
 ```bash
-mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864 --steps 2000 --timing
+mpirun -np 16 ./md_solver --mode lj --integrator verlet --N 864 --steps 1000 --timing
 ```
 
 ## End-To-End Report Workflow
@@ -101,8 +99,8 @@ This runs:
 
 Important current scaling configuration:
 
-- strong scaling: `N = 2048`, `500` timed steps, `20` repetitions per process count
-- size scaling: `P = 16`, `2000` timed steps, `20` repetitions per particle count
+- strong scaling: `N = 2048`, `1000` timed steps, `20` repetitions per process count
+- size scaling: `P = 16`, `1000` timed steps, `20` repetitions per particle count
 
 These values come from `scripts/run_all_data.sh`. They are not encoded directly in the scaling CSV headers, so keep them consistent with the report text.
 
@@ -125,21 +123,6 @@ Useful files to check after a full run:
 - `out/scaling_strong.csv`
 - `out/scaling_size.csv`
 
-### 3. Generate AI Context Files
-
-```bash
-bash ai/generate_all_context.sh
-```
-
-This produces:
-
-- `ai/audit_output.md`
-- `ai/results.md`
-- `ai/results_bundle.md`
-- `ai/context_bundle.tar.gz`
-
-Use these for report drafting, audit tracing, and external LLM context. They are not part of the final submission tarball.
-
 ## Remote-Server Final Run
 
 If you want to rehearse the final submission workflow on a remote machine, use a clean copy of the repository and follow this order:
@@ -154,10 +137,8 @@ If you want to rehearse the final submission workflow on a remote machine, use a
    - `make test`
 3. Generate the full report dataset and plots.
    - `bash scripts/run_results.sh`
-4. Generate the context bundle used for drafting and checking.
-   - `bash ai/generate_all_context.sh`
-5. Inspect the key outputs listed above.
-6. Create the submission tarball.
+4. Inspect the key outputs listed above.
+5. Create the submission tarball.
    - `make dist BCN=<your_candidate_number>`
 
 If you only want a faster debug run before the full timing study, you can skip scaling:
@@ -190,7 +171,6 @@ The tarball includes:
 
 The tarball excludes generated artifacts such as:
 
-- `ai/`
 - `out/`
 - binaries
 - Python caches
@@ -205,7 +185,7 @@ The output tarball name is:
 
 - The required Lennard-Jones production run is the `100`-step / `1 ps` run.
 - The RDF figure comes from a separate long Verlet run (`20000` production steps), not from the required 100-step run.
-- The current scaling dataset is based on `500` strong-scaling steps and `2000` size-scaling steps, not `100` steps.
+- The current scaling dataset is based on `1000` strong-scaling steps and `1000` size-scaling steps.
 - The Rahman RDF comparison is qualitative / semi-quantitative because the reference guide is based on transparent manual anchor points rather than exact tabulated data.
 
 ## Final Checklist

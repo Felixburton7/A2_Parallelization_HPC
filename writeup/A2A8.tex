@@ -342,7 +342,7 @@ Table~\ref{tab:params} lists the run parameters.
 Figure~\ref{fig:ho_traj} shows position and velocity trajectories at
 $\Delta t=0.01$ over $T=10$.
 All three integrators track the exact solution closely at this resolution,
-but the insets at $t\approx T$ reveal that Forward Euler (orange, dashed)
+but near $t\approx T$ the traces reveal that Forward Euler (orange, dashed)
 has accumulated a visible phase lag; Velocity-Verlet (blue) and RK4
 (dark-blue dash-dot) remain indistinguishable from exact.
 Phase space (panel c) makes the qualitative difference stark: Euler traces
@@ -355,19 +355,17 @@ time traces alone.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.575\textwidth]{results1_figure1ab_trajectories_dt0p01.png}%
-  \hspace{0.005\textwidth}%
-  \includegraphics[width=0.405\textwidth]{results1_figure1c_phase_space_dt0p01.png}
+  \includegraphics[width=0.98\textwidth]{results1_figure1abc_combined_dt0p01.png}
   \caption{Harmonic oscillator trajectories and phase space at
     $\Delta t=0.01$, $\omega=1$, $T=10$.
-    \textbf{(a)} Position $x(t)$ and \textbf{(b)} velocity $v(t)$: insets
-    zoom to $t\in[9,10]$ where Euler (orange) exhibits visible phase lag;
+    \textbf{(a)} Position $x(t)$ and \textbf{(b)} velocity $v(t)$: Euler
+    (orange) exhibits visible phase lag near $t\in[9,10]$;
     Velocity-Verlet (blue) and RK4 (dark blue) overlay the exact solution
     (grey).
     \textbf{(c)} Phase-space portrait: Euler spirals outward (non-symplectic,
     Liouville-violating); Velocity-Verlet returns a near-closed orbit
     (symplectic); RK4 is indistinguishable from exact.
-    Inset: zoom near $t\approx T$ confirms the endpoint separation.}
+    Central zoom panel in \textbf{(c)} confirms the endpoint separation.}
   \label{fig:ho_traj}
 \end{figure*}
 
@@ -571,8 +569,11 @@ included as additional structural validation.
 \subsection{Parallel Scaling Analysis}
 \label{sec:scaling}
 
-All scaling runs use Velocity-Verlet, 100 steps, fixed seed,
+Results~3 is a separate timing benchmark, not a repeat of the brief-mandated 100-step argon validation run from Results~2.
+All scaling runs use Velocity-Verlet, fixed seed 42,
 $\Delta t=\SI{e-14}{s}$, and no file output.
+Strong scaling uses 500 timed steps at fixed $N=2048$, whereas size scaling uses 2000 timed steps at fixed $P=16$; each configuration is repeated 20 times and the median paired wall/communication sample is retained to reduce measurement noise and fixed-overhead contamination.
+All times reported in this section are raw measured seconds from those benchmark windows, not values normalised to 100 steps.
 Wall time is the maximum across ranks (\texttt{MPI\_Reduce(MPI\_MAX)});
 communication time is the maximum \texttt{MPI\_Allgatherv} wall time
 accumulated per rank.
@@ -581,7 +582,7 @@ accumulated per rank.
 
 \begin{table}[ht]
   \centering
-  \caption{Strong scaling results ($N=2048$, 100 steps).
+  \caption{Strong scaling results ($N=2048$, 500 timed steps; medians of 20 no-output repetitions).
     Wall and communication times in seconds.}
   \label{tab:strong}
   \small\setlength{\tabcolsep}{3pt}
@@ -624,8 +625,8 @@ as expected.
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.96\textwidth]{results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png}
-  \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 100 steps,
-    dual-socket Intel Xeon Silver 4314 node).
+  \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 500 timed steps;
+    medians of 20 no-output repetitions, dual-socket Intel Xeon Silver 4314 node).
     \textbf{(a)} Speedup $S(P)$: ideal line (grey dashed) and Amdahl fit
     (Eq.~\ref{eq:amdahl}, $f=0.010$, orange). Near-ideal to $P=8$; $S(32)=24.1\times$.
     \textbf{(b)} Parallel efficiency $E(P)$: above 94\% for $P\le 8$, dropping to 75\%
@@ -656,7 +657,8 @@ confirming that the $\mathcal{O}(N^2)$ force loop increasingly dominates.
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.96\textwidth]{results3_figure9ab_problem_size_scaling_fixed_p16.png}
-  \caption{Problem-size scaling ($P=16$ fixed, Velocity-Verlet, 100 steps).
+  \caption{Problem-size scaling ($P=16$ fixed, Velocity-Verlet, 2000 timed steps;
+    medians of 20 no-output repetitions).
     \textbf{(a)} Log--log wall time (circles), compute-only (triangles), and
     communication (squares) vs.\ $N$, with $N^2$ reference (dash-dot).
     Empirical fits over $N\ge500$: $T_{\rm wall}\propto N^{1.85}$,

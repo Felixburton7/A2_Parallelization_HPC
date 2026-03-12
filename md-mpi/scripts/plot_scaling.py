@@ -38,6 +38,15 @@ PLOT_DIR = "out/plots"
 PLOT_META_DIR = "out/plots/metadata"
 FIG9_AB_PNG = "results3_figure9ab_problem_size_scaling_fixed_p16.png"
 FIG10_ABC_PNG = "results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png"
+RESULTS3_INTEGRATOR = "verlet"
+RESULTS3_TIMESTEP_S = 1.0e-14
+RESULTS3_SEED = 42
+RESULTS3_REPETITIONS = 20
+RESULTS3_STRONG_FIXED_N = 2048
+RESULTS3_STRONG_TIMED_STEPS = 1000
+RESULTS3_SIZE_FIXED_P = 16
+RESULTS3_SIZE_TIMED_STEPS = 1000
+RESULTS3_PROTOCOL_SOURCE = "scripts/run_all_data.sh"
 STALE_RESULTS3_PATTERNS = [
     # Legacy pre-results3 naming pattern; no longer part of report outputs.
     f"{PLOT_DIR}/scaling_*.png",
@@ -66,6 +75,49 @@ def unique_preserve_order(items):
         seen.add(item)
         out.append(item)
     return out
+
+
+def results3_protocol(kind):
+    protocol = {
+        "integrator": RESULTS3_INTEGRATOR,
+        "timestep_s": RESULTS3_TIMESTEP_S,
+        "seed": RESULTS3_SEED,
+        "repetitions_per_configuration": RESULTS3_REPETITIONS,
+        "output_mode": "timing mode with file output disabled",
+        "aggregation": "median paired (wall_s, comm_max_s) sample",
+        "protocol_source": RESULTS3_PROTOCOL_SOURCE,
+        "separation_from_results2": (
+            "Results 3 timing benchmarks are separate from the Results 2 brief-mandated 100-step argon validation run."
+        ),
+        "reporting_convention": (
+            "Reported times are raw measured wall-clock seconds from the benchmark windows; no per-100-step normalization is applied."
+        ),
+    }
+    if kind == "strong":
+        protocol.update(
+            {
+                "benchmark_type": "strong_scaling",
+                "fixed_particle_count_N": RESULTS3_STRONG_FIXED_N,
+                "timed_steps": RESULTS3_STRONG_TIMED_STEPS,
+                "design_rationale": (
+                    "Use the same 1000-step timing window across scaling modes for direct comparability."
+                ),
+            }
+        )
+    elif kind == "size":
+        protocol.update(
+            {
+                "benchmark_type": "size_scaling",
+                "fixed_process_count_P": RESULTS3_SIZE_FIXED_P,
+                "timed_steps": RESULTS3_SIZE_TIMED_STEPS,
+                "design_rationale": (
+                    "Use the same 1000-step timing window across scaling modes for direct comparability."
+                ),
+            }
+        )
+    else:
+        raise ValueError(f"Unknown Results 3 protocol kind: {kind}")
+    return protocol
 
 
 def write_plot_metadata(plot_png_name, section, extra):
@@ -97,6 +149,11 @@ def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05):
         fontweight="bold",
         color="black",
     )
+
+
+def set_panel_title(ax, title: str):
+    # Keep panel titles aligned with panel labels and slightly lifted from the plot area.
+    ax.set_title(title, loc="left", y=1.05, pad=3)
 
 
 def remove_stale_results3_artifacts():
@@ -202,7 +259,7 @@ def plot_strong_scaling():
         ax1.plot(P_fit, S_fit, "-", color=COLOR_EULER, linewidth=1.6, label=f"Amdahl fit (f={f_fit:.4f})")
     ax1.set_xlabel("Number of Processes P")
     ax1.set_ylabel("Speedup S(P)")
-    ax1.set_title("Strong Scaling: Speedup")
+    set_panel_title(ax1, "Strong Scaling: Speedup")
     add_panel_label(ax1, "a")
     ax1.legend(loc="best")
     apply_major_grid(ax1)
@@ -214,7 +271,7 @@ def plot_strong_scaling():
     ax2.axhline(y=1.0, color=COLOR_REFERENCE, linestyle="--", alpha=0.9, linewidth=1.3, label="Ideal (E=1)")
     ax2.set_xlabel("Number of Processes P")
     ax2.set_ylabel("Efficiency E(P) = S(P)/P")
-    ax2.set_title("Strong Scaling: Efficiency")
+    set_panel_title(ax2, "Strong Scaling: Efficiency")
     add_panel_label(ax2, "b")
     ax2.set_ylim(0, 1.15)
     ax2.legend(loc="best")
@@ -247,7 +304,7 @@ def plot_strong_scaling():
     ax3.set_xticklabels([str(p) for p in P])
     ax3.set_xlabel("Number of Processes P")
     ax3.set_ylabel("Wall Time [s]")
-    ax3.set_title("Critical-Path Communication vs Remaining Runtime")
+    set_panel_title(ax3, "Critical-Path Communication vs Remaining Runtime")
     add_panel_label(ax3, "c")
     ax3.legend(loc="best")
     apply_major_grid(ax3, axis="y")
@@ -264,7 +321,6 @@ def plot_strong_scaling():
 
     missing_provenance = [
         "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_strong.csv.",
-        "Timing step count and replication count are configured in scripts/run_all_data.sh but not encoded in scaling_strong.csv.",
     ]
     if used_fallback:
         missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
@@ -305,10 +361,15 @@ def plot_strong_scaling():
             "source_data_files": unique_preserve_order(source_data_files),
             "source_manifest_keys": ["scaling.strong"],
             "simulation_run_identifiers": [],
+            "benchmark_protocol": results3_protocol("strong"),
             "key_parameters": {
-                "integrator": "verlet",
+                "integrator": RESULTS3_INTEGRATOR,
                 "fixed_particle_count_N": int(N_values[0]) if len(data) else None,
                 "process_counts_P": [int(p) for p in P.tolist()],
+                "timed_steps": RESULTS3_STRONG_TIMED_STEPS,
+                "repetitions_per_configuration": RESULTS3_REPETITIONS,
+                "seed": RESULTS3_SEED,
+                "timestep_s": RESULTS3_TIMESTEP_S,
                 "plots_in_figure": [
                     "speedup",
                     "efficiency",
@@ -401,7 +462,7 @@ def plot_size_scaling():
     ax1.loglog(N_ref, t_ref, "--", color=COLOR_REFERENCE, alpha=0.9, linewidth=1.5, label=r"$\sim N^2$ reference")
     ax1.set_xlabel("Number of Particles N")
     ax1.set_ylabel("Time [s]")
-    ax1.set_title("Size Scaling (P=16)")
+    set_panel_title(ax1, "Size Scaling (P=16)")
     add_panel_label(ax1, "a")
     ax1.legend(loc="best")
     apply_major_grid(ax1)
@@ -410,7 +471,7 @@ def plot_size_scaling():
     ax2.plot(N, comm_frac, "o-", color=COLOR_EULER, linewidth=2.0, markersize=6)
     ax2.set_xlabel("Number of Particles N")
     ax2.set_ylabel("Communication Fraction [%]")
-    ax2.set_title("Communication Overhead vs Problem Size")
+    set_panel_title(ax2, "Communication Overhead vs Problem Size")
     add_panel_label(ax2, "b")
     ax2.set_ylim(0, 100)
     apply_major_grid(ax2)
@@ -429,7 +490,6 @@ def plot_size_scaling():
 
     missing_provenance = [
         "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_size.csv.",
-        "Timing step count and replication count are configured in scripts/run_all_data.sh but not encoded in scaling_size.csv.",
     ]
     if used_fallback:
         missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
@@ -463,10 +523,15 @@ def plot_size_scaling():
             "source_data_files": unique_preserve_order(source_data_files),
             "source_manifest_keys": ["scaling.size"],
             "simulation_run_identifiers": [],
+            "benchmark_protocol": results3_protocol("size"),
             "key_parameters": {
-                "integrator": "verlet",
+                "integrator": RESULTS3_INTEGRATOR,
                 "fixed_process_count_P": int(data["P"][0]) if len(data) else None,
                 "particle_counts_N": [int(n) for n in N.tolist()],
+                "timed_steps": RESULTS3_SIZE_TIMED_STEPS,
+                "repetitions_per_configuration": RESULTS3_REPETITIONS,
+                "seed": RESULTS3_SEED,
+                "timestep_s": RESULTS3_TIMESTEP_S,
                 "fit_mask_for_power_law": "N >= 500",
                 "reference_curve": "~N^2 anchored to largest-N wall time",
             },

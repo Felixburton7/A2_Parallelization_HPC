@@ -3,8 +3,9 @@
 plot_ho.py — Results 1 harmonic oscillator plotting package.
 
 Main figures (brief-facing):
-  Figure 1(a,b): out/plots/results1_figure1ab_trajectories_dt0p01.png
-  Figure 1(c):   out/plots/results1_figure1c_phase_space_dt0p01.png
+  Figure 1(a-c): out/plots/results1_figure1abc_combined_dt0p01.png
+  Legacy Figure 1(a,b): out/plots/results1_figure1ab_trajectories_dt0p01.png
+  Legacy Figure 1(c):   out/plots/results1_figure1c_phase_space_dt0p01.png
   Figure 2(a-f): out/plots/results1_figure2_small_vs_large_dt.png
   Figure 3(a,b): out/plots/results1_figure3_convergence_combined.png
   Figure 4(a):   out/plots/results1_figure4_energy_diagnostic.png
@@ -74,11 +75,13 @@ PLOT_META_DIR = "out/plots/metadata"
 SUMMARY_DIR = "out/summary"
 SUMMARY_RESULTS1_DIR = "out/summary/results1"
 
+FIG1_COMBINED_PNG = "results1_figure1abc_combined_dt0p01.png"
 FIG1_PNG = "results1_figure1ab_trajectories_dt0p01.png"
 FIG2_PNG = "results1_figure1c_phase_space_dt0p01.png"
 FIG3_PNG = "results1_figure2_small_vs_large_dt.png"
 FIG4_PNG = "results1_figure3_convergence_combined.png"
 FIG5_PNG = "results1_figure4_energy_diagnostic.png"
+RESULTS1_EXACT_COLOR = "#111111"
 
 R1_SMALL_LARGE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.csv"
 R1_SMALL_LARGE_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.md"
@@ -477,6 +480,7 @@ def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]
     t_exact = np.linspace(0.0, T_FINAL, 2000, dtype=float)
     x_exact, v_exact = exact_solution(t_exact)
     exact_style = INTEGRATOR_STYLE["exact"]
+    exact_color = RESULTS1_EXACT_COLOR
     zoom_t0, zoom_t1 = 9.0, 10.0
     plot_series = {
         "x": [("exact", t_exact, x_exact)],
@@ -525,20 +529,20 @@ def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]
     axes[0].plot(
         t_exact,
         x_exact,
-        color=exact_style["color"],
+        color=exact_color,
         linestyle=exact_style["linestyle"],
-        linewidth=2.0,
-        alpha=0.90,
+        linewidth=2.15,
+        alpha=0.98,
         zorder=6,
         label="Exact",
     )
     axes[1].plot(
         t_exact,
         v_exact,
-        color=exact_style["color"],
+        color=exact_color,
         linestyle=exact_style["linestyle"],
-        linewidth=2.0,
-        alpha=0.90,
+        linewidth=2.15,
+        alpha=0.98,
         zorder=6,
         label="Exact",
     )
@@ -560,12 +564,20 @@ def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]
             if integ == "exact":
                 st = exact_style
                 lw = 1.8
-                alpha = 0.88
+                alpha = 0.98
             else:
                 st = INTEGRATOR_STYLE[str(integ)]
                 lw = 2.1 if integ == "euler" else 1.8
                 alpha = 0.96 if integ == "euler" else 0.92
-            axins.plot(t, y, color=st["color"], linestyle=st["linestyle"], linewidth=lw, alpha=alpha, zorder=3)
+            axins.plot(
+                t,
+                y,
+                color=exact_color if integ == "exact" else st["color"],
+                linestyle=st["linestyle"],
+                linewidth=lw,
+                alpha=alpha,
+                zorder=3,
+            )
 
         yz0, yz1 = _window_yrange(series, zoom_t0, zoom_t1, pad_frac=0.22)
         axins.set_xlim(zoom_t0, zoom_t1)
@@ -615,6 +627,7 @@ def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]
 def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> None:
     fig, ax = plt.subplots(figsize=(6.7, 6.5), constrained_layout=False)
     exact_style = INTEGRATOR_STYLE["exact"]
+    exact_color = RESULTS1_EXACT_COLOR
     series = {}
 
     for integ in INTEGRATORS:
@@ -640,9 +653,9 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
     ax.plot(
         x_exact,
         v_exact,
-        color=exact_style["color"],
+        color=exact_color,
         linestyle=exact_style["linestyle"],
-        linewidth=2.4,
+        linewidth=2.2,
         alpha=0.98,
         zorder=6,
         label="Exact",
@@ -699,8 +712,8 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
             zv_all.extend(vloc.tolist())
     tz = np.linspace(zoom_t_start, T_FINAL, 400, dtype=float)
     xz, vz = exact_solution(tz)
-    axins.plot(xz, vz, color=exact_style["color"], linestyle=":", linewidth=1.6, alpha=0.85, zorder=2)
-    axins.plot(xz[-1], vz[-1], marker="D", markersize=4.0, color=exact_style["color"], zorder=4)
+    axins.plot(xz, vz, color=exact_color, linestyle=":", linewidth=1.7, alpha=0.98, zorder=2)
+    axins.plot(xz[-1], vz[-1], marker="D", markersize=4.0, color=exact_color, zorder=4)
     zx_all.extend(xz.tolist())
     zv_all.extend(vz.tolist())
     if zx_all and zv_all:
@@ -730,6 +743,269 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
     plt.close(fig)
 
 
+def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -> None:
+    fig = plt.figure(figsize=(14.2, 7.0), constrained_layout=False)
+    gs = fig.add_gridspec(2, 2, width_ratios=(1.65, 0.95), height_ratios=(1.0, 1.0))
+    ax_x = fig.add_subplot(gs[0, 0])
+    ax_v = fig.add_subplot(gs[1, 0], sharex=ax_x)
+    gs_right = gs[:, 1].subgridspec(2, 1, height_ratios=(0.84, 0.16), hspace=0.12)
+    ax_phase = fig.add_subplot(gs_right[0, 0])
+    ax_phase_zoom = fig.add_subplot(gs_right[1, 0])
+
+    t_exact = np.linspace(0.0, T_FINAL, 2000, dtype=float)
+    x_exact, v_exact = exact_solution(t_exact)
+    phase_x_exact, phase_v_exact = exact_phase_curve(num_points=2200, t_final=T_FINAL)
+    exact_style = INTEGRATOR_STYLE["exact"]
+    exact_color = "#8f8f8f"
+    exact_lw_main = 1.45
+    exact_alpha_main = 0.72
+    phase_zoom_t_start = 8.8
+    marker_map = {"euler": "o", "verlet": "s", "rk4": "^"}
+
+    plot_series = {
+        "x": [("exact", t_exact, x_exact)],
+        "v": [("exact", t_exact, v_exact)],
+    }
+    phase_series: Dict[str, Dict[str, object]] = {}
+
+    # Draw exact trajectories first and lightly so numerical methods remain visible on top.
+    ax_x.plot(
+        t_exact,
+        x_exact,
+        color=exact_color,
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_lw_main,
+        alpha=exact_alpha_main,
+        zorder=1,
+    )
+    ax_v.plot(
+        t_exact,
+        v_exact,
+        color=exact_color,
+        linestyle=exact_style["linestyle"],
+        linewidth=exact_lw_main,
+        alpha=exact_alpha_main,
+        zorder=1,
+    )
+    ax_phase.plot(
+        phase_x_exact,
+        phase_v_exact,
+        color=exact_color,
+        linestyle=exact_style["linestyle"],
+        linewidth=1.6,
+        alpha=exact_alpha_main,
+        zorder=1,
+    )
+
+    for integ in INTEGRATORS:
+        ds = datasets.get(integ, {}).get(TRAJ_DT)
+        if ds is None:
+            print(f"Warning: {integ} dt={TRAJ_DT:g} missing for combined Figure 1.")
+            continue
+        data = ds["data"]
+        phase_series[integ] = data
+        style = INTEGRATOR_STYLE[integ]
+        lw = float(style["linewidth"])
+        alpha = 0.95
+        if integ == "euler":
+            lw = 2.3
+            alpha = 0.98
+        elif integ in ("verlet", "rk4"):
+            lw = 2.0
+            alpha = 0.93
+
+        ax_x.plot(
+            data["time"],
+            data["x"],
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=lw,
+            alpha=alpha,
+            zorder=3,
+        )
+        ax_v.plot(
+            data["time"],
+            data["v"],
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=lw,
+            alpha=alpha,
+            zorder=3,
+        )
+        ax_phase.plot(
+            data["x"],
+            data["v"],
+            color=style["color"],
+            linestyle=style["linestyle"],
+            linewidth=style["linewidth"],
+            alpha=0.96,
+            zorder=3,
+        )
+
+        t_num = np.asarray(data["time"], dtype=float)
+        plot_series["x"].append((integ, t_num, np.asarray(data["x"], dtype=float)))
+        plot_series["v"].append((integ, t_num, np.asarray(data["v"], dtype=float)))
+
+    ax_v.set_xlim(0.0, T_FINAL)
+
+    zx_all: List[float] = []
+    zv_all: List[float] = []
+    for integ in INTEGRATORS:
+        data = phase_series.get(integ)
+        if data is None:
+            continue
+        style = INTEGRATOR_STYLE[integ]
+        tt = np.asarray(data["time"], dtype=float)
+        xx = np.asarray(data["x"], dtype=float)
+        vv = np.asarray(data["v"], dtype=float)
+        mask = tt >= phase_zoom_t_start
+        if np.any(mask):
+            xloc = xx[mask]
+            vloc = vv[mask]
+            ax_phase_zoom.plot(
+                xloc,
+                vloc,
+                color=style["color"],
+                linestyle=style["linestyle"],
+                linewidth=style["linewidth"],
+                alpha=0.98,
+                zorder=3,
+            )
+            ax_phase_zoom.plot(
+                xloc[-1],
+                vloc[-1],
+                marker=marker_map.get(integ, "o"),
+                markersize=4.0,
+                color=style["color"],
+                zorder=4,
+            )
+            zx_all.extend(xloc.tolist())
+            zv_all.extend(vloc.tolist())
+    tz = np.linspace(phase_zoom_t_start, T_FINAL, 400, dtype=float)
+    xz, vz = exact_solution(tz)
+    ax_phase_zoom.plot(xz, vz, color=exact_color, linestyle=":", linewidth=1.45, alpha=0.80, zorder=2)
+    ax_phase_zoom.plot(xz[-1], vz[-1], marker="D", markersize=4.0, color=exact_color, zorder=4)
+    zx_all.extend(xz.tolist())
+    zv_all.extend(vz.tolist())
+    zoom_xlim = None
+    zoom_ylim = None
+    if zx_all and zv_all:
+        xmin, xmax = min(zx_all), max(zx_all)
+        ymin, ymax = min(zv_all), max(zv_all)
+        xpad = max(0.01, 0.22 * (xmax - xmin))
+        ypad = max(0.01, 0.22 * (ymax - ymin))
+        x0, x1 = xmin - xpad, xmax + xpad
+        y0, y1 = ymin - ypad, ymax + ypad
+        # Keep the source zoom window square so the highlighted box and inset match.
+        side = max(x1 - x0, y1 - y0)
+        cx = 0.5 * (x0 + x1)
+        cy = 0.5 * (y0 + y1)
+        zoom_xlim = (cx - 0.5 * side, cx + 0.5 * side)
+        zoom_ylim = (cy - 0.5 * side, cy + 0.5 * side)
+        ax_phase_zoom.set_xlim(*zoom_xlim)
+        ax_phase_zoom.set_ylim(*zoom_ylim)
+        ax_phase_zoom.set_aspect("equal", "box")
+
+    ax_phase_zoom.set_title(r"Zoom near $t\approx T$", fontsize=7.6, pad=1.8)
+    ax_phase_zoom.set_xlabel("")
+    ax_phase_zoom.set_ylabel("")
+    ax_phase_zoom.tick_params(
+        axis="both",
+        which="both",
+        bottom=False,
+        top=False,
+        left=False,
+        right=False,
+        labelbottom=False,
+        labelleft=False,
+    )
+    apply_major_grid(ax_phase_zoom)
+    disable_offset_text(ax_phase_zoom)
+
+    ax_x.set_title("Position x(t)", loc="left")
+    ax_v.set_title("Velocity v(t)", loc="left")
+    ax_phase.set_title("Phase-space orbit", loc="left")
+    add_panel_label(ax_x, "a")
+    add_panel_label(ax_v, "b")
+    add_panel_label(ax_phase, "c", x=-0.11, y=1.02)
+
+    ax_x.set_ylabel("Position x [reduced units]")
+    ax_v.set_ylabel("Velocity v [reduced units]")
+    ax_v.set_xlabel(r"Time $[1/\omega]$")
+    ax_phase.set_xlabel("Position x [reduced units]")
+    ax_phase.set_ylabel("Velocity v [reduced units]")
+    ax_phase.set_aspect("equal", "box")
+    # Keep panel c tightly framed and centered, matching the standalone phase-space style.
+    px0, px1 = ax_phase.get_xlim()
+    py0, py1 = ax_phase.get_ylim()
+    phase_abs_max = max(abs(px0), abs(px1), abs(py0), abs(py1))
+    if phase_abs_max > 0:
+        phase_lim = 1.14 * phase_abs_max
+        ax_phase.set_xlim(-phase_lim, phase_lim)
+        ax_phase.set_ylim(-phase_lim, phase_lim)
+
+    for ax in (ax_x, ax_v, ax_phase, ax_phase_zoom):
+        apply_major_grid(ax)
+        disable_offset_text(ax)
+    for ax in (ax_x, ax_v):
+        ymin, ymax = ax.get_ylim()
+        span = ymax - ymin
+        if span > 0:
+            ax.set_ylim(ymin, ymax + 0.10 * span)
+
+    plt.setp(ax_x.get_xticklabels(), visible=False)
+
+    legend_handles = [
+        Line2D([0], [0], color=exact_color, linestyle=exact_style["linestyle"], linewidth=exact_lw_main, label="Exact"),
+        Line2D([0], [0], color=INTEGRATOR_STYLE["euler"]["color"], linestyle=INTEGRATOR_STYLE["euler"]["linestyle"], linewidth=2.3, label=INTEGRATOR_LABELS["euler"]),
+        Line2D([0], [0], color=INTEGRATOR_STYLE["verlet"]["color"], linestyle=INTEGRATOR_STYLE["verlet"]["linestyle"], linewidth=2.0, label=INTEGRATOR_LABELS["verlet"]),
+        Line2D([0], [0], color=INTEGRATOR_STYLE["rk4"]["color"], linestyle=INTEGRATOR_STYLE["rk4"]["linestyle"], linewidth=2.0, label=INTEGRATOR_LABELS["rk4"]),
+    ]
+    fig.legend(
+        legend_handles,
+        [h.get_label() for h in legend_handles],
+        loc="upper center",
+        ncol=4,
+        frameon=False,
+        bbox_to_anchor=(0.5, 0.985),
+    )
+    fig.subplots_adjust(top=0.88, bottom=0.12, left=0.07, right=0.985, hspace=0.24, wspace=0.16)
+
+    # Place the zoom panel below c (toward the lower-right) and make it larger.
+    phase_pos = ax_phase.get_position()
+    zoom_side = min(phase_pos.height * 0.38, phase_pos.width * 0.38)
+    inset_pad_x = 0.014 * phase_pos.width
+    below_gap = 0.070 * phase_pos.height
+    new_x0 = phase_pos.x1 - inset_pad_x - zoom_side
+    new_y0 = max(0.035, phase_pos.y0 - zoom_side - below_gap)
+    ax_phase_zoom.set_position([new_x0, new_y0, zoom_side, zoom_side])
+    ax_phase_zoom.set_facecolor((1.0, 1.0, 1.0, 0.94))
+    for spine in ax_phase_zoom.spines.values():
+        spine.set_linewidth(0.9)
+        spine.set_edgecolor("#4d4d4d")
+
+    save_plot_pair(
+        fig,
+        FIG1_COMBINED_PNG,
+        {
+            "kind": "main_results1_figure",
+            "figure_number": 1,
+            "claim": "Shows position, velocity, and phase-space diagnostics at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact in one combined figure.",
+            "panels": ["a) x(t)", "b) v(t)", "c) v_vs_x"],
+            "insets": {
+                "phase_space": {
+                    "used": True,
+                    "placement": "below-panel-c-lower-right",
+                    "time_window": [phase_zoom_t_start, T_FINAL],
+                },
+            },
+            "shared_legend": True,
+            "combined_from": [FIG1_PNG, FIG2_PNG],
+        },
+    )
+    plt.close(fig)
+
+
 def _plot_small_large_series(
     ax,
     x_data,
@@ -746,9 +1022,9 @@ def _plot_small_large_series(
         exact_x,
         exact_y,
         color=exact_style["color"] if exact_color is None else exact_color,
-        linestyle=":",
-        linewidth=max(2.0, float(exact_style["linewidth"])),
-        alpha=0.95,
+        linestyle="-",
+        linewidth=max(2.35, float(exact_style["linewidth"])),
+        alpha=1.0,
     )
     if include_coarse:
         ax.plot(
@@ -769,7 +1045,7 @@ def plot_figure3_small_vs_large(
     fig, axes = plt.subplots(len(INTEGRATORS), 2, figsize=(12.8, 11.1), constrained_layout=False)
     t_exact = np.linspace(0.0, T_FINAL, 2400, dtype=float)
     x_exact, v_exact = exact_solution(t_exact)
-    exact_color = "black"
+    exact_color = "#000000"
 
     for row_idx, integ in enumerate(INTEGRATORS):
         ax_traj = axes[row_idx, 0]
@@ -805,7 +1081,7 @@ def plot_figure3_small_vs_large(
 
         ax_traj.set_xlim(0.0, T_FINAL)
         ax_phase.set_aspect("equal", "box")
-        ax_traj.set_ylabel(f"{INTEGRATOR_LABELS[integ]}\nPosition x")
+        ax_traj.set_ylabel("Position x")
         ax_phase.set_ylabel("Velocity v")
         if row_idx == len(INTEGRATORS) - 1:
             ax_traj.set_xlabel(r"Time $[1/\omega]$")
@@ -815,27 +1091,38 @@ def plot_figure3_small_vs_large(
         disable_offset_text(ax_traj)
         disable_offset_text(ax_phase)
 
-    axes[0, 0].set_title("x(t) vs time", loc="left")
-    axes[0, 1].set_title("phase space v(x)", loc="left")
+    axes[0, 0].set_title("Trajectory x(t)", loc="left")
+    axes[0, 1].set_title("Phase portrait", loc="left")
     panel_labels = ["a", "b", "c", "d", "e", "f"]
     for idx, ax in enumerate(axes.flat):
-        add_panel_label(ax, panel_labels[idx])
+        add_panel_label(ax, panel_labels[idx], y=1.015 if idx in (0, 1) else 1.05)
 
     legend_handles = [
         Line2D(
             [0],
             [0],
             color=exact_color,
-            linestyle=":",
-            linewidth=max(2.0, float(INTEGRATOR_STYLE["exact"]["linewidth"])),
+            linestyle="-",
+            linewidth=max(2.35, float(INTEGRATOR_STYLE["exact"]["linewidth"])),
             label="Exact",
         ),
-        Line2D([0], [0], color="black", linestyle="-.", linewidth=2.0, label=f"Coarse dt={DT_LARGE:g}"),
-        Line2D([0], [0], color="black", linestyle="-", linewidth=2.2, label=f"Fine dt={DT_SMALL:g}"),
+        Line2D([0], [0], color="black", linestyle="-.", linewidth=2.0, label=rf"Coarse $\Delta t={DT_LARGE:g}$"),
+        Line2D([0], [0], color="black", linestyle="-", linewidth=2.2, label=rf"Fine $\Delta t={DT_SMALL:g}$"),
     ]
     fig.legend(legend_handles, [h.get_label() for h in legend_handles], loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.972))
-    fig.suptitle("Small vs Large Timestep Comparison", fontsize=13, y=0.995)
-    fig.subplots_adjust(top=0.92, bottom=0.07, left=0.09, right=0.98, hspace=0.18, wspace=0.08)
+    fig.subplots_adjust(top=0.92, bottom=0.07, left=0.13, right=0.98, hspace=0.18, wspace=0.08)
+    for row_idx, integ in enumerate(INTEGRATORS):
+        row_box = axes[row_idx, 0].get_position()
+        fig.text(
+            0.05,
+            0.5 * (row_box.y0 + row_box.y1),
+            INTEGRATOR_LABELS[integ],
+            rotation=90,
+            ha="center",
+            va="center",
+            fontsize=11,
+            fontweight="bold",
+        )
 
     per_integrator = {}
     for integ in INTEGRATORS:
@@ -863,7 +1150,7 @@ def plot_figure3_small_vs_large(
             "kind": "main_results1_figure",
             "figure_number": 2,
             "claim": "Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables.",
-            "layout": {"rows": INTEGRATORS, "columns": ["x(t)", "v(x)"]},
+            "layout": {"rows": INTEGRATORS, "columns": ["x(t)", "phase portrait"]},
             "panels": ["a)", "b)", "c)", "d)", "e)", "f)"],
             "shared_legend": True,
             "error_annotations": per_integrator,
@@ -898,7 +1185,7 @@ def _plot_convergence_panel(
         expected = INTEGRATOR_ORDERS[integ]
         fit_info = fit_summary.get(integ, {})
         slope = fit_info.get("slope", float("nan"))
-        label = f"{INTEGRATOR_LABELS[integ]} (s={float(slope):.2f}, exp {expected})"
+        label = f"{INTEGRATOR_LABELS[integ]} (order {float(slope):.2f}; expected {expected})"
         line = ax.loglog(
             dts,
             errs,
@@ -963,12 +1250,7 @@ def plot_figure4_convergence_combined(
     add_panel_label(axes[0], "a")
     add_panel_label(axes[1], "b")
 
-    fig.suptitle(
-        r"Convergence to the exact solution (expected orders: Euler 1, Velocity-Verlet 2, RK4 4)",
-        fontsize=12.8,
-        y=0.995,
-    )
-    fig.subplots_adjust(top=0.84, bottom=0.17, left=0.08, right=0.98, wspace=0.27)
+    fig.subplots_adjust(top=0.89, bottom=0.17, left=0.08, right=0.98, wspace=0.27)
     fig.text(
         0.5,
         0.040,
@@ -1350,12 +1632,11 @@ def generate_table_outputs(
         "",
         f"Generated: {utc_now()}",
         "",
-        f"Figure 1(a,b) (trajectories): Verifies x(t) and v(t) behaviour for all three methods against the exact solution at dt={format_dt(TRAJ_DT)}; Euler remains the visibly largest deviation while RK4 is nearly exact on this horizon.",
-        "Figure 1(c) (phase space): Shows geometric orbit quality at dt=0.01, with Euler clearly outside the closed exact orbit and a dedicated final-sector zoom showing all methods with endpoint markers.",
-        "Figure 2(a-f) (small vs large dt): Directly demonstrates timestep sensitivity with dt=0.5 and dt=0.01 for each method, retaining full coarse-range behaviour without dense in-panel text; quantitative values are provided in the summary tables; "
+        f"Figure 1(a-c) (combined diagnostics): Verifies x(t), v(t), and phase-space behaviour for all three methods against the exact solution at dt={format_dt(TRAJ_DT)} in one shared-legend figure; Euler remains the visibly largest deviation while Velocity-Verlet and RK4 remain close to the exact orbit.",
+        "Figure 2(a-f) (small vs large dt): Compares coarse and fine timesteps (dt=0.5 and dt=0.01) for each method using time traces and phase portraits, while retaining the full coarse-range behaviour; quantitative values are provided in the summary tables; "
         + "; ".join(fig3_bits)
         + ".",
-        f"Figure 3(a,b) (combined convergence): Fitted slopes are Euler {endpoint_fit['euler']['slope']:.2f}/{rms_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}/{rms_fit['verlet']['slope']:.2f}, RK4 {endpoint_fit['rk4']['slope']:.2f}/{rms_fit['rk4']['slope']:.2f} (endpoint/RMS), consistent with orders 1/2/4; filled markers denote fit-included points and open markers denote coarse points shown for context.",
+        f"Figure 3(a,b) (combined convergence): Measured orders are Euler {endpoint_fit['euler']['slope']:.2f}/{rms_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}/{rms_fit['verlet']['slope']:.2f}, and RK4 {endpoint_fit['rk4']['slope']:.2f}/{rms_fit['rk4']['slope']:.2f} (endpoint/RMS), consistent with 1/2/4; filled markers denote fit points and open markers show coarse-step context.",
         "Figure 4(a) (energy diagnostic): At dt=0.01, Euler exhibits strong secular drift, Velocity-Verlet shows bounded oscillatory error, and RK4 drift is tiny on this interval; RK4 remains non-symplectic.",
     ]
     if sanity_warnings:
@@ -1461,6 +1742,7 @@ def main():
         metric_name="rms_phase_space_error",
     )
 
+    plot_figure1_combined(datasets)
     plot_figure1_trajectories(datasets)
     plot_figure2_phase_space(datasets)
     plot_figure3_small_vs_large(datasets, m_idx)

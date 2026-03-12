@@ -1132,7 +1132,7 @@ def plot_rdf(manifest, rahman_points, out_name=FIG8_RDF_PNG):
         )
     ax.axhline(y=1.0, color=COLOR_REFERENCE, linestyle=(0, (3, 3)), linewidth=1.0, alpha=0.65, label="g(r) = 1")
 
-    ax.set_title("Argon RDF Comparison: Present Work vs Rahman (1964)")
+    ax.set_title("Lennard-Jones argon RDF compared with Rahman (1964)", pad=12)
     ax.set_xlabel(r"Distance $r/\sigma$")
     ax.set_ylabel("g(r)")
     finite_r = r_sigma[np.isfinite(r_sigma)]
@@ -1425,7 +1425,19 @@ def write_results2_quantitative_summary(energy_brief_summary, temp_brief_summary
     }
 
 
-def write_results2_notes():
+def write_results2_notes(brief_temperature=None):
+    euler_max_temp_k = None
+    if brief_temperature:
+        for row in brief_temperature.get("per_integrator", []):
+            if row.get("integrator") == "euler":
+                euler_max_temp_k = row.get("max_temperature_k")
+                break
+    euler_temp_phrase = (
+        f"heats to {format_float(euler_max_temp_k, 2)} K over the same window"
+        if euler_max_temp_k is not None
+        else "shows substantial temperature growth over the same window"
+    )
+
     write_text_file(
         RESULTS2_REPORT_NOTE,
         """# Results 2 Report Note
@@ -1434,7 +1446,9 @@ The Lennard-Jones Argon test case follows the Rahman-style state point at 94.4 K
 
 For the brief-required production run (100 steps, 1 ps), startup/equilibration is performed first, then a final startup->production temperature rescale is applied before production. In the saved production CSV, step 0 is the production initial frame (n_frames = 101).
 
-Across this required production window, Velocity-Verlet remains near the target state and shows small bounded energy drift. Forward Euler shows strong energy drift and substantial temperature growth over the same window, so it is not suitable for a stable NVE Argon trajectory here.
+Across this required production window, Velocity-Verlet remains near the target state and shows small bounded energy drift. Forward Euler shows strong energy drift and """
+        + euler_temp_phrase
+        + """, so it is not suitable for a stable NVE Argon trajectory here.
 
 For structure, the Velocity-Verlet RDF from a longer production run reproduces the expected liquid-argon shell pattern (first peak, first minimum, second shell, and long-range return toward g(r)=1), with broad agreement to Rahman (1964).
 
@@ -1531,8 +1545,8 @@ def main():
             {"series_key": "verlet", "label": "Velocity-Verlet", "style_key": "verlet"},
             {"series_key": "euler", "label": "Forward Euler", "style_key": "euler"},
         ],
-        "energy_title": "Argon LJ required production run (1 ps, 100 steps): signed total-energy drift",
-        "temperature_title": "Argon LJ Required Run (100 Steps, 1 ps): Temperature",
+        "energy_title": "Lennard-Jones argon, required 1 ps NVE run: total-energy drift",
+        "temperature_title": "Lennard-Jones argon, required 1 ps NVE run: temperature",
         "energy_purpose": (
             "Core brief-facing evidence for the required 100-step production run using signed total-energy drift only: "
             "Velocity-Verlet remains bounded while Forward Euler drifts strongly."
@@ -1579,7 +1593,7 @@ def main():
     rdf_summary = safe_plot("rdf", plot_rdf, manifest, rahman_points, FIG8_RDF_PNG)
 
     table_files = write_results2_quantitative_summary(brief_energy, brief_temperature, rdf_summary)
-    write_results2_notes()
+    write_results2_notes(brief_temperature)
     summarize_results2_outputs(
         brief_energy,
         brief_temperature,

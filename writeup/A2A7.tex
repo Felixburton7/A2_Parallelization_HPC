@@ -173,18 +173,11 @@ Validation is performed at three levels. First, the harmonic oscillator provides
 
 The harmonic oscillator $\ddot{x}=-\omega^2x$ with $\omega=1$, $x(0)=1$, and $v(0)=0$ has exact solution $x(t)=\cos t$ and $v(t)=-\sin t$. This problem isolates integrator behaviour without complications from inter-particle communication or force truncation.
 
-Figure~\ref{fig:ho_traj} shows position, velocity, and phase-space trajectories at $\Delta t=0.01$ up to $T=10$. All three schemes track the exact solution closely on this short horizon, but the insets and phase portrait already separate their qualitative behaviour. Euler develops a visible phase lag and an outward spiral in $(x,v)$ space, consistent with artificial energy growth. Velocity-Verlet and RK4 remain visually superposed with the exact orbit in the time traces, and their phase curves remain closed. This is the first indication that ``good-looking trajectories'' over a few periods are not sufficient: the orbital geometry itself reveals whether the numerical flow is respecting the conservative structure of the problem.
+Figure~\ref{fig:ho_traj} shows position, velocity, and phase-space trajectories at $\Delta t=0.01$ up to $T=10$. All three schemes track the exact solution closely on this short horizon, but the end of the time traces and phase portrait already separate their qualitative behaviour. Euler develops a visible phase lag and an outward spiral in $(x,v)$ space, consistent with artificial energy growth. Velocity-Verlet and RK4 remain visually superposed with the exact orbit in the time traces, and their phase curves remain closed. This is the first indication that ``good-looking trajectories'' over a few periods are not sufficient: the orbital geometry itself reveals whether the numerical flow is respecting the conservative structure of the problem.
 
 \begin{figure*}[!t]
   \centering
-  \begin{minipage}[t]{0.58\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{results1_figure1ab_trajectories_dt0p01.png}
-  \end{minipage}\hfill
-  \begin{minipage}[t]{0.39\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{results1_figure1c_phase_space_dt0p01.png}
-  \end{minipage}
+  \includegraphics[width=0.98\textwidth]{results1_figure1abc_combined_dt0p01.png}
   \caption{Harmonic-oscillator diagnostics at $\Delta t=0.01$. Left: position and velocity traces against the exact solution. Right: phase-space orbit. Euler shows a measurable phase error and outward spiral, whereas Velocity-Verlet and RK4 remain almost indistinguishable from the exact conservative orbit on this time horizon.}
   \label{fig:ho_traj}
 \end{figure*}
@@ -308,13 +301,13 @@ The main judgement from Results~2 is therefore straightforward. The code reprodu
 \FloatBarrier
 \section{Results 3: Parallel scaling}
 
-All scaling measurements use Velocity-Verlet, fixed-seed initial conditions, and no file output. This isolates the algorithmic and communication costs of the solver itself. Two scaling questions are relevant. First, for fixed problem size, how much wall-clock speedup is obtained by adding processes? Second, at fixed process count, how does runtime grow with the number of particles?
+Results~3 is a separate timing benchmark, not a repeat of the brief-mandated 100-step argon validation run from Results~2. All scaling measurements use Velocity-Verlet, identical seed-42 initial conditions, $\Delta t=\SI{e-14}{s}$, and no file output so that the reported times reflect solver and communication costs rather than I/O. To reduce measurement noise and fixed-overhead contamination, strong scaling uses 500 timed steps at fixed $N=2048$, whereas size scaling uses 2000 timed steps at fixed $P=16$; each configuration is repeated 20 times and the median paired wall/communication sample is retained. All times reported in this section are raw measured seconds from those benchmark windows, not values normalised to 100 steps.
 
 Strong-scaling results for $N=2048$ are shown in Fig.~\ref{fig:strong} and Table~\ref{tab:strong}. The code scales almost ideally up to 8 processes, where the efficiency remains above 94\%. At 32 processes the measured speedup is $24.12\times$, corresponding to 75.4\% efficiency. These are strong results for a simple allgather-based implementation. They also explain why the apparent ``near-perfect'' scaling at very small $P$ is not suspicious: for this problem size the direct force kernel dominates initially, so the communication term is still a small fraction of runtime.
 
 \begin{table}[!t]
   \centering
-  \caption{Strong-scaling measurements for the MPI Velocity-Verlet solver at fixed $N=2048$ (100 steps).}
+  \caption{Strong-scaling measurements for the MPI Velocity-Verlet solver at fixed $N=2048$ (500 timed steps; medians of 20 no-output repetitions).}
   \label{tab:strong}
   \small
   \setlength{\tabcolsep}{3.5pt}
@@ -336,7 +329,7 @@ Strong-scaling results for $N=2048$ are shown in Fig.~\ref{fig:strong} and Table
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=\textwidth]{results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png}
-  \caption{Strong-scaling behaviour at fixed $N=2048$. The measured speedup remains close to ideal for moderate core counts, but the communication share grows as the local work per rank falls.}
+  \caption{Strong-scaling behaviour at fixed $N=2048$ (500 timed steps; medians of 20 no-output repetitions). The measured speedup remains close to ideal for moderate core counts, but the communication share grows as the local work per rank falls.}
   \label{fig:strong}
 \end{figure*}
 
@@ -347,7 +340,7 @@ The fixed-process size-scaling results at $P=16$ are shown in Fig.~\ref{fig:size
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=\textwidth]{results3_figure9ab_problem_size_scaling_fixed_p16.png}
-  \caption{Fixed-process size scaling at $P=16$. The total runtime is close to quadratic in $N$, while the communication fraction falls with increasing problem size because the direct force loop grows faster than the allgather overhead.}
+  \caption{Fixed-process size scaling at $P=16$ (2000 timed steps; medians of 20 no-output repetitions). The total runtime is close to quadratic in $N$, while the communication fraction falls with increasing problem size because the direct force loop grows faster than the allgather overhead.}
   \label{fig:size}
 \end{figure*}
 

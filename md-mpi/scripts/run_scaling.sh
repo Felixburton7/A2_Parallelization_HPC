@@ -25,7 +25,7 @@ set -euo pipefail
 SOLVER="./md_solver"
 OUTDIR="out"
 STRONG_STEPS=1000
-SIZE_STEPS=5000
+SIZE_STEPS=1000
 INTEGRATOR="verlet"
 REPS=11
 
