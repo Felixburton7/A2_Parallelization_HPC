@@ -1,0 +1,843 @@
+% =============================================================================
+% MPI Parallelisation of Molecular Dynamics Algorithms
+% Written Assignment 2 — MPhil Scientific Computing, University of Cambridge
+% Candidate Number: XXXXX
+% =============================================================================
+
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[a4paper,
+            top=2.0cm,
+            bottom=2.3cm,
+            left=1.85cm,
+            right=1.85cm,
+            columnsep=0.62cm]{geometry}
+\usepackage{graphicx}
+\graphicspath{{../md-mpi/out/plots/}}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{siunitx}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{dblfloatfix}
+\usepackage[section]{placeins}
+
+% ── General spacing / page behaviour ────────────────────────────────────────
+\raggedbottom
+\setlength{\parindent}{1em}
+\setlength{\parskip}{2pt plus 1pt minus 0.5pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\dblfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{0pt}
+
+% ── Float placement parameters ─────────────────────────────────────────────
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\dblfloatpagefraction}{0.85}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{1}
+\setcounter{totalnumber}{3}
+
+% ── Caption style ──────────────────────────────────────────────────────────
+\captionsetup{font=small, labelfont=bf, labelsep=period,
+              format=plain, justification=justified, singlelinecheck=false}
+
+% ── Section heading styles ─────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\normalsize\itshape\bfseries}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.3ex plus 0.3ex minus 0.2ex}{0.5ex plus 0.2ex}
+\titlespacing*{\subsection}{0pt}{0.9ex plus 0.2ex minus 0.1ex}{0.35ex plus 0.1ex}
+\titlespacing*{\subsubsection}{0pt}{0.7ex plus 0.2ex minus 0.1ex}{0.25ex}
+
+% ── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape MPI Parallelisation of Molecular Dynamics}
+\fancyhead[R]{\small\itshape Candidate XXXXX}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── siunitx config ─────────────────────────────────────────────────────────
+\sisetup{separate-uncertainty=true, range-phrase=--}
+
+% =============================================================================
+\begin{document}
+\hypersetup{pageanchor=false}
+
+% =============================================================================
+%  TITLE PAGE  (single column, own page)
+% =============================================================================
+\onecolumn
+\thispagestyle{empty}
+
+\begin{center}
+  \vspace*{1.4cm}
+  {\LARGE\bfseries MPI Parallelisation of Molecular Dynamics Algorithms\par}
+  \vspace{0.7cm}
+  \rule{0.62\textwidth}{0.5pt}\\[0.45cm]
+  {\large Written Assignment 2\par}
+  {\large MPhil in Scientific Computing\par}
+  {\large University of Cambridge\par}
+  \vspace{0.8cm}
+  {\large Candidate Number: \textbf{XXXXX}\par}
+  \vspace{0.35cm}
+  {\large March 2026\par}
+  \vspace{0.55cm}
+  {\normalsize Supervisor: Dr Philip Blakely\par}
+  {\normalsize Department of Physics\par}
+\end{center}
+
+\vfill
+\clearpage
+
+% =============================================================================
+%  ABSTRACT  (single column, own page)
+% =============================================================================
+\thispagestyle{empty}
+
+\begin{center}
+  \begin{minipage}{0.88\textwidth}
+    \setlength{\parindent}{0pt}
+    {\bfseries Abstract}\medskip
+
+    A C++17/MPI molecular dynamics solver is implemented and validated
+    using three numerical integrators---Forward Euler, fourth-order
+    Runge--Kutta (RK4), and Velocity-Verlet---applied to a harmonic oscillator
+    verification suite and a Lennard-Jones argon fluid ($N=864$,
+    $\rho=0.8\sigma^{-3}$, $T=\SI{94.4}{K}$) following \citealt{Rahman1964}.
+    Harmonic oscillator convergence tests confirm global truncation orders of
+    $\mathcal{O}(\Delta t)$, $\mathcal{O}(\Delta t^2)$, and
+    $\mathcal{O}(\Delta t^4)$ (fitted slopes 1.05, 2.00, 3.94); RK4 error
+    saturates at the IEEE~754 double-precision floor (${\approx}3.6\times10^{-15}$).
+    For the argon fluid (100-step NVE run), Velocity-Verlet achieves bounded
+    energy conservation ($\max|\Delta E/E_0|=0.082\%$) while Forward Euler
+    diverges catastrophically ($\max|\Delta E/E_0|=127.6\%$, temperature runaway
+    to ${\sim}\SI{400}{K}$), confirming that symplecticity is essential for
+    stable MD.
+    Radial distribution function peaks at $r/\sigma=1.09$ ($g=2.84$) and
+    $r/\sigma=2.07$ ($g=1.25$) compare favourably with Rahman's published
+    liquid-structure data.
+    Strong scaling at fixed $N=2048$ yields speedup $24.1\times$ at $P=32$
+    (efficiency 75\%; Amdahl $f\approx0.010$); size scaling at fixed $P=16$
+    gives wall time $\propto N^{1.85}$, consistent with $\mathcal{O}(N^2)$
+    direct force evaluation.
+  \end{minipage}
+\end{center}
+
+\vfill
+\clearpage
+
+% =============================================================================
+%  TABLE OF CONTENTS  (own page)
+% =============================================================================
+\thispagestyle{empty}
+\setlength{\columnseprule}{0pt}
+\tableofcontents
+\vfill
+\clearpage
+
+% =============================================================================
+%  MAIN TEXT  (two column)
+% =============================================================================
+\twocolumn
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\thispagestyle{fancy}
+
+% =============================================================================
+\section{Introduction}
+\label{sec:intro}
+% =============================================================================
+
+Molecular dynamics (MD) simulates the time evolution of interacting particle
+systems by numerically integrating Newton's equations of motion. Since
+\citealt{Rahman1964}'s landmark study of liquid argon, and the earlier
+hard-sphere simulations of \citet{AlderWainwright1957}, MD has become central
+to computational chemistry, materials science, and biophysics, yielding
+thermodynamic properties, structural correlations, and transport coefficients
+inaccessible to analytic theory~\citep{FrenkelSmit2002,AllenTildesley2017}.
+Applications span protein folding, radiation damage in nuclear materials,
+phase-transition kinetics, and the design of pharmaceutical binding sites.
+
+The computational bottleneck is pairwise force evaluation, scaling as
+$\mathcal{O}(N^2)$ for direct summation over $N$ particles.
+Physically meaningful simulations require $N\sim10^3$--$10^6$ and
+$10^6$--$10^9$ timesteps; this is intractable without parallelism.
+Distributing the force computation across $P$ cores via the Message Passing
+Interface (MPI) reduces the per-rank cost to $\mathcal{O}(N^2/P)$, but
+practical efficiency depends on the communication overhead required to
+synchronise particle data between ranks.
+
+Modern CPU architectures expose parallelism at multiple levels: vector units
+within a core, multi-core sockets, and distributed-memory clusters connected
+by a communication fabric. For distributed-memory problems, MPI remains the
+standard approach because it gives explicit control over data ownership and
+communication, at the cost of making the programmer responsible for where the
+data reside and when they are exchanged.
+
+Integrator choice is equally consequential. Long-time stability demands
+\emph{symplectic} integrators that preserve the symplectic structure of
+Hamiltonian mechanics: non-symplectic schemes exhibit systematic energy drift
+regardless of formal truncation order, corrupting thermodynamic averages
+over extended simulations. In many-particle systems, exact long-time
+trajectory prediction is in any case impossible because of Lyapunov instability;
+the practical goal of MD is therefore not to recover one exact future
+trajectory, but to sample the correct thermodynamic ensemble and preserve
+the correct short-time dynamical behaviour as accurately as possible.
+
+This report presents a C++17/MPI solver implementing Forward Euler, RK4, and
+Velocity-Verlet. The integrators are assessed for convergence order,
+symplecticity, and energy conservation on the harmonic oscillator and on a
+Lennard-Jones (LJ) argon fluid following~\citealt{Rahman1964}. The
+particle-decomposition parallelisation is benchmarked for strong scaling
+(up to $P=32$) and size scaling (up to $N=2048$), and related to expected
+theoretical properties.
+
+% =============================================================================
+\section{Methodology}
+\label{sec:methodology}
+% =============================================================================
+
+\subsection{Numerical Integrators}
+\label{sec:integrators}
+
+We consider $m\ddot{\mathbf{x}}_i = \mathbf{F}_i(\{\mathbf{x}\})$,
+reformulated as the first-order system
+$\mathbf{y}=(\mathbf{x},\mathbf{v})^\top$,
+$\dot{\mathbf{y}}=(\mathbf{v},\mathbf{F}/m)^\top$,
+with acceleration $\mathbf{a}_n=\mathbf{F}_n/m$.
+
+\subsubsection{Forward Euler}
+
+Plain forward Euler advances position and velocity by simultaneous first-order
+Taylor truncations:
+\begin{align}
+  \mathbf{x}_{n+1} &= \mathbf{x}_n + \mathbf{v}_n\,\Delta t, \label{eq:euler_x}\\
+  \mathbf{v}_{n+1} &= \mathbf{v}_n + \mathbf{a}_n\,\Delta t. \label{eq:euler_v}
+\end{align}
+Both updates are first-order; the global truncation error is
+$\mathcal{O}(\Delta t)$. The scheme is not symplectic: it does not preserve
+the symplectic two-form of Hamiltonian mechanics, so phase-space volume is
+not conserved and total energy drifts monotonically.
+
+\subsubsection{Fourth-Order Runge--Kutta}
+
+RK4 evaluates four stage derivatives of the first-order system:
+\begin{align}
+  \mathbf{k}_j &= \Delta t\,\mathbf{f}\!\left(\mathbf{y}_n
+    + c_j\,\mathbf{k}_{j-1}\right), \quad j=1,\ldots,4, \label{eq:rk4}\\
+  \mathbf{y}_{n+1} &= \mathbf{y}_n
+    + \tfrac{1}{6}(\mathbf{k}_1+2\mathbf{k}_2+2\mathbf{k}_3+\mathbf{k}_4),
+    \nonumber
+\end{align}
+with coefficients $(c_1,c_2,c_3,c_4)=(0,\tfrac{1}{2},\tfrac{1}{2},1)$.
+Global error is $\mathcal{O}(\Delta t^4)$. RK4 is not symplectic.
+Crucially, each intermediate stage requires force evaluation at an
+intermediate particle configuration; for the LJ system this entails a
+separate \texttt{MPI\_Allgatherv} per stage---four per step---making RK4
+prohibitively expensive for large-scale interacting systems.
+
+\subsubsection{Velocity-Verlet}
+
+The Velocity-Verlet algorithm~\citep{Verlet1967,Swope1982} implements a
+half-kick / drift / force / half-kick sequence:
+\begin{align}
+  \mathbf{v}_{n+1/2} &= \mathbf{v}_n + \tfrac{\Delta t}{2}\,\mathbf{a}_n,
+    \label{eq:vv1}\\
+  \mathbf{x}_{n+1} &= \mathbf{x}_n + \Delta t\,\mathbf{v}_{n+1/2},
+    \label{eq:vv2}\\
+  \mathbf{a}_{n+1} &= \mathbf{F}(\mathbf{x}_{n+1})/m, \label{eq:vv3}\\
+  \mathbf{v}_{n+1} &= \mathbf{v}_{n+1/2} + \tfrac{\Delta t}{2}\,\mathbf{a}_{n+1}.
+    \label{eq:vv4}
+\end{align}
+The global truncation error in trajectory coordinates is
+$\mathcal{O}(\Delta t^2)$.
+The underlying Verlet construction arises from cancellation of odd-order
+Taylor terms when combining forward and reverse expansions, giving a local
+truncation error $\mathcal{O}(\Delta t^4)$ per step; the
+$\mathcal{O}(\Delta t^2)$ global rate reflects accumulation over
+$T/\Delta t$ steps and should not be conflated with the local-order result.
+The scheme is \emph{symplectic} and time-reversible: it conserves a shadow
+Hamiltonian $\tilde{H}=H+\mathcal{O}(\Delta t^2)$, so total energy oscillates
+with bounded amplitude indefinitely rather than drifting~\citep{Hairer2006}.
+This matters particularly in chaotic many-body systems, where trajectories
+diverge exponentially under small perturbations: the correct requirement is
+therefore not exact trajectory matching at long times, but accurate ensemble
+sampling and faithful preservation of invariants over long runs.
+Only one force evaluation per step is required, making Velocity-Verlet the
+standard choice for production MD.
+
+\subsection{Lennard-Jones Potential and Force Computation}
+\label{sec:lj}
+
+The LJ pair potential and force on particle $i$ are
+\begin{align}
+  V(r) &= 4\varepsilon\!\left[\left(\frac{\sigma}{r}\right)^{12}
+    - \left(\frac{\sigma}{r}\right)^{6}\right], \label{eq:ljpot}\\
+  \mathbf{a}_i &= \frac{24\varepsilon}{m}\sum_{j\ne i}
+    \frac{\mathbf{x}_i-\mathbf{x}_j}{r_{ij}^2}
+    \!\left[2\!\left(\frac{\sigma}{r_{ij}}\right)^{12}
+      - \!\left(\frac{\sigma}{r_{ij}}\right)^6\right], \label{eq:ljforce}
+\end{align}
+with argon parameters $\varepsilon/k_{\rm B}=\SI{120}{K}$,
+$\sigma=\SI{3.4}{\text{\AA}}$, $m=66.904\times10^{-27}\,\si{kg}$~\citep{Rahman1964}.
+A hard cutoff is applied at $r_c=2.25\sigma$; the geometric constraint
+$r_c < L/2\approx5.115\sigma$ (for $N=864$, $L=10.229\sigma$) ensures validity
+of the minimum image convention
+$\delta x \leftarrow \delta x - L\,\mathrm{round}(\delta x/L)$.
+Potential energy is accumulated unconditionally over all $j\ne i$ pairs and
+multiplied by 0.5 post-loop (avoiding a branch in the $\mathcal{O}(N^2)$ hot
+loop). Newton's third law is not exploited (see \S\ref{sec:parallel}).
+The force kernel uses only integer powers: $r^{-2}\to r^{-6}\to r^{-12}$,
+with all constants precomputed at compile time.
+
+Initial conditions follow Rahman: an FCC lattice ($N=4k^3$, $k=6$) with
+random perturbations $\pm0.01\sigma$, and Maxwell--Boltzmann velocities
+via the Box--Muller transform. Temperature is computed from equipartition
+using $N_{\rm dof}=3(N-1)$ degrees of freedom after removing centre-of-mass
+drift. Box length scales as $L=10.229\sigma\,(N/864)^{1/3}$ to maintain
+constant number density.
+
+\subsection{Parallelisation Strategy}
+\label{sec:parallel}
+
+\textbf{Particle decomposition.}
+Rank $r$ owns a fixed, contiguous block of particles
+$[\mathrm{offset}_r,\,\mathrm{offset}_r+N_r^{\rm loc})$, where
+$N_r^{\rm loc}=\lfloor N/P\rfloor+(r<N\bmod P\,?\,1:0)$.
+Ownership is determined at startup and fixed throughout the simulation.
+
+\textbf{Data layout.}
+Particle state is stored in flat interleaved \texttt{std::vector<double>}
+arrays of size $3N_r^{\rm loc}$, indexed as \texttt{arr[3*i+d]}.
+This layout provides sequential cache access in force loops and maps directly
+to \texttt{MPI\_Allgatherv} buffers without packing.
+During time stepping, only positions are communicated; velocities are
+broadcast once at startup and forces are never communicated.
+
+\textbf{MPI API usage.}
+Five collective operations are used:
+\begin{enumerate}\itemsep0pt
+  \item \texttt{MPI\_Bcast}: rank~0 generates all initial conditions
+    (\texttt{std::mt19937\_64}, seed~42) and broadcasts the complete
+    $3N$-double position and velocity arrays before the time loop.
+  \item \texttt{MPI\_Allgatherv}: the sole collective in the time-stepping
+    loop. After updating and wrapping local positions, each rank
+    contributes its $3N_r^{\rm loc}$ doubles to reconstruct the global
+    position array on every rank, \emph{before} force evaluation.
+    Correct sequencing---wrap $\to$ allgather $\to$ force compute---is
+    critical: forces require globally consistent positions.
+    For the non-interacting harmonic oscillator, this call is bypassed
+    entirely.
+  \item \texttt{MPI\_Reduce(MPI\_SUM)}: local kinetic and potential
+    energies are summed to rank~0 for output.
+  \item \texttt{MPI\_Reduce(MPI\_MAX)}: maximum wall time across all
+    ranks is reported; separate reduces capture communication statistics.
+  \item \texttt{MPI\_Barrier} / \texttt{MPI\_Wtime}: synchronise ranks
+    before timing; accumulate \texttt{MPI\_Allgatherv} wall time when
+    the timing flag is set.
+\end{enumerate}
+
+\textbf{Newton's Third Law trade-off.}
+Each rank evaluates forces on its local particles against all $N$ particles,
+giving $\mathcal{O}(N^2/P)$ rather than $\mathcal{O}(N^2/2P)$ cost.
+This avoids the complex partial-force exchange communication required by
+third-law optimisation, keeping a single clean \texttt{MPI\_Allgatherv}
+per Euler/Velocity-Verlet step. RK4 requires four gathers per step:
+three for intermediate stages and one to refresh forces at the final state.
+
+\textbf{Equilibration and reproducibility.}
+A 50-step startup phase applies per-step velocity rescaling
+$(\lambda=\sqrt{T_{\rm target}/T_{\rm meas}})$, broadcast via
+\texttt{MPI\_Bcast}, followed by a final exact rescale at the
+startup-to-production boundary.
+The 100-step production run is clean NVE.
+All timing runs use identical initial conditions (fixed seed) and are
+performed without file output, as required by the assignment brief.
+
+\textbf{Communication-cost perspective.}
+The present particle-decomposition algorithm is deliberately simple and
+transparent, but it exposes the standard distributed-memory trade-off:
+computation is reduced by splitting the force loop across ranks, while
+communication incurs latency and bandwidth costs every time global
+particle positions are reconstructed. For strong scaling, the amount of
+work per rank decreases as $P$ increases, so communication occupies a
+larger fraction of the runtime even if its absolute cost remains modest.
+
+\subsection{Validation Methodology}
+\label{sec:validation}
+
+Parallel correctness is verified by confirming that energy trajectories
+agree between $P=1$ and $P=2$ runs to bitwise precision.
+For $P>2$, floating-point non-associativity in \texttt{MPI\_Reduce} tree
+reductions introduces differences at ${\sim}10^{-12}$--$10^{-14}$
+relative tolerance, consistent with IEEE~754 arithmetic.
+This is expected whenever the order of floating-point summation changes
+between serial and parallel executions.
+
+% =============================================================================
+\section{Results 1: Harmonic Oscillator Verification}
+\label{sec:results1}
+
+The harmonic oscillator $\ddot{x}=-\omega^2x$ ($\omega=1$, $x_0=1$,
+$\dot{x}_0=0$) has exact solution $x(t)=\cos t$, providing a stringent
+benchmark against which convergence and energy behaviour can be assessed
+analytically.
+
+\subsubsection*{Trajectories and phase space}
+
+Figure~\ref{fig:ho_traj} shows position, velocity, and phase-space
+trajectories at $\Delta t=0.01$ over $T=10$.
+All three integrators track the exact solution closely at this resolution;
+the insets reveal that Euler accumulates a visible phase error near $t=T$.
+In phase space (panel~c), Euler traces an outward spiral consistent with
+non-symplectic energy growth and violation of Liouville's theorem; both
+Velocity-Verlet and RK4 remain on the exact unit circle.
+
+\begin{figure*}[!t]
+  \centering
+  \begin{minipage}[t]{0.58\textwidth}
+    \centering
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{results1_figure1ab_trajectories_dt0p01.png}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.39\textwidth}
+    \centering
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{results1_figure1c_phase_space_dt0p01.png}
+  \end{minipage}
+  \caption{Harmonic oscillator trajectories at $\Delta t=0.01$, $\omega=1$,
+    $T=10$; exact solution in grey.
+    \textbf{(a)} Position $x(t)$ and \textbf{(b)} velocity $v(t)$; insets zoom
+    near $t\approx T$.
+    Velocity-Verlet (blue) and RK4 (dark blue dash-dot) overlay the exact
+    solution; Euler (orange dashed) shows visible phase deviation.
+    \textbf{(c)} Phase-space portrait.
+    Euler spirals outward (non-symplectic); Velocity-Verlet traces a near-exact
+    closed orbit (symplectic, Liouville-preserving); RK4 is indistinguishable
+    from the exact circle.}
+  \label{fig:ho_traj}
+\end{figure*}
+
+\subsubsection*{Small vs.\ large timestep}
+
+Figure~\ref{fig:ho_dtcomp} illustrates the effect of timestep size.
+At $\Delta t=0.5$, Euler is numerically unstable (amplitude growth to
+$|x|\approx8$, spiralling outward in phase space);
+Velocity-Verlet remains bounded even at this coarse resolution---a key
+property of symplectic integrators, which preserve qualitative dynamics
+even when accuracy is poor;
+RK4 stays close to the exact trajectory in both time and phase space.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.96\textwidth]{results1_figure2_small_vs_large_dt.png}
+  \caption{Comparison of coarse ($\Delta t=0.5$, dash-dot) and fine ($\Delta t=0.01$,
+    solid) timesteps. Left: $x(t)$; right: phase-space portrait.
+    Euler (orange, top) is unstable at $\Delta t=0.5$;
+    Velocity-Verlet (blue, centre) retains bounded orbits despite coarse resolution;
+    RK4 (dark blue, bottom) remains close to exact at both resolutions.}
+  \label{fig:ho_dtcomp}
+\end{figure*}
+
+\subsubsection*{Convergence order}
+
+Figure~\ref{fig:ho_conv} presents log--log convergence curves for the endpoint
+position error $|x_{\rm num}(T{=}10)-x_{\rm exact}(T{=}10)|$ and the RMS
+phase-space error, fitted over the asymptotic regime $\Delta t\le0.1$.
+Table~\ref{tab:convergence} reports representative errors and fitted slopes.
+
+\begin{table}[!t]
+  \centering
+  \caption{Global position error $|x_{\rm num}(T{=}10)-x_{\rm exact}|$ and fitted
+    convergence slopes.}
+  \label{tab:convergence}
+  \setlength{\tabcolsep}{4pt}
+  \small
+  \begin{tabular}{@{}rccc@{}}
+    \toprule
+    $\Delta t$ & Euler & Vel.-Verlet & RK4 \\
+    \midrule
+    $10^{0}$ & $7.0\times10^{0}$   & $3.4\times10^{-1}$ & $2.2\times10^{-2}$ \\
+    $10^{-1}$& $2.3\times10^{-1}$  & $2.3\times10^{-3}$ & $3.9\times10^{-6}$ \\
+    $10^{-2}$& $2.0\times10^{-2}$  & $2.3\times10^{-5}$ & $4.5\times10^{-10}$\\
+    $10^{-3}$& $2.0\times10^{-3}$  & $2.3\times10^{-7}$ & $5.3\times10^{-14}$\\
+    $5\!\times\!10^{-4}$ & $9.8\times10^{-4}$ & $5.7\times10^{-8}$ &
+      $3.6\times10^{-15}$\rlap{$^\dagger$} \\
+    \midrule
+    Fitted slope & 1.05 & 2.00 & 3.94 \\
+    \bottomrule
+    \multicolumn{4}{@{}l}{\footnotesize $^\dagger$IEEE~754 double-precision floor.}
+  \end{tabular}
+\end{table}
+
+Fitted slopes of 1.05, 2.00, and 3.94 confirm the expected first-, second-,
+and fourth-order convergence.
+At $\Delta t=10^{-2}$, Velocity-Verlet is three orders of magnitude more
+accurate than Euler, and RK4 a further five orders more accurate than Verlet.
+RK4 saturates at ${\approx}3.6\times10^{-15}$ for $\Delta t=5\times10^{-4}$,
+at the IEEE~754 double-precision floor.
+
+The $\mathcal{O}(\Delta t^2)$ global convergence of Velocity-Verlet arises
+from accumulation of steps whose local truncation error is formally
+$\mathcal{O}(\Delta t^4)$, due to cancellation of odd-order terms in the
+symplectic derivation; this local accuracy is not equivalent to fourth-order
+global convergence.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=\textwidth]{results1_figure3_convergence_combined.png}
+  \caption{Convergence to the exact harmonic-oscillator solution ($\omega=1$,
+    $x_0=1$, $T=10$).
+    \textbf{(a)} Endpoint position error; \textbf{(b)} RMS phase-space error.
+    Filled markers: asymptotic fit domain ($\Delta t\le0.1$); open markers: context only.
+    Fitted slopes (Table~\ref{tab:convergence}) confirm first-, second-, and fourth-order
+    convergence for Euler, Velocity-Verlet, and RK4.
+    RK4 saturates at ${\approx}3.6\times10^{-15}$ (IEEE~754 floor).}
+  \label{fig:ho_conv}
+\end{figure*}
+
+\subsubsection*{Energy conservation}
+
+Figure~\ref{fig:ho_energy} shows the relative energy deviation
+$(E-E_0)/|E_0|$ over $T=10$ at $\Delta t=0.01$.
+Euler drifts monotonically to $10.5\%$, a direct consequence of its
+non-symplectic character.
+Velocity-Verlet exhibits bounded oscillation at amplitude ${\sim}2.5\times10^{-5}$
+(visible in the inset), consistent with conservation of a shadow Hamiltonian.
+RK4's deviation is negligible ($1.4\times10^{-9}\%$) on this short interval,
+but its lack of symplecticity means energy would drift on longer timescales.
+This directly demonstrates the distinction between short-time local accuracy and
+long-time preservation of the invariant structure of the dynamics.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=\columnwidth]{results1_figure4_energy_diagnostic.png}
+  \caption{Relative energy deviation $(E-E_0)/|E_0|$ for the harmonic oscillator
+    ($\Delta t=0.01$, $T=10$).
+    Euler (orange) drifts monotonically to $10.5\%$.
+    The inset reveals Velocity-Verlet (blue) bounded oscillation at
+    ${\sim}2.5\times10^{-5}$ (shadow-Hamiltonian conservation) and negligible
+    RK4 deviation ($1.4\times10^{-9}\%$).}
+  \label{fig:ho_energy}
+\end{figure}
+
+\FloatBarrier
+
+\section{Results 2: Lennard-Jones Argon Fluid}
+\label{sec:results2}
+
+The LJ argon system ($N=864$, $\Delta t=\SI{e-14}{s}$) is simulated at
+$T=\SI{94.4}{K}$ using the equilibration protocol described in
+\S\ref{sec:parallel}, followed by a clean 100-step NVE production run at $P=4$.
+
+\subsubsection*{Energy conservation: mandated 100-step run}
+
+Figure~\ref{fig:lj_energy} shows the signed relative total-energy deviation
+$\Delta E/E_0$ for both integrators over the production run.
+Velocity-Verlet (panel~a) maintains bounded, oscillatory deviation with
+$\max|\Delta E/E_0|=0.082\%$ and mean $0.033\%$, consistent with
+shadow-Hamiltonian conservation (cf.~Fig.~\ref{fig:ho_energy}).
+Forward Euler (panel~b) diverges catastrophically to $+127.6\%$
+within 1~ps, rendering the trajectory completely unphysical.
+
+Three factors contribute to the finite Velocity-Verlet deviations.
+The hard cutoff at $r_c$ introduces discontinuities whenever a particle
+pair crosses the cutoff radius, causing local energy spikes.
+The initial FCC lattice is far from the equilibrium liquid structure,
+generating large early-time forces before relaxation.
+Discrete-timestep truncation accumulates even in a symplectic scheme.
+A shifted-force cutoff---standard in production codes---would eliminate the
+force discontinuity at $r_c$.
+
+Exact reproduction of Rahman's energy trajectory is not expected: the
+assignment brief explicitly notes sensitivity to initial conditions, and our
+FCC starting configuration differs from Rahman's prepared liquid state.
+Parallel correctness is confirmed by bitwise agreement of energy trajectories
+between $P=1$ and $P=2$ runs.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=\columnwidth]{results2_figure6_lj_brief_energy_100step_production.png}
+  \caption{Signed relative energy deviation $\Delta E/E_0$ [\%] during the 100-step
+    NVE production run for liquid argon ($N=864$, $\Delta t=\SI{e-14}{s}$,
+    equilibrated to $T=\SI{94.4}{K}$).
+    \textbf{(a)} Velocity-Verlet: bounded oscillation,
+    $\max|\Delta E/E_0|=0.082\%$ (mean $0.033\%$), confirming symplectic
+    long-time stability.
+    \textbf{(b)} Forward Euler: monotonic drift to $+127.6\%$, demonstrating
+    catastrophic non-symplectic energy injection.}
+  \label{fig:lj_energy}
+\end{figure}
+
+\subsubsection*{Temperature}
+
+Figure~\ref{fig:lj_temp} confirms the temperature evolution.
+Velocity-Verlet holds $T=(94.4\pm1.4)\,\si{K}$ throughout, consistent
+with NVE energy conservation.
+Euler heats from the target $\SI{94.4}{K}$ to ${\sim}\SI{400}{K}$ within 1~ps,
+a direct consequence of non-symplectic energy injection; mean temperature
+rises to $\SI{185}{K}$ over the 100 steps.
+This temperature runaway demonstrates conclusively that Euler is unsuitable
+for production MD even from a well-equilibrated initial configuration.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=\columnwidth]{results2_figure7_lj_brief_temperature_100step_production.png}
+  \caption{Instantaneous temperature during the 100-step argon NVE run
+    ($N=864$, $\Delta t=\SI{e-14}{s}$).
+    Velocity-Verlet (blue) holds $T\approx\SI{94.4}{K}$ (grey dashed);
+    Forward Euler (orange) heats to ${\sim}\SI{400}{K}$, reflecting the energy
+    drift of Fig.~\ref{fig:lj_energy}.}
+  \label{fig:lj_temp}
+\end{figure}
+
+\subsubsection*{Radial distribution function}
+
+To validate the structural properties of the simulated liquid state,
+an extended NVE run was performed (20\,000 production steps, Velocity-Verlet,
+$P=4$, $N=864$, with a 200-step equilibration discard before $g(r)$
+accumulation sampled every 5 steps).
+Figure~\ref{fig:lj_rdf} shows $g(r)$ alongside a reference curve derived from
+\citealt{Rahman1964} Fig.~2 using WebPlotDigitizer, with paper-anchored points
+at identifiable features.
+
+The first peak at $r/\sigma=1.09$ ($g=2.84$), the first minimum at
+$r/\sigma=1.55$, the second peak at $r/\sigma=2.07$ ($g=1.25$), and the
+long-range tail ($\langle g\rangle=1.002$ for $r>4\sigma$) all compare
+favourably with Rahman's published liquid-structure data.
+The comparison is qualitative to semi-quantitative: exact agreement is not
+expected given different initial configurations and finite run length.
+The Rahman reference was constructed from manually anchored digitisation
+points and should not be over-interpreted.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.86\textwidth]{results2_figure8_lj_rdf_comparison_rahman1964.png}
+  \caption{Radial distribution function $g(r)$ from an extended 20\,000-step
+    NVE run (Velocity-Verlet, $N=864$, $P=4$; $g(r)$ sampled every 5 steps
+    after a 200-step discard), compared with the reference from
+    \citealt{Rahman1964} (orange dashed, digitised).
+    First peak: $r/\sigma=1.09$, $g=2.84$; second peak: $r/\sigma=2.07$,
+    $g=1.25$; tail $\langle g\rangle=1.002\to1$.
+    The comparison is qualitative to semi-quantitative; exact reproduction is
+    not expected.}
+  \label{fig:lj_rdf}
+\end{figure*}
+
+\FloatBarrier
+
+\section{Results 3: Parallel Scaling Analysis}
+\label{sec:results3}
+
+All timing runs used Velocity-Verlet, fixed-seed initial conditions,
+$\Delta t=\SI{e-14}{s}$, and no file output, in accordance with the
+assignment brief.
+
+\subsubsection*{Strong scaling}
+
+Figure~\ref{fig:strong}a--c shows speedup $S(P)=T_1/T_P$, parallel efficiency
+$E(P)=S(P)/P$, and the computation/communication breakdown at fixed $N=2048$.
+Table~\ref{tab:strong} records the measured values.
+
+\begin{table}[!t]
+  \centering
+  \caption{Strong scaling results ($N=2048$, Velocity-Verlet, 100 steps).}
+  \label{tab:strong}
+  \setlength{\tabcolsep}{3.5pt}
+  \small
+  \begin{tabular}{@{}rrrrrr@{}}
+    \toprule
+    $P$ & Wall [s] & Comm [s] & Comm\% & $S(P)$ & $E(P)$ \\
+    \midrule
+     1 & 45.96 & 0.001 &  0.0 &  1.00 & 1.000 \\
+     2 & 23.15 & 0.244 &  1.1 &  1.99 & 0.993 \\
+     4 & 12.00 & 0.661 &  5.5 &  3.83 & 0.957 \\
+     8 &  6.09 & 0.554 &  9.1 &  7.55 & 0.944 \\
+    16 &  3.21 & 0.367 & 11.4 & 14.30 & 0.894 \\
+    24 &  2.37 & 0.319 & 13.5 & 19.42 & 0.809 \\
+    32 &  1.91 & 0.290 & 15.2 & 24.12 & 0.754 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Scaling is near-ideal up to $P=8$ (efficiency $>94\%$).
+At $P=32$, $S(32)=24.1\times$ with efficiency $75\%$.
+Amdahl's law,
+\begin{equation}
+  S(P)=\frac{1}{f+(1-f)/P}, \label{eq:amdahl}
+\end{equation}
+fitted via nonlinear least-squares across all $P>1$ values yields
+$f\approx0.010$.
+This is an \emph{empirical descriptor} of the measured strong-scaling curve
+and should not be interpreted as a literal, machine-independent serial
+fraction: Amdahl's model assumes constant $f$ and negligible communication,
+whereas the \texttt{MPI\_Allgatherv} communication fraction grows monotonically with $P$
+(Table~\ref{tab:strong}, rising from $1.1\%$ at $P=2$ to $15.2\%$ at $P=32$),
+explaining the visible deviation from the Amdahl fit at high $P$.
+This is the expected behaviour of strong scaling: as the work per process
+falls, the communication term grows as a fraction of total runtime.
+A more realistic extension includes a message-passing overhead,
+$T_n = T_s + T_p/N + c\lambda N$, where $\lambda$ represents the cost of
+inter-process communication and the final term captures the increasing impact
+of communication as process count rises~\citep{Amdahl1967}.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=\textwidth]{results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png}
+  \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 100 steps).
+    \textbf{(a)} Speedup $S(P)$: ideal line (grey dashed), Amdahl fit
+    (Eq.~\ref{eq:amdahl}, $f=0.010$, orange).
+    Near-ideal to $P=8$; $S(32)=24.1\times$.
+    \textbf{(b)} Parallel efficiency $E(P)$: above $94\%$ for $P\le8$,
+    $75\%$ at $P=32$.
+    \textbf{(c)} Critical-path communication (orange) vs.\ remaining runtime
+    (blue); communication fraction grows from $0\%$ to $15\%$,
+    explaining the Amdahl fit deviation at high $P$.}
+  \label{fig:strong}
+\end{figure*}
+
+\subsubsection*{Size scaling}
+
+Figure~\ref{fig:size} shows wall time and its components as a function of $N$
+at fixed $P=16$, ranging from $N=108$ to $N=2048$.
+Empirical log--log fits give wall time $\propto N^{1.85}$ and compute-only
+$\propto N^{1.93}$, close to the expected $\mathcal{O}(N^2)$ for direct
+all-pairs force evaluation.
+These are fits over a limited range of $N$ and should be treated as such.
+The sub-quadratic wall-time exponent reflects the $\mathcal{O}(N)$
+\texttt{MPI\_Allgatherv} communication, which contributes a sub-quadratic
+component; the compute-only exponent converges toward~2 as $N$ grows,
+confirming the $\mathcal{O}(N^2)$ force loop asymptotically dominates.
+Communication fraction falls monotonically from $51\%$ at $N=108$ to $13\%$
+at $N=2048$ (Fig.~\ref{fig:size}b), confirming that $\mathcal{O}(N^2)$ force
+cost grows faster than $\mathcal{O}(N)$ communication volume.
+
+Although only strong and size scaling are required here, it is helpful to note
+the complementary weak-scaling viewpoint: if work per process is held roughly
+constant while both problem size and process count increase together, one
+expects communication effects to be isolated more clearly, rather than being
+amplified by shrinking local workload.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=\textwidth]{results3_figure9ab_problem_size_scaling_fixed_p16.png}
+  \caption{Size scaling ($P=16$ fixed, Velocity-Verlet, 100 steps).
+    \textbf{(a)} Log-log wall time (blue circles), compute-only (blue triangles),
+    and communication time (orange squares) vs.\ $N$, with $N^2$ reference.
+    Empirical fits: $T_{\rm wall}\propto N^{1.85}$, $T_{\rm compute}\propto N^{1.93}$.
+    \textbf{(b)} Communication fraction vs.\ $N$: monotonic decrease from $51\%$
+    to $13\%$ confirms $\mathcal{O}(N^2)$ force cost grows faster than
+    $\mathcal{O}(N)$ \texttt{MPI\_Allgatherv} volume.}
+  \label{fig:size}
+\end{figure*}
+
+\FloatBarrier
+
+% =============================================================================
+\section{Conclusions}
+\label{sec:conclusions}
+% =============================================================================
+
+The harmonic oscillator tests confirm the expected convergence orders (1.05,
+2.00, 3.94 for Euler, Velocity-Verlet, and RK4) and the decisive role of
+symplecticity in long-time energy conservation.
+Velocity-Verlet's bounded energy oscillation ($0.002\%$) versus Euler's
+monotonic $10.5\%$ drift shows that preserving the underlying Hamiltonian
+structure matters more for long-time MD stability than formal local order alone.
+
+For the LJ argon fluid, Velocity-Verlet conserves energy to $0.082\%$ over
+the mandated 100-step NVE run, while Euler diverges to $128\%$ with
+temperature runaway to $\sim\SI{400}{K}$.
+This demonstrates conclusively that Euler is unsuitable for production MD.
+RK4 achieves the highest formal accuracy (down to the IEEE~754 floor at
+$3.6\times10^{-15}$) but requires four force evaluations and four
+\texttt{MPI\_Allgatherv} calls per step; it is also non-symplectic and would
+drift on long timescales. Velocity-Verlet, requiring one force evaluation
+and one collective per step, is the correct choice.
+
+Strong scaling achieves $24.1\times$ speedup at $P=32$ with $75\%$
+efficiency (empirical Amdahl $f\approx0.010$), limited at high $P$ by
+growing \texttt{MPI\_Allgatherv} overhead not captured by the simple
+Amdahl model.
+The fundamental bottleneck is $\mathcal{O}(N)$ communication volume per step:
+the full position array must be gathered every timestep. In distributed-memory
+computing, this cost is ultimately controlled by latency and bandwidth as well
+as algorithmic structure, so parallel performance is never determined by
+flop-count alone.
+
+Production codes such as LAMMPS~\citep{Thompson2022} and GROMACS use
+\emph{spatial domain decomposition} with \emph{neighbour lists} (Verlet or
+cell lists) to reduce force evaluation to $\mathcal{O}(N)$ and limit
+communication to $\mathcal{O}(N^{2/3}/P)$ halo exchange---a fundamental
+scaling advantage.
+Additional improvements include shifted-force cutoffs to eliminate energy
+discontinuities at $r_c$, and Ewald summation for long-range electrostatics.
+The complementary perspective of Gustafson--Barsis's law is relevant here:
+the size-scaling results show the code can tackle larger problems on more
+cores, even if the strong-scaling efficiency is not perfect~\citep{Gustafson1988}.
+
+\section*{Acknowledgements}
+The author thanks Dr Philip Blakely for supervision and the Cambridge MPhil
+Scientific Computing programme for compute access.
+
+% =============================================================================
+% REFERENCES
+% =============================================================================
+\bibliographystyle{plainnat}
+
+\begin{thebibliography}{99}
+
+\bibitem[Alder \& Wainwright(1957)]{AlderWainwright1957}
+Alder B.~J., Wainwright T.~E., 1957, J.\ Chem.\ Phys., 27, 1208
+
+\bibitem[Allen \& Tildesley(2017)]{AllenTildesley2017}
+Allen M.~P., Tildesley D.~J., 2017, Computer Simulation of Liquids, 2nd edn.
+Oxford University Press
+
+\bibitem[Amdahl(1967)]{Amdahl1967}
+Amdahl G.~M., 1967, in \emph{Proceedings of the AFIPS Spring Joint Computer Conference}, pp. 483--485
+
+\bibitem[Frenkel \& Smit(2002)]{FrenkelSmit2002}
+Frenkel D., Smit B., 2002, Understanding Molecular Simulation, 2nd edn.
+Academic Press
+
+\bibitem[Gustafson(1988)]{Gustafson1988}
+Gustafson J.~L., 1988, Commun.\ ACM, 31, 532
+
+\bibitem[Hairer et~al.(2006)]{Hairer2006}
+Hairer E., Lubich C., Wanner G., 2006, Geometric Numerical Integration:
+Structure-Preserving Algorithms for Ordinary Differential Equations, 2nd edn.
+Springer
+
+\bibitem[Rahman(1964)]{Rahman1964}
+Rahman A., 1964, Phys.\ Rev., 136, A405
+
+\bibitem[Swope et~al.(1982)]{Swope1982}
+Swope W.~C., Andersen H.~C., Berens P.~H., Wilson K.~R., 1982,
+J.\ Chem.\ Phys., 76, 637
+
+\bibitem[Thompson et~al.(2022)]{Thompson2022}
+Thompson A.~P. et al., 2022, Comput.\ Phys.\ Commun., 271, 108171
+
+\bibitem[Verlet(1967)]{Verlet1967}
+Verlet L., 1967, Phys.\ Rev., 159, 98
+
+\end{thebibliography}
+
+\end{document}

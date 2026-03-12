@@ -25,6 +25,26 @@ warn() {
     echo "$1" >> "$TMP_WARN"
 }
 
+# Helper function to append a code snippet with line numbers
+append_code_snippet() {
+    local file="$1"
+    local title="$2"
+    local fence="$3"
+    local start_line="$4"
+    local end_line="$5"
+    if [ -f "$file" ]; then
+        echo "## $title" >> "$TMP_BODY"
+        echo "" >> "$TMP_BODY"
+        echo "Source: \`$file:$start_line-$end_line\`" >> "$TMP_BODY"
+        echo '```'"$fence" >> "$TMP_BODY"
+        nl -ba "$file" | sed -n "${start_line},${end_line}p" >> "$TMP_BODY"
+        echo '```' >> "$TMP_BODY"
+        echo "" >> "$TMP_BODY"
+    else
+        warn "missing expected code file for section '$title': $file"
+    fi
+}
+
 # Helper function to append a full CSV
 append_full_csv() {
     local file="$1"
@@ -170,16 +190,40 @@ fi
     echo ""
 } >> "$TMP_BODY"
 
+{
+    echo "## Report-Writing Notes and Plot Metadata"
+    echo ""
+    echo "This section pulls in the short human-readable notes and figure metadata sidecars that are most useful while drafting the Results section."
+    echo ""
+} >> "$TMP_BODY"
+
 append_text_file "out/summary/results1/results1_ho_convergence_summary.md" "Results 1 HO Convergence Summary (Markdown)" "markdown"
 append_full_csv "out/summary/results1/results1_ho_convergence_summary.csv" "Results 1 HO Convergence Summary (CSV)"
+append_text_file "out/summary/results1/results1_ho_small_large_summary.md" "Results 1 Small-vs-Large Timestep Summary (Markdown)" "markdown"
 append_full_csv "out/summary/results1/results1_ho_small_large_summary.csv" "Results 1 Small-vs-Large Timestep Summary (CSV)"
+append_text_file "out/summary/results1/results1_ho_endpoint_values.md" "Results 1 Endpoint Values (Markdown)" "markdown"
 append_full_csv "out/summary/results1/results1_ho_endpoint_values.csv" "Results 1 Endpoint Values (CSV)"
+append_text_file "out/summary/results1/results1_results_section_notes.md" "Results 1 Results-Section Notes" "markdown"
+append_text_file "out/summary/results1/results1_ho_caption_notes.md" "Results 1 Figure Caption Notes" "markdown"
 
 append_text_file "out/summary/results2/results2_quantitative_summary_table.md" "Results 2 Quantitative Summary Table (Markdown)"
 append_full_csv "out/summary/results2/results2_quantitative_summary_table.csv" "Results 2 Quantitative Summary Table (CSV)"
 append_text_file "out/summary/results2/rahman1964_fig2_manual_anchors.csv" "Rahman Fig. 2 Manual Anchor Dataset" "csv"
 append_text_file "out/summary/results2/results2_report_note.md" "Results 2 Report Note" "markdown"
 append_text_file "out/summary/results2/results2_rahman_extraction_note.md" "Rahman Extraction Note" "markdown"
+append_text_file "out/summary/results2/results2_recommended_figure_set.md" "Results 2 Recommended Figure Set" "markdown"
+append_text_file "out/summary/results2/results2_what_changed_and_why.md" "Results 2 What Changed and Why" "markdown"
+
+append_text_file "out/plots/metadata/results1_figure1ab_trajectories_dt0p01.json" "Plot Metadata: Results 1 Figure 1(a,b) Trajectories" "json"
+append_text_file "out/plots/metadata/results1_figure1c_phase_space_dt0p01.json" "Plot Metadata: Results 1 Figure 1(c) Phase Space" "json"
+append_text_file "out/plots/metadata/results1_figure2_small_vs_large_dt.json" "Plot Metadata: Results 1 Figure 2 Small-vs-Large dt" "json"
+append_text_file "out/plots/metadata/results1_figure3_convergence_combined.json" "Plot Metadata: Results 1 Figure 3 Convergence" "json"
+append_text_file "out/plots/metadata/results1_figure4_energy_diagnostic.json" "Plot Metadata: Results 1 Figure 4 Energy Diagnostic" "json"
+append_text_file "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json" "Plot Metadata: Results 2 Figure 6 Energy Drift" "json"
+append_text_file "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json" "Plot Metadata: Results 2 Figure 7 Temperature" "json"
+append_text_file "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json" "Plot Metadata: Results 2 Figure 8 RDF vs Rahman" "json"
+append_text_file "out/plots/metadata/results3_figure9ab_problem_size_scaling_fixed_p16.json" "Plot Metadata: Results 3 Figure 9 Size Scaling" "json"
+append_text_file "out/plots/metadata/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.json" "Plot Metadata: Results 3 Figure 10 Strong Scaling" "json"
 
 # Radial distribution function (full)
 GR_PATH="$(resolve_rdf_gr_path)"
@@ -201,20 +245,6 @@ if [ -n "$LJ_BRIEF_EULER" ]; then
     append_trunc_csv "$LJ_BRIEF_EULER" "LJ Brief (required) — Euler (100 steps)"
 else
     warn "manifest key missing or empty: lj_brief.euler"
-fi
-
-# Scaling data (full)
-STRONG_PATH="$(manifest_get "scaling.strong")"
-SIZE_PATH="$(manifest_get "scaling.size")"
-if [ -n "$STRONG_PATH" ]; then
-    append_full_csv "$STRONG_PATH" "Strong Scaling (median paired timings)"
-else
-    warn "manifest key missing or empty: scaling.strong"
-fi
-if [ -n "$SIZE_PATH" ]; then
-    append_full_csv "$SIZE_PATH" "Size Scaling (median paired timings)"
-else
-    warn "manifest key missing or empty: scaling.size"
 fi
 
 # HO convergence endpoint snapshot
@@ -265,6 +295,69 @@ if [ -n "$LJ_RDF_ENERGY" ]; then
 else
     warn "RDF companion trajectory path missing from expected manifest keys and run-file fallbacks"
 fi
+
+echo "## Results 3 Scaling Evidence Bundle" >> "$TMP_BODY"
+echo "" >> "$TMP_BODY"
+echo "This section makes Results 3 explicit: benchmark inputs, derived metadata, and the code path that turns timed MPI runs into the scaling claims used in the report." >> "$TMP_BODY"
+echo "" >> "$TMP_BODY"
+
+append_text_file "out/scaling_meta.txt" "Results 3 Hardware / Environment Snapshot" "text"
+append_text_file "out/plots/metadata/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.json" "Results 3 Strong Scaling Figure Metadata" "json"
+append_text_file "out/plots/metadata/results3_figure9ab_problem_size_scaling_fixed_p16.json" "Results 3 Size Scaling Figure Metadata" "json"
+
+# Scaling data (full/truncated)
+STRONG_PATH="$(manifest_get "scaling.strong")"
+SIZE_PATH="$(manifest_get "scaling.size")"
+if [ -n "$STRONG_PATH" ]; then
+    append_full_csv "$STRONG_PATH" "Results 3 Strong Scaling (median paired timings)"
+else
+    warn "manifest key missing or empty: scaling.strong"
+fi
+if [ -f "out/scaling_strong_stats.csv" ]; then
+    append_full_csv "out/scaling_strong_stats.csv" "Results 3 Strong Scaling Spread Statistics"
+else
+    warn "missing expected scaling stats file: out/scaling_strong_stats.csv"
+fi
+if [ -f "out/scaling_strong_raw.csv" ]; then
+    append_trunc_csv "out/scaling_strong_raw.csv" "Results 3 Strong Scaling Raw Repetition Samples"
+else
+    warn "missing expected scaling raw file: out/scaling_strong_raw.csv"
+fi
+
+if [ -n "$SIZE_PATH" ]; then
+    append_full_csv "$SIZE_PATH" "Results 3 Size Scaling (median paired timings)"
+else
+    warn "manifest key missing or empty: scaling.size"
+fi
+if [ -f "out/scaling_size_stats.csv" ]; then
+    append_full_csv "out/scaling_size_stats.csv" "Results 3 Size Scaling Spread Statistics"
+else
+    warn "missing expected scaling stats file: out/scaling_size_stats.csv"
+fi
+if [ -f "out/scaling_size_raw.csv" ]; then
+    append_trunc_csv "out/scaling_size_raw.csv" "Results 3 Size Scaling Raw Repetition Samples"
+else
+    warn "missing expected scaling raw file: out/scaling_size_raw.csv"
+fi
+
+echo "## Important Code Snippets" >> "$TMP_BODY"
+echo "" >> "$TMP_BODY"
+echo "These excerpts are included so the bundle carries the implementation context behind the figures, not only the output tables." >> "$TMP_BODY"
+echo "" >> "$TMP_BODY"
+
+append_code_snippet "include/md/integrators.hpp" "Integrator Implementations Compared in Results 1/2" "cpp" 27 135
+append_code_snippet "src/main.cpp" "MPI Position Exchange and Force Refresh Path" "cpp" 341 367
+append_code_snippet "src/main.cpp" "Timed Production Loop and Max-Reduction Timing Output" "cpp" 430 505
+append_code_snippet "scripts/run_all_data.sh" "Results 3 Benchmark Collection (20 Paired Repetitions, Median Pair Retained)" "bash" 203 253
+append_code_snippet "scripts/plot_ho.py" "Results 1 Fit-Point Selection and Slope Construction" "python" 370 443
+append_code_snippet "scripts/plot_ho.py" "Results 1 Convergence Figure and Metadata Generation" "python" 938 1015
+append_code_snippet "scripts/plot_ho.py" "Results 1 Summary Table Generation" "python" 1136 1235
+append_code_snippet "scripts/plot_lj.py" "Results 2 CSV Metadata Parsing and Production-Step Semantics" "python" 303 377
+append_code_snippet "scripts/plot_lj.py" "Results 2 Energy Drift Extraction and Per-Integrator Summary" "python" 455 569
+append_code_snippet "scripts/plot_lj.py" "Results 2 RDF Feature Extraction and Metadata Packaging" "python" 975 1230
+append_code_snippet "scripts/plot_lj.py" "Results 2 Quantitative Summary Table Generation" "python" 1280 1355
+append_code_snippet "scripts/plot_scaling.py" "Results 3 Strong Scaling Derivations (Speedup, Efficiency, Amdahl Fit)" "python" 140 255
+append_code_snippet "scripts/plot_scaling.py" "Results 3 Size Scaling Derivations (Power-Law Fit and Communication Fraction)" "python" 345 445
 
 {
     echo "## Diagnostics / Warnings (Bundle Generator)"

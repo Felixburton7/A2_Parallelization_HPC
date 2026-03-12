@@ -49,7 +49,7 @@ dist: clean
 	tar -czvf $(TARBALL) \
 		--exclude='__pycache__' --exclude='*.pyc' \
 		include/ src/ tests/ scripts/ \
-		Makefile README.md .clang-format
+		Makefile README.md FINAL_SUBMISSION.md .clang-format
 	@echo ""
 	@echo "Created $(TARBALL)"
 	@echo "Contents:"

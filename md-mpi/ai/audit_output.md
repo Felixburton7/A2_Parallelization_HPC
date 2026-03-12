@@ -8,7 +8,7 @@
 
 | Field | Value |
 |---|---|
-| Generation timestamp (UTC) | 2026-03-11T12:17:17Z |
+| Generation timestamp (UTC) | 2026-03-12T11:55:08Z |
 | Generation succeeded | yes |
 | Generation status label | confirmed |
 | Generation note | Audit generation completed. |
@@ -23,8 +23,8 @@
 
 | Field | Value |
 |-------|-------|
-| Timestamp (UTC) | 2026-03-11T12:17:11Z |
-| Git commit | 47c6b8ab38ed450504057c25a7a77d2ff70c79ff |
+| Timestamp (UTC) | 2026-03-12T11:55:00Z |
+| Git commit | af72d143d0f35acbc02c67bcb510cf7ebd473543 |
 | Hostname | MacBook-Pro-434.local |
 | uname -a | Darwin MacBook-Pro-434.local 24.6.0 Darwin Kernel Version 24.6.0: Mon Jul 14 11:30:29 PDT 2025; root:xnu-11417.140.69~1/RELEASE_ARM64_T6000 arm64 |
 | Compiler | Apple clang version 17.0.0 (clang-1700.0.13.5) |
@@ -39,21 +39,20 @@
 ./.gitignore
 ./Makefile
 ./README.md
+./ai/__pycache__/analyse_results.cpython-313.pyc
+./ai/__pycache__/context_report.cpython-313.pyc
+./ai/__pycache__/report_writer_context.cpython-313.pyc
 ./ai/analyse_results.py
-./ai/archive/claude.md
-./ai/archive/code.md
-./ai/archive/constraints.md
-./ai/archive/current_code.md
-./ai/archive/task_overview.md
 ./ai/audit.sh
 ./ai/audit_output.md
-./ai/audit_output.tmp.tZXFat
-./ai/audit_preface.tmp.ZltUIW
+./ai/audit_output.tmp.3syWaq
+./ai/audit_preface.tmp.WNgve1
 ./ai/context_report.py
 ./ai/generate_all_context.sh
 ./ai/make_results.sh
 ./ai/pack_context.sh
 ./ai/pack_results.sh
+./ai/report_writer_context.py
 ./ai/results.md
 ./ai/results_bundle.md
 ./include/md/constants.hpp
@@ -95,10 +94,10 @@
 
 ### out/plots/
 ```
-total 6696
+total 6256
 drwx------  13 felix  staff     416 Mar 11 12:01 .
-drwx------  24 felix  staff     768 Mar 11 12:14 ..
-drwx------  13 felix  staff     416 Mar 11 12:01 metadata
+drwx------  24 felix  staff     768 Mar 12 11:54 ..
+drwx------  14 felix  staff     448 Mar 11 12:18 metadata
 -rw-r--r--   1 felix  staff  353455 Mar 11 12:01 results1_figure1ab_trajectories_dt0p01.png
 -rw-r--r--   1 felix  staff  223338 Mar 11 12:01 results1_figure1c_phase_space_dt0p01.png
 -rw-r--r--   1 felix  staff  696830 Mar 11 12:01 results1_figure2_small_vs_large_dt.png
@@ -275,16 +274,15 @@ ALL TESTS PASSED
 ### 5a. HO — Velocity-Verlet (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:59683] [prterun-MacBook-Pro-434-59683@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59683] [prterun-MacBook-Pro-434-59683@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59683] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[MacBook-Pro-434.local:15759] [prterun-MacBook-Pro-434-15759@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15759] [prterun-MacBook-Pro-434-15759@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15759] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
 --------------------------------------------------------------------------
 No sockets were able to be opened on the available protocols
 (IPv4 and/or IPv6). Please check your network and retry.
 --------------------------------------------------------------------------
-[59683] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[15759] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 --------------------------------------------------------------------------
-No network interfaces were found for out-of-band communications. We require
 ```
 
 **Output (first 6 + last 3 lines):**
@@ -304,10 +302,14 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5b. HO — RK4 (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:59686] [prterun-MacBook-Pro-434-59686@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59686] [prterun-MacBook-Pro-434-59686@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59686] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[59686] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:15762] [prterun-MacBook-Pro-434-15762@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15762] [prterun-MacBook-Pro-434-15762@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15762] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+[15762] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+--------------------------------------------------------------------------
 ```
 
 **Output (first 6 + last 3):**
@@ -327,10 +329,18 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5c. HO — Euler (N=1, 1000 steps, dt=0.01, T_final≈10)
 
 ```
-[MacBook-Pro-434.local:59689] [prterun-MacBook-Pro-434-59689@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59689] [prterun-MacBook-Pro-434-59689@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59689] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[59689] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:15765] [prterun-MacBook-Pro-434-15765@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15765] [prterun-MacBook-Pro-434-15765@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15765] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+--------------------------------------------------------------------------
+No sockets were able to be opened on the available protocols
+(IPv4 and/or IPv6). Please check your network and retry.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+No network interfaces were found for out-of-band communications. We require
+at least one available network for out-of-band messaging.
+--------------------------------------------------------------------------
+[15765] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output (first 6 + last 3):**
@@ -350,11 +360,10 @@ step,time,x,v,E_kin,E_pot,E_total
 ### 5d. LJ — Velocity-Verlet (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:59692] [prterun-MacBook-Pro-434-59692@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59692] [prterun-MacBook-Pro-434-59692@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59692] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[59692] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
---------------------------------------------------------------------------
+[MacBook-Pro-434.local:15768] [prterun-MacBook-Pro-434-15768@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15768] [prterun-MacBook-Pro-434-15768@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15768] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[15768] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 **Output:**
@@ -467,10 +476,11 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5e. LJ — Euler (N=108, 10 steps, P=1)
 
 ```
-[MacBook-Pro-434.local:59706] [prterun-MacBook-Pro-434-59706@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59706] [prterun-MacBook-Pro-434-59706@0,0] bind() failed for port 0: Operation not permitted (1)
-[MacBook-Pro-434.local:59706] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
-[59706] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[MacBook-Pro-434.local:15782] [prterun-MacBook-Pro-434-15782@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15782] [prterun-MacBook-Pro-434-15782@0,0] bind() failed for port 0: Operation not permitted (1)
+[MacBook-Pro-434.local:15782] PRTE ERROR: Fatal in file oob_tcp_component.c at line 582
+[15782] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+--------------------------------------------------------------------------
 ```
 
 **Output:**
@@ -493,9 +503,9 @@ step,time,E_kin,E_pot,E_total,temperature
 ### 5f. MPI Consistency — P=1 vs P=2 (N=108, 5 steps, Verlet)
 
 ```
-[59710] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-[59711] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
-Error checking tolerance: [Errno 2] No such file or directory: 'out/audit_p1.pfv1GM/lj_verlet.csv'
+[15786] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[15789] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+Error checking tolerance: [Errno 2] No such file or directory: 'out/audit_p1.PiAnES/lj_verlet.csv'
 ```
 
 ## 6. Code Quality Audit (Assessor Perspective)
@@ -527,12 +537,12 @@ count=0
 
 **Triple-slash comments (`///`)**
 ```
-count=51
+count=49
 include/md/params.hpp:15:/// @brief Runtime parameters parsed from command-line arguments.
-include/md/params.hpp:17:    int N = 864;                        ///< Number of particles
-include/md/params.hpp:18:    int steps = 100;                    ///< Number of timesteps (HO) / legacy alias for LJ production_steps
-include/md/params.hpp:19:    double dt = 1.0e-14;                ///< Timestep [s] (for LJ) or dimensionless (for HO)
-include/md/params.hpp:20:    double T_init = 94.4;               ///< Legacy alias of targetTemperature [K]
+include/md/params.hpp:17:    int N = 864;          ///< Number of particles
+include/md/params.hpp:18:    int steps = 100;      ///< Number of timesteps (HO) / legacy alias for LJ production_steps
+include/md/params.hpp:19:    double dt = 1.0e-14;  ///< Timestep [s] (for LJ) or dimensionless (for HO)
+include/md/params.hpp:20:    double targetTemperature = 94.4;  ///< Target temperature for LJ startup/production handoff [K]
 ```
 
 ### 6b. Style comparison against Blakely reference style
@@ -553,7 +563,7 @@ include/md/constants.hpp,84,28,28,28,1.000,1,YES
 include/md/integrators.hpp,141,66,50,25,0.758,4,YES
 include/md/mic.hpp,19,11,3,5,0.273,1,no
 include/md/observables.hpp,82,14,58,10,4.143,5,YES
-include/md/params.hpp,90,78,5,7,0.064,1,no
+include/md/params.hpp,86,74,5,7,0.068,1,no
 include/md/partition.hpp,26,10,10,6,1.000,2,YES
 include/md/potentials.hpp,61,11,42,8,3.818,3,YES
 include/md/rng.hpp,134,76,33,25,0.434,3,YES
@@ -702,7 +712,7 @@ src/potentials/lennard_jones.cpp -> md/constants.hpp, md/mic.hpp, md/potentials.
 **Submission preview checks:**
 
 - Total files: 38
-- Approx uncompressed payload size: 300539 bytes
+- Approx uncompressed payload size: 300050 bytes
 - Makefile BCN line: BCN ?= 4316J
 - Stale/empty directory flag: src/integrators not present
 - ai/ directory excluded in preview: confirmed by filter
@@ -761,7 +771,7 @@ The report figures are produced from data in `out/manifest.json` using scripts i
 
 ### CLI help output
 ```
-[59773] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
+[15856] base/ptl_base_listener.c:604 bind() failed for socket 8 storage size 16: Operation not permitted
 ```
 
 ### Comparison
@@ -1017,400 +1027,6 @@ constexpr double L_rahman = L_sigma_rahman * sigma;
 #endif  // MD_CONSTANTS_HPP
 ```
 
-### `include/md/mic.hpp` (19 lines)
-
-```cpp
-#ifndef MD_MIC_HPP
-#define MD_MIC_HPP
-
-#include <cmath>
-
-namespace md {
-
-/// Apply the minimum image convention to a single displacement component.
-/// Maps dx into (-L/2, +L/2] using the round-based minimum image convention.
-/// Tie behavior from std::round: +L/2 -> -L/2 and -L/2 -> +L/2.
-inline double applyMIC(double dx, double L) {
-    double invL = 1.0 / L;
-    dx -= L * std::round(dx * invL);
-    return dx;
-}
-
-}  // namespace md
-
-#endif
-```
-
-### `include/md/params.hpp` (90 lines)
-
-```cpp
-/**
- * @file params.hpp
- * @brief Runtime parameters.
- */
-
-#ifndef MD_PARAMS_HPP
-#define MD_PARAMS_HPP
-
-#include <cstdio>
-#include <cstdlib>
-#include <string>
-
-namespace md {
-
-/// @brief Runtime parameters parsed from command-line arguments.
-struct Params {
-    int N = 864;                        ///< Number of particles
-    int steps = 100;                    ///< Number of timesteps (HO) / legacy alias for LJ production_steps
-    double dt = 1.0e-14;                ///< Timestep [s] (for LJ) or dimensionless (for HO)
-    double T_init = 94.4;               ///< Legacy alias of targetTemperature [K]
-    double targetTemperature = 94.4;    ///< Target temperature for LJ startup/production handoff [K]
-    int equilibrationSteps = 50;        ///< LJ startup timesteps before production (with optional rescaling)
-    int productionSteps = 100;          ///< LJ production timesteps (NVE after startup/final rescale)
-    bool finalRescaleBeforeProduction = true;  ///< Apply one exact rescale at startup->production boundary
-    double omega = 1.0;                 ///< HO angular frequency (only for mode "ho")
-    std::string integrator = "verlet";  ///< "euler", "rk4", "verlet"
-    std::string mode = "lj";            ///< "ho" or "lj"
-    bool output = true;                 ///< Enable CSV output
-    int seed = 42;                      ///< RNG seed for reproducibility
-    int rescaleStep = -1;               ///< Legacy alias for equilibrationSteps (for CLI compatibility)
-    bool timing = false;                ///< Enable wall-clock timing (disables output)
-    bool gr = false;                    ///< Enable g(r) accumulation
-    int grDiscardSteps = 200;           ///< Steps to discard after production_start_step before g(r)
-    int grSampleEvery = 5;              ///< Sample g(r) every N steps after discard
-    std::string outdir = "";            ///< Output directory for per-run namespaces
-
-    static void parse(int argc, char* argv[], Params& p) {
-        for (int i = 1; i < argc; ++i) {
-            std::string arg = argv[i];
-            if (arg == "--N" && i + 1 < argc)
-                p.N = std::atoi(argv[++i]);
-            else if (arg == "--steps" && i + 1 < argc) {
-                p.steps = std::atoi(argv[++i]);
-                p.productionSteps = p.steps;
-            } else if (arg == "--production-steps" && i + 1 < argc)
-                p.productionSteps = std::atoi(argv[++i]);
-            else if (arg == "--equilibration-steps" && i + 1 < argc)
-                p.equilibrationSteps = std::atoi(argv[++i]);
-            else if (arg == "--dt" && i + 1 < argc)
-                p.dt = std::atof(argv[++i]);
-            else if ((arg == "--T" || arg == "--target-temperature") && i + 1 < argc) {
-                p.T_init = std::atof(argv[++i]);
-                p.targetTemperature = p.T_init;
-            } else if (arg == "--omega" && i + 1 < argc)
-                p.omega = std::atof(argv[++i]);
-            else if (arg == "--integrator" && i + 1 < argc)
-                p.integrator = argv[++i];
-            else if (arg == "--mode" && i + 1 < argc)
-                p.mode = argv[++i];
-            else if (arg == "--no-output")
-                p.output = false;
-            else if (arg == "--seed" && i + 1 < argc)
-                p.seed = std::atoi(argv[++i]);
-            else if (arg == "--outdir" && i + 1 < argc)
-                p.outdir = argv[++i];
-            else if (arg == "--rescale-step" && i + 1 < argc) {
-                p.rescaleStep = std::atoi(argv[++i]);
-                p.equilibrationSteps = p.rescaleStep < 0 ? 0 : p.rescaleStep;
-            } else if (arg == "--final-rescale-before-production")
-                p.finalRescaleBeforeProduction = true;
-            else if (arg == "--no-final-rescale-before-production")
-                p.finalRescaleBeforeProduction = false;
-            else if (arg == "--timing") {
-                p.timing = true;
-                p.output = false;
-            } else if (arg == "--gr")
-                p.gr = true;
-            else if ((arg == "--gr-discard-steps" || arg == "--gr-discard") && i + 1 < argc)
-                p.grDiscardSteps = std::atoi(argv[++i]);
-            else if ((arg == "--gr-sample-every" || arg == "--gr-interval") && i + 1 < argc)
-                p.grSampleEvery = std::atoi(argv[++i]);
-            else if (!arg.empty() && arg[0] == '-')
-                std::fprintf(stderr, "WARNING: unknown argument '%s' (ignored)\n", argv[i]);
-        }
-    }
-};
-
-}  // namespace md
-
-#endif  // MD_PARAMS_HPP
-```
-
-### `include/md/mpi_context.hpp` — NOT FOUND
-
-### `include/md/system.hpp` (63 lines)
-
-```cpp
-/**
- * @file system.hpp
- * @brief Particle state in flat interleaved arrays (x,y,z per particle).
- */
-
-#ifndef MD_SYSTEM_HPP
-#define MD_SYSTEM_HPP
-
-#include <cmath>
-#include <vector>
-
-namespace md {
-
-/**
- * @brief State of the local particle system on one MPI rank.
- */
-struct System {
-    int localN;  ///< Number of particles owned by this rank
-    int offset;  ///< Starting global index for this rank's particles
-    int N;       ///< Total number of particles (global)
-    double L;    ///< Box side length [m]
-
-    std::vector<double> pos;  ///< Local positions  [3*localN], interleaved (x,y,z,x,y,z,...)
-    std::vector<double> vel;  ///< Local velocities  [3*localN], interleaved
-    std::vector<double> acc;  ///< Local accelerations [3*localN], interleaved (a = F/m)
-
-    /**
-     * @brief Initialise system arrays for localN particles.
-     *
-     * @param ln   Number of local particles
-     * @param off  Starting global index
-     * @param totalN Total particles
-     * @param boxL Box side length
-     */
-    void init(int ln, int off, int totalN, double boxL) {
-        localN = ln;
-        offset = off;
-        N = totalN;
-        L = boxL;
-
-        pos.assign(3 * localN, 0.0);
-        vel.assign(3 * localN, 0.0);
-        acc.assign(3 * localN, 0.0);
-    }
-
-    /**
-     * @brief Wrap all local positions into the canonical range [0, L).
-     *
-     * Prevents unbounded coordinate growth and floating-point precision loss.
-     * Must be called after every drift (position update) step and before
-     * the subsequent MPI_Allgatherv / force evaluation.
-     */
-    void wrapPositions() {
-        double invL = 1.0 / L;
-        for (int i = 0; i < 3 * localN; ++i) {
-            pos[i] -= L * std::floor(pos[i] * invL);
-        }
-    }
-};
-
-}  // namespace md
-
-#endif  // MD_SYSTEM_HPP
-```
-
-### `include/md/rng.hpp` (134 lines)
-
-```cpp
-/**
- * @file rng.hpp
- * @brief FCC lattice construction and Maxwell-Boltzmann velocity initialisation.
- */
-
-#ifndef MD_RNG_HPP
-#define MD_RNG_HPP
-
-#include <cmath>
-#include <random>
-#include <vector>
-
-#include "md/constants.hpp"
-
-namespace md {
-
-/**
- * @brief Construct an FCC lattice with N = 4k^3 particles in a cubic box.
- *
- * Uses the standard four-site FCC basis with a small zero-mean perturbation
- * to avoid exact-symmetry force artefacts.
- *
- * @param N     Total number of particles (must be 4*k^3, validated by caller)
- * @param L     Box side length [m]
- * @param gen   Reference to shared RNG (caller owns lifetime)
- * @return      Flat interleaved position array of size 3*N
- */
-inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
-    // Determine k such that N = 4*k^3 (validated by caller)
-    int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
-
-    std::vector<double> positions(3 * N);
-
-    // Unit cell side length
-    double a = L / k;
-
-    // FCC basis vectors (fractional coordinates)
-    const double basis[4][3] = {{0.0, 0.0, 0.0}, {0.5, 0.5, 0.0}, {0.5, 0.0, 0.5}, {0.0, 0.5, 0.5}};
-
-    // Perturbation magnitude (zero-mean uniform distribution)
-    double pertMag = constants::fccPerturbation * constants::sigma;
-    std::uniform_real_distribution<double> pertDist(-pertMag, pertMag);
-
-    int idx = 0;
-    for (int ix = 0; ix < k; ++ix) {
-        for (int iy = 0; iy < k; ++iy) {
-            for (int iz = 0; iz < k; ++iz) {
-                for (int b = 0; b < 4; ++b) {
-                    positions[3 * idx + 0] = (ix + basis[b][0]) * a + pertDist(gen);
-                    positions[3 * idx + 1] = (iy + basis[b][1]) * a + pertDist(gen);
-                    positions[3 * idx + 2] = (iz + basis[b][2]) * a + pertDist(gen);
-                    ++idx;
-                }
-            }
-        }
-    }
-
-    return positions;
-}
-
-/**
- * @brief Maxwell-Boltzmann velocities via Box-Muller.
- *
- * Removes centre-of-mass drift and rescales to match the target temperature.
- *
- * @param N      Total number of particles
- * @param T      Target temperature [K]
- * @param mass   Particle mass [kg]
- * @param gen    Reference to shared RNG (same stream as lattice perturbation)
- * @return       Flat interleaved velocity array of size 3*N
- */
-inline std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
-    std::vector<double> vel(3 * N);
-
-    double sigmaV = std::sqrt(constants::kB * T / mass);
-    constexpr double pi = 3.14159265358979323846;
-
-    std::uniform_real_distribution<double> uDist(0.0, 1.0);
-
-    int totalComponents = 3 * N;
-
-    // Box-Muller: generate pairs of normal deviates
-    for (int i = 0; i < totalComponents; i += 2) {
-        double u1, u2;
-        // Ensure u1 > 0 to avoid log(0)
-        do {
-            u1 = uDist(gen);
-        } while (u1 == 0.0);
-        u2 = uDist(gen);
-
-        double mag = sigmaV * std::sqrt(-2.0 * std::log(u1));
-        double z1 = mag * std::cos(2.0 * pi * u2);
-        double z2 = mag * std::sin(2.0 * pi * u2);
-
-        vel[i] = z1;
-        if (i + 1 < totalComponents) {
-            vel[i + 1] = z2;
-        }
-    }
-
-    // Remove centre-of-mass drift to ensure zero total momentum.
-    double vxMean = 0.0, vyMean = 0.0, vzMean = 0.0;
-    for (int i = 0; i < N; ++i) {
-        vxMean += vel[3 * i + 0];
-        vyMean += vel[3 * i + 1];
-        vzMean += vel[3 * i + 2];
-    }
-    vxMean /= N;
-    vyMean /= N;
-    vzMean /= N;
-
-    for (int i = 0; i < N; ++i) {
-        vel[3 * i + 0] -= vxMean;
-        vel[3 * i + 1] -= vyMean;
-        vel[3 * i + 2] -= vzMean;
-    }
-
-    double sumSq = 0.0;
-    for (int i = 0; i < 3 * N; ++i) {
-        sumSq += vel[i] * vel[i];
-    }
-    double tActual = (mass / (3.0 * (N - 1) * constants::kB)) * sumSq;
-    double lambda = std::sqrt(T / tActual);
-
-    for (int i = 0; i < 3 * N; ++i) {
-        vel[i] *= lambda;
-    }
-
-    return vel;
-}
-
-}  // namespace md
-
-#endif  // MD_RNG_HPP
-```
-
-### `include/md/potentials.hpp` (61 lines)
-
-```cpp
-/**
- * @file potentials.hpp
- * @brief Harmonic Oscillator and Lennard-Jones acceleration/energy kernels.
- */
-
-#ifndef MD_POTENTIALS_HPP
-#define MD_POTENTIALS_HPP
-
-#include <vector>
-
-#include "md/system.hpp"
-
-namespace md {
-
-/**
- * @brief Compute harmonic oscillator accelerations for local particles.
- *
- * a_i = -omega^2 * x_i  (independent, non-interacting particles)
- * V_i = 0.5 * m * omega^2 * x_i^2
- *
- * Non-interacting potential: operates purely on local data.
- * No communication is required in HO mode.
- *
- * Validation runs should use N=1. The code supports N independent copies.
- *
- * @param[in,out] sys       System state (accelerations written to sys.acc)
- * @param[in]     posGlobal Ignored for HO (may be empty)
- * @param[out]    localPE   Local potential energy contribution
- * @param[in]     omega     Angular frequency
- * @param[in]     mass      Particle mass [kg]
- */
-void computeHOForces(System& sys, const std::vector<double>& posGlobal, double& localPE,
-                     double omega, double mass);
-
-/**
- * @brief Compute Lennard-Jones forces for local particles against all particles.
- *
- * Uses the optimised kernel with shared intermediates (no pow, no sqrt).
- * Applies minimum image convention and hard
- * cutoff at rcut. Accumulates potential energy unconditionally for all
- * j != i; the local sum is multiplied by 0.5 AFTER the loop to correct
- * for double-counting.
- *
- * Force formula (Rahman Appendix, brief Eqn 3):
- *   a_i = (24*eps/m) * sum_{j!=i} (x_i - x_j)/r^2_ij
- *         * [2*(sigma/r_ij)^12 - (sigma/r_ij)^6]
- *
- * Caller must provide up-to-date global positions in posGlobal before
- * invoking this routine.
- *
- * @param[in,out] sys       System state (forces written to sys.acc)
- * @param[in]     posGlobal Global positions (3*N doubles, from Allgatherv)
- * @param[out]    localPE   Local PE contribution (pre-halved for this rank's pairs)
- * @param[in]     mass      Particle mass [kg]
- */
-void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& localPE,
-                     double mass);
-
-}  // namespace md
-
-#endif  // MD_POTENTIALS_HPP
-```
-
 ### `include/md/integrators.hpp` (140 lines)
 
 ```cpp
@@ -1556,6 +1172,30 @@ inline void stepVelocityVerlet(System& sys, double dt, RefreshForceFn refreshFor
 
 #endif  // MD_INTEGRATORS_HPP```
 
+### `include/md/mic.hpp` (19 lines)
+
+```cpp
+#ifndef MD_MIC_HPP
+#define MD_MIC_HPP
+
+#include <cmath>
+
+namespace md {
+
+/// Apply the minimum image convention to a single displacement component.
+/// Maps dx into (-L/2, +L/2] using the round-based minimum image convention.
+/// Tie behavior from std::round: +L/2 -> -L/2 and -L/2 -> +L/2.
+inline double applyMIC(double dx, double L) {
+    double invL = 1.0 / L;
+    dx -= L * std::round(dx * invL);
+    return dx;
+}
+
+}  // namespace md
+
+#endif
+```
+
 ### `include/md/observables.hpp` (82 lines)
 
 ```cpp
@@ -1641,6 +1281,401 @@ void normaliseGR(std::vector<double>& histogram, double dr, int N, double L, int
 }  // namespace md
 
 #endif  // MD_OBSERVABLES_HPP
+```
+
+### `include/md/params.hpp` (86 lines)
+
+```cpp
+/**
+ * @file params.hpp
+ * @brief Runtime parameters.
+ */
+
+#ifndef MD_PARAMS_HPP
+#define MD_PARAMS_HPP
+
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+
+namespace md {
+
+/// @brief Runtime parameters parsed from command-line arguments.
+struct Params {
+    int N = 864;          ///< Number of particles
+    int steps = 100;      ///< Number of timesteps (HO) / legacy alias for LJ production_steps
+    double dt = 1.0e-14;  ///< Timestep [s] (for LJ) or dimensionless (for HO)
+    double targetTemperature = 94.4;  ///< Target temperature for LJ startup/production handoff [K]
+    int equilibrationSteps =
+        50;  ///< LJ startup timesteps before production (with optional rescaling)
+    int productionSteps = 100;  ///< LJ production timesteps (NVE after startup/final rescale)
+    bool finalRescaleBeforeProduction =
+        true;                           ///< Apply one exact rescale at startup->production boundary
+    double omega = 1.0;                 ///< HO angular frequency (only for mode "ho")
+    std::string integrator = "verlet";  ///< "euler", "rk4", "verlet"
+    std::string mode = "lj";            ///< "ho" or "lj"
+    bool output = true;                 ///< Enable CSV output
+    int seed = 42;                      ///< RNG seed for reproducibility
+    bool timing = false;                ///< Enable wall-clock timing (disables output)
+    bool gr = false;                    ///< Enable g(r) accumulation
+    int grDiscardSteps = 200;  ///< Steps to discard after production_start_step before g(r)
+    int grSampleEvery = 5;     ///< Sample g(r) every N steps after discard
+    std::string outdir = "";   ///< Output directory for per-run namespaces
+
+    static void parse(int argc, char* argv[], Params& p) {
+        for (int i = 1; i < argc; ++i) {
+            std::string arg = argv[i];
+            if (arg == "--N" && i + 1 < argc)
+                p.N = std::atoi(argv[++i]);
+            else if (arg == "--steps" && i + 1 < argc) {
+                p.steps = std::atoi(argv[++i]);
+                p.productionSteps = p.steps;
+            } else if (arg == "--production-steps" && i + 1 < argc)
+                p.productionSteps = std::atoi(argv[++i]);
+            else if (arg == "--equilibration-steps" && i + 1 < argc)
+                p.equilibrationSteps = std::atoi(argv[++i]);
+            else if (arg == "--dt" && i + 1 < argc)
+                p.dt = std::atof(argv[++i]);
+            else if (arg == "--target-temperature" && i + 1 < argc)
+                p.targetTemperature = std::atof(argv[++i]);
+            else if (arg == "--omega" && i + 1 < argc)
+                p.omega = std::atof(argv[++i]);
+            else if (arg == "--integrator" && i + 1 < argc)
+                p.integrator = argv[++i];
+            else if (arg == "--mode" && i + 1 < argc)
+                p.mode = argv[++i];
+            else if (arg == "--no-output")
+                p.output = false;
+            else if (arg == "--seed" && i + 1 < argc)
+                p.seed = std::atoi(argv[++i]);
+            else if (arg == "--outdir" && i + 1 < argc)
+                p.outdir = argv[++i];
+            else if (arg == "--final-rescale-before-production")
+                p.finalRescaleBeforeProduction = true;
+            else if (arg == "--no-final-rescale-before-production")
+                p.finalRescaleBeforeProduction = false;
+            else if (arg == "--timing") {
+                p.timing = true;
+                p.output = false;
+            } else if (arg == "--gr")
+                p.gr = true;
+            else if ((arg == "--gr-discard-steps" || arg == "--gr-discard") && i + 1 < argc)
+                p.grDiscardSteps = std::atoi(argv[++i]);
+            else if ((arg == "--gr-sample-every" || arg == "--gr-interval") && i + 1 < argc)
+                p.grSampleEvery = std::atoi(argv[++i]);
+            else if (!arg.empty() && arg[0] == '-')
+                std::fprintf(stderr, "WARNING: unknown argument '%s' (ignored)\n", argv[i]);
+        }
+    }
+};
+
+}  // namespace md
+
+#endif  // MD_PARAMS_HPP
+```
+
+### `include/md/partition.hpp` (26 lines)
+
+```cpp
+/**
+ * @file partition.hpp
+ * @brief Pure helper for 1D remainder-safe particle decomposition.
+ */
+
+#ifndef MD_PARTITION_HPP
+#define MD_PARTITION_HPP
+
+#include <algorithm>
+
+namespace md {
+
+/**
+ * @brief Compute local particle count and offset for a rank.
+ *
+ * Particles are distributed as evenly as possible:
+ * first (N % size) ranks receive one extra particle.
+ */
+inline void computePartition(int N, int size, int rank, int& localN, int& offset) {
+    localN = N / size + (rank < N % size ? 1 : 0);
+    offset = rank * (N / size) + std::min(rank, N % size);
+}
+
+}  // namespace md
+
+#endif  // MD_PARTITION_HPP
+```
+
+### `include/md/potentials.hpp` (61 lines)
+
+```cpp
+/**
+ * @file potentials.hpp
+ * @brief Harmonic Oscillator and Lennard-Jones acceleration/energy kernels.
+ */
+
+#ifndef MD_POTENTIALS_HPP
+#define MD_POTENTIALS_HPP
+
+#include <vector>
+
+#include "md/system.hpp"
+
+namespace md {
+
+/**
+ * @brief Compute harmonic oscillator accelerations for local particles.
+ *
+ * a_i = -omega^2 * x_i  (independent, non-interacting particles)
+ * V_i = 0.5 * m * omega^2 * x_i^2
+ *
+ * Non-interacting potential: operates purely on local data.
+ * No communication is required in HO mode.
+ *
+ * Validation runs should use N=1. The code supports N independent copies.
+ *
+ * @param[in,out] sys       System state (accelerations written to sys.acc)
+ * @param[in]     posGlobal Ignored for HO (may be empty)
+ * @param[out]    localPE   Local potential energy contribution
+ * @param[in]     omega     Angular frequency
+ * @param[in]     mass      Particle mass [kg]
+ */
+void computeHOForces(System& sys, const std::vector<double>& posGlobal, double& localPE,
+                     double omega, double mass);
+
+/**
+ * @brief Compute Lennard-Jones forces for local particles against all particles.
+ *
+ * Uses the optimised kernel with shared intermediates (no pow, no sqrt).
+ * Applies minimum image convention and hard
+ * cutoff at rcut. Accumulates potential energy unconditionally for all
+ * j != i; the local sum is multiplied by 0.5 AFTER the loop to correct
+ * for double-counting.
+ *
+ * Force formula (Rahman Appendix, brief Eqn 3):
+ *   a_i = (24*eps/m) * sum_{j!=i} (x_i - x_j)/r^2_ij
+ *         * [2*(sigma/r_ij)^12 - (sigma/r_ij)^6]
+ *
+ * Caller must provide up-to-date global positions in posGlobal before
+ * invoking this routine.
+ *
+ * @param[in,out] sys       System state (forces written to sys.acc)
+ * @param[in]     posGlobal Global positions (3*N doubles, from Allgatherv)
+ * @param[out]    localPE   Local PE contribution (pre-halved for this rank's pairs)
+ * @param[in]     mass      Particle mass [kg]
+ */
+void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& localPE,
+                     double mass);
+
+}  // namespace md
+
+#endif  // MD_POTENTIALS_HPP
+```
+
+### `include/md/rng.hpp` (134 lines)
+
+```cpp
+/**
+ * @file rng.hpp
+ * @brief FCC lattice construction and Maxwell-Boltzmann velocity initialisation.
+ */
+
+#ifndef MD_RNG_HPP
+#define MD_RNG_HPP
+
+#include <cmath>
+#include <random>
+#include <vector>
+
+#include "md/constants.hpp"
+
+namespace md {
+
+/**
+ * @brief Construct an FCC lattice with N = 4k^3 particles in a cubic box.
+ *
+ * Uses the standard four-site FCC basis with a small zero-mean perturbation
+ * to avoid exact-symmetry force artefacts.
+ *
+ * @param N     Total number of particles (must be 4*k^3, validated by caller)
+ * @param L     Box side length [m]
+ * @param gen   Reference to shared RNG (caller owns lifetime)
+ * @return      Flat interleaved position array of size 3*N
+ */
+inline std::vector<double> buildFCCLattice(int N, double L, std::mt19937_64& gen) {
+    // Determine k such that N = 4*k^3 (validated by caller)
+    int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
+
+    std::vector<double> positions(3 * N);
+
+    // Unit cell side length
+    double a = L / k;
+
+    // FCC basis vectors (fractional coordinates)
+    const double basis[4][3] = {{0.0, 0.0, 0.0}, {0.5, 0.5, 0.0}, {0.5, 0.0, 0.5}, {0.0, 0.5, 0.5}};
+
+    // Perturbation magnitude (zero-mean uniform distribution)
+    double pertMag = constants::fccPerturbation * constants::sigma;
+    std::uniform_real_distribution<double> pertDist(-pertMag, pertMag);
+
+    int idx = 0;
+    for (int ix = 0; ix < k; ++ix) {
+        for (int iy = 0; iy < k; ++iy) {
+            for (int iz = 0; iz < k; ++iz) {
+                for (int b = 0; b < 4; ++b) {
+                    positions[3 * idx + 0] = (ix + basis[b][0]) * a + pertDist(gen);
+                    positions[3 * idx + 1] = (iy + basis[b][1]) * a + pertDist(gen);
+                    positions[3 * idx + 2] = (iz + basis[b][2]) * a + pertDist(gen);
+                    ++idx;
+                }
+            }
+        }
+    }
+
+    return positions;
+}
+
+/**
+ * @brief Maxwell-Boltzmann velocities via Box-Muller.
+ *
+ * Removes centre-of-mass drift and rescales to match the target temperature.
+ *
+ * @param N      Total number of particles
+ * @param T      Target temperature [K]
+ * @param mass   Particle mass [kg]
+ * @param gen    Reference to shared RNG (same stream as lattice perturbation)
+ * @return       Flat interleaved velocity array of size 3*N
+ */
+inline std::vector<double> generateVelocities(int N, double T, double mass, std::mt19937_64& gen) {
+    std::vector<double> vel(3 * N);
+
+    double sigmaV = std::sqrt(constants::kB * T / mass);
+    constexpr double pi = 3.14159265358979323846;
+
+    std::uniform_real_distribution<double> uDist(0.0, 1.0);
+
+    int totalComponents = 3 * N;
+
+    // Box-Muller: generate pairs of normal deviates
+    for (int i = 0; i < totalComponents; i += 2) {
+        double u1, u2;
+        // Ensure u1 > 0 to avoid log(0)
+        do {
+            u1 = uDist(gen);
+        } while (u1 == 0.0);
+        u2 = uDist(gen);
+
+        double mag = sigmaV * std::sqrt(-2.0 * std::log(u1));
+        double z1 = mag * std::cos(2.0 * pi * u2);
+        double z2 = mag * std::sin(2.0 * pi * u2);
+
+        vel[i] = z1;
+        if (i + 1 < totalComponents) {
+            vel[i + 1] = z2;
+        }
+    }
+
+    // Remove centre-of-mass drift to ensure zero total momentum.
+    double vxMean = 0.0, vyMean = 0.0, vzMean = 0.0;
+    for (int i = 0; i < N; ++i) {
+        vxMean += vel[3 * i + 0];
+        vyMean += vel[3 * i + 1];
+        vzMean += vel[3 * i + 2];
+    }
+    vxMean /= N;
+    vyMean /= N;
+    vzMean /= N;
+
+    for (int i = 0; i < N; ++i) {
+        vel[3 * i + 0] -= vxMean;
+        vel[3 * i + 1] -= vyMean;
+        vel[3 * i + 2] -= vzMean;
+    }
+
+    double sumSq = 0.0;
+    for (int i = 0; i < 3 * N; ++i) {
+        sumSq += vel[i] * vel[i];
+    }
+    double tActual = (mass / (3.0 * (N - 1) * constants::kB)) * sumSq;
+    double lambda = std::sqrt(T / tActual);
+
+    for (int i = 0; i < 3 * N; ++i) {
+        vel[i] *= lambda;
+    }
+
+    return vel;
+}
+
+}  // namespace md
+
+#endif  // MD_RNG_HPP
+```
+
+### `include/md/system.hpp` (63 lines)
+
+```cpp
+/**
+ * @file system.hpp
+ * @brief Particle state in flat interleaved arrays (x,y,z per particle).
+ */
+
+#ifndef MD_SYSTEM_HPP
+#define MD_SYSTEM_HPP
+
+#include <cmath>
+#include <vector>
+
+namespace md {
+
+/**
+ * @brief State of the local particle system on one MPI rank.
+ */
+struct System {
+    int localN;  ///< Number of particles owned by this rank
+    int offset;  ///< Starting global index for this rank's particles
+    int N;       ///< Total number of particles (global)
+    double L;    ///< Box side length [m]
+
+    std::vector<double> pos;  ///< Local positions  [3*localN], interleaved (x,y,z,x,y,z,...)
+    std::vector<double> vel;  ///< Local velocities  [3*localN], interleaved
+    std::vector<double> acc;  ///< Local accelerations [3*localN], interleaved (a = F/m)
+
+    /**
+     * @brief Initialise system arrays for localN particles.
+     *
+     * @param ln   Number of local particles
+     * @param off  Starting global index
+     * @param totalN Total particles
+     * @param boxL Box side length
+     */
+    void init(int ln, int off, int totalN, double boxL) {
+        localN = ln;
+        offset = off;
+        N = totalN;
+        L = boxL;
+
+        pos.assign(3 * localN, 0.0);
+        vel.assign(3 * localN, 0.0);
+        acc.assign(3 * localN, 0.0);
+    }
+
+    /**
+     * @brief Wrap all local positions into the canonical range [0, L).
+     *
+     * Prevents unbounded coordinate growth and floating-point precision loss.
+     * Must be called after every drift (position update) step and before
+     * the subsequent MPI_Allgatherv / force evaluation.
+     */
+    void wrapPositions() {
+        double invL = 1.0 / L;
+        for (int i = 0; i < 3 * localN; ++i) {
+            pos[i] -= L * std::floor(pos[i] * invL);
+        }
+    }
+};
+
+}  // namespace md
+
+#endif  // MD_SYSTEM_HPP
 ```
 
 ### `src/main.cpp` (550 lines)
@@ -2424,166 +2459,6 @@ void computeLJForces(System& sys, const std::vector<double>& posGlobal, double& 
 }  // namespace md
 ```
 
-### `tests/test_runner.cpp` (33 lines)
-
-```cpp
-/**
- * @file test_runner.cpp
- * @brief Homebrew unit test runner.
- */
-
-#include <cstdio>
-#include <cstdlib>
-
-extern int testMIC();
-extern int testForce();
-extern int testIntegrators();
-extern int testPartition();
-
-int main() {
-    std::printf("=== MD Unit Tests ===\n");
-
-    int totalFailures = 0;
-
-    totalFailures += testMIC();
-    totalFailures += testForce();
-    totalFailures += testIntegrators();
-    totalFailures += testPartition();
-
-    std::printf("=====================\n");
-
-    if (totalFailures == 0) {
-        std::printf("ALL TESTS PASSED\n");
-        return 0;
-    } else {
-        std::printf("TOTAL FAILURES: %d\n", totalFailures);
-        return 1;
-    }
-}
-```
-
-### `tests/test_mic.cpp` (117 lines)
-
-```cpp
-/**
- * @file test_mic.cpp
- * @brief Unit tests for the Minimum Image Convention.
- *
- * Tests that the minimum image convention correctly wraps
- * inter-particle displacements to (-L/2, +L/2], with tie behavior
- * from std::round at +/-L/2. Also tests that
- * the geometric safety condition r_c < L/2 holds for the Rahman
- * state point (r_c = 2.25*sigma < L/2 ≈ 5.115*sigma).
- */
-
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-
-#include "md/constants.hpp"
-#include "md/mic.hpp"
-
-int testMIC() {
-    int failures = 0;
-    double L = 10.0;
-    double tol = 1e-14;
-
-    // Test 1: displacement within [-L/2, L/2) should be unchanged
-    {
-        double dx = 3.0;
-        double result = md::applyMIC(dx, L);
-        if (std::abs(result - 3.0) > tol) {
-            std::printf("FAIL: MIC unchanged test: got %e, expected 3.0\n", result);
-            ++failures;
-        }
-    }
-
-    // Test 2: displacement > L/2 should wrap by -L
-    {
-        double dx = 7.0;  // > 5.0 = L/2
-        double result = md::applyMIC(dx, L);
-        if (std::abs(result - (-3.0)) > tol) {
-            std::printf("FAIL: MIC positive wrap: got %e, expected -3.0\n", result);
-            ++failures;
-        }
-    }
-
-    // Test 3: displacement < -L/2 should wrap by +L
-    {
-        double dx = -6.0;  // < -5.0
-        double result = md::applyMIC(dx, L);
-        if (std::abs(result - 4.0) > tol) {
-            std::printf("FAIL: MIC negative wrap: got %e, expected 4.0\n", result);
-            ++failures;
-        }
-    }
-
-    // Test 4: displacement at exactly L/2 boundary
-    {
-        double dx = 5.0;  // == L/2 (std::round(0.5) is 1.0, wraps to -5.0)
-        double result = md::applyMIC(dx, L);
-        if (std::abs(result - (-5.0)) > tol) {
-            std::printf("FAIL: MIC boundary L/2: got %e, expected -5.0\n", result);
-            ++failures;
-        }
-    }
-
-    // Test 5: displacement at exactly -L/2 boundary
-    {
-        double dx = -5.0;  // == -L/2 (std::round(-0.5) is -1.0, wraps to 5.0)
-        double result = md::applyMIC(dx, L);
-        if (std::abs(result - 5.0) > tol) {
-            std::printf("FAIL: MIC boundary -L/2: got %e, expected 5.0\n", result);
-            ++failures;
-        }
-    }
-
-    // Test 6: zero displacement
-    {
-        double dx = 0.0;
-        double result = md::applyMIC(dx, L);
-        if (std::abs(result) > tol) {
-            std::printf("FAIL: MIC zero: got %e, expected 0.0\n", result);
-            ++failures;
-        }
-    }
-
-    // Test 7: Geometric safety condition: r_c = 2.25*sigma < L/2
-    // For Rahman: L = 10.229*sigma, so L/2 = 5.1145*sigma
-    // r_c = 2.25*sigma < 5.1145*sigma ✓
-    {
-        double rcut_sigma = md::constants::rcut_sigma;             // 2.25
-        double halfL_sigma = md::constants::L_sigma_rahman / 2.0;  // ~5.1145
-        if (rcut_sigma >= halfL_sigma) {
-            std::printf("FAIL: Geometric safety: rcut/sigma=%.4f >= L/(2*sigma)=%.4f\n", rcut_sigma,
-                        halfL_sigma);
-            ++failures;
-        }
-    }
-
-    // Test 8: 3D MIC with all components wrapping
-    {
-        double dx = 8.0, dy = -7.0, dz = 0.5;
-        dx = md::applyMIC(dx, L);
-        dy = md::applyMIC(dy, L);
-        dz = md::applyMIC(dz, L);
-
-        if (std::abs(dx - (-2.0)) > tol || std::abs(dy - 3.0) > tol || std::abs(dz - 0.5) > tol) {
-            std::printf("FAIL: 3D MIC: got (%e, %e, %e), expected (-2, 3, 0.5)\n", dx, dy, dz);
-            ++failures;
-        }
-    }
-
-    if (failures == 0) {
-        std::printf("  MIC tests: ALL PASSED\n");
-    } else {
-        std::printf("  MIC tests: %d FAILED\n", failures);
-    }
-
-    return failures;
-}
-```
-
 ### `tests/test_force.cpp` (288 lines)
 
 ```cpp
@@ -2874,6 +2749,339 @@ int testForce() {
     }
 
     return failures;
+}
+```
+
+### `tests/test_integrators.cpp` (95 lines)
+
+```cpp
+/**
+ * @file test_integrators.cpp
+ * @brief Deterministic HO checks for Euler, Verlet, and RK4.
+ */
+
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "md/constants.hpp"
+#include "md/integrators.hpp"
+#include "md/potentials.hpp"
+#include "md/system.hpp"
+
+namespace {
+
+enum class IntegratorKind { Euler, Verlet, RK4 };
+
+double runHOAndGetError(IntegratorKind kind, double dt, int steps) {
+    md::System sys;
+    sys.init(1, 0, 1, md::constants::L_ho_dummy);
+    sys.pos[0] = 1.0;
+    sys.pos[1] = 0.0;
+    sys.pos[2] = 0.0;
+    sys.vel[0] = 0.0;
+    sys.vel[1] = 0.0;
+    sys.vel[2] = 0.0;
+
+    std::vector<double> posGlobal(3, 0.0);
+
+    const double omega = 1.0;
+    const double mass = md::constants::mass;
+    auto evalHO = [omega, mass](md::System& s, const std::vector<double>& pg, double& pe) {
+        md::computeHOForces(s, pg, pe, omega, mass);
+    };
+
+    double localPE = 0.0;
+    auto refreshForces = [&]() { evalHO(sys, posGlobal, localPE); };
+    refreshForces();
+
+    for (int step = 0; step < steps; ++step) {
+        if (kind == IntegratorKind::Euler) {
+            md::stepEuler(sys, dt, refreshForces);
+        } else if (kind == IntegratorKind::Verlet) {
+            md::stepVelocityVerlet(sys, dt, refreshForces);
+        } else {
+            md::stepRK4(sys, dt, refreshForces);
+        }
+    }
+
+    const double t = steps * dt;
+    const double xExact = std::cos(omega * t);
+    const double vExact = -omega * std::sin(omega * t);
+    const double dx = sys.pos[0] - xExact;
+    const double dv = sys.vel[0] - vExact;
+    return std::sqrt(dx * dx + dv * dv);
+}
+
+}  // namespace
+
+int testIntegrators() {
+    int failures = 0;
+
+    const double dt = 0.01;
+    const int steps = 1000;
+    const double errEuler = runHOAndGetError(IntegratorKind::Euler, dt, steps);
+    const double errVerlet = runHOAndGetError(IntegratorKind::Verlet, dt, steps);
+    const double errRK4 = runHOAndGetError(IntegratorKind::RK4, dt, steps);
+
+    if (!std::isfinite(errEuler) || !std::isfinite(errVerlet) || !std::isfinite(errRK4)) {
+        std::printf("FAIL: integrator error contains non-finite value\n");
+        ++failures;
+    }
+
+    if (!(errRK4 < errVerlet && errVerlet < errEuler)) {
+        std::printf("FAIL: expected RK4 < Verlet < Euler errors, got Euler=%e Verlet=%e RK4=%e\n",
+                    errEuler, errVerlet, errRK4);
+        ++failures;
+    }
+
+    if (errRK4 > 1e-7) {
+        std::printf("FAIL: RK4 HO error too large: %e\n", errRK4);
+        ++failures;
+    }
+
+    if (failures == 0) {
+        std::printf("  Integrator tests: ALL PASSED (Euler=%e Verlet=%e RK4=%e)\n", errEuler,
+                    errVerlet, errRK4);
+    } else {
+        std::printf("  Integrator tests: %d FAILED\n", failures);
+    }
+
+    return failures;
+}
+```
+
+### `tests/test_mic.cpp` (117 lines)
+
+```cpp
+/**
+ * @file test_mic.cpp
+ * @brief Unit tests for the Minimum Image Convention.
+ *
+ * Tests that the minimum image convention correctly wraps
+ * inter-particle displacements to (-L/2, +L/2], with tie behavior
+ * from std::round at +/-L/2. Also tests that
+ * the geometric safety condition r_c < L/2 holds for the Rahman
+ * state point (r_c = 2.25*sigma < L/2 ≈ 5.115*sigma).
+ */
+
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+
+#include "md/constants.hpp"
+#include "md/mic.hpp"
+
+int testMIC() {
+    int failures = 0;
+    double L = 10.0;
+    double tol = 1e-14;
+
+    // Test 1: displacement within [-L/2, L/2) should be unchanged
+    {
+        double dx = 3.0;
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result - 3.0) > tol) {
+            std::printf("FAIL: MIC unchanged test: got %e, expected 3.0\n", result);
+            ++failures;
+        }
+    }
+
+    // Test 2: displacement > L/2 should wrap by -L
+    {
+        double dx = 7.0;  // > 5.0 = L/2
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result - (-3.0)) > tol) {
+            std::printf("FAIL: MIC positive wrap: got %e, expected -3.0\n", result);
+            ++failures;
+        }
+    }
+
+    // Test 3: displacement < -L/2 should wrap by +L
+    {
+        double dx = -6.0;  // < -5.0
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result - 4.0) > tol) {
+            std::printf("FAIL: MIC negative wrap: got %e, expected 4.0\n", result);
+            ++failures;
+        }
+    }
+
+    // Test 4: displacement at exactly L/2 boundary
+    {
+        double dx = 5.0;  // == L/2 (std::round(0.5) is 1.0, wraps to -5.0)
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result - (-5.0)) > tol) {
+            std::printf("FAIL: MIC boundary L/2: got %e, expected -5.0\n", result);
+            ++failures;
+        }
+    }
+
+    // Test 5: displacement at exactly -L/2 boundary
+    {
+        double dx = -5.0;  // == -L/2 (std::round(-0.5) is -1.0, wraps to 5.0)
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result - 5.0) > tol) {
+            std::printf("FAIL: MIC boundary -L/2: got %e, expected 5.0\n", result);
+            ++failures;
+        }
+    }
+
+    // Test 6: zero displacement
+    {
+        double dx = 0.0;
+        double result = md::applyMIC(dx, L);
+        if (std::abs(result) > tol) {
+            std::printf("FAIL: MIC zero: got %e, expected 0.0\n", result);
+            ++failures;
+        }
+    }
+
+    // Test 7: Geometric safety condition: r_c = 2.25*sigma < L/2
+    // For Rahman: L = 10.229*sigma, so L/2 = 5.1145*sigma
+    // r_c = 2.25*sigma < 5.1145*sigma ✓
+    {
+        double rcut_sigma = md::constants::rcut_sigma;             // 2.25
+        double halfL_sigma = md::constants::L_sigma_rahman / 2.0;  // ~5.1145
+        if (rcut_sigma >= halfL_sigma) {
+            std::printf("FAIL: Geometric safety: rcut/sigma=%.4f >= L/(2*sigma)=%.4f\n", rcut_sigma,
+                        halfL_sigma);
+            ++failures;
+        }
+    }
+
+    // Test 8: 3D MIC with all components wrapping
+    {
+        double dx = 8.0, dy = -7.0, dz = 0.5;
+        dx = md::applyMIC(dx, L);
+        dy = md::applyMIC(dy, L);
+        dz = md::applyMIC(dz, L);
+
+        if (std::abs(dx - (-2.0)) > tol || std::abs(dy - 3.0) > tol || std::abs(dz - 0.5) > tol) {
+            std::printf("FAIL: 3D MIC: got (%e, %e, %e), expected (-2, 3, 0.5)\n", dx, dy, dz);
+            ++failures;
+        }
+    }
+
+    if (failures == 0) {
+        std::printf("  MIC tests: ALL PASSED\n");
+    } else {
+        std::printf("  MIC tests: %d FAILED\n", failures);
+    }
+
+    return failures;
+}
+```
+
+### `tests/test_partition.cpp` (68 lines)
+
+```cpp
+/**
+ * @file test_partition.cpp
+ * @brief Unit tests for remainder-safe particle decomposition.
+ */
+
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "md/partition.hpp"
+
+namespace {
+
+int checkCase(int N, int P, const std::vector<int>& expectedLocalN,
+              const std::vector<int>& expectedOffset) {
+    int failures = 0;
+
+    if (static_cast<int>(expectedLocalN.size()) != P || static_cast<int>(expectedOffset.size()) != P) {
+        std::printf("FAIL: partition test fixture size mismatch for N=%d, P=%d\n", N, P);
+        return 1;
+    }
+
+    int sumLocalN = 0;
+    for (int rank = 0; rank < P; ++rank) {
+        int localN = -1;
+        int offset = -1;
+        md::computePartition(N, P, rank, localN, offset);
+        sumLocalN += localN;
+
+        if (localN != expectedLocalN[rank]) {
+            std::printf("FAIL: partition localN mismatch N=%d P=%d rank=%d got=%d expected=%d\n", N,
+                        P, rank, localN, expectedLocalN[rank]);
+            ++failures;
+        }
+        if (offset != expectedOffset[rank]) {
+            std::printf("FAIL: partition offset mismatch N=%d P=%d rank=%d got=%d expected=%d\n", N,
+                        P, rank, offset, expectedOffset[rank]);
+            ++failures;
+        }
+    }
+
+    if (sumLocalN != N) {
+        std::printf("FAIL: partition count conservation N=%d P=%d sum_localN=%d\n", N, P, sumLocalN);
+        ++failures;
+    }
+
+    return failures;
+}
+
+}  // namespace
+
+int testPartition() {
+    int failures = 0;
+
+    failures += checkCase(32, 2, {16, 16}, {0, 16});
+    failures += checkCase(10, 3, {4, 3, 3}, {0, 4, 7});
+    failures += checkCase(3, 5, {1, 1, 1, 0, 0}, {0, 1, 2, 3, 3});
+    failures += checkCase(1, 4, {1, 0, 0, 0}, {0, 1, 1, 1});
+    failures += checkCase(17, 6, {3, 3, 3, 3, 3, 2}, {0, 3, 6, 9, 12, 15});
+
+    if (failures == 0) {
+        std::printf("  Partition tests: ALL PASSED\n");
+    } else {
+        std::printf("  Partition tests: %d FAILED\n", failures);
+    }
+
+    return failures;
+}
+```
+
+### `tests/test_runner.cpp` (33 lines)
+
+```cpp
+/**
+ * @file test_runner.cpp
+ * @brief Homebrew unit test runner.
+ */
+
+#include <cstdio>
+#include <cstdlib>
+
+extern int testMIC();
+extern int testForce();
+extern int testIntegrators();
+extern int testPartition();
+
+int main() {
+    std::printf("=== MD Unit Tests ===\n");
+
+    int totalFailures = 0;
+
+    totalFailures += testMIC();
+    totalFailures += testForce();
+    totalFailures += testIntegrators();
+    totalFailures += testPartition();
+
+    std::printf("=====================\n");
+
+    if (totalFailures == 0) {
+        std::printf("ALL TESTS PASSED\n");
+        return 0;
+    } else {
+        std::printf("TOTAL FAILURES: %d\n", totalFailures);
+        return 1;
+    }
 }
 ```
 
@@ -4024,7 +4232,7 @@ include/md/constants.hpp                             84 lines
 include/md/integrators.hpp                          140 lines
 include/md/mic.hpp                                   19 lines
 include/md/observables.hpp                           82 lines
-include/md/params.hpp                                90 lines
+include/md/params.hpp                                86 lines
 include/md/partition.hpp                             26 lines
 include/md/potentials.hpp                            61 lines
 include/md/rng.hpp                                  134 lines
@@ -4040,7 +4248,7 @@ tests/test_partition.cpp                             68 lines
 tests/test_runner.cpp                                33 lines
 
 Total C++ lines:
-    2061
+    2057
 ```
 
 **End of audit.**
