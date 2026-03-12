@@ -1,0 +1,62 @@
+=== Step 1/4: Audit ===
+=== Step 2/4: Results analysis ===
+results.md written to ai/results.md
+=== Step 3/4: Results bundle ===
+Results successfully bundled into ai/results_bundle.md
+=== Step 4/4: Pack context ===
+Created ai/context_bundle.tar.gz containing:
+  ai/audit_output.md
+  ai/results.md
+  out/manifest.json
+  out/plots/ho_convergence.png
+  out/plots/ho_energy.png
+  out/plots/ho_trajectories.png
+  out/plots/lj_energy.png
+  out/plots/lj_equilibrated_comparison.png
+  out/plots/lj_rdf.png
+  out/plots/lj_temperature.png
+  out/plots/scaling_size.png
+  out/plots/scaling_strong.png
+  out/runs/ho_N1_euler_dt0.0005_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_euler_dt0.001_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_euler_dt0.005_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_euler_dt0.01_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_euler_dt0.05_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_euler_dt0.1_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_euler_dt0.5_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_euler_dt1.0_20260304_170025/ho_euler.csv
+  out/runs/ho_N1_rk4_dt0.0005_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_rk4_dt0.001_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_rk4_dt0.005_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_rk4_dt0.01_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_rk4_dt0.05_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_rk4_dt0.1_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_rk4_dt0.5_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_rk4_dt1.0_20260304_170025/ho_rk4.csv
+  out/runs/ho_N1_verlet_dt0.0005_20260304_170025/ho_verlet.csv
+  out/runs/ho_N1_verlet_dt0.001_20260304_170025/ho_verlet.csv
+  out/runs/ho_N1_verlet_dt0.005_20260304_170025/ho_verlet.csv
+  out/runs/ho_N1_verlet_dt0.01_20260304_170025/ho_verlet.csv
+  out/runs/ho_N1_verlet_dt0.05_20260304_170025/ho_verlet.csv
+  out/runs/ho_N1_verlet_dt0.1_20260304_170025/ho_verlet.csv
+  out/runs/ho_N1_verlet_dt0.5_20260304_170025/ho_verlet.csv
+  out/runs/ho_N1_verlet_dt1.0_20260304_170025/ho_verlet.csv
+  out/runs/lj_N864_P4_euler_100_20260304_170025/lj_euler.csv
+  out/runs/lj_N864_P4_gr_20260304_170025/gr.csv
+  out/runs/lj_N864_P4_gr_20260304_170025/lj_verlet.csv
+  out/runs/lj_N864_P4_verlet_100_20260304_170025/lj_verlet.csv
+  out/runs/lj_N864_P4_verlet_200_eq_20260304_170025/lj_verlet.csv
+  out/scaling_size.csv
+  out/scaling_strong.csv
+
+Total files: 43
+Archive size: 5.7M
+
+=== Context generation complete ===
+Files to upload to LLM:
+  1. ai/audit_output.md   (139135 bytes)
+  2. ai/results.md        (14099 bytes)
+  3. ai/results_bundle.md (14792 bytes)
+
+Combined context tarball:
+  ai/context_bundle.tar.gz (5.7M)

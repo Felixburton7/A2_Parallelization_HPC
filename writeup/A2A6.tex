@@ -412,7 +412,7 @@ Velocity-Verlet and RK4 remain on the exact unit circle.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.98\textwidth]{results1_figure1abc_combined_dt0p01.png}
+  \includegraphics[width=0.98\textwidth]{results1_figure1abc.png}
   \caption{Harmonic oscillator trajectories at $\Delta t=0.01$, $\omega=1$,
     $T=10$; exact solution in grey.
     \textbf{(a)} Position $x(t)$ and \textbf{(b)} velocity $v(t)$.
@@ -439,7 +439,7 @@ RK4 stays close to the exact trajectory in both time and phase space.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results1_figure2_small_vs_large_dt.png}
+  \includegraphics[width=0.96\textwidth]{results1_figure2.png}
   \caption{Comparison of coarse ($\Delta t=0.5$, dash-dot) and fine ($\Delta t=0.01$,
     solid) timesteps. Left: $x(t)$; right: phase-space portrait.
     Euler (orange, top) is unstable at $\Delta t=0.5$;
@@ -494,7 +494,7 @@ global convergence.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=\textwidth]{results1_figure3_convergence_combined.png}
+  \includegraphics[width=\textwidth]{results1_figure3.png}
   \caption{Convergence to the exact harmonic-oscillator solution ($\omega=1$,
     $x_0=1$, $T=10$).
     \textbf{(a)} Endpoint position error; \textbf{(b)} RMS phase-space error.
@@ -520,7 +520,7 @@ long-time preservation of the invariant structure of the dynamics.
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{results1_figure4_energy_diagnostic.png}
+  \includegraphics[width=\columnwidth]{results1_figure4.png}
   \caption{Relative energy deviation $(E-E_0)/|E_0|$ for the harmonic oscillator
     ($\Delta t=0.01$, $T=10$).
     Euler (orange) drifts monotonically to $10.5\%$.
@@ -566,7 +566,7 @@ between $P=1$ and $P=2$ runs.
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure6_lj_brief_energy_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure6.png}
   \caption{Signed relative energy deviation $\Delta E/E_0$ [\%] during the 100-step
     NVE production run for liquid argon ($N=864$, $\Delta t=\SI{e-14}{s}$,
     equilibrated to $T=\SI{94.4}{K}$).
@@ -591,7 +591,7 @@ for production MD even from a well-equilibrated initial configuration.
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure7_lj_brief_temperature_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure7.png}
   \caption{Instantaneous temperature during the 100-step argon NVE run
     ($N=864$, $\Delta t=\SI{e-14}{s}$).
     Velocity-Verlet (blue) holds $T\approx\SI{94.4}{K}$ (grey dashed);
@@ -621,7 +621,7 @@ points and should not be over-interpreted.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.86\textwidth]{results2_figure8_lj_rdf_comparison_rahman1964.png}
+  \includegraphics[width=0.86\textwidth]{results2_figure8.png}
   \caption{Radial distribution function $g(r)$ from an extended 20\,000-step
     NVE run (Velocity-Verlet, $N=864$, $P=4$; $g(r)$ sampled every 5 steps
     after a 200-step discard), compared with the reference from
@@ -642,8 +642,8 @@ Results~3 is a separate timing benchmark, not a repeat of the brief-mandated
 100-step argon validation run from Results~2.
 All timing runs used Velocity-Verlet, fixed seed 42,
 $\Delta t=\SI{e-14}{s}$, and no file output.
-Strong scaling used 500 timed steps at fixed $N=2048$, whereas size scaling
-used 2000 timed steps at fixed $P=16$; each configuration was repeated
+Strong scaling used 1000 timed steps at fixed $N=2048$, whereas size scaling
+used 1000 timed steps at fixed $P=16$; each configuration was repeated
 20 times and the median paired wall/communication sample retained to reduce
 measurement noise and fixed-overhead contamination.
 All times reported in this section are raw measured seconds from those
@@ -657,7 +657,7 @@ Table~\ref{tab:strong} records the measured values.
 
 \begin{table}[!t]
   \centering
-  \caption{Strong scaling results ($N=2048$, Velocity-Verlet, 500 timed steps;
+  \caption{Strong scaling results ($N=2048$, Velocity-Verlet, 1000 timed steps;
     medians of 20 no-output repetitions).}
   \label{tab:strong}
   \setlength{\tabcolsep}{3.5pt}
@@ -700,8 +700,8 @@ of communication as process count rises~\citep{Amdahl1967}.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=\textwidth]{results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png}
-  \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 500 timed steps;
+  \includegraphics[width=\textwidth]{results3_figure10abc.png}
+  \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 1000 timed steps;
     medians of 20 no-output repetitions).
     \textbf{(a)} Speedup $S(P)$: ideal line (grey dashed), Amdahl fit
     (Eq.~\ref{eq:amdahl}, $f=0.010$, orange).
@@ -738,8 +738,8 @@ amplified by shrinking local workload.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=\textwidth]{results3_figure9ab_problem_size_scaling_fixed_p16.png}
-  \caption{Size scaling ($P=16$ fixed, Velocity-Verlet, 2000 timed steps;
+  \includegraphics[width=\textwidth]{results3_figure9ab.png}
+  \caption{Size scaling ($P=16$ fixed, Velocity-Verlet, 1000 timed steps;
     medians of 20 no-output repetitions).
     \textbf{(a)} Log-log wall time (blue circles), compute-only (blue triangles),
     and communication time (orange squares) vs.\ $N$, with $N^2$ reference.

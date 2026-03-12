@@ -1,0 +1,5 @@
+label=final_full_run_20260310_222336
+job_id=6860
+host=phy-cerberus4
+start=Tue 10 Mar 22:50:11 GMT 2026
+git_commit=47c6b8ab38ed450504057c25a7a77d2ff70c79ff

@@ -98,16 +98,16 @@ total 6256
 drwx------  13 felix  staff     416 Mar 11 12:01 .
 drwx------  24 felix  staff     768 Mar 12 11:54 ..
 drwx------  14 felix  staff     448 Mar 11 12:18 metadata
--rw-r--r--   1 felix  staff  353455 Mar 11 12:01 results1_figure1ab_trajectories_dt0p01.png
--rw-r--r--   1 felix  staff  223338 Mar 11 12:01 results1_figure1c_phase_space_dt0p01.png
--rw-r--r--   1 felix  staff  696830 Mar 11 12:01 results1_figure2_small_vs_large_dt.png
--rw-r--r--   1 felix  staff  367029 Mar 11 12:01 results1_figure3_convergence_combined.png
--rw-r--r--   1 felix  staff  198433 Mar 11 12:01 results1_figure4_energy_diagnostic.png
--rw-r--r--   1 felix  staff  319969 Mar 11 12:01 results2_figure6_lj_brief_energy_100step_production.png
--rw-r--r--   1 felix  staff  153527 Mar 11 12:01 results2_figure7_lj_brief_temperature_100step_production.png
--rw-r--r--   1 felix  staff  246521 Mar 11 12:01 results2_figure8_lj_rdf_comparison_rahman1964.png
--rw-r--r--   1 felix  staff  308808 Mar 11 12:01 results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png
--rw-r--r--   1 felix  staff  311049 Mar 11 12:01 results3_figure9ab_problem_size_scaling_fixed_p16.png
+-rw-r--r--   1 felix  staff  353455 Mar 11 12:01 results1_figure1ab.png
+-rw-r--r--   1 felix  staff  223338 Mar 11 12:01 results1_figure1c.png
+-rw-r--r--   1 felix  staff  696830 Mar 11 12:01 results1_figure2.png
+-rw-r--r--   1 felix  staff  367029 Mar 11 12:01 results1_figure3.png
+-rw-r--r--   1 felix  staff  198433 Mar 11 12:01 results1_figure4.png
+-rw-r--r--   1 felix  staff  319969 Mar 11 12:01 results2_figure6.png
+-rw-r--r--   1 felix  staff  153527 Mar 11 12:01 results2_figure7.png
+-rw-r--r--   1 felix  staff  246521 Mar 11 12:01 results2_figure8.png
+-rw-r--r--   1 felix  staff  308808 Mar 11 12:01 results3_figure10abc.png
+-rw-r--r--   1 felix  staff  311049 Mar 11 12:01 results3_figure9ab.png
 ```
 
 ### out/manifest.json
@@ -150,9 +150,9 @@ drwx------  14 felix  staff     448 Mar 11 12:18 metadata
   "results2_outputs": {
     "generated_utc": "2026-03-11T12:01:14Z",
     "main_report_figures": [
-      "out/plots/results2_figure6_lj_brief_energy_100step_production.png",
-      "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
-      "out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png"
+      "out/plots/results2_figure6.png",
+      "out/plots/results2_figure7.png",
+      "out/plots/results2_figure8.png"
     ],
     "main_report_tables": [
       "out/summary/results2/results2_quantitative_summary_table.md",
@@ -167,9 +167,9 @@ drwx------  14 felix  staff     448 Mar 11 12:18 metadata
       "out/summary/results2/results2_what_changed_and_why.md"
     ],
     "plot_metadata_files": [
-      "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json",
-      "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json",
-      "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json"
+      "out/plots/metadata/results2_figure6.json",
+      "out/plots/metadata/results2_figure7.json",
+      "out/plots/metadata/results2_figure8.json"
     ]
   },
   "lj_rdf": {
@@ -3882,11 +3882,11 @@ Plot script content truncated for token efficiency. Full file remains in reposit
 plot_ho.py — Results 1 harmonic oscillator plotting package.
 
 Main figures (brief-facing):
-  Figure 1(a,b): out/plots/results1_figure1ab_trajectories_dt0p01.png
-  Figure 1(c):   out/plots/results1_figure1c_phase_space_dt0p01.png
-  Figure 2(a-f): out/plots/results1_figure2_small_vs_large_dt.png
-  Figure 3(a,b): out/plots/results1_figure3_convergence_combined.png
-  Figure 4(a):   out/plots/results1_figure4_energy_diagnostic.png
+  Figure 1(a,b): out/plots/results1_figure1ab.png
+  Figure 1(c):   out/plots/results1_figure1c.png
+  Figure 2(a-f): out/plots/results1_figure2.png
+  Figure 3(a,b): out/plots/results1_figure3.png
+  Figure 4(a):   out/plots/results1_figure4.png
 
 Generated artifacts:
   - out/summary/results1/results1_ho_small_large_summary.(csv|md)
@@ -3954,9 +3954,9 @@ Plot script content truncated for token efficiency. Full file remains in reposit
 plot_lj.py — Generate Lennard-Jones / Argon validation plots (Results 2).
 
 Produces:
-  - out/plots/results2_figure6_lj_brief_energy_100step_production.png
-  - out/plots/results2_figure7_lj_brief_temperature_100step_production.png
-  - out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png
+  - out/plots/results2_figure6.png
+  - out/plots/results2_figure7.png
+  - out/plots/results2_figure8.png
 """
 
 import csv

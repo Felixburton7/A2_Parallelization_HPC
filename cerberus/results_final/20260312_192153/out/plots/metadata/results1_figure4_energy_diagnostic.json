@@ -1,0 +1,17 @@
+{
+  "claim": "Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval.",
+  "figure_number": 4,
+  "generated_utc": "2026-03-12T18:17:51Z",
+  "kind": "supporting_results1_figure",
+  "note": "RK4 is not symplectic.",
+  "parameters": {
+    "dt_large": 0.5,
+    "dt_small": 0.01,
+    "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
+    "omega": 1.0,
+    "t_final": 10.0,
+    "v0": 0.0,
+    "x0": 1.0
+  },
+  "plot_file_png": "out/plots/results1_figure4_energy_diagnostic.png"
+}

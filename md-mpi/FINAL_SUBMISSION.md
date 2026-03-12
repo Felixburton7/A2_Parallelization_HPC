@@ -44,9 +44,10 @@ Before finalising the write-up, confirm these are still true for the generated d
 
 - required LJ production run: `100` steps / `1 ps`
 - RDF: separate long Verlet run (`20000` production steps)
-- strong scaling: `1000` timed steps
-- size scaling: `1000` timed steps
-- timing data are medians over `20` repetitions per point
+- default scaling path is pinned deterministic reference data from `scripts/data/reference_scaling/`
+- pinned strong scaling: `1000` timed steps
+- pinned size scaling: `1000` timed steps
+- pinned timing data are medians over `11` repetitions per point
 
 ## 5. Create Submission Tarball
 

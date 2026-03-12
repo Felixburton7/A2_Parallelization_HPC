@@ -1,0 +1,5 @@
+hostname: phy-cerberus6
+cpu: Intel(R) Xeon(R) Gold 5418Y
+compiler: g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+mpi: mpirun (Open MPI) 4.1.6
+date: 2026-03-10T04:35:14+00:00

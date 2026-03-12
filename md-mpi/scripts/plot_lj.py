@@ -3,9 +3,9 @@
 plot_lj.py — Generate Lennard-Jones / Argon validation plots (Results 2).
 
 Produces:
-  - out/plots/results2_figure6_lj_brief_energy_100step_production.png
-  - out/plots/results2_figure7_lj_brief_temperature_100step_production.png
-  - out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png
+  - out/plots/results2_figure6.png
+  - out/plots/results2_figure7.png
+  - out/plots/results2_figure8.png
 """
 
 import csv
@@ -57,9 +57,9 @@ EPSILON = KB * EPSILON_OVER_KB
 SIGMA_ANGSTROM = 3.4
 TEMP_DIVERGENCE_K = 1.0e4
 
-FIG6_ENERGY_PNG = "results2_figure6_lj_brief_energy_100step_production.png"
-FIG7_TEMPERATURE_PNG = "results2_figure7_lj_brief_temperature_100step_production.png"
-FIG8_RDF_PNG = "results2_figure8_lj_rdf_comparison_rahman1964.png"
+FIG6_ENERGY_PNG = "results2_figure6.png"
+FIG7_TEMPERATURE_PNG = "results2_figure7.png"
+FIG8_RDF_PNG = "results2_figure8.png"
 
 
 def utc_now():
@@ -539,8 +539,6 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
             framealpha=0.86,
         )
 
-        if row == 0:
-            ax_d.set_title(r"Signed relative drift $\Delta E/E_0$ [%]")
 
         divergence_step = series.get("divergence_step")
         divergence_time_ps = series.get("divergence_time_ps")
@@ -603,7 +601,6 @@ def plot_energy_for_run(manifest, run_key, config, out_name):
             axes[row].set_xlim(0.0, x_max)
 
     axes[1].set_xlabel("Time [ps]")
-    fig.suptitle(config["energy_title"], fontsize=13)
     if config.get("include_required_run_note", False):
         fig.set_constrained_layout_pads(h_pad=0.12, w_pad=0.03, hspace=0.08, wspace=0.08)
         fig.text(
@@ -811,7 +808,6 @@ def plot_temperature_for_run(manifest, run_key, config, out_name):
 
     ax.set_xlabel("Time [ps]")
     ax.set_ylabel("Temperature [K]")
-    ax.set_title(config["temperature_title"])
     apply_major_grid(ax)
     disable_offset_text(ax)
     if target_temp_k is None:
@@ -1132,7 +1128,6 @@ def plot_rdf(manifest, rahman_points, out_name=FIG8_RDF_PNG):
         )
     ax.axhline(y=1.0, color=COLOR_REFERENCE, linestyle=(0, (3, 3)), linewidth=1.0, alpha=0.65, label="g(r) = 1")
 
-    ax.set_title("Lennard-Jones argon RDF compared with Rahman (1964)", pad=12)
     ax.set_xlabel(r"Distance $r/\sigma$")
     ax.set_ylabel("g(r)")
     finite_r = r_sigma[np.isfinite(r_sigma)]
@@ -1408,10 +1403,10 @@ def write_results2_quantitative_summary(energy_brief_summary, temp_brief_summary
             "section_b_rdf_comparison": rows_b,
             "sources": {
                 "energy_temperature_summary": (
-                    "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json + "
-                    "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json"
+                    "out/plots/metadata/results2_figure6.json + "
+                    "out/plots/metadata/results2_figure7.json"
                 ),
-                "rdf_summary": "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json",
+                "rdf_summary": "out/plots/metadata/results2_figure8.json",
             },
         },
     )
@@ -1463,9 +1458,9 @@ This comparison should be stated as qualitative / semi-quantitative rather than 
         """# Recommended Final Results 2 Figure Set
 
 Main report figures (core evidence, in order):
-6. `out/plots/results2_figure6_lj_brief_energy_100step_production.png` (panels: a, b)
-7. `out/plots/results2_figure7_lj_brief_temperature_100step_production.png` (panel: a)
-8. `out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png` (panel: a)
+6. `out/plots/results2_figure6.png` (panels: a, b)
+7. `out/plots/results2_figure7.png` (panel: a)
+8. `out/plots/results2_figure8.png` (panel: a)
 Table: `out/summary/results2/results2_quantitative_summary_table.md` (compact quantitative table)
 Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler comparison and Rahman structural comparison with no extra non-deliverable figures.
 """,

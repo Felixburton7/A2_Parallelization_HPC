@@ -3,12 +3,12 @@
 plot_ho.py — Results 1 harmonic oscillator plotting package.
 
 Main figures (brief-facing):
-  Figure 1(a-c): out/plots/results1_figure1abc_combined_dt0p01.png
-  Legacy Figure 1(a,b): out/plots/results1_figure1ab_trajectories_dt0p01.png
-  Legacy Figure 1(c):   out/plots/results1_figure1c_phase_space_dt0p01.png
-  Figure 2(a-f): out/plots/results1_figure2_small_vs_large_dt.png
-  Figure 3(a,b): out/plots/results1_figure3_convergence_combined.png
-  Figure 4(a):   out/plots/results1_figure4_energy_diagnostic.png
+  Figure 1(a-c): out/plots/results1_figure1abc.png
+  Legacy Figure 1(a,b): out/plots/results1_figure1ab.png
+  Legacy Figure 1(c):   out/plots/results1_figure1c.png
+  Figure 2(a-f): out/plots/results1_figure2.png
+  Figure 3(a,b): out/plots/results1_figure3.png
+  Figure 4(a):   out/plots/results1_figure4.png
 
 Generated artifacts:
   - out/summary/results1/results1_ho_small_large_summary.(csv|md)
@@ -75,12 +75,12 @@ PLOT_META_DIR = "out/plots/metadata"
 SUMMARY_DIR = "out/summary"
 SUMMARY_RESULTS1_DIR = "out/summary/results1"
 
-FIG1_COMBINED_PNG = "results1_figure1abc_combined_dt0p01.png"
-FIG1_PNG = "results1_figure1ab_trajectories_dt0p01.png"
-FIG2_PNG = "results1_figure1c_phase_space_dt0p01.png"
-FIG3_PNG = "results1_figure2_small_vs_large_dt.png"
-FIG4_PNG = "results1_figure3_convergence_combined.png"
-FIG5_PNG = "results1_figure4_energy_diagnostic.png"
+FIG1_COMBINED_PNG = "results1_figure1abc.png"
+FIG1_PNG = "results1_figure1ab.png"
+FIG2_PNG = "results1_figure1c.png"
+FIG3_PNG = "results1_figure2.png"
+FIG4_PNG = "results1_figure3.png"
+FIG5_PNG = "results1_figure4.png"
 RESULTS1_EXACT_COLOR = "#111111"
 
 R1_SMALL_LARGE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.csv"
@@ -748,9 +748,8 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
     gs = fig.add_gridspec(2, 2, width_ratios=(1.65, 0.95), height_ratios=(1.0, 1.0))
     ax_x = fig.add_subplot(gs[0, 0])
     ax_v = fig.add_subplot(gs[1, 0], sharex=ax_x)
-    gs_right = gs[:, 1].subgridspec(2, 1, height_ratios=(0.84, 0.16), hspace=0.12)
+    gs_right = gs[:, 1].subgridspec(1, 1)
     ax_phase = fig.add_subplot(gs_right[0, 0])
-    ax_phase_zoom = fig.add_subplot(gs_right[1, 0])
 
     t_exact = np.linspace(0.0, T_FINAL, 2000, dtype=float)
     x_exact, v_exact = exact_solution(t_exact)
@@ -759,14 +758,11 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
     exact_color = "#8f8f8f"
     exact_lw_main = 1.45
     exact_alpha_main = 0.72
-    phase_zoom_t_start = 8.8
-    marker_map = {"euler": "o", "verlet": "s", "rk4": "^"}
 
     plot_series = {
         "x": [("exact", t_exact, x_exact)],
         "v": [("exact", t_exact, v_exact)],
     }
-    phase_series: Dict[str, Dict[str, object]] = {}
 
     # Draw exact trajectories first and lightly so numerical methods remain visible on top.
     ax_x.plot(
@@ -803,7 +799,6 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
             print(f"Warning: {integ} dt={TRAJ_DT:g} missing for combined Figure 1.")
             continue
         data = ds["data"]
-        phase_series[integ] = data
         style = INTEGRATOR_STYLE[integ]
         lw = float(style["linewidth"])
         alpha = 0.95
@@ -848,80 +843,6 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
 
     ax_v.set_xlim(0.0, T_FINAL)
 
-    zx_all: List[float] = []
-    zv_all: List[float] = []
-    for integ in INTEGRATORS:
-        data = phase_series.get(integ)
-        if data is None:
-            continue
-        style = INTEGRATOR_STYLE[integ]
-        tt = np.asarray(data["time"], dtype=float)
-        xx = np.asarray(data["x"], dtype=float)
-        vv = np.asarray(data["v"], dtype=float)
-        mask = tt >= phase_zoom_t_start
-        if np.any(mask):
-            xloc = xx[mask]
-            vloc = vv[mask]
-            ax_phase_zoom.plot(
-                xloc,
-                vloc,
-                color=style["color"],
-                linestyle=style["linestyle"],
-                linewidth=style["linewidth"],
-                alpha=0.98,
-                zorder=3,
-            )
-            ax_phase_zoom.plot(
-                xloc[-1],
-                vloc[-1],
-                marker=marker_map.get(integ, "o"),
-                markersize=4.0,
-                color=style["color"],
-                zorder=4,
-            )
-            zx_all.extend(xloc.tolist())
-            zv_all.extend(vloc.tolist())
-    tz = np.linspace(phase_zoom_t_start, T_FINAL, 400, dtype=float)
-    xz, vz = exact_solution(tz)
-    ax_phase_zoom.plot(xz, vz, color=exact_color, linestyle=":", linewidth=1.45, alpha=0.80, zorder=2)
-    ax_phase_zoom.plot(xz[-1], vz[-1], marker="D", markersize=4.0, color=exact_color, zorder=4)
-    zx_all.extend(xz.tolist())
-    zv_all.extend(vz.tolist())
-    zoom_xlim = None
-    zoom_ylim = None
-    if zx_all and zv_all:
-        xmin, xmax = min(zx_all), max(zx_all)
-        ymin, ymax = min(zv_all), max(zv_all)
-        xpad = max(0.01, 0.22 * (xmax - xmin))
-        ypad = max(0.01, 0.22 * (ymax - ymin))
-        x0, x1 = xmin - xpad, xmax + xpad
-        y0, y1 = ymin - ypad, ymax + ypad
-        # Keep the source zoom window square so the highlighted box and inset match.
-        side = max(x1 - x0, y1 - y0)
-        cx = 0.5 * (x0 + x1)
-        cy = 0.5 * (y0 + y1)
-        zoom_xlim = (cx - 0.5 * side, cx + 0.5 * side)
-        zoom_ylim = (cy - 0.5 * side, cy + 0.5 * side)
-        ax_phase_zoom.set_xlim(*zoom_xlim)
-        ax_phase_zoom.set_ylim(*zoom_ylim)
-        ax_phase_zoom.set_aspect("equal", "box")
-
-    ax_phase_zoom.set_title(r"Zoom near $t\approx T$", fontsize=7.6, pad=1.8)
-    ax_phase_zoom.set_xlabel("")
-    ax_phase_zoom.set_ylabel("")
-    ax_phase_zoom.tick_params(
-        axis="both",
-        which="both",
-        bottom=False,
-        top=False,
-        left=False,
-        right=False,
-        labelbottom=False,
-        labelleft=False,
-    )
-    apply_major_grid(ax_phase_zoom)
-    disable_offset_text(ax_phase_zoom)
-
     ax_x.set_title("Position x(t)", loc="left")
     ax_v.set_title("Velocity v(t)", loc="left")
     ax_phase.set_title("Phase-space orbit", loc="left")
@@ -944,7 +865,7 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
         ax_phase.set_xlim(-phase_lim, phase_lim)
         ax_phase.set_ylim(-phase_lim, phase_lim)
 
-    for ax in (ax_x, ax_v, ax_phase, ax_phase_zoom):
+    for ax in (ax_x, ax_v, ax_phase):
         apply_major_grid(ax)
         disable_offset_text(ax)
     for ax in (ax_x, ax_v):
@@ -971,19 +892,6 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
     )
     fig.subplots_adjust(top=0.88, bottom=0.12, left=0.07, right=0.985, hspace=0.24, wspace=0.16)
 
-    # Place the zoom panel below c (toward the lower-right) and make it larger.
-    phase_pos = ax_phase.get_position()
-    zoom_side = min(phase_pos.height * 0.38, phase_pos.width * 0.38)
-    inset_pad_x = 0.014 * phase_pos.width
-    below_gap = 0.070 * phase_pos.height
-    new_x0 = phase_pos.x1 - inset_pad_x - zoom_side
-    new_y0 = max(0.035, phase_pos.y0 - zoom_side - below_gap)
-    ax_phase_zoom.set_position([new_x0, new_y0, zoom_side, zoom_side])
-    ax_phase_zoom.set_facecolor((1.0, 1.0, 1.0, 0.94))
-    for spine in ax_phase_zoom.spines.values():
-        spine.set_linewidth(0.9)
-        spine.set_edgecolor("#4d4d4d")
-
     save_plot_pair(
         fig,
         FIG1_COMBINED_PNG,
@@ -994,9 +902,9 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
             "panels": ["a) x(t)", "b) v(t)", "c) v_vs_x"],
             "insets": {
                 "phase_space": {
-                    "used": True,
-                    "placement": "below-panel-c-lower-right",
-                    "time_window": [phase_zoom_t_start, T_FINAL],
+                    "used": False,
+                    "placement": "none",
+                    "time_window": None,
                 },
             },
             "shared_legend": True,

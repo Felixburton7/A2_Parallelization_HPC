@@ -1,0 +1,7 @@
+label=results3_pinned_rerun_20260310_160028
+job_id=6831
+host=phy-cerberus6
+start=Tue 10 Mar 16:26:46 GMT 2026
+git_commit=ccf5f1350359a1bc69a1ba7a6e4a295ae0f6aaad
+reps=11
+note=--bind-to core pinning enabled

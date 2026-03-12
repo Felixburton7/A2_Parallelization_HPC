@@ -177,7 +177,7 @@ Figure~\ref{fig:ho_traj} shows position, velocity, and phase-space trajectories 
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.98\textwidth]{results1_figure1abc_combined_dt0p01.png}
+  \includegraphics[width=0.98\textwidth]{results1_figure1abc.png}
   \caption{Harmonic-oscillator diagnostics at $\Delta t=0.01$. Left: position and velocity traces against the exact solution. Right: phase-space orbit. Euler shows a measurable phase error and outward spiral, whereas Velocity-Verlet and RK4 remain almost indistinguishable from the exact conservative orbit on this time horizon.}
   \label{fig:ho_traj}
 \end{figure*}
@@ -186,7 +186,7 @@ The timestep-comparison figure, Fig.~\ref{fig:ho_dtcomp}, makes the stability di
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results1_figure2_small_vs_large_dt.png}
+  \includegraphics[width=0.96\textwidth]{results1_figure2.png}
   \caption{Fine-versus-coarse timestep comparison for the harmonic oscillator. Euler becomes unstable at $\Delta t=0.5$, while Velocity-Verlet remains bounded and RK4 stays close to the exact solution. The figure directly shows why formal order alone is not enough to choose an MD integrator.}
   \label{fig:ho_dtcomp}
 \end{figure*}
@@ -216,7 +216,7 @@ Convergence to the exact solution is shown in Fig.~\ref{fig:ho_conv} and Table~\
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=\textwidth]{results1_figure3_convergence_combined.png}
+  \includegraphics[width=\textwidth]{results1_figure3.png}
   \caption{Log--log convergence of endpoint position error and RMS phase-space error. Filled markers denote the fitted asymptotic regime. The measured slopes confirm first-, second-, and fourth-order global convergence for Euler, Velocity-Verlet, and RK4.}
   \label{fig:ho_conv}
 \end{figure*}
@@ -225,7 +225,7 @@ The decisive MD-oriented diagnostic is energy conservation, shown in Fig.~\ref{f
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{results1_figure4_energy_diagnostic.png}
+  \includegraphics[width=\columnwidth]{results1_figure4.png}
   \caption{Relative harmonic-oscillator energy deviation at $\Delta t=0.01$. Euler shows secular drift, Velocity-Verlet a bounded oscillation, and RK4 a very small short-time error. This figure is the clearest evidence that symplecticity matters for MD.}
   \label{fig:ho_energy}
 \end{figure}
@@ -271,7 +271,7 @@ Figure~\ref{fig:lj_energy} shows the signed energy drift over the mandated produ
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure6_lj_brief_energy_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure6.png}
   \caption{Signed relative total-energy drift during the required argon production run. Velocity-Verlet remains bounded, whereas Euler exhibits catastrophic secular growth.}
   \label{fig:lj_energy}
 \end{figure}
@@ -280,7 +280,7 @@ The temperature traces in Fig.~\ref{fig:lj_temp} tell the same story in more dir
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure7_lj_brief_temperature_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure7.png}
   \caption{Instantaneous temperature during the brief argon NVE run. Velocity-Verlet remains near the target state; Euler undergoes severe artificial heating.}
   \label{fig:lj_temp}
 \end{figure}
@@ -291,7 +291,7 @@ It is important, however, to describe this comparison honestly. The Rahman curve
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.86\textwidth]{results2_figure8_lj_rdf_comparison_rahman1964.png}
+  \includegraphics[width=0.86\textwidth]{results2_figure8.png}
   \caption{Velocity-Verlet radial distribution function for the longer argon run, compared with a semi-quantitative guide extracted from Rahman (1964). The main liquid-structure features --- first peak, first minimum, second peak, and long-range relaxation toward $g(r)=1$ --- are reproduced. The Rahman curve should be interpreted as a manually anchored visual reference rather than exact tabulated truth.}
   \label{fig:lj_rdf}
 \end{figure*}
@@ -301,13 +301,13 @@ The main judgement from Results~2 is therefore straightforward. The code reprodu
 \FloatBarrier
 \section{Results 3: Parallel scaling}
 
-Results~3 is a separate timing benchmark, not a repeat of the brief-mandated 100-step argon validation run from Results~2. All scaling measurements use Velocity-Verlet, identical seed-42 initial conditions, $\Delta t=\SI{e-14}{s}$, and no file output so that the reported times reflect solver and communication costs rather than I/O. To reduce measurement noise and fixed-overhead contamination, strong scaling uses 500 timed steps at fixed $N=2048$, whereas size scaling uses 2000 timed steps at fixed $P=16$; each configuration is repeated 20 times and the median paired wall/communication sample is retained. All times reported in this section are raw measured seconds from those benchmark windows, not values normalised to 100 steps.
+Results~3 is a separate timing benchmark, not a repeat of the brief-mandated 100-step argon validation run from Results~2. All scaling measurements use Velocity-Verlet, identical seed-42 initial conditions, $\Delta t=\SI{e-14}{s}$, and no file output so that the reported times reflect solver and communication costs rather than I/O. To reduce measurement noise and fixed-overhead contamination, strong scaling uses 1000 timed steps at fixed $N=2048$, whereas size scaling uses 1000 timed steps at fixed $P=16$; each configuration is repeated 20 times and the median paired wall/communication sample is retained. All times reported in this section are raw measured seconds from those benchmark windows, not values normalised to 100 steps.
 
 Strong-scaling results for $N=2048$ are shown in Fig.~\ref{fig:strong} and Table~\ref{tab:strong}. The code scales almost ideally up to 8 processes, where the efficiency remains above 94\%. At 32 processes the measured speedup is $24.12\times$, corresponding to 75.4\% efficiency. These are strong results for a simple allgather-based implementation. They also explain why the apparent ``near-perfect'' scaling at very small $P$ is not suspicious: for this problem size the direct force kernel dominates initially, so the communication term is still a small fraction of runtime.
 
 \begin{table}[!t]
   \centering
-  \caption{Strong-scaling measurements for the MPI Velocity-Verlet solver at fixed $N=2048$ (500 timed steps; medians of 20 no-output repetitions).}
+  \caption{Strong-scaling measurements for the MPI Velocity-Verlet solver at fixed $N=2048$ (1000 timed steps; medians of 20 no-output repetitions).}
   \label{tab:strong}
   \small
   \setlength{\tabcolsep}{3.5pt}
@@ -328,8 +328,8 @@ Strong-scaling results for $N=2048$ are shown in Fig.~\ref{fig:strong} and Table
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=\textwidth]{results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png}
-  \caption{Strong-scaling behaviour at fixed $N=2048$ (500 timed steps; medians of 20 no-output repetitions). The measured speedup remains close to ideal for moderate core counts, but the communication share grows as the local work per rank falls.}
+  \includegraphics[width=\textwidth]{results3_figure10abc.png}
+  \caption{Strong-scaling behaviour at fixed $N=2048$ (1000 timed steps; medians of 20 no-output repetitions). The measured speedup remains close to ideal for moderate core counts, but the communication share grows as the local work per rank falls.}
   \label{fig:strong}
 \end{figure*}
 
@@ -339,8 +339,8 @@ The fixed-process size-scaling results at $P=16$ are shown in Fig.~\ref{fig:size
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=\textwidth]{results3_figure9ab_problem_size_scaling_fixed_p16.png}
-  \caption{Fixed-process size scaling at $P=16$ (2000 timed steps; medians of 20 no-output repetitions). The total runtime is close to quadratic in $N$, while the communication fraction falls with increasing problem size because the direct force loop grows faster than the allgather overhead.}
+  \includegraphics[width=\textwidth]{results3_figure9ab.png}
+  \caption{Fixed-process size scaling at $P=16$ (1000 timed steps; medians of 20 no-output repetitions). The total runtime is close to quadratic in $N$, while the communication fraction falls with increasing problem size because the direct force loop grows faster than the allgather overhead.}
   \label{fig:size}
 \end{figure*}
 

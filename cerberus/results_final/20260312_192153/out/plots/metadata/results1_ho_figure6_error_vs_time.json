@@ -1,0 +1,57 @@
+{
+  "caveats": [
+    "This figure is qualitative; quantitative order evidence is in Figure 4.",
+    "RK4 is non-symplectic; long-time drift behaviour requires longer-horizon diagnostics."
+  ],
+  "claim": "At dt=0.1, Forward Euler error grows monotonically while Velocity-Verlet remains bounded and oscillatory; RK4 remains smallest on this horizon.",
+  "figure_number": 6,
+  "generated_utc": "2026-03-10T22:50:07Z",
+  "key_parameters": {
+    "dt": 0.1,
+    "exact_solution": "x_exact(t)=cos(t), v_exact(t)=-sin(t) for omega=1, x0=1, v0=0",
+    "metric": "absolute position error |x_num(t)-x_exact(t)|",
+    "x_axis": "linear time",
+    "y_axis": "log error"
+  },
+  "kind": "supporting_results1_figure",
+  "parameters": {
+    "dt_large": 0.5,
+    "dt_small": 0.01,
+    "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
+    "omega": 1.0,
+    "t_final": 10.0,
+    "v0": 0.0,
+    "x0": 1.0
+  },
+  "plot_file_png": "out/plots/results1_ho_figure6_error_vs_time.png",
+  "purpose": "Qualitative error-character diagnostic over time; complements Figure 4 convergence slopes.",
+  "series": [
+    {
+      "dt": 0.1,
+      "integrator": "euler",
+      "integrator_label": "Forward Euler",
+      "max_position_error": 0.610987133414713,
+      "min_nonzero_position_error": 0.003319423320088815,
+      "n_points": 101,
+      "source_file": "out/runs/ho_N1_euler_dt0.1_20260310_222343/ho_euler.csv"
+    },
+    {
+      "dt": 0.1,
+      "integrator": "verlet",
+      "integrator_label": "Velocity-Verlet",
+      "max_position_error": 0.0033007601628174676,
+      "min_nonzero_position_error": 4.165278025825003e-06,
+      "n_points": 101,
+      "source_file": "out/runs/ho_N1_verlet_dt0.1_20260310_222343/ho_verlet.csv"
+    },
+    {
+      "dt": 0.1,
+      "integrator": "rk4",
+      "integrator_label": "RK4",
+      "max_position_error": 6.660214297099509e-06,
+      "min_nonzero_position_error": 1.3886412020269745e-09,
+      "n_points": 101,
+      "source_file": "out/runs/ho_N1_rk4_dt0.1_20260310_222343/ho_rk4.csv"
+    }
+  ]
+}

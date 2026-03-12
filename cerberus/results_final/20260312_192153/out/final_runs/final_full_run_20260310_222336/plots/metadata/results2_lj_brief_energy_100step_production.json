@@ -1,0 +1,155 @@
+{
+  "audience_tier": "main-report-core",
+  "caveats": [
+    "Relative drift is computed from total energy with E0 taken at the first finite production frame.",
+    "LJ uses a hard cutoff without potential shifting; small energy discontinuities can occur when pairs cross r_cut.",
+    "For required-run interpretation, startup/equilibration is completed before this production trajectory."
+  ],
+  "figure_filename": "results2_lj_brief_energy_100step_production.png",
+  "fit_or_truncation": {
+    "applied_xlim_ps": [
+      0.0,
+      1.0
+    ],
+    "crop_to_euler_divergence": false,
+    "divergent_tail_handling": "no tail omitted; full available production window is plotted",
+    "drift_only": true,
+    "relative_deviation_reference": "first finite E_total point at or after production_start_step"
+  },
+  "generated_utc": "2026-03-10T22:50:08Z",
+  "intended_claim": "At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable.",
+  "key_parameters": {
+    "drift_only_figure": true,
+    "energy_units": "epsilon",
+    "figure_layout": {
+      "columns": [
+        "signed relative total-energy deviation \u0394E/E0 [%] vs time [ps]"
+      ],
+      "rows": [
+        "Velocity-Verlet",
+        "Forward Euler"
+      ]
+    },
+    "integrators_compared": [
+      "verlet",
+      "euler"
+    ],
+    "panel_content": "signed relative total-energy deviation only (\u0394E/E0 [%])",
+    "run_semantics": {
+      "final_rescale_before_production_expected": true,
+      "required_production_steps": 100,
+      "required_production_time_ps": 1.0,
+      "startup_precedes_production": true,
+      "step_0_semantics": "step 0 in CSV is the production initial frame"
+    },
+    "series_parameters": {
+      "euler": {
+        "L": 3.47786e-09,
+        "N": 864,
+        "P": 4,
+        "dt": 1e-14,
+        "equilibration_steps": 50,
+        "final_rescale_applied": true,
+        "final_rescale_before_production": true,
+        "gr_discard_steps": 200,
+        "gr_sample_every": 5,
+        "gr_start": 200,
+        "integrator": "euler",
+        "mode": "lj",
+        "n_frames": 101,
+        "n_steps": 100,
+        "production_nve": true,
+        "production_start_step": 0,
+        "production_steps": 100,
+        "rcut": 7.65e-10,
+        "startup_temperature_after_final_rescale": 94.4000000000001,
+        "startup_temperature_before_final_rescale": 95.9438964430546,
+        "target_temperature": 94.4,
+        "timestamp": "2026-03-10T22:24:03Z",
+        "total_steps_executed": 150
+      },
+      "verlet": {
+        "L": 3.47786e-09,
+        "N": 864,
+        "P": 4,
+        "dt": 1e-14,
+        "equilibration_steps": 50,
+        "final_rescale_applied": true,
+        "final_rescale_before_production": true,
+        "gr_discard_steps": 200,
+        "gr_sample_every": 5,
+        "gr_start": 200,
+        "integrator": "verlet",
+        "mode": "lj",
+        "n_frames": 101,
+        "n_steps": 100,
+        "production_nve": true,
+        "production_start_step": 0,
+        "production_steps": 100,
+        "rcut": 7.65e-10,
+        "startup_temperature_after_final_rescale": 94.4,
+        "startup_temperature_before_final_rescale": 94.3304820914355,
+        "target_temperature": 94.4,
+        "timestamp": "2026-03-10T22:24:02Z",
+        "total_steps_executed": 150
+      }
+    },
+    "temperature_divergence_threshold_k": 10000.0
+  },
+  "key_quantitative_summary": {
+    "euler_divergence_time_ps": null,
+    "max_time_ps_in_source": 1.0,
+    "per_integrator": [
+      {
+        "divergence_reason": null,
+        "divergence_step": null,
+        "divergence_time_ps": null,
+        "divergent_tail_omitted": false,
+        "final_relative_energy_deviation_percent": 0.026317557803661323,
+        "integrator": "verlet",
+        "label": "Velocity-Verlet",
+        "manifest_key": "lj_brief.verlet",
+        "max_abs_relative_energy_deviation_percent": 0.08170372894395177,
+        "mean_abs_relative_energy_deviation_percent": 0.032632074982034596,
+        "mean_total_energy_eps": -3492.4966292122103,
+        "points_plotted": 101,
+        "reference_step_for_relative_deviation": 0,
+        "run_identifier": "lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260310_222343",
+        "source_file": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260310_222343/lj_verlet.csv"
+      },
+      {
+        "divergence_reason": null,
+        "divergence_step": null,
+        "divergence_time_ps": null,
+        "divergent_tail_omitted": false,
+        "final_relative_energy_deviation_percent": 127.58742647206859,
+        "integrator": "euler",
+        "label": "Forward Euler",
+        "manifest_key": "lj_brief.euler",
+        "max_abs_relative_energy_deviation_percent": 127.58742647206859,
+        "mean_abs_relative_energy_deviation_percent": 39.78766799289705,
+        "mean_total_energy_eps": -2097.254252611147,
+        "points_plotted": 101,
+        "reference_step_for_relative_deviation": 0,
+        "run_identifier": "lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260310_222343",
+        "source_file": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260310_222343/lj_euler.csv"
+      }
+    ]
+  },
+  "missing_provenance": [],
+  "plot_file_png": "out/plots/results2_lj_brief_energy_100step_production.png",
+  "purpose": "Core brief-facing evidence for the required 100-step production run using signed total-energy drift only: Velocity-Verlet remains bounded while Forward Euler drifts strongly.",
+  "section": "results2",
+  "simulation_run_identifiers": [
+    "lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260310_222343",
+    "lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260310_222343"
+  ],
+  "source_data_files": [
+    "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260310_222343/lj_verlet.csv",
+    "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260310_222343/lj_euler.csv"
+  ],
+  "source_manifest_keys": [
+    "lj_brief.verlet",
+    "lj_brief.euler"
+  ]
+}

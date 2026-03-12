@@ -355,9 +355,9 @@ time traces alone.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.575\textwidth]{results1_figure1ab_trajectories_dt0p01.png}%
+  \includegraphics[width=0.575\textwidth]{results1_figure1ab.png}%
   \hspace{0.005\textwidth}%
-  \includegraphics[width=0.405\textwidth]{results1_figure1c_phase_space_dt0p01.png}
+  \includegraphics[width=0.405\textwidth]{results1_figure1c.png}
   \caption{Harmonic oscillator trajectories and phase space at
     $\Delta t=0.01$, $\omega=1$, $T=10$.
     \textbf{(a)} Position $x(t)$ and \textbf{(b)} velocity $v(t)$: insets
@@ -384,7 +384,7 @@ higher-order accuracy.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{results1_figure2_small_vs_large_dt.png}
+  \includegraphics[width=\columnwidth]{results1_figure2.png}
   \caption{Effect of timestep on harmonic oscillator behaviour.
     \textbf{Left}: $x(t)$; \textbf{Right}: phase-space portrait.
     Each row shows $\Delta t=0.5$ (coarse, dash-dot) and $\Delta t=0.01$ (fine, solid).
@@ -439,7 +439,7 @@ convergence.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results1_figure3_convergence_combined.png}
+  \includegraphics[width=0.96\textwidth]{results1_figure3.png}
   \caption{Convergence of harmonic oscillator errors with timestep
     ($\omega=1$, $x_0=1$, $T=10$).
     \textbf{(a)} Endpoint position error; \textbf{(b)} RMS phase-space error.
@@ -465,7 +465,7 @@ symplecticity governs long-time stability independently of truncation order.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\columnwidth]{results1_figure4_energy_diagnostic.png}
+  \includegraphics[width=\columnwidth]{results1_figure4.png}
   \caption{Relative energy deviation $(E-E_0)/|E_0|$ for the harmonic
     oscillator ($\Delta t=0.01$, $T=10$).
     Euler (orange dashed) drifts linearly to 10.5\%; Velocity-Verlet (blue)
@@ -503,7 +503,7 @@ eliminate contribution (i) and is standard in production codes.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure6_lj_brief_energy_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure6.png}
   \caption{Signed relative total-energy deviation $\Delta E/E_0$ [\%]
     during the required 100-step ($\Delta t=\SI{e-14}{s}$) NVE production run
     for LJ argon ($N=864$, $P=4$, equilibrated to $T=\SI{94.4}{K}$).
@@ -526,7 +526,7 @@ MD even from a well-equilibrated starting configuration.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure7_lj_brief_temperature_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure7.png}
   \caption{Instantaneous temperature during the required 100-step NVE production
     run ($N=864$, $\Delta t=\SI{e-14}{s}$).
     Velocity-Verlet (blue) holds $T\approx\SI{94.4}{K}$ (grey dashed);
@@ -555,7 +555,7 @@ included as additional structural validation.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure8_lj_rdf_comparison_rahman1964.png}
+  \includegraphics[width=\columnwidth]{results2_figure8.png}
   \caption{Radial distribution function $g(r)$ from an extended 20\,000-step
     NVE run (Velocity-Verlet, $N=864$, $P=4$; $g(r)$ sampled every 5 steps
     after a 200-step discard).
@@ -623,7 +623,7 @@ as expected.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png}
+  \includegraphics[width=0.96\textwidth]{results3_figure10abc.png}
   \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 100 steps,
     dual-socket Intel Xeon Silver 4314 node).
     \textbf{(a)} Speedup $S(P)$: ideal line (grey dashed) and Amdahl fit
@@ -655,7 +655,7 @@ confirming that the $\mathcal{O}(N^2)$ force loop increasingly dominates.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results3_figure9ab_problem_size_scaling_fixed_p16.png}
+  \includegraphics[width=0.96\textwidth]{results3_figure9ab.png}
   \caption{Problem-size scaling ($P=16$ fixed, Velocity-Verlet, 100 steps).
     \textbf{(a)} Log--log wall time (circles), compute-only (triangles), and
     communication (squares) vs.\ $N$, with $N^2$ reference (dash-dot).

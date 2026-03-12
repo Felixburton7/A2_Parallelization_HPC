@@ -1,0 +1,143 @@
+{
+  "audience_tier": "main-report-core",
+  "caveats": [
+    "Temperature is shown only for finite values; divergent tails are omitted.",
+    "Target temperature line is a reference, not a fitted value.",
+    "Temperature evidence is complementary and should be interpreted with the energy and RDF results."
+  ],
+  "figure_filename": "results2_figure7_lj_brief_temperature_100step_production.png",
+  "figure_number": 7,
+  "fit_or_truncation": {
+    "applied_xlim_ps": null,
+    "crop_to_euler_divergence": false,
+    "divergent_tail_handling": "non-finite values or |T| > threshold are omitted from plotted tail",
+    "production_start_line_ps": null,
+    "zoom_inset": null
+  },
+  "generated_utc": "2026-03-12T18:17:54Z",
+  "intended_claim": "Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window.",
+  "key_parameters": {
+    "integrators_compared": [
+      "verlet",
+      "euler"
+    ],
+    "run_semantics": {
+      "final_rescale_before_production_expected": true,
+      "required_production_steps": 100,
+      "required_production_time_ps": 1.0,
+      "startup_precedes_production": true,
+      "step_0_semantics": "step 0 in CSV is the production initial frame"
+    },
+    "series_parameters": {
+      "euler": {
+        "L": 3.47786e-09,
+        "N": 864,
+        "P": 4,
+        "dt": 1e-14,
+        "equilibration_steps": 50,
+        "final_rescale_applied": true,
+        "final_rescale_before_production": true,
+        "gr_discard_steps": 200,
+        "gr_sample_every": 5,
+        "gr_start": 200,
+        "integrator": "euler",
+        "mode": "lj",
+        "n_frames": 101,
+        "n_steps": 100,
+        "production_nve": true,
+        "production_start_step": 0,
+        "production_steps": 100,
+        "rcut": 7.65e-10,
+        "startup_temperature_after_final_rescale": 94.4000000000001,
+        "startup_temperature_before_final_rescale": 95.9438964430546,
+        "target_temperature": 94.4,
+        "timestamp": "2026-03-12T17:28:41Z",
+        "total_steps_executed": 150
+      },
+      "verlet": {
+        "L": 3.47786e-09,
+        "N": 864,
+        "P": 4,
+        "dt": 1e-14,
+        "equilibration_steps": 50,
+        "final_rescale_applied": true,
+        "final_rescale_before_production": true,
+        "gr_discard_steps": 200,
+        "gr_sample_every": 5,
+        "gr_start": 200,
+        "integrator": "verlet",
+        "mode": "lj",
+        "n_frames": 101,
+        "n_steps": 100,
+        "production_nve": true,
+        "production_start_step": 0,
+        "production_steps": 100,
+        "rcut": 7.65e-10,
+        "startup_temperature_after_final_rescale": 94.4,
+        "startup_temperature_before_final_rescale": 94.3304820914355,
+        "target_temperature": 94.4,
+        "timestamp": "2026-03-12T17:28:39Z",
+        "total_steps_executed": 150
+      }
+    },
+    "target_temperature_k": 94.4,
+    "temperature_divergence_threshold_k": 10000.0
+  },
+  "key_quantitative_summary": {
+    "euler_divergence_time_ps": null,
+    "max_time_ps_in_source": 1.0,
+    "per_integrator": [
+      {
+        "divergence_reason": null,
+        "divergence_step": null,
+        "divergence_time_ps": null,
+        "divergent_tail_omitted": false,
+        "integrator": "verlet",
+        "label": "Velocity-Verlet",
+        "manifest_key": "lj_brief.verlet",
+        "max_temperature_k": 97.8050863147048,
+        "mean_temperature_k": 94.41593148560331,
+        "min_temperature_k": 92.3947902866264,
+        "points_plotted": 101,
+        "run_identifier": "lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260312_172820",
+        "source_file": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260312_172820/lj_verlet.csv",
+        "std_temperature_k": 1.4282228787362978
+      },
+      {
+        "divergence_reason": null,
+        "divergence_step": null,
+        "divergence_time_ps": null,
+        "divergent_tail_omitted": false,
+        "integrator": "euler",
+        "label": "Forward Euler",
+        "manifest_key": "lj_brief.euler",
+        "max_temperature_k": 396.052822933163,
+        "mean_temperature_k": 185.27030178144133,
+        "min_temperature_k": 94.4000000000001,
+        "points_plotted": 101,
+        "run_identifier": "lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260312_172820",
+        "source_file": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260312_172820/lj_euler.csv",
+        "std_temperature_k": 74.57453159772372
+      }
+    ]
+  },
+  "missing_provenance": [],
+  "panels": [
+    "a)"
+  ],
+  "plot_file_png": "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
+  "purpose": "Core brief-facing evidence for the required 100-step production run temperature response.",
+  "section": "results2",
+  "simulation_run_identifiers": [
+    "lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260312_172820",
+    "lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260312_172820"
+  ],
+  "source_data_files": [
+    "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260312_172820/lj_verlet.csv",
+    "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260312_172820/lj_euler.csv"
+  ],
+  "source_manifest_keys": [
+    "lj_brief.verlet",
+    "lj_brief.euler"
+  ]
+}

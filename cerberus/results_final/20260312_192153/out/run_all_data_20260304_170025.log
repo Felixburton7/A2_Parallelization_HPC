@@ -1,0 +1,352 @@
+==========================================
+  FULL DATA GENERATION — Wed  4 Mar 17:00:25 GMT 2026
+==========================================
+
+=== PARALLEL CONSISTENCY CHECK ===
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 108 | P = 1 | steps = 10 | dt = 1.000e-14
+L = 1.738930e-09 m (5.1145 sigma)
+T_init = 94.4 K | seed = 42
+==================
+Wall time: 0.004413 s (max across 1 ranks)
+=== Initial Conditions (Rank 0) ===
+Seed used for RNG: 42
+FCC lattice generated
+Perturbation amplitude: 3.400000e-12 m (0.0100 sigma)
+Box-Muller velocities applied
+Initial measured Temperature: 94.400000 K
+===================================
+=== MD Solver ===
+Mode: lj | Integrator: verlet
+N = 108 | P = 2 | steps = 10 | dt = 1.000e-14
+L = 1.738930e-09 m (5.1145 sigma)
+T_init = 94.4 K | seed = 42
+==================
+Wall time: 0.003066 s (max across 2 ranks)
+  P=1 vs P=2 data: MATCH ✅
+
+=== RESULTS 1: HO CONVERGENCE ===
+  euler dt=1.0 steps=10 -> out/runs/ho_N1_euler_dt1.0_20260304_170025/ho_euler.csv ✅
+  euler dt=0.5 steps=20 -> out/runs/ho_N1_euler_dt0.5_20260304_170025/ho_euler.csv ✅
+  euler dt=0.1 steps=100 -> out/runs/ho_N1_euler_dt0.1_20260304_170025/ho_euler.csv ✅
+  euler dt=0.05 steps=200 -> out/runs/ho_N1_euler_dt0.05_20260304_170025/ho_euler.csv ✅
+  euler dt=0.01 steps=1000 -> out/runs/ho_N1_euler_dt0.01_20260304_170025/ho_euler.csv ✅
+  euler dt=0.005 steps=2000 -> out/runs/ho_N1_euler_dt0.005_20260304_170025/ho_euler.csv ✅
+  euler dt=0.001 steps=10000 -> out/runs/ho_N1_euler_dt0.001_20260304_170025/ho_euler.csv ✅
+  euler dt=0.0005 steps=20000 -> out/runs/ho_N1_euler_dt0.0005_20260304_170025/ho_euler.csv ✅
+  verlet dt=1.0 steps=10 -> out/runs/ho_N1_verlet_dt1.0_20260304_170025/ho_verlet.csv ✅
+  verlet dt=0.5 steps=20 -> out/runs/ho_N1_verlet_dt0.5_20260304_170025/ho_verlet.csv ✅
+  verlet dt=0.1 steps=100 -> out/runs/ho_N1_verlet_dt0.1_20260304_170025/ho_verlet.csv ✅
+  verlet dt=0.05 steps=200 -> out/runs/ho_N1_verlet_dt0.05_20260304_170025/ho_verlet.csv ✅
+  verlet dt=0.01 steps=1000 -> out/runs/ho_N1_verlet_dt0.01_20260304_170025/ho_verlet.csv ✅
+  verlet dt=0.005 steps=2000 -> out/runs/ho_N1_verlet_dt0.005_20260304_170025/ho_verlet.csv ✅
+  verlet dt=0.001 steps=10000 -> out/runs/ho_N1_verlet_dt0.001_20260304_170025/ho_verlet.csv ✅
+  verlet dt=0.0005 steps=20000 -> out/runs/ho_N1_verlet_dt0.0005_20260304_170025/ho_verlet.csv ✅
+  rk4 dt=1.0 steps=10 -> out/runs/ho_N1_rk4_dt1.0_20260304_170025/ho_rk4.csv ✅
+  rk4 dt=0.5 steps=20 -> out/runs/ho_N1_rk4_dt0.5_20260304_170025/ho_rk4.csv ✅
+  rk4 dt=0.1 steps=100 -> out/runs/ho_N1_rk4_dt0.1_20260304_170025/ho_rk4.csv ✅
+  rk4 dt=0.05 steps=200 -> out/runs/ho_N1_rk4_dt0.05_20260304_170025/ho_rk4.csv ✅
+  rk4 dt=0.01 steps=1000 -> out/runs/ho_N1_rk4_dt0.01_20260304_170025/ho_rk4.csv ✅
+  rk4 dt=0.005 steps=2000 -> out/runs/ho_N1_rk4_dt0.005_20260304_170025/ho_rk4.csv ✅
+  rk4 dt=0.001 steps=10000 -> out/runs/ho_N1_rk4_dt0.001_20260304_170025/ho_rk4.csv ✅
+  rk4 dt=0.0005 steps=20000 -> out/runs/ho_N1_rk4_dt0.0005_20260304_170025/ho_rk4.csv ✅
+
+=== RESULTS 2: LJ PRODUCTION ===
+  Verlet N=864 100 steps...
+  -> output saved to manifest ✅
+  Euler N=864 100 steps...
+  -> output saved to manifest ✅
+
+=== g(r) PRODUCTION RUN ===
+  g(r) done, output saved to manifest ✅
+
+=== RESULTS 3: STRONG SCALING (20 reps, N=2048, 200 steps) ===
+    P=1 rep=1 wall=11.881275 comm=0.000347
+    P=1 rep=2 wall=11.343080 comm=0.000355
+    P=1 rep=3 wall=11.342997 comm=0.000337
+    P=1 rep=4 wall=11.448115 comm=0.000349
+    P=1 rep=5 wall=11.334634 comm=0.000331
+    P=1 rep=6 wall=11.400715 comm=0.000337
+    P=1 rep=7 wall=11.340984 comm=0.000341
+    P=1 rep=8 wall=11.443699 comm=0.000343
+    P=1 rep=9 wall=11.404692 comm=0.000336
+    P=1 rep=10 wall=11.517045 comm=0.000330
+    P=1 rep=11 wall=11.301485 comm=0.000333
+    P=1 rep=12 wall=11.368837 comm=0.000334
+    P=1 rep=13 wall=11.427710 comm=0.000352
+    P=1 rep=14 wall=11.264913 comm=0.000327
+    P=1 rep=15 wall=11.255829 comm=0.000329
+    P=1 rep=16 wall=11.338743 comm=0.000340
+    P=1 rep=17 wall=11.529844 comm=0.000345
+    P=1 rep=18 wall=11.662060 comm=0.000346
+    P=1 rep=19 wall=11.372909 comm=0.000342
+    P=1 rep=20 wall=11.322999 comm=0.000315
+  >> P=1 MEDIAN: wall=11.368837 comm=0.000334
+    P=2 rep=1 wall=6.399863 comm=0.022836
+    P=2 rep=2 wall=5.630923 comm=0.011574
+    P=2 rep=3 wall=5.711975 comm=0.009069
+    P=2 rep=4 wall=5.698921 comm=0.016160
+    P=2 rep=5 wall=5.696374 comm=0.001977
+    P=2 rep=6 wall=5.689146 comm=0.018973
+    P=2 rep=7 wall=5.724256 comm=0.081533
+    P=2 rep=8 wall=5.683690 comm=0.004366
+    P=2 rep=9 wall=5.641640 comm=0.001899
+    P=2 rep=10 wall=5.617769 comm=0.023922
+    P=2 rep=11 wall=5.620349 comm=0.016690
+    P=2 rep=12 wall=5.807386 comm=0.015010
+    P=2 rep=13 wall=5.726004 comm=0.030913
+    P=2 rep=14 wall=5.719642 comm=0.038297
+    P=2 rep=15 wall=5.772744 comm=0.007197
+    P=2 rep=16 wall=5.844700 comm=0.006399
+    P=2 rep=17 wall=5.813876 comm=0.003332
+    P=2 rep=18 wall=5.735534 comm=0.001895
+    P=2 rep=19 wall=5.734487 comm=0.007666
+    P=2 rep=20 wall=5.682408 comm=0.006201
+  >> P=2 MEDIAN: wall=5.711975 comm=0.009069
+    P=4 rep=1 wall=3.314099 comm=0.016409
+    P=4 rep=2 wall=3.475603 comm=0.085645
+    P=4 rep=3 wall=3.569124 comm=0.013198
+    P=4 rep=4 wall=3.451975 comm=0.537210
+    P=4 rep=5 wall=3.147052 comm=0.302763
+    P=4 rep=6 wall=3.353376 comm=0.220232
+    P=4 rep=7 wall=3.227090 comm=0.172087
+    P=4 rep=8 wall=3.327471 comm=0.028196
+    P=4 rep=9 wall=3.298142 comm=0.442105
+    P=4 rep=10 wall=2.826523 comm=0.010549
+    P=4 rep=11 wall=3.151444 comm=0.006635
+    P=4 rep=12 wall=2.903422 comm=0.008293
+    P=4 rep=13 wall=2.912473 comm=0.008590
+    P=4 rep=14 wall=3.522743 comm=0.731730
+    P=4 rep=15 wall=3.346385 comm=0.477544
+    P=4 rep=16 wall=2.896013 comm=0.019633
+    P=4 rep=17 wall=2.905504 comm=0.030341
+    P=4 rep=18 wall=3.539496 comm=0.004817
+    P=4 rep=19 wall=3.285359 comm=0.457048
+    P=4 rep=20 wall=3.821189 comm=0.042030
+  >> P=4 MEDIAN: wall=3.298142 comm=0.442105
+    P=8 rep=1 wall=1.955250 comm=0.044785
+    P=8 rep=2 wall=1.977688 comm=0.052548
+    P=8 rep=3 wall=1.959807 comm=0.026329
+    P=8 rep=4 wall=1.967324 comm=0.008102
+    P=8 rep=5 wall=1.991808 comm=0.076780
+    P=8 rep=6 wall=1.990142 comm=0.046213
+    P=8 rep=7 wall=2.039518 comm=0.084762
+    P=8 rep=8 wall=1.989694 comm=0.010622
+    P=8 rep=9 wall=1.942843 comm=0.005533
+    P=8 rep=10 wall=1.898152 comm=0.503247
+    P=8 rep=11 wall=1.955295 comm=0.026177
+    P=8 rep=12 wall=1.955763 comm=0.028816
+    P=8 rep=13 wall=1.953048 comm=0.007329
+    P=8 rep=14 wall=1.947605 comm=0.028933
+    P=8 rep=15 wall=1.968867 comm=0.050213
+    P=8 rep=16 wall=1.992095 comm=0.033137
+    P=8 rep=17 wall=2.037279 comm=0.331160
+    P=8 rep=18 wall=2.043113 comm=0.055184
+    P=8 rep=19 wall=1.971137 comm=0.014032
+    P=8 rep=20 wall=1.963867 comm=0.046274
+  >> P=8 MEDIAN: wall=1.967324 comm=0.008102
+    P=16 rep=1 wall=1.037035 comm=0.043024
+    P=16 rep=2 wall=1.074799 comm=0.086112
+    P=16 rep=3 wall=1.059330 comm=0.048622
+    P=16 rep=4 wall=1.120055 comm=0.048883
+    P=16 rep=5 wall=1.035560 comm=0.046660
+    P=16 rep=6 wall=1.045000 comm=0.058370
+    P=16 rep=7 wall=1.116254 comm=0.124213
+    P=16 rep=8 wall=1.038538 comm=0.022126
+    P=16 rep=9 wall=1.046600 comm=0.037558
+    P=16 rep=10 wall=1.056849 comm=0.071833
+    P=16 rep=11 wall=1.005570 comm=0.026142
+    P=16 rep=12 wall=1.097556 comm=0.110020
+    P=16 rep=13 wall=1.040199 comm=0.066135
+    P=16 rep=14 wall=1.013909 comm=0.032568
+    P=16 rep=15 wall=1.040496 comm=0.056463
+    P=16 rep=16 wall=1.052281 comm=0.070198
+    P=16 rep=17 wall=1.056366 comm=0.074501
+    P=16 rep=18 wall=1.060193 comm=0.064693
+    P=16 rep=19 wall=1.042521 comm=0.069960
+    P=16 rep=20 wall=1.077356 comm=0.095482
+  >> P=16 MEDIAN: wall=1.046600 comm=0.037558
+    P=24 rep=1 wall=0.877700 comm=0.065724
+    P=24 rep=2 wall=0.881374 comm=0.117771
+    P=24 rep=3 wall=0.960694 comm=0.068600
+    P=24 rep=4 wall=1.023203 comm=0.017983
+    P=24 rep=5 wall=0.926996 comm=0.053471
+    P=24 rep=6 wall=0.957626 comm=0.110641
+    P=24 rep=7 wall=0.968100 comm=0.084445
+    P=24 rep=8 wall=1.044016 comm=0.035013
+    P=24 rep=9 wall=1.042147 comm=0.034397
+    P=24 rep=10 wall=0.960844 comm=0.085311
+    P=24 rep=11 wall=0.838822 comm=0.067472
+    P=24 rep=12 wall=1.035140 comm=0.038077
+    P=24 rep=13 wall=0.815099 comm=0.061813
+    P=24 rep=14 wall=1.027125 comm=0.033886
+    P=24 rep=15 wall=0.931690 comm=0.263571
+    P=24 rep=16 wall=1.019248 comm=0.031435
+    P=24 rep=17 wall=1.035096 comm=0.035013
+    P=24 rep=18 wall=0.980482 comm=0.191554
+    P=24 rep=19 wall=0.909636 comm=0.177300
+    P=24 rep=20 wall=0.944503 comm=0.127073
+  >> P=24 MEDIAN: wall=0.960694 comm=0.068600
+    P=32 rep=1 wall=0.776571 comm=0.018893
+    P=32 rep=2 wall=0.770893 comm=0.017919
+    P=32 rep=3 wall=0.779047 comm=0.023103
+    P=32 rep=4 wall=0.780931 comm=0.020823
+    P=32 rep=5 wall=0.788567 comm=0.047265
+    P=32 rep=6 wall=0.774429 comm=0.019275
+    P=32 rep=7 wall=0.774165 comm=0.027595
+    P=32 rep=8 wall=0.773496 comm=0.026752
+    P=32 rep=9 wall=0.779669 comm=0.021558
+    P=32 rep=10 wall=0.775981 comm=0.017856
+    P=32 rep=11 wall=0.768628 comm=0.017595
+    P=32 rep=12 wall=0.786265 comm=0.042040
+    P=32 rep=13 wall=0.775952 comm=0.020190
+    P=32 rep=14 wall=0.786896 comm=0.030259
+    P=32 rep=15 wall=0.779691 comm=0.030351
+    P=32 rep=16 wall=0.790038 comm=0.031822
+    P=32 rep=17 wall=0.777739 comm=0.023672
+    P=32 rep=18 wall=0.777874 comm=0.033683
+    P=32 rep=19 wall=0.778708 comm=0.027003
+    P=32 rep=20 wall=0.772531 comm=0.016622
+  >> P=32 MEDIAN: wall=0.777739 comm=0.023672
+
+=== RESULTS 3: SIZE SCALING (20 reps, P=16, 500 steps) ===
+    N=108 rep=1 wall=0.019918 comm=0.009384
+    N=108 rep=2 wall=0.021762 comm=0.011957
+    N=108 rep=3 wall=0.021878 comm=0.009204
+    N=108 rep=4 wall=0.019000 comm=0.007195
+    N=108 rep=5 wall=0.022701 comm=0.008352
+    N=108 rep=6 wall=0.022496 comm=0.007801
+    N=108 rep=7 wall=0.021910 comm=0.007789
+    N=108 rep=8 wall=0.021572 comm=0.006755
+    N=108 rep=9 wall=0.021791 comm=0.008301
+    N=108 rep=10 wall=0.021043 comm=0.007177
+    N=108 rep=11 wall=0.021243 comm=0.010250
+    N=108 rep=12 wall=0.022271 comm=0.008733
+    N=108 rep=13 wall=0.021051 comm=0.006536
+    N=108 rep=14 wall=0.022126 comm=0.007957
+    N=108 rep=15 wall=0.022208 comm=0.012483
+    N=108 rep=16 wall=0.021520 comm=0.010899
+    N=108 rep=17 wall=0.021958 comm=0.007465
+    N=108 rep=18 wall=0.022215 comm=0.007210
+    N=108 rep=19 wall=0.021850 comm=0.010997
+    N=108 rep=20 wall=0.017316 comm=0.007222
+  >> N=108 MEDIAN: wall=0.021791 comm=0.008301
+    N=256 rep=1 wall=0.079986 comm=0.011900
+    N=256 rep=2 wall=0.080646 comm=0.010448
+    N=256 rep=3 wall=0.070334 comm=0.011865
+    N=256 rep=4 wall=0.065787 comm=0.010902
+    N=256 rep=5 wall=0.068692 comm=0.010455
+    N=256 rep=6 wall=0.077733 comm=0.011611
+    N=256 rep=7 wall=0.078005 comm=0.011443
+    N=256 rep=8 wall=0.083200 comm=0.014627
+    N=256 rep=9 wall=0.086552 comm=0.038159
+    N=256 rep=10 wall=0.087839 comm=0.015327
+    N=256 rep=11 wall=0.076759 comm=0.012129
+    N=256 rep=12 wall=0.075164 comm=0.005785
+    N=256 rep=13 wall=0.074847 comm=0.021190
+    N=256 rep=14 wall=0.090470 comm=0.035908
+    N=256 rep=15 wall=0.074133 comm=0.009738
+    N=256 rep=16 wall=0.079227 comm=0.019293
+    N=256 rep=17 wall=0.076247 comm=0.009829
+    N=256 rep=18 wall=0.078990 comm=0.020360
+    N=256 rep=19 wall=0.078825 comm=0.019361
+    N=256 rep=20 wall=0.076436 comm=0.010952
+  >> N=256 MEDIAN: wall=0.077733 comm=0.011611
+    N=500 rep=1 wall=0.219144 comm=0.039714
+    N=500 rep=2 wall=0.246162 comm=0.026099
+    N=500 rep=3 wall=0.233516 comm=0.053909
+    N=500 rep=4 wall=0.229446 comm=0.050040
+    N=500 rep=5 wall=0.227292 comm=0.030653
+    N=500 rep=6 wall=0.223983 comm=0.030844
+    N=500 rep=7 wall=0.233245 comm=0.053864
+    N=500 rep=8 wall=0.247481 comm=0.035428
+    N=500 rep=9 wall=0.231293 comm=0.025322
+    N=500 rep=10 wall=0.229946 comm=0.050433
+    N=500 rep=11 wall=0.236552 comm=0.023329
+    N=500 rep=12 wall=0.230339 comm=0.052755
+    N=500 rep=13 wall=0.258998 comm=0.077441
+    N=500 rep=14 wall=0.225880 comm=0.045883
+    N=500 rep=15 wall=0.228425 comm=0.041672
+    N=500 rep=16 wall=0.223062 comm=0.041423
+    N=500 rep=17 wall=0.236431 comm=0.064795
+    N=500 rep=18 wall=0.227223 comm=0.050504
+    N=500 rep=19 wall=0.226751 comm=0.046967
+    N=500 rep=20 wall=0.228369 comm=0.048566
+  >> N=500 MEDIAN: wall=0.229446 comm=0.050040
+    N=864 rep=1 wall=0.549319 comm=0.037890
+    N=864 rep=2 wall=0.528752 comm=0.146120
+    N=864 rep=3 wall=0.536897 comm=0.059656
+    N=864 rep=4 wall=0.647852 comm=0.026546
+    N=864 rep=5 wall=0.573276 comm=0.083487
+    N=864 rep=6 wall=0.570181 comm=0.058805
+    N=864 rep=7 wall=0.539421 comm=0.062411
+    N=864 rep=8 wall=0.553250 comm=0.070583
+    N=864 rep=9 wall=0.521428 comm=0.039444
+    N=864 rep=10 wall=0.551753 comm=0.069175
+    N=864 rep=11 wall=0.574848 comm=0.057410
+    N=864 rep=12 wall=0.540230 comm=0.061907
+    N=864 rep=13 wall=0.534962 comm=0.026978
+    N=864 rep=14 wall=0.526605 comm=0.049125
+    N=864 rep=15 wall=0.552560 comm=0.043019
+    N=864 rep=16 wall=0.538775 comm=0.062555
+    N=864 rep=17 wall=0.525910 comm=0.023249
+    N=864 rep=18 wall=0.571153 comm=0.076006
+    N=864 rep=19 wall=0.581767 comm=0.090991
+    N=864 rep=20 wall=0.527845 comm=0.051632
+  >> N=864 MEDIAN: wall=0.540230 comm=0.061907
+    N=1372 rep=1 wall=1.250541 comm=0.101157
+    N=1372 rep=2 wall=1.259909 comm=0.078083
+    N=1372 rep=3 wall=1.275374 comm=0.091263
+    N=1372 rep=4 wall=1.202130 comm=0.058540
+    N=1372 rep=5 wall=1.248118 comm=0.152106
+    N=1372 rep=6 wall=1.233177 comm=0.094385
+    N=1372 rep=7 wall=1.225401 comm=0.057571
+    N=1372 rep=8 wall=1.217360 comm=0.037808
+    N=1372 rep=9 wall=1.283201 comm=0.129706
+    N=1372 rep=10 wall=1.202354 comm=0.029777
+    N=1372 rep=11 wall=1.218722 comm=0.085897
+    N=1372 rep=12 wall=1.591356 comm=0.036632
+    N=1372 rep=13 wall=1.237975 comm=0.079826
+    N=1372 rep=14 wall=1.214683 comm=0.063275
+    N=1372 rep=15 wall=1.250703 comm=0.091734
+    N=1372 rep=16 wall=1.200311 comm=0.068442
+    N=1372 rep=17 wall=1.228263 comm=0.027289
+    N=1372 rep=18 wall=1.249912 comm=0.062019
+    N=1372 rep=19 wall=1.267507 comm=0.100533
+    N=1372 rep=20 wall=1.289743 comm=0.082786
+  >> N=1372 MEDIAN: wall=1.237975 comm=0.079826
+    N=2048 rep=1 wall=2.643617 comm=0.260957
+    N=2048 rep=2 wall=2.521306 comm=0.130755
+    N=2048 rep=3 wall=2.586168 comm=0.161124
+    N=2048 rep=4 wall=2.519181 comm=0.098135
+    N=2048 rep=5 wall=2.493616 comm=0.095750
+    N=2048 rep=6 wall=2.502120 comm=0.059417
+    N=2048 rep=7 wall=2.547063 comm=0.084178
+    N=2048 rep=8 wall=2.461759 comm=0.060086
+    N=2048 rep=9 wall=2.446837 comm=0.586950
+    N=2048 rep=10 wall=2.536874 comm=0.122600
+    N=2048 rep=11 wall=2.495687 comm=0.074776
+    N=2048 rep=12 wall=2.463341 comm=0.095393
+    N=2048 rep=13 wall=2.510348 comm=0.090846
+    N=2048 rep=14 wall=2.496832 comm=0.062962
+    N=2048 rep=15 wall=2.493746 comm=0.086757
+    N=2048 rep=16 wall=2.479558 comm=0.090926
+    N=2048 rep=17 wall=2.523612 comm=0.066348
+    N=2048 rep=18 wall=2.513092 comm=0.087425
+    N=2048 rep=19 wall=2.618626 comm=0.194465
+    N=2048 rep=20 wall=2.521961 comm=0.092301
+  >> N=2048 MEDIAN: wall=2.510348 comm=0.090846
+Manifest validation OK
+
+==========================================
+  ALL DONE — Wed  4 Mar 17:17:05 GMT 2026
+==========================================
+Manifest written to: out/manifest.json

@@ -1,0 +1,8 @@
+# mode: lj, integrator: verlet, N: 108, P: 1, dt: 1e-14, steps: 5, n_steps: 5, n_frames: 6, step_indexing: 0..steps (includes initial frame), total_steps_executed: 55, seed: 42, L: 1.73893e-09, rcut: 7.65e-10, target_temperature: 94.4, equilibration_steps: 50, production_steps: 5, production_start_step: 0, final_rescale_before_production: true, final_rescale_applied: true, production_nve: true, gr_discard_steps: 200, gr_sample_every: 5, gr_start: 200, startup_temperature_before_final_rescale: 92.6105392665026, startup_temperature_after_final_rescale: 94.3999999999999, lattice: FCC, velocities: Box-Muller, timestamp: 2026-03-12T14:18:38Z
+step,time,E_kin,E_pot,E_total,temperature
+0,0,2.09184891288e-19,-9.20669527803387e-19,-7.11484636515388e-19,94.3999999999999
+1,1e-14,2.0629946851695e-19,-9.17766278588533e-19,-7.11466810071583e-19,93.0978796226154
+2,2e-14,2.04827441248049e-19,-9.1614257594132e-19,-7.11315134693272e-19,92.4335898962938
+3,3e-14,2.0481582202525e-19,-9.16299395319137e-19,-7.11483573293887e-19,92.4283464266272
+4,4e-14,2.06045870018546e-19,-9.17656698021879e-19,-7.11610828003332e-19,92.9834368533412
+5,5e-14,2.08162886638895e-19,-9.19490886894372e-19,-7.11328000255477e-19,93.938794421139

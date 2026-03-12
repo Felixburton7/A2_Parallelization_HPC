@@ -48,16 +48,16 @@
 ## Current Deliverables Map
 
 ### Current final figures
-- [confirmed] Results 1: `out/plots/results1_figure1ab_trajectories_dt0p01.png` (required)
-- [confirmed] Results 1: `out/plots/results1_figure1c_phase_space_dt0p01.png` (required)
-- [confirmed] Results 1: `out/plots/results1_figure2_small_vs_large_dt.png` (required)
-- [confirmed] Results 1: `out/plots/results1_figure3_convergence_combined.png` (required)
-- [confirmed] Results 1: `out/plots/results1_figure4_energy_diagnostic.png` (optional)
-- [confirmed] Results 2: `out/plots/results2_figure6_lj_brief_energy_100step_production.png` (required)
-- [confirmed] Results 2: `out/plots/results2_figure7_lj_brief_temperature_100step_production.png` (required)
-- [confirmed] Results 2: `out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png` (required)
-- [confirmed] Results 3: `out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png` (required)
-- [confirmed] Results 3: `out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png` (required)
+- [confirmed] Results 1: `out/plots/results1_figure1ab.png` (required)
+- [confirmed] Results 1: `out/plots/results1_figure1c.png` (required)
+- [confirmed] Results 1: `out/plots/results1_figure2.png` (required)
+- [confirmed] Results 1: `out/plots/results1_figure3.png` (required)
+- [confirmed] Results 1: `out/plots/results1_figure4.png` (optional)
+- [confirmed] Results 2: `out/plots/results2_figure6.png` (required)
+- [confirmed] Results 2: `out/plots/results2_figure7.png` (required)
+- [confirmed] Results 2: `out/plots/results2_figure8.png` (required)
+- [confirmed] Results 3: `out/plots/results3_figure10abc.png` (required)
+- [confirmed] Results 3: `out/plots/results3_figure9ab.png` (required)
 
 ### Current tables
 - [confirmed] Manifest: `out/manifest.json` (required)
@@ -80,26 +80,26 @@
 - [informational] Raw run CSV trees under `out/runs/` are primary diagnostics and provenance backing.
 
 ### Deprecated / legacy artifacts
-- [expected by design] Legacy filename `out/plots/results1_ho_position_velocity_trajectories.png` replaced by `out/plots/results1_figure1ab_trajectories_dt0p01.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_phase_space_trajectories.png` replaced by `out/plots/results1_figure1c_phase_space_dt0p01.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_convergence_endpoint_position_error.png` replaced by `out/plots/results1_figure3_convergence_combined.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_convergence_rms_phase_space_error.png` replaced by `out/plots/results1_figure3_convergence_combined.png`.
-- [expected by design] Legacy filename `out/plots/results1_ho_energy_conservation.png` replaced by `out/plots/results1_figure4_energy_diagnostic.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_position_velocity_trajectories.png` replaced by `out/plots/results1_figure1ab.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_phase_space_trajectories.png` replaced by `out/plots/results1_figure1c.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_convergence_endpoint_position_error.png` replaced by `out/plots/results1_figure3.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_convergence_rms_phase_space_error.png` replaced by `out/plots/results1_figure3.png`.
+- [expected by design] Legacy filename `out/plots/results1_ho_energy_conservation.png` replaced by `out/plots/results1_figure4.png`.
 
 ## Report Claims Supported by Current Evidence
 
 | Claim | Supporting artifacts | Confidence | Caveat |
 |---|---|---|---|
-| Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_figure3_convergence_combined.png` | medium | No major caveat recorded in metadata. |
-| Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_figure2_small_vs_large_dt.png` | medium | No major caveat recorded in metadata. |
-| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_figure6_lj_brief_energy_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_182329/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_182329/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
-| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_figure7_lj_brief_temperature_100step_production.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_182329/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_182329/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
-| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
-| The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime. | `out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
-| Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
-| Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_figure1ab_trajectories_dt0p01.png` | medium | No major caveat recorded in metadata. |
-| Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences. | `out/plots/results1_figure1c_phase_space_dt0p01.png` | medium | No major caveat recorded in metadata. |
-| Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval. | `out/plots/results1_figure4_energy_diagnostic.png` | medium | No major caveat recorded in metadata. |
+| Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics. | `out/plots/results1_figure3.png` | medium | No major caveat recorded in metadata. |
+| Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables. | `out/plots/results1_figure2.png` | medium | No major caveat recorded in metadata. |
+| At the required run length, Velocity-Verlet gives a physically meaningful bounded NVE trajectory in total energy; Forward Euler shows strong total-energy drift and is unreliable. | `out/plots/results2_figure6.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_182329/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_182329/lj_euler.csv` | high | Relative drift is computed from total energy with E0 taken at the first finite production frame. |
+| Velocity-Verlet remains close to the target state while Forward Euler heats strongly over the same required window. | `out/plots/results2_figure7.png`; `out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260308_182329/lj_verlet.csv`; `out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260308_182329/lj_euler.csv` | high | Temperature is shown only for finite values; divergent tails are omitted. |
+| The present Velocity-Verlet RDF reproduces liquid-argon shell structure (first peak, first minimum, second shell, long-range trend) with qualitative/semi-quantitative agreement to Rahman (1964), while peak heights are somewhat reduced. | `out/plots/results2_figure8.png`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/gr.csv`; `out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260307_201536/lj_verlet.csv`; `out/summary/results2/rahman1964_fig2_manual_anchors.csv` | high | Rahman comparison uses a manually extracted approximate reference guide from printed Fig. 2. |
+| The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime. | `out/plots/results3_figure10abc.png`; `out/scaling_strong.csv`; `out/scaling_meta.txt` | medium | Strong-scaling data are aggregated medians, not raw replicate traces. |
+| Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16. | `out/plots/results3_figure9ab.png`; `out/scaling_size.csv`; `out/scaling_meta.txt` | medium | Power-law exponents depend on the chosen fit domain (here N >= 500). |
+| Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact. | `out/plots/results1_figure1ab.png` | medium | No major caveat recorded in metadata. |
+| Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences. | `out/plots/results1_figure1c.png` | medium | No major caveat recorded in metadata. |
+| Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval. | `out/plots/results1_figure4.png` | medium | No major caveat recorded in metadata. |
 
 ## Freshness / Staleness Metadata
 
@@ -111,22 +111,22 @@
 | ai/analyse_results.py | yes | 2026-03-11T16:20:36Z | confirmed |
 | ai/context_report.py | yes | 2026-03-12T11:53:16Z | confirmed |
 | out/manifest.json | yes | 2026-03-11T12:01:14Z | confirmed |
-| out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json | yes | 2026-03-11T12:01:13Z | confirmed |
-| out/plots/metadata/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.json | yes | 2026-03-11T12:01:13Z | confirmed |
+| out/plots/metadata/results2_figure7.json | yes | 2026-03-11T12:01:13Z | confirmed |
+| out/plots/metadata/results3_figure10abc.json | yes | 2026-03-11T12:01:13Z | confirmed |
 
 ### Expected file checks
 | Path | Expectation | Role | Status |
 |---|---|---|---|
 | out/manifest.json | required | project manifest | confirmed |
-| out/plots/results1_figure1ab_trajectories_dt0p01.png | required | core final figure | confirmed |
-| out/plots/results1_figure1c_phase_space_dt0p01.png | required | core final figure | confirmed |
-| out/plots/results1_figure2_small_vs_large_dt.png | required | core final figure | confirmed |
-| out/plots/results1_figure3_convergence_combined.png | required | core final figure | confirmed |
-| out/plots/results2_figure6_lj_brief_energy_100step_production.png | required | core final figure | confirmed |
-| out/plots/results2_figure7_lj_brief_temperature_100step_production.png | required | core final figure | confirmed |
-| out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png | required | core final figure | confirmed |
-| out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png | required | core final figure | confirmed |
-| out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png | required | core final figure | confirmed |
+| out/plots/results1_figure1ab.png | required | core final figure | confirmed |
+| out/plots/results1_figure1c.png | required | core final figure | confirmed |
+| out/plots/results1_figure2.png | required | core final figure | confirmed |
+| out/plots/results1_figure3.png | required | core final figure | confirmed |
+| out/plots/results2_figure6.png | required | core final figure | confirmed |
+| out/plots/results2_figure7.png | required | core final figure | confirmed |
+| out/plots/results2_figure8.png | required | core final figure | confirmed |
+| out/plots/results3_figure10abc.png | required | core final figure | confirmed |
+| out/plots/results3_figure9ab.png | required | core final figure | confirmed |
 | out/manifest.json | required | core summary/table | confirmed |
 | out/summary/results1/results1_ho_convergence_summary.csv | required | core summary/table | confirmed |
 | out/summary/results1/results1_ho_small_large_summary.csv | required | core summary/table | confirmed |
@@ -135,8 +135,8 @@
 | out/summary/results2/results2_quantitative_summary_table.md | required | core summary/table | confirmed |
 | out/scaling_strong.csv | required | core summary/table | confirmed |
 | out/scaling_size.csv | required | core summary/table | confirmed |
-| out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json | required | metadata sidecar | confirmed |
-| out/plots/metadata/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.json | required | metadata sidecar | confirmed |
+| out/plots/metadata/results2_figure7.json | required | metadata sidecar | confirmed |
+| out/plots/metadata/results3_figure10abc.json | required | metadata sidecar | confirmed |
 
 ### Output currency relative to current repo evidence
 | Context file | Last modified (UTC) | Latest evidence mtime (UTC) | Status | Note |
@@ -163,11 +163,11 @@
 
 | Status | Item | Interpretation |
 |---|---|---|
-| expected by design | `out/plots/results1_ho_position_velocity_trajectories.png` | Renamed; current artifact is `out/plots/results1_figure1ab_trajectories_dt0p01.png`. |
-| expected by design | `out/plots/results1_ho_phase_space_trajectories.png` | Renamed; current artifact is `out/plots/results1_figure1c_phase_space_dt0p01.png`. |
-| expected by design | `out/plots/results1_ho_convergence_endpoint_position_error.png` | Renamed; current artifact is `out/plots/results1_figure3_convergence_combined.png`. |
-| expected by design | `out/plots/results1_ho_convergence_rms_phase_space_error.png` | Renamed; current artifact is `out/plots/results1_figure3_convergence_combined.png`. |
-| expected by design | `out/plots/results1_ho_energy_conservation.png` | Renamed; current artifact is `out/plots/results1_figure4_energy_diagnostic.png`. |
+| expected by design | `out/plots/results1_ho_position_velocity_trajectories.png` | Renamed; current artifact is `out/plots/results1_figure1ab.png`. |
+| expected by design | `out/plots/results1_ho_phase_space_trajectories.png` | Renamed; current artifact is `out/plots/results1_figure1c.png`. |
+| expected by design | `out/plots/results1_ho_convergence_endpoint_position_error.png` | Renamed; current artifact is `out/plots/results1_figure3.png`. |
+| expected by design | `out/plots/results1_ho_convergence_rms_phase_space_error.png` | Renamed; current artifact is `out/plots/results1_figure3.png`. |
+| expected by design | `out/plots/results1_ho_energy_conservation.png` | Renamed; current artifact is `out/plots/results1_figure4.png`. |
 | informational | `scripts/__pycache__/` | Generated cache files may create noisy static-scan results unless excluded. |
 | informational | `out/summary/results3/` | Results 3 currently tracked via `out/scaling_*.csv` and metadata JSON sidecars. |
 
@@ -218,14 +218,14 @@ This section is tuned for drafting the Results section itself: what to say first
 
 | Subsection | Primary artifact(s) | Best use in the report | Exact anchors to lift | Caveat to retain |
 |---|---|---|---|---|
-| Results 1 opening paragraph | `results1_figure1ab_trajectories_dt0p01.png`, `results1_figure1c_phase_space_dt0p01.png` | Separate near-overlap in x(t), v(t) from geometric orbit quality. | dt=0.01, Euler is still the visibly worst method; Velocity-Verlet remains near-closed in phase space; RK4 is nearly exact. | This figure is qualitative; formal order comes from Fig. 3, not Fig. 1. |
-| Results 1 timestep sensitivity | `results1_figure2_small_vs_large_dt.png`, `results1_ho_small_large_summary.csv` | Show that coarse-step behaviour separates structural stability from accuracy. | At dt=0.5 Euler is unstable, Velocity-Verlet remains bounded, RK4 stays accurate; dt=0.01 errors are tabulated separately. | Do not use dt=0.5 points in the convergence-fit claim. |
-| Results 1 convergence paragraph | `results1_figure3_convergence_combined.png`, `results1_ho_convergence_summary.csv`, `results1_ho_endpoint_values.csv` | Main proof of first/second/fourth-order behaviour. | Endpoint slopes 1.05, 2.00, 3.94; RMS slopes 1.03, 2.00, 4.00; RK4 floor at 3.6e-15 for dt=5e-4. | State the fit rule: dt <= 0.1, with coarse points retained only for context. |
-| Results 1 energy paragraph | `results1_figure4_energy_diagnostic.png` | Supporting evidence for long-time structure preservation. | At dt=0.01, Euler max |dE/E0| = 10.52%; Velocity-Verlet = 0.00250%; RK4 = 1.39e-11%. | Use this as structural support, not as the only accuracy argument. |
-| Results 2 required-run paragraph | `results2_figure6_lj_brief_energy_100step_production.png`, `results2_figure7_lj_brief_temperature_100step_production.png`, `results2_quantitative_summary_table.md` | Main evidence that Velocity-Verlet is production-usable and Euler is not. | Velocity-Verlet max |dE/E0| = 0.082%; Euler = 127.587%; mean temperatures 94.42 K vs 185.27 K; Euler max temperature 396.05 K. | State that this is the required 100-step, 1 ps production run and that step 0 is the production initial frame. |
-| Results 2 RDF paragraph | `results2_figure8_lj_rdf_comparison_rahman1964.png`, `rahman1964_fig2_manual_anchors.csv` | Structural validation against Rahman-style shell locations. | First peak 1.09 / 2.838, first minimum 1.55 / 0.623, second peak 2.07 / 1.253, tail mean 1.002. | Keep the wording qualitative or semi-quantitative because the Rahman guide is manually anchored. |
-| Results 3 strong scaling | `results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png`, `scaling_strong.csv` | Main performance figure for speedup, efficiency, and communication growth. | S(32)=24.12, E(32)=0.754, fitted f=0.0103, comm fraction 1.1% at P=2 to 15.2% at P=32. | Amdahl f is an empirical descriptor of the measured curve, not a literal machine-independent serial fraction. |
-| Results 3 size scaling | `results3_figure9ab_problem_size_scaling_fixed_p16.png`, `scaling_size.csv` | Show near-O(N^2) growth and falling communication fraction at larger N. | Wall ~ N^1.85, wall-minus-comm ~ N^1.93, communication fraction 50.8% down to 13.1%. | Say explicitly that the power-law fit is over N >= 500, not all N values. |
+| Results 1 opening paragraph | `results1_figure1ab.png`, `results1_figure1c.png` | Separate near-overlap in x(t), v(t) from geometric orbit quality. | dt=0.01, Euler is still the visibly worst method; Velocity-Verlet remains near-closed in phase space; RK4 is nearly exact. | This figure is qualitative; formal order comes from Fig. 3, not Fig. 1. |
+| Results 1 timestep sensitivity | `results1_figure2.png`, `results1_ho_small_large_summary.csv` | Show that coarse-step behaviour separates structural stability from accuracy. | At dt=0.5 Euler is unstable, Velocity-Verlet remains bounded, RK4 stays accurate; dt=0.01 errors are tabulated separately. | Do not use dt=0.5 points in the convergence-fit claim. |
+| Results 1 convergence paragraph | `results1_figure3.png`, `results1_ho_convergence_summary.csv`, `results1_ho_endpoint_values.csv` | Main proof of first/second/fourth-order behaviour. | Endpoint slopes 1.05, 2.00, 3.94; RMS slopes 1.03, 2.00, 4.00; RK4 floor at 3.6e-15 for dt=5e-4. | State the fit rule: dt <= 0.1, with coarse points retained only for context. |
+| Results 1 energy paragraph | `results1_figure4.png` | Supporting evidence for long-time structure preservation. | At dt=0.01, Euler max |dE/E0| = 10.52%; Velocity-Verlet = 0.00250%; RK4 = 1.39e-11%. | Use this as structural support, not as the only accuracy argument. |
+| Results 2 required-run paragraph | `results2_figure6.png`, `results2_figure7.png`, `results2_quantitative_summary_table.md` | Main evidence that Velocity-Verlet is production-usable and Euler is not. | Velocity-Verlet max |dE/E0| = 0.082%; Euler = 127.587%; mean temperatures 94.42 K vs 185.27 K; Euler max temperature 396.05 K. | State that this is the required 100-step, 1 ps production run and that step 0 is the production initial frame. |
+| Results 2 RDF paragraph | `results2_figure8.png`, `rahman1964_fig2_manual_anchors.csv` | Structural validation against Rahman-style shell locations. | First peak 1.09 / 2.838, first minimum 1.55 / 0.623, second peak 2.07 / 1.253, tail mean 1.002. | Keep the wording qualitative or semi-quantitative because the Rahman guide is manually anchored. |
+| Results 3 strong scaling | `results3_figure10abc.png`, `scaling_strong.csv` | Main performance figure for speedup, efficiency, and communication growth. | S(32)=24.12, E(32)=0.754, fitted f=0.0103, comm fraction 1.1% at P=2 to 15.2% at P=32. | Amdahl f is an empirical descriptor of the measured curve, not a literal machine-independent serial fraction. |
+| Results 3 size scaling | `results3_figure9ab.png`, `scaling_size.csv` | Show near-O(N^2) growth and falling communication fraction at larger N. | Wall ~ N^1.85, wall-minus-comm ~ N^1.93, communication fraction 50.8% down to 13.1%. | Say explicitly that the power-law fit is over N >= 500, not all N values. |
 
 ### Stronger Presentation Opportunities
 
@@ -290,9 +290,9 @@ The section below is the detailed verbatim analyzer output from `ai/analyse_resu
   "results2_outputs": {
     "generated_utc": "2026-03-11T12:01:14Z",
     "main_report_figures": [
-      "out/plots/results2_figure6_lj_brief_energy_100step_production.png",
-      "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
-      "out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png"
+      "out/plots/results2_figure6.png",
+      "out/plots/results2_figure7.png",
+      "out/plots/results2_figure8.png"
     ],
     "main_report_tables": [
       "out/summary/results2/results2_quantitative_summary_table.md",
@@ -307,9 +307,9 @@ The section below is the detailed verbatim analyzer output from `ai/analyse_resu
       "out/summary/results2/results2_what_changed_and_why.md"
     ],
     "plot_metadata_files": [
-      "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json",
-      "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json",
-      "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json"
+      "out/plots/metadata/results2_figure6.json",
+      "out/plots/metadata/results2_figure7.json",
+      "out/plots/metadata/results2_figure8.json"
     ]
   },
   "lj_rdf": {
@@ -431,17 +431,17 @@ The section below is the detailed verbatim analyzer output from `ai/analyse_resu
 - rk4: max |ΔE/E0| = 0.000000% (dt≈0.01)
 
 **Plots presence (current naming):**
-- `out/plots/results1_figure1ab_trajectories_dt0p01.png` — confirmed
-- `out/plots/results1_figure1c_phase_space_dt0p01.png` — confirmed
-- `out/plots/results1_figure2_small_vs_large_dt.png` — confirmed
-- `out/plots/results1_figure3_convergence_combined.png` — confirmed
-- `out/plots/results1_figure4_energy_diagnostic.png` — confirmed
+- `out/plots/results1_figure1ab.png` — confirmed
+- `out/plots/results1_figure1c.png` — confirmed
+- `out/plots/results1_figure2.png` — confirmed
+- `out/plots/results1_figure3.png` — confirmed
+- `out/plots/results1_figure4.png` — confirmed
 **Legacy filename aliases (staleness-aware check):**
-- `out/plots/results1_ho_position_velocity_trajectories.png` → `out/plots/results1_figure1ab_trajectories_dt0p01.png` — expected by design (renamed to current filename)
-- `out/plots/results1_ho_phase_space_trajectories.png` → `out/plots/results1_figure1c_phase_space_dt0p01.png` — expected by design (renamed to current filename)
-- `out/plots/results1_ho_convergence_endpoint_position_error.png` → `out/plots/results1_figure3_convergence_combined.png` — expected by design (renamed to current filename)
-- `out/plots/results1_ho_convergence_rms_phase_space_error.png` → `out/plots/results1_figure3_convergence_combined.png` — expected by design (renamed to current filename)
-- `out/plots/results1_ho_energy_conservation.png` → `out/plots/results1_figure4_energy_diagnostic.png` — expected by design (renamed to current filename)
+- `out/plots/results1_ho_position_velocity_trajectories.png` → `out/plots/results1_figure1ab.png` — expected by design (renamed to current filename)
+- `out/plots/results1_ho_phase_space_trajectories.png` → `out/plots/results1_figure1c.png` — expected by design (renamed to current filename)
+- `out/plots/results1_ho_convergence_endpoint_position_error.png` → `out/plots/results1_figure3.png` — expected by design (renamed to current filename)
+- `out/plots/results1_ho_convergence_rms_phase_space_error.png` → `out/plots/results1_figure3.png` — expected by design (renamed to current filename)
+- `out/plots/results1_ho_energy_conservation.png` → `out/plots/results1_figure4.png` — expected by design (renamed to current filename)
 
 ## C) Results 2: Lennard-Jones / Argon
 
@@ -474,9 +474,9 @@ The section below is the detailed verbatim analyzer output from `ai/analyse_resu
 - Provenance: Rahman guide values are manual Fig. 2 anchors (paper-anchored x values at 3.7 Å, 7.0 Å, 10.4 Å; other points are approximate shape anchors).
 
 **Plots presence:**
-- `out/plots/results2_figure6_lj_brief_energy_100step_production.png` — confirmed
-- `out/plots/results2_figure7_lj_brief_temperature_100step_production.png` — confirmed
-- `out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png` — confirmed
+- `out/plots/results2_figure6.png` — confirmed
+- `out/plots/results2_figure7.png` — confirmed
+- `out/plots/results2_figure8.png` — confirmed
 - Core Results 2 evidence: required-run energy + required-run temperature + RDF-vs-Rahman.
 - Results 2 quantitative table (MD): `out/summary/results2/results2_quantitative_summary_table.md` — confirmed
 - Results 2 quantitative table (CSV): `out/summary/results2/results2_quantitative_summary_table.csv` — confirmed
@@ -526,8 +526,8 @@ The section below is the detailed verbatim analyzer output from `ai/analyse_resu
 - CSV: `out/scaling_size.csv`
 
 **Plots presence:**
-- `out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png` — confirmed
-- `out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png` — confirmed
+- `out/plots/results3_figure10abc.png` — confirmed
+- `out/plots/results3_figure9ab.png` — confirmed
 
 ## E) Compliance & Known Limitations
 
@@ -540,7 +540,7 @@ The section below is the detailed verbatim analyzer output from `ai/analyse_resu
 | LJ two-stage semantics (Verlet brief) | confirmed | Expected production_start_step=0, production_steps=100, total_steps_executed=equilibration_steps+production_steps, final_rescale_before_production=true, production_nve=true |
 | LJ two-stage semantics (Euler brief) | confirmed | Expected production_start_step=0, production_steps=100, total_steps_executed=equilibration_steps+production_steps, final_rescale_before_production=true, production_nve=true |
 | HO convergence data present | confirmed | `manifest.ho_convergence` present |
-| Required current plot set present | confirmed | present=['results1_figure1ab_trajectories_dt0p01.png', 'results1_figure1c_phase_space_dt0p01.png', 'results1_figure2_small_vs_large_dt.png', 'results1_figure3_convergence_combined.png', 'results2_figure6_lj_brief_energy_100step_production.png', 'results2_figure7_lj_brief_temperature_100step_production.png', 'results2_figure8_lj_rdf_comparison_rahman1964.png', 'results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png', 'results3_figure9ab_problem_size_scaling_fixed_p16.png']; missing=none |
+| Required current plot set present | confirmed | present=['results1_figure1ab.png', 'results1_figure1c.png', 'results1_figure2.png', 'results1_figure3.png', 'results2_figure6.png', 'results2_figure7.png', 'results2_figure8.png', 'results3_figure10abc.png', 'results3_figure9ab.png']; missing=none |
 | Legacy Results 1 plot-name aliases | expected by design | Legacy Results 1 filenames are absent because plots were renamed to the `results1_figure*` scheme. |
 | Makefile present | confirmed | `Makefile` exists |
 | No rand()/std::rand() usage | confirmed | none |

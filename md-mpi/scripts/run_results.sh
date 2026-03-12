@@ -1,10 +1,14 @@
 #!/bin/bash
 # Run end-to-end Results data generation and plotting.
 # Usage:
-#   bash scripts/run_results.sh [--skip-scaling]
+#   bash scripts/run_results.sh [--skip-scaling] [--live-scaling] [--reference-scaling] [--bind-to-core|--no-bind-to-core]
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
+
+# Start from a clean output tree to avoid mixing stale and fresh artifacts.
+rm -rf out
+mkdir -p out
 
 bash scripts/run_all_data.sh "$@"
 

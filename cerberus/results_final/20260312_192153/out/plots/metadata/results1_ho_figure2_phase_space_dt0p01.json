@@ -1,0 +1,18 @@
+{
+  "claim": "Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences.",
+  "figure_number": 2,
+  "generated_utc": "2026-03-10T22:50:04Z",
+  "kind": "main_results1_figure",
+  "panel": "v_vs_x",
+  "parameters": {
+    "dt_large": 0.5,
+    "dt_small": 0.01,
+    "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
+    "omega": 1.0,
+    "t_final": 10.0,
+    "v0": 0.0,
+    "x0": 1.0
+  },
+  "plot_file_png": "out/plots/results1_ho_figure2_phase_space_dt0p01.png",
+  "shared_legend": true
+}

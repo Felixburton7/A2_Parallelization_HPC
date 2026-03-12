@@ -8,7 +8,7 @@
 # is reported. This guarantees comm <= wall for every data point.
 #
 # Usage:
-#   bash scripts/run_scaling.sh
+#   bash scripts/run_scaling.sh [--bind-to-core|--no-bind-to-core]
 #
 # Produces:
 #   out/scaling_strong.csv   (P,N,wall_s,comm_max_s)
@@ -22,14 +22,32 @@
 
 set -euo pipefail
 
-SOLVER="./md_solver"
-OUTDIR="out"
-STRONG_STEPS=1000
-SIZE_STEPS=1000
-INTEGRATOR="verlet"
-REPS=11
+SOLVER="${SOLVER:-./md_solver}"
+OUTDIR="${OUTDIR:-out}"
+STRONG_STEPS="${STRONG_STEPS:-1000}"
+SIZE_STEPS="${SIZE_STEPS:-1000}"
+INTEGRATOR="${INTEGRATOR:-verlet}"
+REPS="${REPS:-11}"
+BIND_TO_CORE="${BIND_TO_CORE:-1}"
+
+for arg in "$@"; do
+    case "$arg" in
+        --bind-to-core) BIND_TO_CORE=1 ;;
+        --no-bind-to-core) BIND_TO_CORE=0 ;;
+        *)
+            echo "ERROR: unknown argument '$arg'" >&2
+            echo "Usage: bash scripts/run_scaling.sh [--bind-to-core|--no-bind-to-core]" >&2
+            exit 1
+            ;;
+    esac
+done
 
 mkdir -p "$OUTDIR"
+
+MPIRUN_BIND_ARGS=()
+if [ "$BIND_TO_CORE" = "1" ]; then
+    MPIRUN_BIND_ARGS=(--bind-to core)
+fi
 
 if [ $((REPS % 2)) -eq 0 ]; then
     echo "ERROR: REPS must be odd for an unambiguous median-by-sample selection (got REPS=$REPS)." >&2
@@ -98,8 +116,7 @@ N_STRONG=2048
 for P in 1 2 4 8 16 24 32; do
     TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        # OUTPUT=$(mpirun -np "$P" "$SOLVER" \
-        OUTPUT=$(mpirun --bind-to core -np "$P" "$SOLVER" \
+        OUTPUT=$(mpirun "${MPIRUN_BIND_ARGS[@]}" -np "$P" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
 
@@ -153,8 +170,7 @@ P_SIZE=16
 for N in 108 256 500 864 1372 2048; do
     TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
-        # OUTPUT=$(mpirun -np "$P_SIZE" "$SOLVER" \
-        OUTPUT=$(mpirun --bind-to core -np "$P_SIZE" "$SOLVER" \
+        OUTPUT=$(mpirun "${MPIRUN_BIND_ARGS[@]}" -np "$P_SIZE" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
             --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
 

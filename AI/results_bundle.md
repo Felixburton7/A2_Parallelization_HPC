@@ -61,9 +61,9 @@ This section preserves raw artifact payloads (with explicit truncation for long 
   "results2_outputs": {
     "generated_utc": "2026-03-11T12:01:14Z",
     "main_report_figures": [
-      "out/plots/results2_figure6_lj_brief_energy_100step_production.png",
-      "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
-      "out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png"
+      "out/plots/results2_figure6.png",
+      "out/plots/results2_figure7.png",
+      "out/plots/results2_figure8.png"
     ],
     "main_report_tables": [
       "out/summary/results2/results2_quantitative_summary_table.md",
@@ -78,9 +78,9 @@ This section preserves raw artifact payloads (with explicit truncation for long 
       "out/summary/results2/results2_what_changed_and_why.md"
     ],
     "plot_metadata_files": [
-      "out/plots/metadata/results2_figure6_lj_brief_energy_100step_production.json",
-      "out/plots/metadata/results2_figure7_lj_brief_temperature_100step_production.json",
-      "out/plots/metadata/results2_figure8_lj_rdf_comparison_rahman1964.json"
+      "out/plots/metadata/results2_figure6.json",
+      "out/plots/metadata/results2_figure7.json",
+      "out/plots/metadata/results2_figure8.json"
     ]
   },
   "lj_rdf": {
@@ -95,11 +95,11 @@ This section preserves raw artifact payloads (with explicit truncation for long 
 1. out/manifest.json
 2. out/summary/results1/results1_ho_convergence_summary.csv
 3. out/summary/results2/results2_quantitative_summary_table.md
-4. out/plots/results2_figure6_lj_brief_energy_100step_production.png
-5. out/plots/results2_figure7_lj_brief_temperature_100step_production.png
-6. out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png
-7. out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png
-8. out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png
+4. out/plots/results2_figure6.png
+5. out/plots/results2_figure7.png
+6. out/plots/results2_figure8.png
+7. out/plots/results3_figure9ab.png
+8. out/plots/results3_figure10abc.png
 9. out/scaling_strong.csv
 10. out/scaling_size.csv
 
@@ -299,9 +299,9 @@ Interpretation rule:
 # Recommended Final Results 2 Figure Set
 
 Main report figures (core evidence, in order):
-6. `out/plots/results2_figure6_lj_brief_energy_100step_production.png` (panels: a, b)
-7. `out/plots/results2_figure7_lj_brief_temperature_100step_production.png` (panel: a)
-8. `out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png` (panel: a)
+6. `out/plots/results2_figure6.png` (panels: a, b)
+7. `out/plots/results2_figure7.png` (panel: a)
+8. `out/plots/results2_figure8.png` (panel: a)
 Table: `out/summary/results2/results2_quantitative_summary_table.md` (compact quantitative table)
 Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler comparison and Rahman structural comparison with no extra non-deliverable figures.
 ```
@@ -358,7 +358,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure1ab_trajectories_dt0p01.png",
+  "plot_file_png": "out/plots/results1_figure1ab.png",
   "shared_legend": true,
   "zoom_window": [
     9.0,
@@ -383,7 +383,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure1c_phase_space_dt0p01.png",
+  "plot_file_png": "out/plots/results1_figure1c.png",
   "shared_legend": true
 }```
 
@@ -464,7 +464,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure2_small_vs_large_dt.png",
+  "plot_file_png": "out/plots/results1_figure2.png",
   "shared_legend": true
 }```
 
@@ -591,7 +591,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure3_convergence_combined.png"
+  "plot_file_png": "out/plots/results1_figure3.png"
 }```
 
 ## Plot Metadata: Results 1 Figure 4 Energy Diagnostic
@@ -611,7 +611,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure4_energy_diagnostic.png"
+  "plot_file_png": "out/plots/results1_figure4.png"
 }```
 
 ## Plot Metadata: Results 2 Figure 6 Energy Drift
@@ -623,7 +623,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "LJ uses a hard cutoff without potential shifting; small energy discontinuities can occur when pairs cross r_cut.",
     "For required-run interpretation, startup/equilibration is completed before this production trajectory."
   ],
-  "figure_filename": "results2_figure6_lj_brief_energy_100step_production.png",
+  "figure_filename": "results2_figure6.png",
   "figure_number": 6,
   "fit_or_truncation": {
     "applied_xlim_ps": [
@@ -760,7 +760,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "a)",
     "b)"
   ],
-  "plot_file_png": "out/plots/results2_figure6_lj_brief_energy_100step_production.png",
+  "plot_file_png": "out/plots/results2_figure6.png",
   "purpose": "Core brief-facing evidence for the required 100-step production run using signed total-energy drift only: Velocity-Verlet remains bounded while Forward Euler drifts strongly.",
   "section": "results2",
   "simulation_run_identifiers": [
@@ -786,7 +786,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "Target temperature line is a reference, not a fitted value.",
     "Temperature evidence is complementary and should be interpreted with the energy and RDF results."
   ],
-  "figure_filename": "results2_figure7_lj_brief_temperature_100step_production.png",
+  "figure_filename": "results2_figure7.png",
   "figure_number": 7,
   "fit_or_truncation": {
     "applied_xlim_ps": null,
@@ -906,7 +906,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
   "panels": [
     "a)"
   ],
-  "plot_file_png": "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
+  "plot_file_png": "out/plots/results2_figure7.png",
   "purpose": "Core brief-facing evidence for the required 100-step production run temperature response.",
   "section": "results2",
   "simulation_run_identifiers": [
@@ -933,7 +933,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "All Rahman g(r) values and all non-anchored x-values are approximate manual reads from the printed plot.",
     "No error bars are shown; comparison is qualitative/semi-quantitative rather than exact."
   ],
-  "figure_filename": "results2_figure8_lj_rdf_comparison_rahman1964.png",
+  "figure_filename": "results2_figure8.png",
   "figure_number": 8,
   "fit_or_truncation": {
     "present_work_truncation": "none",
@@ -1080,7 +1080,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
   "panels": [
     "a)"
   ],
-  "plot_file_png": "out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png",
+  "plot_file_png": "out/plots/results2_figure8.png",
   "purpose": "Core brief-facing structural evidence: compare present-work Argon RDF against a transparent manually extracted Rahman (1964) Fig. 2 anchor guide.",
   "section": "results2",
   "simulation_run_identifiers": [
@@ -1106,7 +1106,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
     "O(...) expressions in the legend are empirical power-law fits over the tested range, not rigorous statements of asymptotic complexity."
   ],
-  "figure_filename": "results3_figure9ab_problem_size_scaling_fixed_p16.png",
+  "figure_filename": "results3_figure9ab.png",
   "figure_number": 9,
   "fit_or_truncation": {
     "excluded_from_power_law_fit": [
@@ -1203,7 +1203,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "a)",
     "b)"
   ],
-  "plot_file_png": "out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png",
+  "plot_file_png": "out/plots/results3_figure9ab.png",
   "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
   "section": "results3",
   "simulation_run_identifiers": [],
@@ -1225,7 +1225,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
     "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time."
   ],
-  "figure_filename": "results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png",
+  "figure_filename": "results3_figure10abc.png",
   "figure_number": 10,
   "fit_or_truncation": {
     "amdahl_fit_domain": "P > 1",
@@ -1338,7 +1338,7 @@ Rationale: this set directly answers the brief-required 100-step Verlet-vs-Euler
     "b)",
     "c)"
   ],
-  "plot_file_png": "out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png",
+  "plot_file_png": "out/plots/results3_figure10abc.png",
   "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
   "section": "results3",
   "simulation_run_identifiers": [],
@@ -1723,7 +1723,7 @@ date: 2026-03-10T15:03:22+00:00
     "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
     "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time."
   ],
-  "figure_filename": "results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png",
+  "figure_filename": "results3_figure10abc.png",
   "figure_number": 10,
   "fit_or_truncation": {
     "amdahl_fit_domain": "P > 1",
@@ -1836,7 +1836,7 @@ date: 2026-03-10T15:03:22+00:00
     "b)",
     "c)"
   ],
-  "plot_file_png": "out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png",
+  "plot_file_png": "out/plots/results3_figure10abc.png",
   "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
   "section": "results3",
   "simulation_run_identifiers": [],
@@ -1858,7 +1858,7 @@ date: 2026-03-10T15:03:22+00:00
     "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
     "O(...) expressions in the legend are empirical power-law fits over the tested range, not rigorous statements of asymptotic complexity."
   ],
-  "figure_filename": "results3_figure9ab_problem_size_scaling_fixed_p16.png",
+  "figure_filename": "results3_figure9ab.png",
   "figure_number": 9,
   "fit_or_truncation": {
     "excluded_from_power_law_fit": [
@@ -1955,7 +1955,7 @@ date: 2026-03-10T15:03:22+00:00
     "a)",
     "b)"
   ],
-  "plot_file_png": "out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png",
+  "plot_file_png": "out/plots/results3_figure9ab.png",
   "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
   "section": "results3",
   "simulation_run_identifiers": [],

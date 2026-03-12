@@ -1,0 +1,123 @@
+{
+  "claim": "Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics.",
+  "coarse_points_retained_on_plot": true,
+  "figure_number": 3,
+  "fit_rule": "dt <= 0.1; fallback to smallest half if fewer than 3 points",
+  "fits": {
+    "endpoint_position_error": {
+      "euler": {
+        "excluded_dt_values": [
+          0.5,
+          1.0
+        ],
+        "expected_order": 1,
+        "fit_dt_values": [
+          0.0005,
+          0.001,
+          0.005,
+          0.01,
+          0.05,
+          0.1
+        ],
+        "fitted_slope": 1.0501683187829562
+      },
+      "rk4": {
+        "excluded_dt_values": [
+          0.5,
+          1.0
+        ],
+        "expected_order": 4,
+        "fit_dt_values": [
+          0.001,
+          0.005,
+          0.01,
+          0.05,
+          0.1
+        ],
+        "fitted_slope": 3.9442304587115373
+      },
+      "verlet": {
+        "excluded_dt_values": [
+          0.5,
+          1.0
+        ],
+        "expected_order": 2,
+        "fit_dt_values": [
+          0.0005,
+          0.001,
+          0.005,
+          0.01,
+          0.05,
+          0.1
+        ],
+        "fitted_slope": 2.0006208677631636
+      }
+    },
+    "rms_phase_space_error": {
+      "euler": {
+        "excluded_dt_values": [
+          0.5,
+          1.0
+        ],
+        "expected_order": 1,
+        "fit_dt_values": [
+          0.0005,
+          0.001,
+          0.005,
+          0.01,
+          0.05,
+          0.1
+        ],
+        "fitted_slope": 1.0321586375425549
+      },
+      "rk4": {
+        "excluded_dt_values": [
+          0.5,
+          1.0
+        ],
+        "expected_order": 4,
+        "fit_dt_values": [
+          0.0005,
+          0.001,
+          0.005,
+          0.01,
+          0.05,
+          0.1
+        ],
+        "fitted_slope": 3.9961192997018524
+      },
+      "verlet": {
+        "excluded_dt_values": [
+          0.5,
+          1.0
+        ],
+        "expected_order": 2,
+        "fit_dt_values": [
+          0.0005,
+          0.001,
+          0.005,
+          0.01,
+          0.05,
+          0.1
+        ],
+        "fitted_slope": 2.000084095237239
+      }
+    }
+  },
+  "generated_utc": "2026-03-12T18:17:51Z",
+  "kind": "main_results1_figure",
+  "panels": [
+    "a) endpoint_position_error",
+    "b) rms_phase_space_error"
+  ],
+  "parameters": {
+    "dt_large": 0.5,
+    "dt_small": 0.01,
+    "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
+    "omega": 1.0,
+    "t_final": 10.0,
+    "v0": 0.0,
+    "x0": 1.0
+  },
+  "plot_file_png": "out/plots/results1_figure3_convergence_combined.png"
+}

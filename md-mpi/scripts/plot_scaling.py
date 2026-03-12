@@ -36,12 +36,12 @@ from plot_style import (
 
 PLOT_DIR = "out/plots"
 PLOT_META_DIR = "out/plots/metadata"
-FIG9_AB_PNG = "results3_figure9ab_problem_size_scaling_fixed_p16.png"
-FIG10_ABC_PNG = "results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png"
+FIG9_AB_PNG = "results3_figure9ab.png"
+FIG10_ABC_PNG = "results3_figure10abc.png"
 RESULTS3_INTEGRATOR = "verlet"
 RESULTS3_TIMESTEP_S = 1.0e-14
 RESULTS3_SEED = 42
-RESULTS3_REPETITIONS = 20
+RESULTS3_REPETITIONS = 11
 RESULTS3_STRONG_FIXED_N = 2048
 RESULTS3_STRONG_TIMED_STEPS = 1000
 RESULTS3_SIZE_FIXED_P = 16
@@ -100,7 +100,7 @@ def results3_protocol(kind):
                 "fixed_particle_count_N": RESULTS3_STRONG_FIXED_N,
                 "timed_steps": RESULTS3_STRONG_TIMED_STEPS,
                 "design_rationale": (
-                    "Use the same 1000-step timing window across scaling modes for direct comparability."
+                    "Use a longer timing window at fixed N=2048 to reduce measurement noise while keeping the single-rank baseline tractable."
                 ),
             }
         )
@@ -111,7 +111,7 @@ def results3_protocol(kind):
                 "fixed_process_count_P": RESULTS3_SIZE_FIXED_P,
                 "timed_steps": RESULTS3_SIZE_TIMED_STEPS,
                 "design_rationale": (
-                    "Use the same 1000-step timing window across scaling modes for direct comparability."
+                    "Use a longer timing window at small N so fixed overhead and timer granularity contaminate the size-scaling trend less strongly."
                 ),
             }
         )

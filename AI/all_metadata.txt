@@ -1,4 +1,4 @@
-===== results1_figure1ab_trajectories_dt0p01.json =====
+===== results1_figure1ab.json =====
 {
   "claim": "Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact.",
   "endpoint_note": "Near-overlap is expected at small \u0394t; endpoint errors still rank Euler > Velocity-Verlet > RK4.",
@@ -36,7 +36,7 @@
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure1ab_trajectories_dt0p01.png",
+  "plot_file_png": "out/plots/results1_figure1ab.png",
   "shared_legend": true,
   "zoom_window": [
     9.0,
@@ -44,7 +44,7 @@
   ]
 }
 
-===== results1_figure1c_phase_space_dt0p01.json =====
+===== results1_figure1c.json =====
 {
   "claim": "Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences.",
   "figure_number": 1,
@@ -60,11 +60,11 @@
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure1c_phase_space_dt0p01.png",
+  "plot_file_png": "out/plots/results1_figure1c.png",
   "shared_legend": true
 }
 
-===== results1_figure2_small_vs_large_dt.json =====
+===== results1_figure2.json =====
 {
   "claim": "Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables.",
   "error_annotations": {
@@ -140,11 +140,11 @@
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure2_small_vs_large_dt.png",
+  "plot_file_png": "out/plots/results1_figure2.png",
   "shared_legend": true
 }
 
-===== results1_figure3_convergence_combined.json =====
+===== results1_figure3.json =====
 {
   "claim": "Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics.",
   "coarse_points_retained_on_plot": true,
@@ -266,10 +266,10 @@
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure3_convergence_combined.png"
+  "plot_file_png": "out/plots/results1_figure3.png"
 }
 
-===== results1_figure4_energy_diagnostic.json =====
+===== results1_figure4.json =====
 {
   "claim": "Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval.",
   "figure_number": 4,
@@ -285,10 +285,10 @@
     "v0": 0.0,
     "x0": 1.0
   },
-  "plot_file_png": "out/plots/results1_figure4_energy_diagnostic.png"
+  "plot_file_png": "out/plots/results1_figure4.png"
 }
 
-===== results2_figure6_lj_brief_energy_100step_production.json =====
+===== results2_figure6.json =====
 {
   "audience_tier": "main-report-core",
   "caveats": [
@@ -296,7 +296,7 @@
     "LJ uses a hard cutoff without potential shifting; small energy discontinuities can occur when pairs cross r_cut.",
     "For required-run interpretation, startup/equilibration is completed before this production trajectory."
   ],
-  "figure_filename": "results2_figure6_lj_brief_energy_100step_production.png",
+  "figure_filename": "results2_figure6.png",
   "figure_number": 6,
   "fit_or_truncation": {
     "applied_xlim_ps": [
@@ -433,7 +433,7 @@
     "a)",
     "b)"
   ],
-  "plot_file_png": "out/plots/results2_figure6_lj_brief_energy_100step_production.png",
+  "plot_file_png": "out/plots/results2_figure6.png",
   "purpose": "Core brief-facing evidence for the required 100-step production run using signed total-energy drift only: Velocity-Verlet remains bounded while Forward Euler drifts strongly.",
   "section": "results2",
   "simulation_run_identifiers": [
@@ -450,7 +450,7 @@
   ]
 }
 
-===== results2_figure7_lj_brief_temperature_100step_production.json =====
+===== results2_figure7.json =====
 {
   "audience_tier": "main-report-core",
   "caveats": [
@@ -458,7 +458,7 @@
     "Target temperature line is a reference, not a fitted value.",
     "Temperature evidence is complementary and should be interpreted with the energy and RDF results."
   ],
-  "figure_filename": "results2_figure7_lj_brief_temperature_100step_production.png",
+  "figure_filename": "results2_figure7.png",
   "figure_number": 7,
   "fit_or_truncation": {
     "applied_xlim_ps": null,
@@ -578,7 +578,7 @@
   "panels": [
     "a)"
   ],
-  "plot_file_png": "out/plots/results2_figure7_lj_brief_temperature_100step_production.png",
+  "plot_file_png": "out/plots/results2_figure7.png",
   "purpose": "Core brief-facing evidence for the required 100-step production run temperature response.",
   "section": "results2",
   "simulation_run_identifiers": [
@@ -595,7 +595,7 @@
   ]
 }
 
-===== results2_figure8_lj_rdf_comparison_rahman1964.json =====
+===== results2_figure8.json =====
 {
   "audience_tier": "main-report-core",
   "caveats": [
@@ -604,7 +604,7 @@
     "All Rahman g(r) values and all non-anchored x-values are approximate manual reads from the printed plot.",
     "No error bars are shown; comparison is qualitative/semi-quantitative rather than exact."
   ],
-  "figure_filename": "results2_figure8_lj_rdf_comparison_rahman1964.png",
+  "figure_filename": "results2_figure8.png",
   "figure_number": 8,
   "fit_or_truncation": {
     "present_work_truncation": "none",
@@ -751,7 +751,7 @@
   "panels": [
     "a)"
   ],
-  "plot_file_png": "out/plots/results2_figure8_lj_rdf_comparison_rahman1964.png",
+  "plot_file_png": "out/plots/results2_figure8.png",
   "purpose": "Core brief-facing structural evidence: compare present-work Argon RDF against a transparent manually extracted Rahman (1964) Fig. 2 anchor guide.",
   "section": "results2",
   "simulation_run_identifiers": [
@@ -768,7 +768,7 @@
   ]
 }
 
-===== results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.json =====
+===== results3_figure10abc.json =====
 {
   "audience_tier": "brief-facing",
   "caveats": [
@@ -776,7 +776,7 @@
     "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
     "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time."
   ],
-  "figure_filename": "results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png",
+  "figure_filename": "results3_figure10abc.png",
   "figure_number": 10,
   "fit_or_truncation": {
     "amdahl_fit_domain": "P > 1",
@@ -889,7 +889,7 @@
     "b)",
     "c)"
   ],
-  "plot_file_png": "out/plots/results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png",
+  "plot_file_png": "out/plots/results3_figure10abc.png",
   "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
   "section": "results3",
   "simulation_run_identifiers": [],
@@ -902,7 +902,7 @@
   ]
 }
 
-===== results3_figure9ab_problem_size_scaling_fixed_p16.json =====
+===== results3_figure9ab.json =====
 {
   "audience_tier": "brief-facing",
   "caveats": [
@@ -910,7 +910,7 @@
     "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
     "O(...) expressions in the legend are empirical power-law fits over the tested range, not rigorous statements of asymptotic complexity."
   ],
-  "figure_filename": "results3_figure9ab_problem_size_scaling_fixed_p16.png",
+  "figure_filename": "results3_figure9ab.png",
   "figure_number": 9,
   "fit_or_truncation": {
     "excluded_from_power_law_fit": [
@@ -1007,7 +1007,7 @@
     "a)",
     "b)"
   ],
-  "plot_file_png": "out/plots/results3_figure9ab_problem_size_scaling_fixed_p16.png",
+  "plot_file_png": "out/plots/results3_figure9ab.png",
   "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
   "section": "results3",
   "simulation_run_identifiers": [],

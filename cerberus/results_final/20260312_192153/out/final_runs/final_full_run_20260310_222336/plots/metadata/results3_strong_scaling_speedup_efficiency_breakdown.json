@@ -1,0 +1,126 @@
+{
+  "audience_tier": "brief-facing",
+  "caveats": [
+    "Strong-scaling data are aggregated medians, not raw replicate traces.",
+    "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
+    "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time."
+  ],
+  "figure_filename": "results3_strong_scaling_speedup_efficiency_breakdown.png",
+  "fit_or_truncation": {
+    "amdahl_fit_domain": "P > 1",
+    "amdahl_fit_model": "S(P)=1/(f+(1-f)/P)",
+    "excluded_points_from_amdahl_fit": [
+      1
+    ],
+    "fit_method": "two-pass grid search in f (coarse 1e-3 then refined 1e-5 step over local window)"
+  },
+  "generated_utc": "2026-03-10T22:50:10Z",
+  "intended_claim": "The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime.",
+  "key_parameters": {
+    "fixed_particle_count_N": 2048,
+    "integrator": "verlet",
+    "plots_in_figure": [
+      "speedup",
+      "efficiency",
+      "critical_path_communication_vs_remaining_runtime"
+    ],
+    "process_counts_P": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      24,
+      32
+    ]
+  },
+  "key_quantitative_summary": {
+    "amdahl_serial_fraction_f": 0.013637552043492639,
+    "efficiency_range": [
+      0.6847678628811771,
+      1.0
+    ],
+    "max_measured_speedup": 23.982559697161978,
+    "maximum_theoretical_speedup_from_fit": 73.3269429008093,
+    "rows": [
+      {
+        "N": 2048,
+        "P": 1,
+        "comm_max_s": 0.000615,
+        "efficiency": 1.0,
+        "remaining_runtime_s": 22.109986,
+        "speedup": 1.0,
+        "wall_s": 22.110601
+      },
+      {
+        "N": 2048,
+        "P": 2,
+        "comm_max_s": 0.113989,
+        "efficiency": 0.995114440450793,
+        "remaining_runtime_s": 10.995588,
+        "speedup": 1.990228880901586,
+        "wall_s": 11.109577
+      },
+      {
+        "N": 2048,
+        "P": 4,
+        "comm_max_s": 0.331327,
+        "efficiency": 0.9582351288203982,
+        "remaining_runtime_s": 5.437247,
+        "speedup": 3.8329405152815927,
+        "wall_s": 5.768574
+      },
+      {
+        "N": 2048,
+        "P": 8,
+        "comm_max_s": 0.243847,
+        "efficiency": 0.9500161983885825,
+        "remaining_runtime_s": 2.665393,
+        "speedup": 7.60012958710866,
+        "wall_s": 2.90924
+      },
+      {
+        "N": 2048,
+        "P": 16,
+        "comm_max_s": 0.436469,
+        "efficiency": 0.7706701643661282,
+        "remaining_runtime_s": 1.356662,
+        "speedup": 12.330722629858052,
+        "wall_s": 1.793131
+      },
+      {
+        "N": 2048,
+        "P": 24,
+        "comm_max_s": 0.368196,
+        "efficiency": 0.6847678628811771,
+        "remaining_runtime_s": 0.977187,
+        "speedup": 16.43442870914825,
+        "wall_s": 1.345383
+      },
+      {
+        "N": 2048,
+        "P": 32,
+        "comm_max_s": 0.158872,
+        "efficiency": 0.7494549905363118,
+        "remaining_runtime_s": 0.763073,
+        "speedup": 23.982559697161978,
+        "wall_s": 0.921945
+      }
+    ]
+  },
+  "missing_provenance": [
+    "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_strong.csv.",
+    "Timing step count and replication count are configured in scripts/run_all_data.sh but not encoded in scaling_strong.csv."
+  ],
+  "plot_file_png": "out/plots/results3_strong_scaling_speedup_efficiency_breakdown.png",
+  "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
+  "section": "results3",
+  "simulation_run_identifiers": [],
+  "source_data_files": [
+    "out/scaling_strong.csv",
+    "out/scaling_meta.txt"
+  ],
+  "source_manifest_keys": [
+    "scaling.strong"
+  ]
+}

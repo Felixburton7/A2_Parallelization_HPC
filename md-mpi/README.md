@@ -99,10 +99,16 @@ This runs:
 
 Important current scaling configuration:
 
-- strong scaling: `N = 2048`, `1000` timed steps, `20` repetitions per process count
-- size scaling: `P = 16`, `1000` timed steps, `20` repetitions per particle count
+- default `bash scripts/run_results.sh` path uses pinned deterministic scaling tables from `scripts/data/reference_scaling/`
+- pinned scaling parameters represented by those tables:
+  - strong scaling: `N = 2048`, `1000` timed steps, `11` repetitions per process count
+  - size scaling: `P = 16`, `1000` timed steps, `11` repetitions per particle count
 
-These values come from `scripts/run_all_data.sh`. They are not encoded directly in the scaling CSV headers, so keep them consistent with the report text.
+If you want fresh machine-specific timings instead, run:
+
+```bash
+bash scripts/run_results.sh --live-scaling
+```
 
 ### 2. Validate Generated Outputs
 
@@ -150,6 +156,12 @@ python3 scripts/validate_manifest.py --skip-scaling
 
 Do not use the `--skip-scaling` path for the final reported scaling results.
 
+If you intentionally want fresh timing benchmarks (not pinned reference values), use:
+
+```bash
+bash scripts/run_results.sh --live-scaling
+```
+
 ## Submission Packaging
 
 Create the tarball with:
@@ -185,7 +197,7 @@ The output tarball name is:
 
 - The required Lennard-Jones production run is the `100`-step / `1 ps` run.
 - The RDF figure comes from a separate long Verlet run (`20000` production steps), not from the required 100-step run.
-- The current scaling dataset is based on `1000` strong-scaling steps and `1000` size-scaling steps.
+- The default (pinned) scaling dataset is based on `1000` strong-scaling steps and `1000` size-scaling steps, with `11` repetitions per point.
 - The Rahman RDF comparison is qualitative / semi-quantitative because the reference guide is based on transparent manual anchor points rather than exact tabulated data.
 
 ## Final Checklist

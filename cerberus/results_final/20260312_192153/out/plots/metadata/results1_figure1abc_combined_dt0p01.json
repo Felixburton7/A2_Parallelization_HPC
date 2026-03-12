@@ -1,0 +1,36 @@
+{
+  "claim": "Shows position, velocity, and phase-space diagnostics at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact in one combined figure.",
+  "combined_from": [
+    "results1_figure1ab_trajectories_dt0p01.png",
+    "results1_figure1c_phase_space_dt0p01.png"
+  ],
+  "figure_number": 1,
+  "generated_utc": "2026-03-12T18:17:48Z",
+  "insets": {
+    "phase_space": {
+      "placement": "below-panel-c-lower-right",
+      "time_window": [
+        8.8,
+        10.0
+      ],
+      "used": true
+    }
+  },
+  "kind": "main_results1_figure",
+  "panels": [
+    "a) x(t)",
+    "b) v(t)",
+    "c) v_vs_x"
+  ],
+  "parameters": {
+    "dt_large": 0.5,
+    "dt_small": 0.01,
+    "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
+    "omega": 1.0,
+    "t_final": 10.0,
+    "v0": 0.0,
+    "x0": 1.0
+  },
+  "plot_file_png": "out/plots/results1_figure1abc_combined_dt0p01.png",
+  "shared_legend": true
+}

@@ -1,0 +1,44 @@
+{
+  "claim": "Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact.",
+  "endpoint_note": "Near-overlap is expected at small \u0394t; endpoint errors still rank Euler > Velocity-Verlet > RK4.",
+  "figure_number": 1,
+  "generated_utc": "2026-03-10T22:50:04Z",
+  "insets": {
+    "v": {
+      "placement": "inside-upper right",
+      "time_window": [
+        9.0,
+        10.0
+      ],
+      "used": true
+    },
+    "x": {
+      "placement": "inside-upper right",
+      "time_window": [
+        9.0,
+        10.0
+      ],
+      "used": true
+    }
+  },
+  "kind": "main_results1_figure",
+  "panels": [
+    "(a) x(t)",
+    "(b) v(t)"
+  ],
+  "parameters": {
+    "dt_large": 0.5,
+    "dt_small": 0.01,
+    "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
+    "omega": 1.0,
+    "t_final": 10.0,
+    "v0": 0.0,
+    "x0": 1.0
+  },
+  "plot_file_png": "out/plots/results1_ho_figure1_trajectories_dt0p01.png",
+  "shared_legend": true,
+  "zoom_window": [
+    9.0,
+    10.0
+  ]
+}

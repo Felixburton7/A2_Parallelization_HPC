@@ -355,7 +355,7 @@ time traces alone.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.98\textwidth]{results1_figure1abc_combined_dt0p01.png}
+  \includegraphics[width=0.98\textwidth]{results1_figure1abc.png}
   \caption{Harmonic oscillator trajectories and phase space at
     $\Delta t=0.01$, $\omega=1$, $T=10$.
     \textbf{(a)} Position $x(t)$ and \textbf{(b)} velocity $v(t)$: Euler
@@ -382,7 +382,7 @@ higher-order accuracy.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{results1_figure2_small_vs_large_dt.png}
+  \includegraphics[width=\columnwidth]{results1_figure2.png}
   \caption{Effect of timestep on harmonic oscillator behaviour.
     \textbf{Left}: $x(t)$; \textbf{Right}: phase-space portrait.
     Each row shows $\Delta t=0.5$ (coarse, dash-dot) and $\Delta t=0.01$ (fine, solid).
@@ -437,7 +437,7 @@ convergence.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results1_figure3_convergence_combined.png}
+  \includegraphics[width=0.96\textwidth]{results1_figure3.png}
   \caption{Convergence of harmonic oscillator errors with timestep
     ($\omega=1$, $x_0=1$, $T=10$).
     \textbf{(a)} Endpoint position error; \textbf{(b)} RMS phase-space error.
@@ -463,7 +463,7 @@ symplecticity governs long-time stability independently of truncation order.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\columnwidth]{results1_figure4_energy_diagnostic.png}
+  \includegraphics[width=\columnwidth]{results1_figure4.png}
   \caption{Relative energy deviation $(E-E_0)/|E_0|$ for the harmonic
     oscillator ($\Delta t=0.01$, $T=10$).
     Euler (orange dashed) drifts linearly to 10.5\%; Velocity-Verlet (blue)
@@ -501,7 +501,7 @@ eliminate contribution (i) and is standard in production codes.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure6_lj_brief_energy_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure6.png}
   \caption{Signed relative total-energy deviation $\Delta E/E_0$ [\%]
     during the required 100-step ($\Delta t=\SI{e-14}{s}$) NVE production run
     for LJ argon ($N=864$, $P=4$, equilibrated to $T=\SI{94.4}{K}$).
@@ -524,7 +524,7 @@ MD even from a well-equilibrated starting configuration.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure7_lj_brief_temperature_100step_production.png}
+  \includegraphics[width=\columnwidth]{results2_figure7.png}
   \caption{Instantaneous temperature during the required 100-step NVE production
     run ($N=864$, $\Delta t=\SI{e-14}{s}$).
     Velocity-Verlet (blue) holds $T\approx\SI{94.4}{K}$ (grey dashed);
@@ -553,7 +553,7 @@ included as additional structural validation.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\columnwidth]{results2_figure8_lj_rdf_comparison_rahman1964.png}
+  \includegraphics[width=\columnwidth]{results2_figure8.png}
   \caption{Radial distribution function $g(r)$ from an extended 20\,000-step
     NVE run (Velocity-Verlet, $N=864$, $P=4$; $g(r)$ sampled every 5 steps
     after a 200-step discard).
@@ -572,7 +572,7 @@ included as additional structural validation.
 Results~3 is a separate timing benchmark, not a repeat of the brief-mandated 100-step argon validation run from Results~2.
 All scaling runs use Velocity-Verlet, fixed seed 42,
 $\Delta t=\SI{e-14}{s}$, and no file output.
-Strong scaling uses 500 timed steps at fixed $N=2048$, whereas size scaling uses 2000 timed steps at fixed $P=16$; each configuration is repeated 20 times and the median paired wall/communication sample is retained to reduce measurement noise and fixed-overhead contamination.
+Strong scaling uses 1000 timed steps at fixed $N=2048$, whereas size scaling uses 1000 timed steps at fixed $P=16$; each configuration is repeated 20 times and the median paired wall/communication sample is retained to reduce measurement noise and fixed-overhead contamination.
 All times reported in this section are raw measured seconds from those benchmark windows, not values normalised to 100 steps.
 Wall time is the maximum across ranks (\texttt{MPI\_Reduce(MPI\_MAX)});
 communication time is the maximum \texttt{MPI\_Allgatherv} wall time
@@ -582,7 +582,7 @@ accumulated per rank.
 
 \begin{table}[ht]
   \centering
-  \caption{Strong scaling results ($N=2048$, 500 timed steps; medians of 20 no-output repetitions).
+  \caption{Strong scaling results ($N=2048$, 1000 timed steps; medians of 20 no-output repetitions).
     Wall and communication times in seconds.}
   \label{tab:strong}
   \small\setlength{\tabcolsep}{3pt}
@@ -624,8 +624,8 @@ as expected.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results3_figure10abc_strong_scaling_speedup_efficiency_breakdown.png}
-  \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 500 timed steps;
+  \includegraphics[width=0.96\textwidth]{results3_figure10abc.png}
+  \caption{Strong scaling ($N=2048$ fixed, Velocity-Verlet, 1000 timed steps;
     medians of 20 no-output repetitions, dual-socket Intel Xeon Silver 4314 node).
     \textbf{(a)} Speedup $S(P)$: ideal line (grey dashed) and Amdahl fit
     (Eq.~\ref{eq:amdahl}, $f=0.010$, orange). Near-ideal to $P=8$; $S(32)=24.1\times$.
@@ -656,8 +656,8 @@ confirming that the $\mathcal{O}(N^2)$ force loop increasingly dominates.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.96\textwidth]{results3_figure9ab_problem_size_scaling_fixed_p16.png}
-  \caption{Problem-size scaling ($P=16$ fixed, Velocity-Verlet, 2000 timed steps;
+  \includegraphics[width=0.96\textwidth]{results3_figure9ab.png}
+  \caption{Problem-size scaling ($P=16$ fixed, Velocity-Verlet, 1000 timed steps;
     medians of 20 no-output repetitions).
     \textbf{(a)} Log--log wall time (circles), compute-only (triangles), and
     communication (squares) vs.\ $N$, with $N^2$ reference (dash-dot).
