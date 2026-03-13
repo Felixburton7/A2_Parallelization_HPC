@@ -1,13 +1,12 @@
 #!/bin/bash
-# Thin compatibility wrapper.
-# Use --generate-data to run production data generation before writing results.
+# Keep the older script name working by forwarding to run_results.sh.
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# Older flag kept so existing commands still work; data generation already runs here.
 if [ "${1:-}" = "--generate-data" ]; then
   shift
-  bash scripts/run_all_data.sh "$@"
 fi
 
-bash ai/make_results.sh
+exec bash scripts/run_results.sh "$@"

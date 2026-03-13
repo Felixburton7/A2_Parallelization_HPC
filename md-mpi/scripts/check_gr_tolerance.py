@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check_gr_tolerance.py — Compare two g(r) CSV files with tolerances.
+check_gr_tolerance.py - Compare two g(r) CSV files with tolerances.
 
 Usage:
   python3 scripts/check_gr_tolerance.py <gr_p1.csv> <gr_p2.csv>

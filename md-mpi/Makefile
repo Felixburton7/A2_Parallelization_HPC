@@ -42,14 +42,15 @@ clean:
 	rm -f src/potentials/*.o tests/*.o
 
 dist: clean
-	@test "$(BCN)" != "4316J_PLACEHOLDER" || (echo "ERROR: Set BCN" && false)
+	@test -n "$(BCN)" || (echo "ERROR: BCN is empty" && false)
 	find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
-	find . -name '*.pyc' -delete 2>/dev/null || true
+	find . \( -name '*.pyc' -o -name '.DS_Store' -o -name '*~' -o -name '*.swp' \) -delete 2>/dev/null || true
 	rm -f test_runner wa2-results-*.out
 	tar -czvf $(TARBALL) \
-		--exclude='__pycache__' --exclude='*.pyc' \
+		--exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' \
+		--exclude='*~' --exclude='*.swp' --exclude='*.o' --exclude='*.out' \
 		include/ src/ tests/ scripts/ \
-		Makefile README.md FINAL_SUBMISSION.md .clang-format
+		Makefile README.md .clang-format
 	@echo ""
 	@echo "Created $(TARBALL)"
 	@echo "Contents:"

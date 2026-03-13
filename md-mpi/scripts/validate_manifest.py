@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-validate_manifest.py — Ensure out/manifest.json has expected keys and valid paths.
+validate_manifest.py - Check that out/manifest.json has the expected keys and valid paths.
 """
 
 import argparse

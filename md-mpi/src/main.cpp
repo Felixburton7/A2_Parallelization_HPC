@@ -50,6 +50,7 @@ int buildInitialConditions(const md::Params& params, bool isHO, int N, double L,
     }
 
     // FCC lattice requires N = 4*k^3.
+    // cbrt is floating-point; round to nearest integer before exact FCC validation.
     const int k = static_cast<int>(std::round(std::cbrt(N / 4.0)));
     if (4 * k * k * k != N) {
         std::fprintf(stderr,
@@ -274,11 +275,13 @@ int main(int argc, char* argv[]) {
     const int nSteps = isHO ? params.steps : std::max(0, params.productionSteps);
     const int nFrames = nSteps + 1;
     const int totalStepsExecuted = nSteps + equilibrationSteps;
+    // Output is production-only, so step numbering always starts at 0 here.
     const int productionStartStep = 0;
 
     const int grDiscardSteps = params.grDiscardSteps;
     const int grSampleEvery = params.grSampleEvery;
     const int grStart = productionStartStep + grDiscardSteps;
+    // Integer formula counts sampled frames in [grStart, nSteps] with inclusive endpoints.
     const int maxGRFrames = (!isHO && params.gr && grStart <= nSteps)
                                 ? (1 + (nSteps - grStart) / grSampleEvery)
                                 : 0;
@@ -311,6 +314,8 @@ int main(int argc, char* argv[]) {
     md::System sys;
     sys.init(localN, offset, N, L);
 
+    // Flat-array mapping: particle p contributes xyz at indices 3*p + {0,1,2};
+    // local particle i on this rank corresponds to global particle p = offset + i.
     for (int i = 0; i < localN; ++i) {
         for (int d = 0; d < 3; ++d) {
             sys.pos[3 * i + d] = posAll[3 * (offset + i) + d];
@@ -341,6 +346,7 @@ int main(int argc, char* argv[]) {
     double localPE = 0.0;
     auto allgatherPositions = [&]() {
         double t0 = params.timing ? MPI_Wtime() : 0.0;
+        // Gather local xyz blocks into a full 3N vector needed by the all-pairs force kernels.
         MPI_Allgatherv(sys.pos.data(), 3 * localN, MPI_DOUBLE, posGlobal.data(), recvcounts.data(),
                        displs.data(), MPI_DOUBLE, MPI_COMM_WORLD);
         if (params.timing) {
@@ -351,6 +357,7 @@ int main(int argc, char* argv[]) {
         if (isHO) {
             evalHO(sys, posGlobal, localPE);
         } else {
+            // LJ uses periodic boundaries; wrap before exchange so every rank sees canonical coords.
             sys.wrapPositions();
             allgatherPositions();
             evalLJ(sys, posGlobal, localPE);
@@ -433,6 +440,7 @@ int main(int argc, char* argv[]) {
     MPI_Barrier(MPI_COMM_WORLD);
     const double tStart = MPI_Wtime();
 
+    // Inclusive loop writes frame 0 plus nSteps integrated updates => nSteps + 1 frames.
     for (int step = 0; step <= nSteps; ++step) {
         double totalKE = 0.0;
         double totalPE = 0.0;

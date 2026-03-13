@@ -1,10 +1,11 @@
-# Pinned Results 3 Scaling Dataset
+# Reference Results 3 Scaling Data
 
-These files are the deterministic reference scaling tables used by
-`scripts/run_all_data.sh` (default mode) so that a fresh run can
-reproduce the same Results 3 figures and reported scaling numbers.
+These files are the default scaling inputs used by
+`scripts/run_all_data.sh`.
 
-To regenerate live timing data instead of using this pinned set, run:
+They keep the Results 3 figures and tables consistent across runs.
+
+To measure scaling on the current machine instead, run:
 
 ```bash
 bash scripts/run_results.sh --live-scaling

@@ -1,0 +1,65 @@
+{
+  "ho_convergence": {
+    "euler_dt1_0": "out/runs/ho_N1_euler_dt1.0_20260312_213405/ho_euler.csv",
+    "euler_dt0_5": "out/runs/ho_N1_euler_dt0.5_20260312_213405/ho_euler.csv",
+    "euler_dt0_1": "out/runs/ho_N1_euler_dt0.1_20260312_213405/ho_euler.csv",
+    "euler_dt0_05": "out/runs/ho_N1_euler_dt0.05_20260312_213405/ho_euler.csv",
+    "euler_dt0_01": "out/runs/ho_N1_euler_dt0.01_20260312_213405/ho_euler.csv",
+    "euler_dt0_005": "out/runs/ho_N1_euler_dt0.005_20260312_213405/ho_euler.csv",
+    "euler_dt0_001": "out/runs/ho_N1_euler_dt0.001_20260312_213405/ho_euler.csv",
+    "euler_dt0_0005": "out/runs/ho_N1_euler_dt0.0005_20260312_213405/ho_euler.csv",
+    "verlet_dt1_0": "out/runs/ho_N1_verlet_dt1.0_20260312_213405/ho_verlet.csv",
+    "verlet_dt0_5": "out/runs/ho_N1_verlet_dt0.5_20260312_213405/ho_verlet.csv",
+    "verlet_dt0_1": "out/runs/ho_N1_verlet_dt0.1_20260312_213405/ho_verlet.csv",
+    "verlet_dt0_05": "out/runs/ho_N1_verlet_dt0.05_20260312_213405/ho_verlet.csv",
+    "verlet_dt0_01": "out/runs/ho_N1_verlet_dt0.01_20260312_213405/ho_verlet.csv",
+    "verlet_dt0_005": "out/runs/ho_N1_verlet_dt0.005_20260312_213405/ho_verlet.csv",
+    "verlet_dt0_001": "out/runs/ho_N1_verlet_dt0.001_20260312_213405/ho_verlet.csv",
+    "verlet_dt0_0005": "out/runs/ho_N1_verlet_dt0.0005_20260312_213405/ho_verlet.csv",
+    "rk4_dt1_0": "out/runs/ho_N1_rk4_dt1.0_20260312_213405/ho_rk4.csv",
+    "rk4_dt0_5": "out/runs/ho_N1_rk4_dt0.5_20260312_213405/ho_rk4.csv",
+    "rk4_dt0_1": "out/runs/ho_N1_rk4_dt0.1_20260312_213405/ho_rk4.csv",
+    "rk4_dt0_05": "out/runs/ho_N1_rk4_dt0.05_20260312_213405/ho_rk4.csv",
+    "rk4_dt0_01": "out/runs/ho_N1_rk4_dt0.01_20260312_213405/ho_rk4.csv",
+    "rk4_dt0_005": "out/runs/ho_N1_rk4_dt0.005_20260312_213405/ho_rk4.csv",
+    "rk4_dt0_001": "out/runs/ho_N1_rk4_dt0.001_20260312_213405/ho_rk4.csv",
+    "rk4_dt0_0005": "out/runs/ho_N1_rk4_dt0.0005_20260312_213405/ho_rk4.csv"
+  },
+  "lj_brief": {
+    "verlet": "out/runs/lj_brief_N864_P4_verlet_prod100_eq50_dt1e-14_20260312_213405/lj_verlet.csv",
+    "euler": "out/runs/lj_brief_N864_P4_euler_prod100_eq50_dt1e-14_20260312_213405/lj_euler.csv"
+  },
+  "lj_rdf": {
+    "verlet_long": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260312_213405/gr.csv",
+    "verlet_long_energy": "out/runs/lj_rdf_N864_P4_verlet_prod20000_eq50_dt1e-14_20260312_213405/lj_verlet.csv"
+  },
+  "scaling": {
+    "strong": "out/scaling_strong.csv",
+    "size": "out/scaling_size.csv"
+  },
+  "results2_outputs": {
+    "generated_utc": "2026-03-12T22:25:59Z",
+    "main_report_figures": [
+      "out/plots/results2_figure6.png",
+      "out/plots/results2_figure7.png",
+      "out/plots/results2_figure8.png"
+    ],
+    "main_report_tables": [
+      "out/summary/results2/results2_quantitative_summary_table.md",
+      "out/summary/results2/results2_quantitative_summary_table.csv",
+      "out/summary/results2/results2_quantitative_summary_table.json"
+    ],
+    "rahman_reference_dataset": "out/summary/results2/rahman1964_fig2_manual_anchors.csv",
+    "notes": [
+      "out/summary/results2/results2_report_note.md",
+      "out/summary/results2/results2_recommended_figure_set.md",
+      "out/summary/results2/results2_rahman_extraction_note.md",
+      "out/summary/results2/results2_what_changed_and_why.md"
+    ],
+    "plot_metadata_files": [
+      "out/plots/metadata/results2_figure6.json",
+      "out/plots/metadata/results2_figure7.json",
+      "out/plots/metadata/results2_figure8.json"
+    ]
+  }
+}

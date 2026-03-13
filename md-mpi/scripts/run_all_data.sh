@@ -1,10 +1,7 @@
 #!/bin/bash
-# ──────────────────────────────────────────────────────────────────
-# run_all_data.sh — Generate ALL production data for the report
-#
-# Designed for shared HPC clusters (cerberus1). By default it reuses
-# pinned scaling tables for deterministic Results 3 regeneration.
-# ──────────────────────────────────────────────────────────────────
+# Generate the data used in the report.
+# By default, Results 3 uses the reference scaling tables in
+# scripts/data/reference_scaling/.
 
 set -euo pipefail
 
@@ -12,7 +9,7 @@ SOLVER="./md_solver"
 OUTDIR="out"
 SKIP_SCALING=0
 LIVE_SCALING=0
-STRONG_STEPS=2000
+STRONG_STEPS=500
 SIZE_STEPS=2000
 SCALING_REPS=11
 SCALING_BIND_TO_CORE=1
@@ -49,13 +46,13 @@ mkdir -p "$OUTDIR/runs"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 echo "=========================================="
-echo "  FULL DATA GENERATION — $(date)"
+echo "  DATA GENERATION - $(date)"
 echo "=========================================="
 
-# ── 0. Parallel Consistency Check ──
+# 0. Parallel consistency check
 echo ""
 echo "=== PARALLEL CONSISTENCY CHECK ==="
-# Uses zero equilibration for a fast MPI consistency smoke test (not a physical-accuracy run).
+# This uses zero equilibration for a quick MPI consistency test.
 D1="$OUTDIR/runs/lj_N108_P1_test_${TIMESTAMP}"
 D2="$OUTDIR/runs/lj_N108_P2_test_${TIMESTAMP}"
 mkdir -p "$D1" "$D2"
@@ -66,9 +63,9 @@ mpirun -np 2 $SOLVER --mode lj --integrator verlet --N 108 \
     --equilibration-steps 0 --production-steps 10 \
     --target-temperature $LJ_TARGET_T --final-rescale-before-production --outdir "$D2"
 if python3 scripts/check_tolerance.py "$D1/lj_verlet.csv" "$D2/lj_verlet.csv" > /dev/null 2>&1; then
-    echo "  P=1 vs P=2 data: MATCH ✅"
+    echo "  P=1 vs P=2 data: match"
 else
-    echo "  P=1 vs P=2 data: MISMATCH ❌"
+    echo "  P=1 vs P=2 data: mismatch"
 fi
 
 echo ""
@@ -85,12 +82,12 @@ mpirun -np 2 $SOLVER --mode lj --integrator verlet --N 108 --dt 1e-14 \
     --target-temperature $LJ_TARGET_T --final-rescale-before-production \
     --gr --gr-discard-steps 20 --gr-sample-every 2 --outdir "$DGR2" > /dev/null
 if python3 scripts/check_gr_tolerance.py "$DGR1/gr.csv" "$DGR2/gr.csv" > /dev/null 2>&1; then
-    echo "  g(r) P=1 vs P=2 data: MATCH ✅"
+    echo "  g(r) P=1 vs P=2 data: match"
 else
-    echo "  g(r) P=1 vs P=2 data: MISMATCH ❌"
+    echo "  g(r) P=1 vs P=2 data: mismatch"
 fi
 
-# ── 1. Results 1: HO Convergence ──
+# 1. Results 1: HO convergence
 echo ""
 echo "=== RESULTS 1: HO CONVERGENCE ==="
 DT_LIST="1.0:10 0.5:20 0.1:100 0.05:200 0.01:1000 0.005:2000 0.001:10000 0.0005:20000"
@@ -105,14 +102,14 @@ for INT in euler verlet rk4; do
         DSTFILE="$RUNDIR/ho_${INT}.csv"
         if [ -s "$DSTFILE" ]; then
             python3 scripts/append_manifest.py "ho_convergence.${INT}_dt${DT//./_}" "$DSTFILE"
-            echo "  $INT dt=$DT steps=$STEPS -> $DSTFILE ✅"
+            echo "  $INT dt=$DT steps=$STEPS -> saved to $DSTFILE"
         else
             echo "  $INT dt=$DT steps=$STEPS -> FAILED"
         fi
     done
 done
 
-# ── 2. Results 2: LJ Brief ──
+# 2. Results 2: LJ brief run
 echo ""
 echo "=== RESULTS 2: LJ BRIEF ==="
 echo "  Convention: startup is configured by --equilibration-steps, production by --production-steps."
@@ -130,7 +127,7 @@ mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
     --outdir "$RUNDIR_BRIEF_V" > /dev/null
 if [ -s "$RUNDIR_BRIEF_V/lj_verlet.csv" ]; then
     python3 scripts/append_manifest.py "lj_brief.verlet" "$RUNDIR_BRIEF_V/lj_verlet.csv"
-    echo "  -> brief Verlet output saved to manifest ✅"
+    echo "  -> brief Verlet output saved in manifest"
 fi
 
 RUNDIR_BRIEF_E="$OUTDIR/runs/lj_brief_N864_P4_euler_prod${LJ_BRIEF_PROD_STEPS}_eq${LJ_BRIEF_EQUIL}_dt1e-14_${TIMESTAMP}"
@@ -144,10 +141,10 @@ mpirun -np 4 $SOLVER --mode lj --integrator euler --N 864 \
     --outdir "$RUNDIR_BRIEF_E" > /dev/null
 if [ -s "$RUNDIR_BRIEF_E/lj_euler.csv" ]; then
     python3 scripts/append_manifest.py "lj_brief.euler" "$RUNDIR_BRIEF_E/lj_euler.csv"
-    echo "  -> brief Euler output saved to manifest ✅"
+    echo "  -> brief Euler output saved in manifest"
 fi
 
-# ── 3. g(r) Production Run (long) ──
+# 3. g(r) production run
 echo ""
 echo "=== g(r) PRODUCTION RUN (LONG) ==="
 echo "  RDF long run: equilibration=${LJ_RDF_EQUIL}, production=${LJ_RDF_PROD_STEPS}, frames=${LJ_RDF_FRAMES}, discard_steps=${LJ_GR_DISCARD_STEPS}, sample_every=${LJ_GR_SAMPLE_EVERY}"
@@ -166,12 +163,12 @@ mpirun -np 4 $SOLVER --mode lj --integrator verlet --N 864 \
 if [ -s "$RUNDIR_GR/gr.csv" ]; then
     python3 scripts/append_manifest.py "lj_rdf.verlet_long" "$RUNDIR_GR/gr.csv"
     python3 scripts/append_manifest.py "lj_rdf.verlet_long_energy" "$RUNDIR_GR/lj_verlet.csv"
-    echo "  g(r) done, output saved to manifest ✅"
+    echo "  g(r) complete; output saved in manifest"
 else
-    echo "  g(r) FAILED ❌"
+    echo "  g(r) FAILED"
 fi
 
-# ── 4. Strong/Size Scaling ──
+# 4. Strong and size scaling
 if [ "$SKIP_SCALING" = "1" ]; then
   echo ""
   echo "=== SKIPPING SCALING (--skip-scaling) ==="
@@ -191,15 +188,10 @@ if [ "$LIVE_SCALING" = "1" ]; then
   INTEGRATOR="verlet" \
     bash scripts/run_scaling.sh
 else
-  echo "=== RESULTS 3: PINNED SCALING REFERENCE (deterministic) ==="
+  echo "=== RESULTS 3: REFERENCE SCALING DATA ==="
   for f in \
     scaling_strong.csv \
-    scaling_size.csv \
-    scaling_strong_raw.csv \
-    scaling_size_raw.csv \
-    scaling_strong_stats.csv \
-    scaling_size_stats.csv \
-    scaling_meta.txt
+    scaling_size.csv
   do
     SRC="$SCALING_REF_DIR/$f"
     if [ ! -s "$SRC" ]; then
@@ -215,16 +207,16 @@ python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
 
 fi  # end --skip-scaling check
 
-# ── Validate manifest integrity before downstream plotting/analysis ──
+# Validate manifest before plotting.
 if [ "$SKIP_SCALING" = "1" ]; then
   python3 scripts/validate_manifest.py --skip-scaling
 else
   python3 scripts/validate_manifest.py
 fi
 
-# ── Summary ──
+# Summary
 echo ""
 echo "=========================================="
-echo "  ALL DONE — $(date)"
+echo "  FINISHED - $(date)"
 echo "=========================================="
-echo "Manifest written to: $OUTDIR/manifest.json"
+echo "Run data written under: $OUTDIR/"

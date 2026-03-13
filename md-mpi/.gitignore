@@ -1,9 +1,6 @@
 # Generated data
 out/
 
-# AI context workspace
-ai/
-
 # Build artifacts
 *.o
 md_solver

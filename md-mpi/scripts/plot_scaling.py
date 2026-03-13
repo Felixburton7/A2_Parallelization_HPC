@@ -1,25 +1,11 @@
 #!/usr/bin/env python3
 """
-plot_scaling.py — Generate scaling analysis plots (Results 3).
-
-Produces:
-  1. Strong scaling: Speedup S(P) with Amdahl's Law fit
-  2. Efficiency E(P) = S(P)/P
-  3. Stacked bar chart: Critical-path communication vs remaining runtime
-  4. Size scaling: Wall time vs N with O(N²) reference
-
-Usage:
-  python3 scripts/plot_scaling.py
-
-Prerequisites (from manifest.json):
-  scaling.strong -> out/scaling_strong.csv  (columns: P,N,wall_s,comm_max_s)
-  scaling.size   -> out/scaling_size.csv    (columns: P,N,wall_s,comm_max_s)
+plot_scaling.py - Generate scaling plots for Results 3.
 """
 
 import os
 import json
 import glob
-from datetime import datetime, timezone
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -35,7 +21,6 @@ from plot_style import (
 )
 
 PLOT_DIR = "out/plots"
-PLOT_META_DIR = "out/plots/metadata"
 FIG9_AB_PNG = "results3_figure9ab.png"
 FIG10_ABC_PNG = "results3_figure10abc.png"
 RESULTS3_INTEGRATOR = "verlet"
@@ -43,7 +28,7 @@ RESULTS3_TIMESTEP_S = 1.0e-14
 RESULTS3_SEED = 42
 RESULTS3_REPETITIONS = 11
 RESULTS3_STRONG_FIXED_N = 2048
-RESULTS3_STRONG_TIMED_STEPS = 2000
+RESULTS3_STRONG_TIMED_STEPS = 500
 RESULTS3_SIZE_FIXED_P = 16
 RESULTS3_SIZE_TIMED_STEPS = 2000
 RESULTS3_PROTOCOL_SOURCE = "scripts/run_all_data.sh"
@@ -60,83 +45,6 @@ def load_manifest():
         return {}
     with open(manifest_path, "r", encoding="utf-8") as f:
         return json.load(f)
-
-
-def utc_now():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def unique_preserve_order(items):
-    out = []
-    seen = set()
-    for item in items:
-        if item in seen:
-            continue
-        seen.add(item)
-        out.append(item)
-    return out
-
-
-def results3_protocol(kind):
-    protocol = {
-        "integrator": RESULTS3_INTEGRATOR,
-        "timestep_s": RESULTS3_TIMESTEP_S,
-        "seed": RESULTS3_SEED,
-        "repetitions_per_configuration": RESULTS3_REPETITIONS,
-        "output_mode": "timing mode with file output disabled",
-        "aggregation": "median paired (wall_s, comm_max_s) sample",
-        "protocol_source": RESULTS3_PROTOCOL_SOURCE,
-        "separation_from_results2": (
-            "Results 3 timing benchmarks are separate from the Results 2 brief-mandated 100-step argon validation run."
-        ),
-        "reporting_convention": (
-            "Reported times are raw measured wall-clock seconds from the benchmark windows; no per-100-step normalization is applied."
-        ),
-    }
-    if kind == "strong":
-        protocol.update(
-            {
-                "benchmark_type": "strong_scaling",
-                "fixed_particle_count_N": RESULTS3_STRONG_FIXED_N,
-                "timed_steps": RESULTS3_STRONG_TIMED_STEPS,
-                "design_rationale": (
-                    "Use a longer timing window at fixed N=2048 to reduce measurement noise while keeping the single-rank baseline tractable."
-                ),
-            }
-        )
-    elif kind == "size":
-        protocol.update(
-            {
-                "benchmark_type": "size_scaling",
-                "fixed_process_count_P": RESULTS3_SIZE_FIXED_P,
-                "timed_steps": RESULTS3_SIZE_TIMED_STEPS,
-                "design_rationale": (
-                    "Use a longer timing window at small N so fixed overhead and timer granularity contaminate the size-scaling trend less strongly."
-                ),
-            }
-        )
-    else:
-        raise ValueError(f"Unknown Results 3 protocol kind: {kind}")
-    return protocol
-
-
-def write_plot_metadata(plot_png_name, section, extra):
-    os.makedirs(PLOT_META_DIR, exist_ok=True)
-    payload = {
-        "generated_utc": utc_now(),
-        "figure_filename": plot_png_name,
-        "plot_file_png": f"{PLOT_DIR}/{plot_png_name}",
-        "section": section,
-        "missing_provenance": [],
-    }
-    payload.update(extra)
-    payload["missing_provenance"] = unique_preserve_order(payload.get("missing_provenance", []))
-    sidecar = f"{PLOT_META_DIR}/{os.path.splitext(plot_png_name)[0]}.json"
-    with open(sidecar, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, sort_keys=True)
-    print(f"Saved {sidecar}")
-
-
 def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05):
     ax.text(
         x,
@@ -156,11 +64,11 @@ def set_panel_title(ax, title: str):
     ax.set_title(title, loc="left", y=1.05, pad=3)
 
 
-def remove_stale_results3_artifacts():
+def remove_old_results3_files():
     for pattern in STALE_RESULTS3_PATTERNS:
         for path in glob.glob(pattern):
             os.remove(path)
-            print(f"Removed stale artifact {path}")
+            print(f"Removed old file {path}")
 
 
 def load_scaling_csv(manifest, key):
@@ -185,7 +93,7 @@ def load_scaling_csv(manifest, key):
     out["N"] = raw[:, 1]
     out["wall_s"] = raw[:, 2]
     out["comm_max_s"] = raw[:, 3]
-    print(f"Warning: {path} missing header; parsed as 4-column numeric fallback.")
+    print(f"Warning: {path} missing header; parsed as a 4-column table.")
     return out, path, True
 
 
@@ -223,7 +131,7 @@ def plot_strong_scaling():
     def fit_amdahl(P_arr, S_obs):
         """Fit Amdahl serial fraction f by minimising SSE in S-space.
         Two-pass grid search: coarse (1e-3 resolution) then refined (1e-5).
-        Uses pure NumPy — no SciPy dependency, for cluster portability."""
+        Uses pure NumPy, so no SciPy dependency is required."""
         best_f, best_sse = 0.0, 1e30
         # Coarse pass
         for f_trial in np.linspace(0.001, 0.999, 1000):
@@ -278,7 +186,7 @@ def plot_strong_scaling():
     apply_major_grid(ax2)
     disable_offset_text(ax2)
 
-    # --- Panel 3: Stacked bar — Remaining runtime vs critical-path communication ---
+    # Panel 3: stacked bar chart for remaining runtime and critical-path communication
     ax3 = axes[2]
     x_pos = np.arange(len(P))
     bar_width = 0.6
@@ -313,90 +221,6 @@ def plot_strong_scaling():
     save_figure(fig, f"{PLOT_DIR}/{FIG10_ABC_PNG}")
     plt.close()
     print(f"Saved {PLOT_DIR}/{FIG10_ABC_PNG}")
-
-    scaling_meta_path = "out/scaling_meta.txt"
-    source_data_files = [strong_path]
-    if os.path.exists(scaling_meta_path):
-        source_data_files.append(scaling_meta_path)
-
-    missing_provenance = [
-        "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_strong.csv.",
-    ]
-    if used_fallback:
-        missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
-    if not has_n_column:
-        missing_provenance.append("Strong-scaling CSV omitted N column; metadata assumes fixed N=2048.")
-    if not os.path.exists(scaling_meta_path):
-        missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
-
-    f_fit_value = float(f_fit) if f_fit is not None else None
-    max_theoretical_speedup = float(1.0 / f_fit) if f_fit is not None and f_fit > 0 else None
-    max_measured_speedup = float(np.nanmax(speedup)) if speedup.size else None
-    min_efficiency = float(np.nanmin(efficiency)) if efficiency.size else None
-    max_efficiency = float(np.nanmax(efficiency)) if efficiency.size else None
-
-    rows = []
-    for i in range(len(P)):
-        rows.append(
-            {
-                "P": int(P[i]),
-                "N": int(N_values[i]),
-                "wall_s": float(wall[i]),
-                "comm_max_s": float(comm_max[i]),
-                "remaining_runtime_s": float(compute_overhead[i]),
-                "speedup": float(speedup[i]),
-                "efficiency": float(efficiency[i]),
-            }
-        )
-
-    write_plot_metadata(
-        FIG10_ABC_PNG,
-        "results3",
-        {
-            "figure_number": 10,
-            "panels": ["a)", "b)", "c)"],
-            "purpose": "Main Results 3 figure for strong scaling: show measured speedup/efficiency and a bottleneck-consistent communication breakdown.",
-            "intended_claim": "The MPI implementation achieves strong-scaling gains while critical-path communication (max rank communication time) contributes a measurable share of runtime.",
-            "audience_tier": "brief-facing",
-            "source_data_files": unique_preserve_order(source_data_files),
-            "source_manifest_keys": ["scaling.strong"],
-            "simulation_run_identifiers": [],
-            "benchmark_protocol": results3_protocol("strong"),
-            "key_parameters": {
-                "integrator": RESULTS3_INTEGRATOR,
-                "fixed_particle_count_N": int(N_values[0]) if len(data) else None,
-                "process_counts_P": [int(p) for p in P.tolist()],
-                "timed_steps": RESULTS3_STRONG_TIMED_STEPS,
-                "repetitions_per_configuration": RESULTS3_REPETITIONS,
-                "seed": RESULTS3_SEED,
-                "timestep_s": RESULTS3_TIMESTEP_S,
-                "plots_in_figure": [
-                    "speedup",
-                    "efficiency",
-                    "critical_path_communication_vs_remaining_runtime",
-                ],
-            },
-            "fit_or_truncation": {
-                "amdahl_fit_model": "S(P)=1/(f+(1-f)/P)",
-                "amdahl_fit_domain": "P > 1",
-                "excluded_points_from_amdahl_fit": [1] if np.any(P == 1) else [],
-                "fit_method": "two-pass grid search in f (coarse 1e-3 then refined 1e-5 step over local window)",
-            },
-            "key_quantitative_summary": {
-                "amdahl_serial_fraction_f": f_fit_value,
-                "maximum_theoretical_speedup_from_fit": max_theoretical_speedup,
-                "max_measured_speedup": max_measured_speedup,
-                "efficiency_range": [min_efficiency, max_efficiency],
-                "rows": rows,
-            },
-            "caveats": [
-                "Strong-scaling data are aggregated medians, not raw replicate traces.",
-                "Communication timing is solver-reported MPI_Allgatherv timing and may include measurement noise at small runtimes.",
-                "Remaining runtime is defined as wall time minus critical-path communication and is not pure physical-force compute time.",
-            ],
-            "missing_provenance": missing_provenance,
-        },
-    )
 
     if f_fit is not None:
         print(f"  Amdahl serial fraction f = {f_fit:.6f}")
@@ -483,83 +307,8 @@ def plot_size_scaling():
     plt.close()
     print(f"Saved {PLOT_DIR}/{FIG9_AB_PNG}")
 
-    scaling_meta_path = "out/scaling_meta.txt"
-    source_data_files = [size_path]
-    if os.path.exists(scaling_meta_path):
-        source_data_files.append(scaling_meta_path)
-
-    missing_provenance = [
-        "Raw per-repetition timing samples are not retained in manifest-linked files; only medians are available in scaling_size.csv.",
-    ]
-    if used_fallback:
-        missing_provenance.append("CSV header provenance missing; file required fallback parsing.")
-    if not os.path.exists(scaling_meta_path):
-        missing_provenance.append("Hardware/environment snapshot out/scaling_meta.txt was not found.")
-
-    comm_frac_min = float(np.nanmin(comm_frac)) if comm_frac.size else None
-    comm_frac_max = float(np.nanmax(comm_frac)) if comm_frac.size else None
-    rows = []
-    for i in range(len(N)):
-        rows.append(
-            {
-                "N": int(N[i]),
-                "P": int(data["P"][i]),
-                "wall_s": float(wall[i]),
-                "comm_max_s": float(comm_max[i]),
-                "remaining_runtime_s": float(remaining_runtime[i]),
-                "communication_fraction_percent": float(comm_frac[i]),
-            }
-        )
-
-    write_plot_metadata(
-        FIG9_AB_PNG,
-        "results3",
-        {
-            "figure_number": 9,
-            "panels": ["a)", "b)"],
-            "purpose": "Main Results 3 figure for problem-size scaling at fixed process count.",
-            "intended_claim": "Runtime grows approximately as a power law near O(N^2) while communication fraction changes with size at fixed P=16.",
-            "audience_tier": "brief-facing",
-            "source_data_files": unique_preserve_order(source_data_files),
-            "source_manifest_keys": ["scaling.size"],
-            "simulation_run_identifiers": [],
-            "benchmark_protocol": results3_protocol("size"),
-            "key_parameters": {
-                "integrator": RESULTS3_INTEGRATOR,
-                "fixed_process_count_P": int(data["P"][0]) if len(data) else None,
-                "particle_counts_N": [int(n) for n in N.tolist()],
-                "timed_steps": RESULTS3_SIZE_TIMED_STEPS,
-                "repetitions_per_configuration": RESULTS3_REPETITIONS,
-                "seed": RESULTS3_SEED,
-                "timestep_s": RESULTS3_TIMESTEP_S,
-                "fit_mask_for_power_law": "N >= 500",
-                "reference_curve": "~N^2 anchored to largest-N wall time",
-            },
-            "fit_or_truncation": {
-                "power_law_fit_domain": [int(n) for n in N[mask].tolist()],
-                "excluded_from_power_law_fit": [int(n) for n in N[~mask].tolist()],
-                "fit_method": "linear regression in log10-space on selected N values",
-            },
-            "key_quantitative_summary": {
-                "wall_time_power_law_exponent": float(slope_wall) if slope_wall is not None else None,
-                "remaining_runtime_power_law_exponent": (
-                    float(slope_remaining) if slope_remaining is not None else None
-                ),
-                "communication_fraction_percent_range": [comm_frac_min, comm_frac_max],
-                "rows": rows,
-            },
-            "caveats": [
-                "Power-law exponents depend on the chosen fit domain (here N >= 500).",
-                "Communication fraction uses max rank communication timing from solver output, not network-level profiling counters.",
-                "O(...) expressions in the legend are empirical power-law fits over the tested range, not rigorous statements of asymptotic complexity.",
-            ],
-            "missing_provenance": missing_provenance,
-        },
-    )
-
-
 if __name__ == "__main__":
     apply_plot_style()
-    remove_stale_results3_artifacts()
+    remove_old_results3_files()
     plot_strong_scaling()
     plot_size_scaling()

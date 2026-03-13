@@ -1,0 +1,78 @@
+{
+  "claim": "Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables.",
+  "error_annotations": {
+    "euler": {
+      "coarse": {
+        "dt": 0.5,
+        "endpoint_position_error": 8.367020351721887,
+        "endpoint_velocity_error": 1.9525828174323399
+      },
+      "fine": {
+        "dt": 0.01,
+        "endpoint_position_error": 0.043208489127591565,
+        "endpoint_velocity_error": 0.02759708518306425
+      }
+    },
+    "rk4": {
+      "coarse": {
+        "dt": 0.5,
+        "endpoint_position_error": 0.0008075801512805736,
+        "endpoint_velocity_error": 0.005127035265358737
+      },
+      "fine": {
+        "dt": 0.01,
+        "endpoint_position_error": 4.4750858574360564e-10,
+        "endpoint_velocity_error": 7.029797854940512e-10
+      }
+    },
+    "verlet": {
+      "coarse": {
+        "dt": 0.5,
+        "endpoint_position_error": 0.06303048743925244,
+        "endpoint_velocity_error": 0.0666345063276792
+      },
+      "fine": {
+        "dt": 0.01,
+        "endpoint_position_error": 2.266852967147681e-05,
+        "endpoint_velocity_error": 2.816049136322718e-05
+      }
+    }
+  },
+  "figure_number": 2,
+  "generated_utc": "2026-03-12T22:25:54Z",
+  "insets": {
+    "euler_phase_zoom": false,
+    "euler_trajectory_zoom": false
+  },
+  "kind": "main_results1_figure",
+  "layout": {
+    "columns": [
+      "x(t)",
+      "phase portrait"
+    ],
+    "rows": [
+      "euler",
+      "verlet",
+      "rk4"
+    ]
+  },
+  "panels": [
+    "a)",
+    "b)",
+    "c)",
+    "d)",
+    "e)",
+    "f)"
+  ],
+  "parameters": {
+    "dt_large": 0.5,
+    "dt_small": 0.01,
+    "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
+    "omega": 1.0,
+    "t_final": 10.0,
+    "v0": 0.0,
+    "x0": 1.0
+  },
+  "plot_file_png": "out/plots/results1_figure2.png",
+  "shared_legend": true
+}

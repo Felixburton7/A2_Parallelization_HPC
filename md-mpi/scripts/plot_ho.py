@@ -1,33 +1,15 @@
 #!/usr/bin/env python3
 """
-plot_ho.py — Results 1 harmonic oscillator plotting package.
-
-Main figures (brief-facing):
-  Figure 1(a-c): out/plots/results1_figure1abc.png
-  Legacy Figure 1(a,b): out/plots/results1_figure1ab.png
-  Legacy Figure 1(c):   out/plots/results1_figure1c.png
-  Figure 2(a-f): out/plots/results1_figure2.png
-  Figure 3(a,b): out/plots/results1_figure3.png
-  Figure 4(a):   out/plots/results1_figure4.png
-
-Generated artifacts:
-  - out/summary/results1/results1_ho_small_large_summary.(csv|md)
-  - out/summary/results1/results1_ho_convergence_summary.(csv|md)
-  - out/summary/results1/results1_ho_endpoint_values.(csv|md)
-  - out/summary/results1/results1_ho_caption_notes.md
-
-Each figure gets a JSON metadata sidecar in:
-  out/plots/metadata/<figure_name>.json
+plot_ho.py - Generate Results 1 harmonic oscillator plots.
 """
 
 from __future__ import annotations
 
-import csv
 import json
 import os
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Dict, List, Tuple
 
 import matplotlib.pyplot as plt
@@ -71,9 +53,6 @@ T_FINAL = 10.0
 
 OUT_DIR = "out"
 PLOT_DIR = "out/plots"
-PLOT_META_DIR = "out/plots/metadata"
-SUMMARY_DIR = "out/summary"
-SUMMARY_RESULTS1_DIR = "out/summary/results1"
 
 FIG1_COMBINED_PNG = "results1_figure1abc.png"
 FIG1_PNG = "results1_figure1ab.png"
@@ -83,19 +62,6 @@ FIG4_PNG = "results1_figure3.png"
 FIG5_PNG = "results1_figure4.png"
 RESULTS1_EXACT_COLOR = "#111111"
 
-R1_SMALL_LARGE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.csv"
-R1_SMALL_LARGE_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_small_large_summary.md"
-R1_CONVERGENCE_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_convergence_summary.csv"
-R1_CONVERGENCE_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_convergence_summary.md"
-R1_ENDPOINT_VALUES_CSV = f"{SUMMARY_RESULTS1_DIR}/results1_ho_endpoint_values.csv"
-R1_ENDPOINT_VALUES_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_endpoint_values.md"
-R1_CAPTION_NOTES_MD = f"{SUMMARY_RESULTS1_DIR}/results1_ho_caption_notes.md"
-R1_SECTION_NOTES_MD = f"{SUMMARY_RESULTS1_DIR}/results1_results_section_notes.md"
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
 
 def dt_key(dt: float) -> str:
     return str(dt).replace(".", "_")
@@ -103,6 +69,12 @@ def dt_key(dt: float) -> str:
 
 def format_dt(dt: float) -> str:
     return f"{dt:g}"
+
+
+def fmt_pct_from_ratio(x: float, digits: int = 4) -> str:
+    if not np.isfinite(x):
+        return "nan"
+    return f"{100.0 * x:.{digits}f}%"
 
 
 def exact_solution(t: np.ndarray | float, omega: float = OMEGA, x0: float = X0, v0: float = V0):
@@ -155,71 +127,11 @@ def load_csv(filepath: str):
     return data
 
 
-def write_csv(path: str, fieldnames: List[str], rows: List[Dict[str, object]]) -> None:
-    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for row in rows:
-            writer.writerow(row)
-    print(f"Saved {path}")
-
-
-def markdown_table(headers: List[str], rows: List[List[str]]) -> str:
-    out = []
-    out.append("| " + " | ".join(headers) + " |")
-    out.append("|" + "|".join(["---"] * len(headers)) + "|")
-    for row in rows:
-        out.append("| " + " | ".join(row) + " |")
-    return "\n".join(out)
-
-
-def fmt_sci(x: float, digits: int = 3) -> str:
-    if not np.isfinite(x):
-        return "nan"
-    return f"{x:.{digits}e}"
-
-
-def fmt_pct_from_ratio(x: float, digits: int = 4) -> str:
-    if not np.isfinite(x):
-        return "nan"
-    pct = 100.0 * x
-    if abs(pct) < 10 ** (-digits):
-        s = f"{pct:.2e}"
-        base, exp = s.split('e')
-        return rf"${base} \times 10^{{{int(exp)}}}$%"
-    return f"{pct:.{digits}f}%"
-
-
-def write_plot_metadata(plot_png_name: str, extra: Dict[str, object]) -> None:
-    os.makedirs(PLOT_META_DIR, exist_ok=True)
-    payload = {
-        "generated_utc": utc_now(),
-        "plot_file_png": f"{PLOT_DIR}/{plot_png_name}",
-        "parameters": {
-            "omega": OMEGA,
-            "x0": X0,
-            "v0": V0,
-            "t_final": T_FINAL,
-            "dt_small": DT_SMALL,
-            "dt_large": DT_LARGE,
-            "exact_solution": "x(t)=x0 cos(omega t)+(v0/omega) sin(omega t); v(t)=-x0 omega sin(omega t)+v0 cos(omega t)",
-        },
-    }
-    payload.update(extra)
-    sidecar_name = f"{os.path.splitext(plot_png_name)[0]}.json"
-    sidecar = f"{PLOT_META_DIR}/{sidecar_name}"
-    with open(sidecar, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, sort_keys=True)
-    print(f"Saved {sidecar}")
-
-
 def save_plot_pair(fig, png_name: str, metadata: Dict[str, object]) -> None:
     os.makedirs(PLOT_DIR, exist_ok=True)
     png_path = f"{PLOT_DIR}/{png_name}"
     save_figure(fig, png_path)
     print(f"Saved {png_path}")
-    write_plot_metadata(png_name, metadata)
 
 
 def add_panel_label(ax, label: str, x: float = -0.1, y: float = 1.05) -> None:
@@ -613,7 +525,6 @@ def plot_figure1_trajectories(datasets: Dict[str, Dict[float, Dict[str, object]]
         {
             "kind": "main_results1_figure",
             "figure_number": 1,
-            "claim": "Shows position and velocity trajectories at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact.",
             "panels": ["a) x(t)", "b) v(t)"],
             "insets": inset_meta,
             "zoom_window": [zoom_t0, zoom_t1],
@@ -735,7 +646,6 @@ def plot_figure2_phase_space(datasets: Dict[str, Dict[float, Dict[str, object]]]
         {
             "kind": "main_results1_figure",
             "figure_number": 1,
-            "claim": "Shows phase-space geometry at dt=0.01 and qualitative orbit preservation differences.",
             "panel": "c) v_vs_x",
             "shared_legend": True,
         },
@@ -898,7 +808,6 @@ def plot_figure1_combined(datasets: Dict[str, Dict[float, Dict[str, object]]]) -
         {
             "kind": "main_results1_figure",
             "figure_number": 1,
-            "claim": "Shows position, velocity, and phase-space diagnostics at dt=0.01 for Euler, Velocity-Verlet, RK4 versus exact in one combined figure.",
             "panels": ["a) x(t)", "b) v(t)", "c) v_vs_x"],
             "insets": {
                 "phase_space": {
@@ -1057,7 +966,6 @@ def plot_figure3_small_vs_large(
         {
             "kind": "main_results1_figure",
             "figure_number": 2,
-            "claim": "Direct small-vs-large timestep comparison with full-range coarse behaviour retained; quantitative error values are reported in summary tables.",
             "layout": {"rows": INTEGRATORS, "columns": ["x(t)", "phase portrait"]},
             "panels": ["a)", "b)", "c)", "d)", "e)", "f)"],
             "shared_legend": True,
@@ -1195,7 +1103,6 @@ def plot_figure4_convergence_combined(
         {
             "kind": "main_results1_figure",
             "figure_number": 3,
-            "claim": "Demonstrates first-, second-, and fourth-order convergence using endpoint and RMS phase-space metrics.",
             "panels": ["a) endpoint_position_error", "b) rms_phase_space_error"],
             "fit_rule": "dt <= 0.1; fallback to smallest half if fewer than 3 points",
             "fits": meta_fits,
@@ -1239,7 +1146,6 @@ def plot_figure5_energy_diagnostic(
 
     ax.set_xlabel(r"Time $[1/\omega]$")
     ax.set_ylabel(r"$(E-E_0)/|E_0|$ (dimensionless)")
-    ax.set_title(r"Energy drift at $\Delta t=0.01$")
     apply_major_grid(ax)
     disable_offset_text(ax)
     ax.legend(loc="upper left", bbox_to_anchor=(0.02, 0.985), frameon=False, borderaxespad=0.0)
@@ -1302,7 +1208,7 @@ def plot_figure5_energy_diagnostic(
     disable_offset_text(axins)
 
     # Keep lower area clean for publication readability; no extra sentence below inset.
-    fig.subplots_adjust(top=0.90, bottom=0.12, left=0.10, right=0.98)
+    fig.subplots_adjust(top=0.95, bottom=0.12, left=0.10, right=0.98)
 
     save_plot_pair(
         fig,
@@ -1310,260 +1216,10 @@ def plot_figure5_energy_diagnostic(
         {
             "kind": "supporting_results1_figure",
             "figure_number": 4,
-            "claim": "Supporting diagnostic: Euler shows strong drift, Velocity-Verlet bounded oscillatory error, RK4 tiny drift on this interval.",
             "note": "RK4 is not symplectic.",
         },
     )
     plt.close(fig)
-
-
-def _write_markdown(path: str, lines: List[str]) -> None:
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines) + "\n")
-    print(f"Saved {path}")
-
-
-def generate_table_outputs(
-    metrics: List[Dict[str, object]],
-    endpoint_fit: Dict[str, Dict[str, object]],
-    rms_fit: Dict[str, Dict[str, object]],
-    sanity_warnings: List[str],
-) -> None:
-    os.makedirs(OUT_DIR, exist_ok=True)
-    os.makedirs(SUMMARY_RESULTS1_DIR, exist_ok=True)
-    ordered = sorted_metrics(metrics)
-    idx = metrics_index(metrics)
-
-    # 1) Small-vs-large summary
-    small_large_rows = []
-    for integ in INTEGRATORS:
-        for dt in [DT_LARGE, DT_SMALL]:
-            row = row_for(idx, integ, dt)
-            if row is None:
-                continue
-            small_large_rows.append(
-                {
-                    "integrator": integ,
-                    "integrator_label": INTEGRATOR_LABELS[integ],
-                    "dt": float(dt),
-                    "endpoint_position_error": float(row["endpoint_position_error"]),
-                    "endpoint_velocity_error": float(row["endpoint_velocity_error"]),
-                    "rms_phase_space_error": float(row["rms_phase_space_error"]),
-                    "max_relative_energy_drift": float(row["max_relative_energy_drift"]),
-                }
-            )
-    write_csv(
-        R1_SMALL_LARGE_CSV,
-        [
-            "integrator",
-            "integrator_label",
-            "dt",
-            "endpoint_position_error",
-            "endpoint_velocity_error",
-            "rms_phase_space_error",
-            "max_relative_energy_drift",
-        ],
-        small_large_rows,
-    )
-    small_large_md = [
-        "# Results 1 HO Small-vs-Large Timestep Summary",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        markdown_table(
-            [
-                "Integrator",
-                "dt",
-                "abs(x(T)-x_exact(T))",
-                "abs(v(T)-v_exact(T))",
-                "RMS phase-space error",
-                "max abs(E-E0)/abs(E0)",
-            ],
-            [
-                [
-                    INTEGRATOR_LABELS[str(r["integrator"])],
-                    format_dt(float(r["dt"])),
-                    fmt_sci(float(r["endpoint_position_error"]), 3),
-                    fmt_sci(float(r["endpoint_velocity_error"]), 3),
-                    fmt_sci(float(r["rms_phase_space_error"]), 3),
-                    fmt_sci(float(r["max_relative_energy_drift"]), 3),
-                ]
-                for r in small_large_rows
-            ],
-        ),
-    ]
-    _write_markdown(R1_SMALL_LARGE_MD, small_large_md)
-
-    # 2) Convergence summary
-    merged_fit = merge_fit_info(endpoint_fit, rms_fit)
-    convergence_rows = []
-    for integ in INTEGRATORS:
-        info = merged_fit.get(integ)
-        if info is None:
-            continue
-        convergence_rows.append(
-            {
-                "integrator": integ,
-                "integrator_label": info["integrator_label"],
-                "endpoint_position_slope": info["endpoint_slope"],
-                "rms_phase_space_slope": info["rms_slope"],
-                "endpoint_fit_dt_values": ";".join(format_dt(float(v)) for v in info["endpoint_fit_dt_values"]),
-                "rms_fit_dt_values": ";".join(format_dt(float(v)) for v in info["rms_fit_dt_values"]),
-                "excluded_coarse_dt_values": ";".join(format_dt(float(v)) for v in info["excluded_coarse_dt_values"]),
-            }
-        )
-    write_csv(
-        R1_CONVERGENCE_CSV,
-        [
-            "integrator",
-            "integrator_label",
-            "endpoint_position_slope",
-            "rms_phase_space_slope",
-            "endpoint_fit_dt_values",
-            "rms_fit_dt_values",
-            "excluded_coarse_dt_values",
-        ],
-        convergence_rows,
-    )
-    conv_md = [
-        "# Results 1 HO Convergence Summary",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        markdown_table(
-            [
-                "Integrator",
-                "Endpoint slope",
-                "RMS slope",
-                "Endpoint fit dt values",
-                "RMS fit dt values",
-                "Excluded coarse dt values",
-            ],
-            [
-                [
-                    str(r["integrator_label"]),
-                    f"{float(r['endpoint_position_slope']):.2f}",
-                    f"{float(r['rms_phase_space_slope']):.2f}",
-                    str(r["endpoint_fit_dt_values"]),
-                    str(r["rms_fit_dt_values"]),
-                    str(r["excluded_coarse_dt_values"]) if str(r["excluded_coarse_dt_values"]) else "-",
-                ]
-                for r in convergence_rows
-            ],
-        ),
-    ]
-    _write_markdown(R1_CONVERGENCE_MD, conv_md)
-
-    # 3) Endpoint values table (selected dt)
-    selected_dts = [0.5, 0.1, 0.01]
-    endpoint_rows = []
-    for integ in INTEGRATORS:
-        for dt in selected_dts:
-            row = row_for(idx, integ, dt)
-            if row is None:
-                continue
-            endpoint_rows.append(
-                {
-                    "integrator": integ,
-                    "integrator_label": INTEGRATOR_LABELS[integ],
-                    "dt": dt,
-                    "x_num_final": float(row["x_num_final"]),
-                    "x_exact_final": float(row["x_exact_final"]),
-                    "endpoint_position_error": float(row["endpoint_position_error"]),
-                    "v_num_final": float(row["v_num_final"]),
-                    "v_exact_final": float(row["v_exact_final"]),
-                    "endpoint_velocity_error": float(row["endpoint_velocity_error"]),
-                }
-            )
-    write_csv(
-        R1_ENDPOINT_VALUES_CSV,
-        [
-            "integrator",
-            "integrator_label",
-            "dt",
-            "x_num_final",
-            "x_exact_final",
-            "endpoint_position_error",
-            "v_num_final",
-            "v_exact_final",
-            "endpoint_velocity_error",
-        ],
-        endpoint_rows,
-    )
-    endpoint_md = [
-        "# Results 1 HO Endpoint Values (Selected dt)",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        markdown_table(
-            [
-                "Integrator",
-                "dt",
-                "x_num(T)",
-                "x_exact(T)",
-                "abs(Δx(T))",
-                "v_num(T)",
-                "v_exact(T)",
-                "abs(Δv(T))",
-            ],
-            [
-                [
-                    str(r["integrator_label"]),
-                    format_dt(float(r["dt"])),
-                    fmt_sci(float(r["x_num_final"]), 6),
-                    fmt_sci(float(r["x_exact_final"]), 6),
-                    fmt_sci(float(r["endpoint_position_error"]), 3),
-                    fmt_sci(float(r["v_num_final"]), 6),
-                    fmt_sci(float(r["v_exact_final"]), 6),
-                    fmt_sci(float(r["endpoint_velocity_error"]), 3),
-                ]
-                for r in endpoint_rows
-            ],
-        ),
-    ]
-    _write_markdown(R1_ENDPOINT_VALUES_MD, endpoint_md)
-
-    # 4) Caption/helper notes
-    fig3_bits = []
-    for integ in INTEGRATORS:
-        coarse = row_for(idx, integ, DT_LARGE)
-        fine = row_for(idx, integ, DT_SMALL)
-        if coarse is None or fine is None:
-            continue
-        fig3_bits.append(
-            f"{INTEGRATOR_LABELS[integ]} coarse/fine endpoint x-error ratio = "
-            f"{float(coarse['endpoint_position_error']) / max(float(fine['endpoint_position_error']), 1e-300):.2f}"
-        )
-
-    notes = [
-        "# Results 1 Figure Caption Notes (Auto-Generated)",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        f"Figure 1(a-c) (combined diagnostics): Verifies x(t), v(t), and phase-space behaviour for all three methods against the exact solution at dt={format_dt(TRAJ_DT)} in one shared-legend figure; Euler remains the visibly largest deviation while Velocity-Verlet and RK4 remain close to the exact orbit.",
-        "Figure 2(a-f) (small vs large dt): Compares coarse and fine timesteps (dt=0.5 and dt=0.01) for each method using time traces and phase portraits, while retaining the full coarse-range behaviour; quantitative values are provided in the summary tables; "
-        + "; ".join(fig3_bits)
-        + ".",
-        f"Figure 3(a,b) (combined convergence): Measured orders are Euler {endpoint_fit['euler']['slope']:.2f}/{rms_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}/{rms_fit['verlet']['slope']:.2f}, and RK4 {endpoint_fit['rk4']['slope']:.2f}/{rms_fit['rk4']['slope']:.2f} (endpoint/RMS), consistent with 1/2/4; filled markers denote fit points and open markers show coarse-step context.",
-        "Figure 4(a) (energy diagnostic): At dt=0.01, Euler exhibits strong secular drift, Velocity-Verlet shows bounded oscillatory error, and RK4 drift is tiny on this interval; RK4 remains non-symplectic.",
-    ]
-    if sanity_warnings:
-        notes.append("")
-        notes.append("Sanity warnings:")
-        for warning in sanity_warnings:
-            notes.append(f"- WARNING: {warning}")
-    _write_markdown(R1_CAPTION_NOTES_MD, notes)
-
-    # Keep one compact machine summary for compatibility with downstream note workflows.
-    legacy_notes = [
-        "# Results 1 Auto-Summary Notes",
-        "",
-        f"Generated: {utc_now()}",
-        "",
-        f"Endpoint slopes: Euler {endpoint_fit['euler']['slope']:.2f}, Velocity-Verlet {endpoint_fit['verlet']['slope']:.2f}, RK4 {endpoint_fit['rk4']['slope']:.2f}.",
-        f"RMS slopes: Euler {rms_fit['euler']['slope']:.2f}, Velocity-Verlet {rms_fit['verlet']['slope']:.2f}, RK4 {rms_fit['rk4']['slope']:.2f}.",
-    ]
-    _write_markdown(R1_SECTION_NOTES_MD, legacy_notes)
 
 
 def run_sanity_checks(
@@ -1658,7 +1314,6 @@ def main():
     plot_figure5_energy_diagnostic(datasets, m_idx)
 
     sanity_warnings = run_sanity_checks(endpoint_fit, rms_fit, m_idx)
-    generate_table_outputs(metrics, endpoint_fit, rms_fit, sanity_warnings)
 
     if sanity_warnings:
         print("=== SANITY CHECK WARNINGS ===")

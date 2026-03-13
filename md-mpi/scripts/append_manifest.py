@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-append_manifest.py — Safely append/update a key path in out/manifest.json.
+append_manifest.py - Safely append or update a key path in out/manifest.json.
 
 Usage:
   python3 scripts/append_manifest.py <key.path> <file_path>
