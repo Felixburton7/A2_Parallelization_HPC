@@ -6,7 +6,7 @@
 # from the same run, then reports the median run by wall time.
 #
 # Usage:
-#   bash scripts/run_scaling.sh [--bind-to-core|--no-bind-to-core]
+#   bash scripts/run_scaling.sh [--bind-to-core|--no-bind-to-core] [--weak-only]
 #
 # Produces:
 #   out/scaling_strong.csv   (P,N,wall_s,comm_max_s)
@@ -15,6 +15,8 @@
 #   out/scaling_size_raw.csv
 #   out/scaling_strong_stats.csv
 #   out/scaling_size_stats.csv
+#   out/scaling_weak.csv
+#   out/scaling_weak_stats.csv
 #   out/scaling_meta.txt
 
 set -euo pipefail
@@ -26,14 +28,16 @@ SIZE_STEPS="${SIZE_STEPS:-2000}"
 INTEGRATOR="${INTEGRATOR:-verlet}"
 REPS="${REPS:-11}"
 BIND_TO_CORE="${BIND_TO_CORE:-1}"
+WEAK_ONLY="${WEAK_ONLY:-0}"
 
 for arg in "$@"; do
     case "$arg" in
         --bind-to-core) BIND_TO_CORE=1 ;;
         --no-bind-to-core) BIND_TO_CORE=0 ;;
+        --weak-only) WEAK_ONLY=1 ;;
         *)
             echo "ERROR: unknown argument '$arg'" >&2
-            echo "Usage: bash scripts/run_scaling.sh [--bind-to-core|--no-bind-to-core]" >&2
+            echo "Usage: bash scripts/run_scaling.sh [--bind-to-core|--no-bind-to-core] [--weak-only]" >&2
             exit 1
             ;;
     esac
@@ -104,18 +108,130 @@ extract_metric() {
     ' <<< "$output"
 }
 
-# Strong scaling: N=2048, vary P
-echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_strong.csv"
-echo "kind,P,N,rep,wall_s,comm_max_s" > "$OUTDIR/scaling_strong_raw.csv"
-echo "P,N,reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_strong_stats.csv"
+if [ "$WEAK_ONLY" != "1" ]; then
+    # Strong scaling: N=2048, vary P
+    echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_strong.csv"
+    echo "kind,P,N,rep,wall_s,comm_max_s" > "$OUTDIR/scaling_strong_raw.csv"
+    echo "P,N,reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_strong_stats.csv"
 
-N_STRONG=2048
-for P in 1 2 4 8 16 24 32; do
+    N_STRONG=2048
+    for P in 1 2 4 8 16 24 32; do
+        TMP_SAMPLES=$(mktemp)
+        for REP in $(seq 1 $REPS); do
+            OUTPUT=$(mpirun "${MPIRUN_BIND_ARGS[@]}" -np "$P" "$SOLVER" \
+                --mode lj --integrator "$INTEGRATOR" \
+                --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
+
+            WALL=$(extract_metric "$OUTPUT" "Wall time")
+            COMM_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+            if [ -z "$COMM_MAX" ]; then
+                COMM_MAX=$(extract_metric "$OUTPUT" "Comm time")
+            fi
+            if [ -z "$WALL" ]; then
+                echo "ERROR: failed to parse wall time for strong scaling (P=$P, rep=$REP)." >&2
+                echo "$OUTPUT" >&2
+                rm -f "$TMP_SAMPLES"
+                exit 1
+            fi
+            if [ -z "$COMM_MAX" ]; then COMM_MAX="0.000000"; fi
+            COMM_MAX=$(awk -v w="$WALL" -v c="$COMM_MAX" 'BEGIN{if (c > w) print w; else print c}')
+
+            echo "$REP $WALL $COMM_MAX" >> "$TMP_SAMPLES"
+            echo "strong,$P,$N_STRONG,$REP,$WALL,$COMM_MAX" >> "$OUTDIR/scaling_strong_raw.csv"
+            echo "  P=$P rep=$REP wall=$WALL comm_max=$COMM_MAX"
+        done
+
+        SORTED_SAMPLES=$(mktemp)
+        sort -n -k2 "$TMP_SAMPLES" > "$SORTED_SAMPLES"
+        STATS=$(summarize_sorted_samples "$SORTED_SAMPLES")
+        rm -f "$TMP_SAMPLES" "$SORTED_SAMPLES"
+
+        REPS_OUT=$(echo "$STATS" | cut -d, -f1)
+        MEDIAN_REP=$(echo "$STATS" | cut -d, -f2)
+        MED_WALL=$(echo "$STATS" | cut -d, -f3)
+        MED_COMM_MAX=$(echo "$STATS" | cut -d, -f4)
+        Q1_WALL=$(echo "$STATS" | cut -d, -f5)
+        Q3_WALL=$(echo "$STATS" | cut -d, -f6)
+        IQR_WALL=$(echo "$STATS" | cut -d, -f7)
+        MIN_WALL=$(echo "$STATS" | cut -d, -f8)
+        MAX_WALL=$(echo "$STATS" | cut -d, -f9)
+
+        echo "$P,$N_STRONG,$MED_WALL,$MED_COMM_MAX" >> "$OUTDIR/scaling_strong.csv"
+        echo "$P,$N_STRONG,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM_MAX,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_strong_stats.csv"
+        echo ">> P=$P MEDIAN: wall=$MED_WALL comm_max=$MED_COMM_MAX"
+    done
+
+    echo ""
+
+    # Size scaling: P=16, vary N
+    echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_size.csv"
+    echo "kind,P,N,rep,wall_s,comm_max_s" > "$OUTDIR/scaling_size_raw.csv"
+    echo "P,N,reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_size_stats.csv"
+
+    P_SIZE=16
+    for N in 108 256 500 864 1372 2048; do
+        TMP_SAMPLES=$(mktemp)
+        for REP in $(seq 1 $REPS); do
+            OUTPUT=$(mpirun "${MPIRUN_BIND_ARGS[@]}" -np "$P_SIZE" "$SOLVER" \
+                --mode lj --integrator "$INTEGRATOR" \
+                --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
+
+            WALL=$(extract_metric "$OUTPUT" "Wall time")
+            COMM_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
+            if [ -z "$COMM_MAX" ]; then
+                COMM_MAX=$(extract_metric "$OUTPUT" "Comm time")
+            fi
+            if [ -z "$WALL" ]; then
+                echo "ERROR: failed to parse wall time for size scaling (N=$N, rep=$REP)." >&2
+                echo "$OUTPUT" >&2
+                rm -f "$TMP_SAMPLES"
+                exit 1
+            fi
+            if [ -z "$COMM_MAX" ]; then COMM_MAX="0.000000"; fi
+            COMM_MAX=$(awk -v w="$WALL" -v c="$COMM_MAX" 'BEGIN{if (c > w) print w; else print c}')
+
+            echo "$REP $WALL $COMM_MAX" >> "$TMP_SAMPLES"
+            echo "size,$P_SIZE,$N,$REP,$WALL,$COMM_MAX" >> "$OUTDIR/scaling_size_raw.csv"
+            echo "  N=$N rep=$REP wall=$WALL comm_max=$COMM_MAX"
+        done
+
+        SORTED_SAMPLES=$(mktemp)
+        sort -n -k2 "$TMP_SAMPLES" > "$SORTED_SAMPLES"
+        STATS=$(summarize_sorted_samples "$SORTED_SAMPLES")
+        rm -f "$TMP_SAMPLES" "$SORTED_SAMPLES"
+
+        REPS_OUT=$(echo "$STATS" | cut -d, -f1)
+        MEDIAN_REP=$(echo "$STATS" | cut -d, -f2)
+        MED_WALL=$(echo "$STATS" | cut -d, -f3)
+        MED_COMM_MAX=$(echo "$STATS" | cut -d, -f4)
+        Q1_WALL=$(echo "$STATS" | cut -d, -f5)
+        Q3_WALL=$(echo "$STATS" | cut -d, -f6)
+        IQR_WALL=$(echo "$STATS" | cut -d, -f7)
+        MIN_WALL=$(echo "$STATS" | cut -d, -f8)
+        MAX_WALL=$(echo "$STATS" | cut -d, -f9)
+
+        echo "$P_SIZE,$N,$MED_WALL,$MED_COMM_MAX" >> "$OUTDIR/scaling_size.csv"
+        echo "$P_SIZE,$N,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM_MAX,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_size_stats.csv"
+        echo ">> N=$N MEDIAN: wall=$MED_WALL comm_max=$MED_COMM_MAX"
+    done
+fi
+
+echo ""
+
+echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_weak.csv"
+echo "P,N,reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_weak_stats.csv"
+
+P_WEAK=(1 4 8 16 32)
+N_WEAK=(500 864 1372 2048 2916)
+
+for IDX in "${!P_WEAK[@]}"; do
+    P="${P_WEAK[$IDX]}"
+    N="${N_WEAK[$IDX]}"
     TMP_SAMPLES=$(mktemp)
     for REP in $(seq 1 $REPS); do
         OUTPUT=$(mpirun "${MPIRUN_BIND_ARGS[@]}" -np "$P" "$SOLVER" \
             --mode lj --integrator "$INTEGRATOR" \
-            --N "$N_STRONG" --steps "$STRONG_STEPS" --timing 2>&1)
+            --N "$N" --steps "$STRONG_STEPS" --timing 2>&1)
 
         WALL=$(extract_metric "$OUTPUT" "Wall time")
         COMM_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
@@ -123,7 +239,7 @@ for P in 1 2 4 8 16 24 32; do
             COMM_MAX=$(extract_metric "$OUTPUT" "Comm time")
         fi
         if [ -z "$WALL" ]; then
-            echo "ERROR: failed to parse wall time for strong scaling (P=$P, rep=$REP)." >&2
+            echo "ERROR: failed to parse wall time for weak scaling (P=$P, N=$N, rep=$REP)." >&2
             echo "$OUTPUT" >&2
             rm -f "$TMP_SAMPLES"
             exit 1
@@ -132,8 +248,7 @@ for P in 1 2 4 8 16 24 32; do
         COMM_MAX=$(awk -v w="$WALL" -v c="$COMM_MAX" 'BEGIN{if (c > w) print w; else print c}')
 
         echo "$REP $WALL $COMM_MAX" >> "$TMP_SAMPLES"
-        echo "strong,$P,$N_STRONG,$REP,$WALL,$COMM_MAX" >> "$OUTDIR/scaling_strong_raw.csv"
-        echo "  P=$P rep=$REP wall=$WALL comm_max=$COMM_MAX"
+        echo "  P=$P N=$N rep=$REP wall=$WALL comm_max=$COMM_MAX"
     done
 
     SORTED_SAMPLES=$(mktemp)
@@ -151,63 +266,9 @@ for P in 1 2 4 8 16 24 32; do
     MIN_WALL=$(echo "$STATS" | cut -d, -f8)
     MAX_WALL=$(echo "$STATS" | cut -d, -f9)
 
-    echo "$P,$N_STRONG,$MED_WALL,$MED_COMM_MAX" >> "$OUTDIR/scaling_strong.csv"
-    echo "$P,$N_STRONG,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM_MAX,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_strong_stats.csv"
-    echo ">> P=$P MEDIAN: wall=$MED_WALL comm_max=$MED_COMM_MAX"
-done
-
-echo ""
-
-# Size scaling: P=16, vary N
-echo "P,N,wall_s,comm_max_s" > "$OUTDIR/scaling_size.csv"
-echo "kind,P,N,rep,wall_s,comm_max_s" > "$OUTDIR/scaling_size_raw.csv"
-echo "P,N,reps,median_rep,median_wall_s,median_comm_max_s,q1_wall_s,q3_wall_s,iqr_wall_s,min_wall_s,max_wall_s" > "$OUTDIR/scaling_size_stats.csv"
-
-P_SIZE=16
-for N in 108 256 500 864 1372 2048; do
-    TMP_SAMPLES=$(mktemp)
-    for REP in $(seq 1 $REPS); do
-        OUTPUT=$(mpirun "${MPIRUN_BIND_ARGS[@]}" -np "$P_SIZE" "$SOLVER" \
-            --mode lj --integrator "$INTEGRATOR" \
-            --N "$N" --steps "$SIZE_STEPS" --timing 2>&1)
-
-        WALL=$(extract_metric "$OUTPUT" "Wall time")
-        COMM_MAX=$(extract_metric "$OUTPUT" "Comm time \\(max\\)")
-        if [ -z "$COMM_MAX" ]; then
-            COMM_MAX=$(extract_metric "$OUTPUT" "Comm time")
-        fi
-        if [ -z "$WALL" ]; then
-            echo "ERROR: failed to parse wall time for size scaling (N=$N, rep=$REP)." >&2
-            echo "$OUTPUT" >&2
-            rm -f "$TMP_SAMPLES"
-            exit 1
-        fi
-        if [ -z "$COMM_MAX" ]; then COMM_MAX="0.000000"; fi
-        COMM_MAX=$(awk -v w="$WALL" -v c="$COMM_MAX" 'BEGIN{if (c > w) print w; else print c}')
-
-        echo "$REP $WALL $COMM_MAX" >> "$TMP_SAMPLES"
-        echo "size,$P_SIZE,$N,$REP,$WALL,$COMM_MAX" >> "$OUTDIR/scaling_size_raw.csv"
-        echo "  N=$N rep=$REP wall=$WALL comm_max=$COMM_MAX"
-    done
-
-    SORTED_SAMPLES=$(mktemp)
-    sort -n -k2 "$TMP_SAMPLES" > "$SORTED_SAMPLES"
-    STATS=$(summarize_sorted_samples "$SORTED_SAMPLES")
-    rm -f "$TMP_SAMPLES" "$SORTED_SAMPLES"
-
-    REPS_OUT=$(echo "$STATS" | cut -d, -f1)
-    MEDIAN_REP=$(echo "$STATS" | cut -d, -f2)
-    MED_WALL=$(echo "$STATS" | cut -d, -f3)
-    MED_COMM_MAX=$(echo "$STATS" | cut -d, -f4)
-    Q1_WALL=$(echo "$STATS" | cut -d, -f5)
-    Q3_WALL=$(echo "$STATS" | cut -d, -f6)
-    IQR_WALL=$(echo "$STATS" | cut -d, -f7)
-    MIN_WALL=$(echo "$STATS" | cut -d, -f8)
-    MAX_WALL=$(echo "$STATS" | cut -d, -f9)
-
-    echo "$P_SIZE,$N,$MED_WALL,$MED_COMM_MAX" >> "$OUTDIR/scaling_size.csv"
-    echo "$P_SIZE,$N,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM_MAX,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_size_stats.csv"
-    echo ">> N=$N MEDIAN: wall=$MED_WALL comm_max=$MED_COMM_MAX"
+    echo "$P,$N,$MED_WALL,$MED_COMM_MAX" >> "$OUTDIR/scaling_weak.csv"
+    echo "$P,$N,$REPS_OUT,$MEDIAN_REP,$MED_WALL,$MED_COMM_MAX,$Q1_WALL,$Q3_WALL,$IQR_WALL,$MIN_WALL,$MAX_WALL" >> "$OUTDIR/scaling_weak_stats.csv"
+    echo ">> P=$P N=$N MEDIAN: wall=$MED_WALL comm_max=$MED_COMM_MAX"
 done
 
 {
@@ -234,10 +295,14 @@ done
 
 echo ""
 echo "Done. Results in:"
-echo "  $OUTDIR/scaling_strong.csv"
-echo "  $OUTDIR/scaling_size.csv"
-echo "  $OUTDIR/scaling_strong_raw.csv"
-echo "  $OUTDIR/scaling_size_raw.csv"
-echo "  $OUTDIR/scaling_strong_stats.csv"
-echo "  $OUTDIR/scaling_size_stats.csv"
+if [ "$WEAK_ONLY" != "1" ]; then
+    echo "  $OUTDIR/scaling_strong.csv"
+    echo "  $OUTDIR/scaling_size.csv"
+    echo "  $OUTDIR/scaling_strong_raw.csv"
+    echo "  $OUTDIR/scaling_size_raw.csv"
+    echo "  $OUTDIR/scaling_strong_stats.csv"
+    echo "  $OUTDIR/scaling_size_stats.csv"
+fi
+echo "  $OUTDIR/scaling_weak.csv"
+echo "  $OUTDIR/scaling_weak_stats.csv"
 echo "  $OUTDIR/scaling_meta.txt"

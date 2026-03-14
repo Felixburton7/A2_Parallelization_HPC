@@ -23,6 +23,7 @@ from plot_style import (
 PLOT_DIR = "out/plots"
 FIG9_AB_PNG = "results3_figure9ab.png"
 FIG10_ABC_PNG = "results3_figure10abc.png"
+FIG11_AB_WEAK_PNG = "results3_figure11ab_weak.png"
 RESULTS3_INTEGRATOR = "verlet"
 RESULTS3_TIMESTEP_S = 1.0e-14
 RESULTS3_SEED = 42
@@ -307,8 +308,87 @@ def plot_size_scaling():
     plt.close()
     print(f"Saved {PLOT_DIR}/{FIG9_AB_PNG}")
 
+
+def plot_weak_scaling():
+    os.makedirs(PLOT_DIR, exist_ok=True)
+
+    weak_path = "out/scaling_weak.csv"
+    if not os.path.exists(weak_path):
+        print(f"Warning: {weak_path} not found. Skipping weak scaling.")
+        return
+
+    data = np.genfromtxt(weak_path, delimiter=",", names=True, encoding=None)
+    names = getattr(getattr(data, "dtype", None), "names", None)
+    if not names or "P" not in names or "wall_s" not in names:
+        raw = np.genfromtxt(weak_path, delimiter=",", encoding=None)
+        if raw is None:
+            print(f"Warning: {weak_path} is empty. Skipping weak scaling.")
+            return
+        if raw.ndim == 1:
+            raw = np.array([raw])
+        if raw.shape[1] < 4:
+            print(f"Warning: {weak_path} does not have 4 columns. Skipping weak scaling.")
+            return
+        data = np.zeros(raw.shape[0], dtype=[("P", float), ("N", float), ("wall_s", float), ("comm_max_s", float)])
+        data["P"] = raw[:, 0]
+        data["N"] = raw[:, 1]
+        data["wall_s"] = raw[:, 2]
+        data["comm_max_s"] = raw[:, 3]
+        names = data.dtype.names
+
+    data = np.atleast_1d(data)
+    P = data["P"].astype(int)
+    wall = data["wall_s"].astype(float)
+    comm_col = "comm_max_s" if "comm_max_s" in names else "comm_s"
+    comm_max = data[comm_col].astype(float)
+
+    order = np.argsort(P)
+    P = P[order]
+    wall = wall[order]
+    comm_max = comm_max[order]
+
+    baseline_wall = wall[0]
+    p1_mask = P == 1
+    if np.any(p1_mask):
+        baseline_wall = wall[p1_mask][0]
+
+    comm_frac = np.where(wall > 0.0, (comm_max / wall) * 100.0, 0.0)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.5, 4.8), constrained_layout=True)
+
+    ax1.plot(P, wall, "o-", color=COLOR_VERLET, linewidth=2.0, markersize=6, label="Wall time")
+    ax1.axhline(
+        y=baseline_wall,
+        color=COLOR_REFERENCE,
+        linestyle="--",
+        alpha=0.9,
+        linewidth=1.5,
+        label="Baseline compute time (P=1)",
+    )
+    ax1.set_xlabel("Number of Processes P")
+    ax1.set_ylabel("Wall Time [s]")
+    set_panel_title(ax1, "Constant-Local-Work Runtime")
+    add_panel_label(ax1, "a")
+    ax1.legend(loc="best")
+    apply_major_grid(ax1)
+    disable_offset_text(ax1)
+
+    ax2.plot(P, comm_frac, "o-", color=COLOR_EULER, linewidth=2.0, markersize=6)
+    ax2.set_xlabel("Number of Processes P")
+    ax2.set_ylabel("Communication Fraction [%]")
+    set_panel_title(ax2, "Communication Fraction vs Process Count")
+    add_panel_label(ax2, "b")
+    apply_major_grid(ax2)
+    disable_offset_text(ax2)
+
+    save_figure(fig, f"{PLOT_DIR}/{FIG11_AB_WEAK_PNG}")
+    plt.close()
+    print(f"Saved {PLOT_DIR}/{FIG11_AB_WEAK_PNG}")
+
+
 if __name__ == "__main__":
     apply_plot_style()
     remove_old_results3_files()
     plot_strong_scaling()
     plot_size_scaling()
+    plot_weak_scaling()

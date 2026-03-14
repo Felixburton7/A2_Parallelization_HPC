@@ -9,6 +9,7 @@ SOLVER="./md_solver"
 OUTDIR="out"
 SKIP_SCALING=0
 LIVE_SCALING=0
+WEAK_ONLY=0
 STRONG_STEPS=500
 SIZE_STEPS=2000
 SCALING_REPS=11
@@ -32,9 +33,10 @@ for arg in "$@"; do
     --reference-scaling) LIVE_SCALING=0 ;;
     --bind-to-core) SCALING_BIND_TO_CORE=1 ;;
     --no-bind-to-core) SCALING_BIND_TO_CORE=0 ;;
+    --weak-only) WEAK_ONLY=1 ;;
     *)
       echo "ERROR: unknown argument '$arg'" >&2
-      echo "Usage: bash scripts/run_all_data.sh [--skip-scaling] [--live-scaling] [--reference-scaling] [--bind-to-core|--no-bind-to-core]" >&2
+      echo "Usage: bash scripts/run_all_data.sh [--skip-scaling] [--live-scaling] [--reference-scaling] [--weak-only] [--bind-to-core|--no-bind-to-core]" >&2
       exit 1
       ;;
   esac
@@ -175,10 +177,15 @@ if [ "$SKIP_SCALING" = "1" ]; then
   # Re-register existing files in manifest if they exist
   [ -f "$OUTDIR/scaling_strong.csv" ] && python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
   [ -f "$OUTDIR/scaling_size.csv" ]   && python3 scripts/append_manifest.py "scaling.size"   "$OUTDIR/scaling_size.csv"
+  [ -f "$OUTDIR/scaling_weak.csv" ]   && python3 scripts/append_manifest.py "scaling.weak"   "$OUTDIR/scaling_weak.csv"
 else
 echo ""
 if [ "$LIVE_SCALING" = "1" ]; then
-  echo "=== RESULTS 3: LIVE SCALING (reps=${SCALING_REPS}, strong_steps=${STRONG_STEPS}, size_steps=${SIZE_STEPS}, bind_to_core=${SCALING_BIND_TO_CORE}) ==="
+  echo "=== RESULTS 3: LIVE SCALING (reps=${SCALING_REPS}, strong_steps=${STRONG_STEPS}, size_steps=${SIZE_STEPS}, weak_only=${WEAK_ONLY}, bind_to_core=${SCALING_BIND_TO_CORE}) ==="
+  SCALING_ARGS=()
+  if [ "$WEAK_ONLY" = "1" ]; then
+    SCALING_ARGS+=(--weak-only)
+  fi
   REPS="$SCALING_REPS" \
   SOLVER="$SOLVER" \
   OUTDIR="$OUTDIR" \
@@ -186,12 +193,13 @@ if [ "$LIVE_SCALING" = "1" ]; then
   SIZE_STEPS="$SIZE_STEPS" \
   BIND_TO_CORE="$SCALING_BIND_TO_CORE" \
   INTEGRATOR="verlet" \
-    bash scripts/run_scaling.sh
+    bash scripts/run_scaling.sh "${SCALING_ARGS[@]}"
 else
   echo "=== RESULTS 3: REFERENCE SCALING DATA ==="
   for f in \
     scaling_strong.csv \
-    scaling_size.csv
+    scaling_size.csv \
+    scaling_weak.csv
   do
     SRC="$SCALING_REF_DIR/$f"
     if [ ! -s "$SRC" ]; then
@@ -202,13 +210,14 @@ else
   done
 fi
 
-python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
-python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
+[ -f "$OUTDIR/scaling_strong.csv" ] && python3 scripts/append_manifest.py "scaling.strong" "$OUTDIR/scaling_strong.csv"
+[ -f "$OUTDIR/scaling_size.csv" ] && python3 scripts/append_manifest.py "scaling.size" "$OUTDIR/scaling_size.csv"
+python3 scripts/append_manifest.py "scaling.weak" "$OUTDIR/scaling_weak.csv"
 
 fi  # end --skip-scaling check
 
 # Validate manifest before plotting.
-if [ "$SKIP_SCALING" = "1" ]; then
+if [ "$SKIP_SCALING" = "1" ] || { [ "$LIVE_SCALING" = "1" ] && [ "$WEAK_ONLY" = "1" ]; }; then
   python3 scripts/validate_manifest.py --skip-scaling
 else
   python3 scripts/validate_manifest.py
